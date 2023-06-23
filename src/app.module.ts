@@ -3,6 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as redisStore from 'cache-manager-redis-store';
 import { ConfigModule } from '@nestjs/config';
+import { PrismaService } from './prisma.service';
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
@@ -14,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
       port: process.env.REDIS_PORT,
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, UserController],
+  providers: [AppService, PrismaService, UserService],
 })
 export class AppModule {}

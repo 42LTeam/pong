@@ -25,6 +25,7 @@
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@prisma/client": "^4.16.0",
     "cache-manager": "^4.1.0",
     "cache-manager-redis-store": "^2.0.0",
     "reflect-metadata": "^0.1.13",
