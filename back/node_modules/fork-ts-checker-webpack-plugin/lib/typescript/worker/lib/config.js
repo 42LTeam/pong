@@ -23,21 +23,15 @@ exports.didRootFilesChanged = exports.didDependenciesProbablyChanged = exports.d
 const path = __importStar(require("path"));
 const forward_slash_1 = require("../../../utils/path/forward-slash");
 const diagnostics_1 = require("./diagnostics");
-const extensions_1 = require("./extensions");
 const system_1 = require("./system");
 const typescript_1 = require("./typescript");
 const worker_config_1 = require("./worker-config");
 let parsedConfig;
 let parseConfigDiagnostics = [];
 // initialize ParseConfigFileHost
-let parseConfigFileHost = Object.assign(Object.assign({}, system_1.system), { onUnRecoverableConfigFileDiagnostic: (diagnostic) => {
+const parseConfigFileHost = Object.assign(Object.assign({}, system_1.system), { onUnRecoverableConfigFileDiagnostic: (diagnostic) => {
         parseConfigDiagnostics.push(diagnostic);
     } });
-for (const extension of extensions_1.extensions) {
-    if (extension.extendParseConfigFileHost) {
-        parseConfigFileHost = extension.extendParseConfigFileHost(parseConfigFileHost);
-    }
-}
 function getUserProvidedConfigOverwrite() {
     return worker_config_1.config.configOverwrite || {};
 }

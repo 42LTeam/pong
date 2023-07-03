@@ -22,7 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createIssuesFromDiagnostics = exports.getDiagnosticsOfProgram = exports.invalidateDiagnostics = exports.getIssues = exports.updateDiagnostics = void 0;
 const os = __importStar(require("os"));
 const issue_1 = require("../../../issue");
-const extensions_1 = require("./extensions");
 const typescript_1 = require("./typescript");
 const worker_config_1 = require("./worker-config");
 const diagnosticsPerConfigFile = new Map();
@@ -89,12 +88,6 @@ function createIssueFromDiagnostic(diagnostic) {
     };
 }
 function createIssuesFromDiagnostics(diagnostics) {
-    let issues = (0, issue_1.deduplicateAndSortIssues)(diagnostics.map((diagnostic) => createIssueFromDiagnostic(diagnostic)));
-    extensions_1.extensions.forEach((extension) => {
-        if (extension.extendIssues) {
-            issues = extension.extendIssues(issues);
-        }
-    });
-    return issues;
+    return (0, issue_1.deduplicateAndSortIssues)(diagnostics.map((diagnostic) => createIssueFromDiagnostic(diagnostic)));
 }
 exports.createIssuesFromDiagnostics = createIssuesFromDiagnostics;

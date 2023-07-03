@@ -15,7 +15,6 @@ describe("tsconfig-loader", function () {
                 };
             },
         });
-        // assert.equal(result.tsConfigPath, "/foo/bar/tsconfig.json");
         expect(result.tsConfigPath).toBe("/foo/bar/tsconfig.json");
     });
     it("should return loaderResult.tsConfigPath as undefined when not found", function () {
@@ -30,7 +29,6 @@ describe("tsconfig-loader", function () {
                 };
             },
         });
-        // assert.isUndefined(result.tsConfigPath);
         expect(result.tsConfigPath).toBeUndefined();
     });
     it("should use TS_NODE_PROJECT env if exists", function () {
@@ -54,7 +52,6 @@ describe("tsconfig-loader", function () {
                 };
             },
         });
-        // assert.equal(result.tsConfigPath, "/foo/baz/tsconfig.json");
         expect(result.tsConfigPath).toBe("/foo/baz/tsconfig.json");
     });
     it("should use TS_NODE_BASEURL env if exists", function () {
@@ -71,7 +68,6 @@ describe("tsconfig-loader", function () {
                 };
             },
         });
-        // assert.equal(result.baseUrl, "SOME_BASEURL");
         expect(result.baseUrl).toBe("SOME_BASEURL");
     });
     it("should not use TS_NODE_BASEURL env if it does not exist", function () {
@@ -88,49 +84,78 @@ describe("tsconfig-loader", function () {
                 };
             },
         });
-        // assert.equal(result.baseUrl, undefined);
         expect(result.baseUrl).toBeUndefined();
     });
 });
 describe("walkForTsConfig", function () {
     it("should find tsconfig in starting directory", function () {
         var pathToTsconfig = (0, path_1.join)("/root", "dir1", "tsconfig.json");
-        var res = (0, tsconfig_loader_1.walkForTsConfig)((0, path_1.join)("/root", "dir1"), function (path) { return path === pathToTsconfig; });
-        // assert.equal(res, pathToTsconfig);
+        var mockFiles = {
+            "/root/dir1": ["tsconfig.json"],
+        };
+        var res = (0, tsconfig_loader_1.walkForTsConfig)((0, path_1.join)("/root", "dir1"), function (path) { return mockFiles[path] || []; });
+        expect(res).toBe(pathToTsconfig);
+    });
+    it("should find jsconfig in starting directory", function () {
+        var pathToJsconfig = (0, path_1.join)("/root", "dir1", "jsconfig.json");
+        var mockFiles = {
+            "/root/dir1": ["jsconfig.json"],
+        };
+        var res = (0, tsconfig_loader_1.walkForTsConfig)((0, path_1.join)("/root", "dir1"), function (path) { return mockFiles[path] || []; });
+        expect(res).toBe(pathToJsconfig);
+    });
+    // see https://github.com/Microsoft/TypeScript/issues/15869#issuecomment-301845650
+    it("tsconfig.json take precedence over jsconfig.json when both exist", function () {
+        var pathToTsconfig = (0, path_1.join)("/root/dir1", "tsconfig.json");
+        var mockFiles = {
+            "/root/dir1": ["jsconfig.json", "tsconfig.json"],
+        };
+        var res = (0, tsconfig_loader_1.walkForTsConfig)((0, path_1.join)("/root", "dir1"), function (path) { return mockFiles[path] || []; });
         expect(res).toBe(pathToTsconfig);
     });
     it("should find tsconfig in parent directory", function () {
         var pathToTsconfig = (0, path_1.join)("/root", "tsconfig.json");
-        var res = (0, tsconfig_loader_1.walkForTsConfig)((0, path_1.join)("/root", "dir1"), function (path) { return path === pathToTsconfig; });
-        // assert.equal(res, pathToTsconfig);
+        var mockFiles = {
+            "/root": ["tsconfig.json"],
+        };
+        var res = (0, tsconfig_loader_1.walkForTsConfig)((0, path_1.join)("/root", "dir1"), function (path) { return mockFiles[path] || []; });
+        expect(res).toBe(pathToTsconfig);
+    });
+    it("should find jsconfig in parent directory", function () {
+        var pathToTsconfig = (0, path_1.join)("/root", "jsconfig.json");
+        var mockFiles = {
+            "/root": ["jsconfig.json"],
+        };
+        var res = (0, tsconfig_loader_1.walkForTsConfig)((0, path_1.join)("/root", "dir1"), function (path) { return mockFiles[path] || []; });
         expect(res).toBe(pathToTsconfig);
     });
     it("should return undefined when reaching the top", function () {
-        var res = (0, tsconfig_loader_1.walkForTsConfig)((0, path_1.join)("/root", "dir1", "kalle"), function () { return false; });
-        // assert.equal(res, undefined);
+        var res = (0, tsconfig_loader_1.walkForTsConfig)((0, path_1.join)("/root", "dir1", "kalle"), function () { return []; });
         expect(res).toBeUndefined();
     });
 });
 describe("loadConfig", function () {
-    it("It should load a config", function () {
+    it("should load a config", function () {
         var config = { compilerOptions: { baseUrl: "hej" } };
         var res = (0, tsconfig_loader_1.loadTsconfig)("/root/dir1/tsconfig.json", function (path) { return path === "/root/dir1/tsconfig.json"; }, function (_) { return JSON.stringify(config); });
-        // assert.deepEqual(res, config);
         expect(res).toStrictEqual(config);
     });
-    it("It should load a config with comments", function () {
+    it("should load a config with comments", function () {
         var config = { compilerOptions: { baseUrl: "hej" } };
         var res = (0, tsconfig_loader_1.loadTsconfig)("/root/dir1/tsconfig.json", function (path) { return path === "/root/dir1/tsconfig.json"; }, function (_) { return "{\n          // my comment\n          \"compilerOptions\": { \n            \"baseUrl\": \"hej\"\n          }\n        }"; });
-        // assert.deepEqual(res, config);
         expect(res).toStrictEqual(config);
     });
-    it("It should load a config with trailing commas", function () {
+    it("should load a config with trailing commas", function () {
         var config = { compilerOptions: { baseUrl: "hej" } };
         var res = (0, tsconfig_loader_1.loadTsconfig)("/root/dir1/tsconfig.json", function (path) { return path === "/root/dir1/tsconfig.json"; }, function (_) { return "{\n          \"compilerOptions\": { \n            \"baseUrl\": \"hej\",\n          },\n        }"; });
-        // assert.deepEqual(res, config);
         expect(res).toStrictEqual(config);
     });
-    it("It should load a config with extends and overwrite all options", function () {
+    it("should throw an error including the file path when encountering invalid JSON5", function () {
+        expect(function () {
+            return (0, tsconfig_loader_1.loadTsconfig)("/root/dir1/tsconfig.json", function (path) { return path === "/root/dir1/tsconfig.json"; }, function (_) { return "{\n            \"compilerOptions\": {\n          }"; });
+        }).toThrowError("/root/dir1/tsconfig.json is malformed JSON5: invalid end of input at 3:12");
+    });
+    it("should load a config with string extends and overwrite all options", function () {
         var firstConfig = {
             extends: "../base-config.json",
             compilerOptions: { baseUrl: "kalle", paths: { foo: ["bar2"] } },
@@ -153,14 +178,6 @@ describe("loadConfig", function () {
             }
             return "";
         });
-        // assert.deepEqual(res, {
-        //   extends: "../base-config.json",
-        //   compilerOptions: {
-        //     baseUrl: "kalle",
-        //     paths: { foo: ["bar2"] },
-        //     strict: true,
-        //   },
-        // });
         expect(res).toEqual({
             extends: "../base-config.json",
             compilerOptions: {
@@ -170,7 +187,7 @@ describe("loadConfig", function () {
             },
         });
     });
-    it("It should load a config with extends from node_modules and overwrite all options", function () {
+    it("should load a config with string extends from node_modules and overwrite all options", function () {
         var firstConfig = {
             extends: "my-package/base-config.json",
             compilerOptions: { baseUrl: "kalle", paths: { foo: ["bar2"] } },
@@ -193,14 +210,6 @@ describe("loadConfig", function () {
             }
             return "";
         });
-        // assert.deepEqual(res, {
-        //   extends: "my-package/base-config.json",
-        //   compilerOptions: {
-        //     baseUrl: "kalle",
-        //     paths: { foo: ["bar2"] },
-        //     strict: true,
-        //   },
-        // });
         expect(res).toEqual({
             extends: "my-package/base-config.json",
             compilerOptions: {
@@ -210,7 +219,7 @@ describe("loadConfig", function () {
             },
         });
     });
-    it("Should use baseUrl relative to location of extended tsconfig", function () {
+    it("should use baseUrl relative to location of extended tsconfig", function () {
         var firstConfig = { compilerOptions: { baseUrl: "." } };
         var firstConfigPath = (0, path_1.join)("/root", "first-config.json");
         var secondConfig = { extends: "../first-config.json" };
@@ -233,13 +242,86 @@ describe("loadConfig", function () {
             }
             return "";
         });
-        // assert.deepEqual(res, {
-        //   extends: "../second-config.json",
-        //   compilerOptions: { baseUrl: join("..", "..") },
-        // });
         expect(res).toEqual({
             extends: "../second-config.json",
             compilerOptions: { baseUrl: (0, path_1.join)("..", "..") },
+        });
+    });
+    it("should load a config with array extends and overwrite all options", function () {
+        var baseConfig1 = {
+            compilerOptions: { baseUrl: ".", paths: { foo: ["bar"] } },
+        };
+        var baseConfig1Path = (0, path_1.join)("/root", "base-config-1.json");
+        var baseConfig2 = { compilerOptions: { baseUrl: "." } };
+        var baseConfig2Path = (0, path_1.join)("/root", "dir1", "base-config-2.json");
+        var baseConfig3 = {
+            compilerOptions: { baseUrl: ".", paths: { foo: ["bar2"] } },
+        };
+        var baseConfig3Path = (0, path_1.join)("/root", "dir1", "dir2", "base-config-3.json");
+        var actualConfig = {
+            extends: [
+                "./base-config-1.json",
+                "./dir1/base-config-2.json",
+                "./dir1/dir2/base-config-3.json",
+            ],
+        };
+        var actualConfigPath = (0, path_1.join)("/root", "tsconfig.json");
+        var res = (0, tsconfig_loader_1.loadTsconfig)((0, path_1.join)("/root", "tsconfig.json"), function (path) {
+            return [
+                baseConfig1Path,
+                baseConfig2Path,
+                baseConfig3Path,
+                actualConfigPath,
+            ].indexOf(path) >= 0;
+        }, function (path) {
+            if (path === baseConfig1Path) {
+                return JSON.stringify(baseConfig1);
+            }
+            if (path === baseConfig2Path) {
+                return JSON.stringify(baseConfig2);
+            }
+            if (path === baseConfig3Path) {
+                return JSON.stringify(baseConfig3);
+            }
+            if (path === actualConfigPath) {
+                return JSON.stringify(actualConfig);
+            }
+            return "";
+        });
+        expect(res).toEqual({
+            extends: [
+                "./base-config-1.json",
+                "./dir1/base-config-2.json",
+                "./dir1/dir2/base-config-3.json",
+            ],
+            compilerOptions: {
+                baseUrl: (0, path_1.join)("dir1", "dir2"),
+                paths: { foo: ["bar2"] },
+            },
+        });
+    });
+    it("should load a config with array extends without .json extension", function () {
+        var baseConfig = {
+            compilerOptions: { baseUrl: ".", paths: { foo: ["bar"] } },
+        };
+        var baseConfigPath = (0, path_1.join)("/root", "base-config-1.json");
+        var actualConfig = { extends: ["./base-config-1"] };
+        var actualConfigPath = (0, path_1.join)("/root", "tsconfig.json");
+        var res = (0, tsconfig_loader_1.loadTsconfig)((0, path_1.join)("/root", "tsconfig.json"), function (path) { return [baseConfigPath, actualConfigPath].indexOf(path) >= 0; }, function (path) {
+            if (path === baseConfigPath) {
+                return JSON.stringify(baseConfig);
+            }
+            if (path === actualConfigPath) {
+                return JSON.stringify(actualConfig);
+            }
+            return "";
+        });
+        expect(res).toEqual({
+            extends: ["./base-config-1"],
+            compilerOptions: {
+                baseUrl: ".",
+                paths: { foo: ["bar"] },
+            },
         });
     });
 });
