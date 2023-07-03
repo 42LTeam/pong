@@ -14,7 +14,9 @@ COPY --chown=node:node package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN npm ci
-
+#npm ci:This command is similar to npm install, except it's meant to be used in automated environments such as test
+#platforms, continuous integration, and deployment -- or any situation where you want to make sure you're 
+#doing a clean install of your dependencies.
 # Bundle app source
 COPY --chown=node:node . .
 
