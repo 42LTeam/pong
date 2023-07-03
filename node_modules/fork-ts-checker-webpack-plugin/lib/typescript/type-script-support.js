@@ -26,7 +26,6 @@ exports.assertTypeScriptSupport = void 0;
 const os_1 = __importDefault(require("os"));
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const semver = __importStar(require("semver"));
-const type_script_vue_extension_support_1 = require("./extension/vue/type-script-vue-extension-support");
 function assertTypeScriptSupport(config) {
     let typescriptVersion;
     try {
@@ -59,9 +58,6 @@ function assertTypeScriptSupport(config) {
             '  - wrong `context` directory in webpack configuration (if `configFile` is not set or is a relative path in the fork plugin configuration)',
             '  - wrong `typescript.configFile` path in the plugin configuration (should be a relative or absolute path)',
         ].join(os_1.default.EOL));
-    }
-    if (config.extensions.vue.enabled) {
-        (0, type_script_vue_extension_support_1.assertTypeScriptVueExtensionSupport)(config.extensions.vue);
     }
 }
 exports.assertTypeScriptSupport = assertTypeScriptSupport;
