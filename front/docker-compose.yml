@@ -4,11 +4,11 @@ services:
       dockerfile: Dockerfile
       context: .
       # Only will build development stage from our dockerfile
-      target: development
+      #target: development
     volumes:
       - .:/usr/src/app
     # Run in dev Mode: npm run start:dev
-    command: npm run start:dev
+    command: npm run dev
     ports:
       - 5173:5173
     
