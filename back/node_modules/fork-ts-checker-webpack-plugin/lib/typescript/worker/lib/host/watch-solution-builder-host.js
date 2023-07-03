@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createWatchSolutionBuilderHost = void 0;
-const extensions_1 = require("../extensions");
 const system_1 = require("../system");
 const typescript_1 = require("../typescript");
 const watch_compiler_host_1 = require("./watch-compiler-host");
 function createWatchSolutionBuilderHost(parsedConfig, createProgram, reportDiagnostic, reportWatchStatus, reportSolutionBuilderStatus, afterProgramCreate, afterProgramEmitAndDiagnostics) {
     const controlledWatchCompilerHost = (0, watch_compiler_host_1.createWatchCompilerHost)(parsedConfig, createProgram, reportDiagnostic, reportWatchStatus, afterProgramCreate);
-    let controlledWatchSolutionBuilderHost = Object.assign(Object.assign({}, controlledWatchCompilerHost), { reportDiagnostic(diagnostic) {
+    return Object.assign(Object.assign({}, controlledWatchCompilerHost), { reportDiagnostic(diagnostic) {
             if (reportDiagnostic) {
                 reportDiagnostic(diagnostic);
             }
@@ -44,11 +43,5 @@ function createWatchSolutionBuilderHost(parsedConfig, createProgram, reportDiagn
                     }
                 } }));
         } });
-    extensions_1.extensions.forEach((extension) => {
-        if (extension.extendWatchSolutionBuilderHost) {
-            controlledWatchSolutionBuilderHost = extension.extendWatchSolutionBuilderHost(controlledWatchSolutionBuilderHost, parsedConfig);
-        }
-    });
-    return controlledWatchSolutionBuilderHost;
 }
 exports.createWatchSolutionBuilderHost = createWatchSolutionBuilderHost;

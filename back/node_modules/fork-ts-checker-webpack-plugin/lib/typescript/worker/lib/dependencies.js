@@ -22,7 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.invalidateDependencies = exports.getDependencies = void 0;
 const path = __importStar(require("path"));
 const config_1 = require("./config");
-const extensions_1 = require("./extensions");
 const typescript_1 = require("./typescript");
 const worker_config_1 = require("./worker-config");
 let dependencies;
@@ -30,11 +29,6 @@ function getDependencies(force = false) {
     if (!dependencies || force) {
         const parsedConfig = (0, config_1.getParsedConfig)();
         dependencies = getDependenciesWorker(parsedConfig, worker_config_1.config.context);
-        for (const extension of extensions_1.extensions) {
-            if (extension.extendDependencies) {
-                dependencies = extension.extendDependencies(dependencies);
-            }
-        }
     }
     return dependencies;
 }

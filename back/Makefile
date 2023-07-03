@@ -9,7 +9,7 @@ volumes:
 	@docker volume ls -q
 
 rmvol:
-	@docker volume rm srcs_mariadb srcs_nginx srcs_wordpress
+	@docker volume rm back_docker-nest-postgres back_pgadmin back_redis
 
 up:
 	@docker-compose -f docker-compose.yml up -d
@@ -21,12 +21,12 @@ debug: build
 	@docker-compose -f docker-compose.yml up
 
 stop:
-	@docker-compose -f srcs/docker-compose.yml stop
+	@docker-compose -f docker-compose.yml stop
 
 prune:
 	@docker system prune -a
 
-re: stop down rmvol build up
+re: stop down build up
 	@docker ps
 clean: stop down
 

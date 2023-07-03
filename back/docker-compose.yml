@@ -35,7 +35,7 @@ services:
     volumes:
       - .:/usr/src/app
     # Run in dev Mode: npm run start:dev
-    command: npm run start:migrate:prod
+    command: sh -c "npm install @nestjs/cache-manager cache-manager && npm run build && npm run start:migrate:prod"
     ports:
       - 3000:3000
     depends_on:

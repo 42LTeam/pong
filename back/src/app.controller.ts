@@ -1,11 +1,10 @@
 import {
-  CacheInterceptor,
-  CacheTTL,
   Controller,
   Get,
   UseInterceptors,
 } from '@nestjs/common';
 import { AppService } from './app.service';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller()
 export class AppController {
