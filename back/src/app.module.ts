@@ -9,6 +9,7 @@ import { UserService } from './prisma/user.service';
 import { UserController } from './prisma/user.controller';
 import { FriendService } from './prisma/friend.service';
 import { FriendController } from './prisma/friend.controller';
+import { ChatsModule } from './chats/chats.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { FriendController } from './prisma/friend.controller';
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,
     }),
+    ChatsModule,
   ],
   controllers: [AppController, UserController, FriendController],
   providers: [AppService, PrismaService, UserService, FriendService],
