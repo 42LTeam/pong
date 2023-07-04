@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports: 
+      - '5432:5432'
+    volumes:
+      - docker-nest-postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - '5050:80'
+    volumes:
+      - pgadmin:/root/.pgadmin
+    depends_on:
+      - postgres
+
+
+  api:
+    build:
+      dockerfile: ./back/Dockerfile
+      context: .
+      # Only will build development stage from our dockerfile
+      target: development
+    env_file:
+        - .env
+    volumes:
+      - ./back:/usr/src/app
+    # Run in dev Mode: npm run start:dev
+    command: sh -c "npm install && npx prisma generate && npm run start:migrate:prod"
+    ports:
+      - 3000:3000
+    depends_on:
+      - redis
+      - postgres
+
+
+  redis: # Name of container
+    image: redis
+    ports:
+      - 6379:6379
+    volumes: 
+      - redis:/data
+
+  front:
+    build:
+      dockerfile: ./front/Dockerfile
+      context: .
+      # Only will build development stage from our dockerfile
+      #target: development
+    volumes:
+      - ./front:/usr/src/app
+    # Run in dev Mode: npm run start:dev
+    command: npm run dev
+    ports:
+      - 5173:5173
+
+volumes:
+  docker-nest-postgres:
+  redis:
+    driver: local
+  pgadmin:
+  front:

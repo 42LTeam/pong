@@ -8,10 +8,11 @@ export class UserController {
 
   @Post()
   async createUser(
-    @Body('name') name: string,
-    @Body('email') email: string,
+    @Body('id') id: number,
+    @Body('secretO2FA') secretO2FA: string,
+    @Body('avatar') avatar: string,
   ): Promise<User> {
-    return this.userService.createUser(name, email);
+    return this.userService.createUser(id, secretO2FA, avatar);
   }
 
   @Get()

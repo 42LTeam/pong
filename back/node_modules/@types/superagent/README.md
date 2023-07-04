@@ -8,7 +8,7 @@ This package contains type definitions for SuperAgent (https://github.com/vision
 Files were exported from https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/superagent.
 
 ### Additional Details
- * Last updated: Tue, 25 Jan 2022 21:31:28 GMT
+ * Last updated: Wed, 24 May 2023 21:32:52 GMT
  * Dependencies: [@types/cookiejar](https://npmjs.com/package/@types/cookiejar), [@types/node](https://npmjs.com/package/@types/node)
  * Global values: none
 

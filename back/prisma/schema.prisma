@@ -6,15 +6,42 @@ generator client {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String
-  name  String
+  id          Int     @id @unique
+  secretO2FA  String
+  avatar      String
 }
 
-model Chat {
-  id    Int     @id @default(autoincrement())
-  name1  String
-  name2  String
+model Friends {
+  id_count    Int     @id @default(autoincrement())
+  id          Int
+  user_1      Int
+  user_2      Int
+  status      String
+  created_at  DateTime
+}
+
+model Match {
+  id_count      Int     @id @default(autoincrement())
+  id            Int
+  user_1        Int
+  user_2        Int
+  user_1_score  Int
+  user_2_score  Int
+  created_at    DateTime
+}
+
+model Message {
+  id_count      Int     @id @default(autoincrement())
+  user          Int
+  channel       Int
+}
+
+model Channel {
+  id_count      Int     @id @default(autoincrement())
+  id            Int
+  name          String
+  password      String
+  created_at    DateTime
 }
 
 datasource db {

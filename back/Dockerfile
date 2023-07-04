@@ -10,7 +10,8 @@ WORKDIR /usr/src/app
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
 # Copying this first prevents re-running npm install on every code change.
-COPY --chown=node:node package*.json ./
+COPY --chown=node:node ./back/package*.json ./
+
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN npm ci
@@ -18,7 +19,7 @@ RUN npm ci
 #platforms, continuous integration, and deployment -- or any situation where you want to make sure you're 
 #doing a clean install of your dependencies.
 # Bundle app source
-COPY --chown=node:node . .
+COPY --chown=node:node ./back . 
 
 # Use the node user from the image (instead of the root user)
 USER node

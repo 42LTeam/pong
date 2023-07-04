@@ -19,8 +19,8 @@ let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    async createUser(name, email) {
-        return this.userService.createUser(name, email);
+    async createUser(id, secretO2FA, avatar) {
+        return this.userService.createUser(id, secretO2FA, avatar);
     }
     async getAllUsers() {
         return this.userService.getAllUsers();
@@ -31,10 +31,11 @@ let UserController = class UserController {
 };
 __decorate([
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)('name')),
-    __param(1, (0, common_1.Body)('email')),
+    __param(0, (0, common_1.Body)('id')),
+    __param(1, (0, common_1.Body)('secretO2FA')),
+    __param(2, (0, common_1.Body)('avatar')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [Number, String, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "createUser", null);
 __decorate([

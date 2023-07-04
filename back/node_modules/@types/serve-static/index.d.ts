@@ -1,14 +1,14 @@
-// Type definitions for serve-static 1.13
+// Type definitions for serve-static 1.15
 // Project: https://github.com/expressjs/serve-static
 // Definitions by: Uros Smolnik <https://github.com/urossmolnik>
 //                 Linus Unnebäck <https://github.com/LinusU>
 //                 Devansh Jethmalani <https://github.com/devanshj>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.3
 
 /// <reference types="node" />
 import * as m from "mime";
 import * as http from "http";
+import { HttpError } from "http-errors";
 
 /**
  * Create a new middleware function to serve files from within a given root directory.
@@ -23,6 +23,12 @@ declare function serveStatic<R extends http.ServerResponse>(
 declare namespace serveStatic {
     var mime: typeof m;
     interface ServeStaticOptions<R extends http.ServerResponse = http.ServerResponse> {
+        /**
+         * Enable or disable accepting ranged requests, defaults to true.
+         * Disabling this will not send Accept-Ranges and ignore the contents of the Range request header.
+         */
+        acceptRanges?: boolean | undefined;
+
         /**
          * Enable or disable setting Cache-Control response header, defaults to true.
          * Disabling this will ignore the immutable and maxAge options.
@@ -96,7 +102,7 @@ declare namespace serveStatic {
     }
 
     interface RequestHandler<R extends http.ServerResponse> {
-        (request: http.IncomingMessage, response: R, next: () => void): any;
+        (request: http.IncomingMessage, response: R, next: (err?: HttpError) => void): any;
     }
 
     interface RequestHandlerConstructor<R extends http.ServerResponse> {

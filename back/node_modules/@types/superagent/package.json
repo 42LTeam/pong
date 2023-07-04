@@ -1,6 +1,6 @@
 {
     "name": "@types/superagent",
-    "version": "4.1.15",
+    "version": "4.1.18",
     "description": "TypeScript definitions for SuperAgent",
     "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/superagent",
     "license": "MIT",
@@ -73,6 +73,6 @@
         "@types/cookiejar": "*",
         "@types/node": "*"
     },
-    "typesPublisherContentHash": "2c0bbeaebfa8db47b247092a1d80cd606251f233e6139c512c856020051df830",
-    "typeScriptVersion": "3.8"
+    "typesPublisherContentHash": "de36cad4b597b66eadc0f68856e41fd6bf8fc585c99526b8e0afcd74dacd6ff7",
+    "typeScriptVersion": "4.3"
 }

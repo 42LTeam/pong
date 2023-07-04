@@ -16,11 +16,12 @@ let UserService = class UserService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async createUser(name, email) {
+    async createUser(id, secretO2FA, avatar) {
         return this.prisma.user.create({
             data: {
-                name,
-                email,
+                id,
+                secretO2FA,
+                avatar
             },
         });
     }
@@ -30,7 +31,7 @@ let UserService = class UserService {
     async getUserById(id) {
         return this.prisma.user.findUnique({
             where: {
-                id,
+                id: id,
             },
         });
     }
