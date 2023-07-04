@@ -34,6 +34,7 @@ model Message {
   id_count      Int     @id @default(autoincrement())
   user          Int
   channel       Int
+  text       String
 }
 
 model Channel {

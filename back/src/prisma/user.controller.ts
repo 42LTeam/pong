@@ -1,18 +1,30 @@
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
 
+class CreateUserDto {
+  @ApiProperty()
+  id: number;
+
+  @ApiProperty()
+  secretO2FA: string;
+
+  @ApiProperty()
+  avatar: string;
+}
+
+@ApiTags('users')
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
+  @ApiBody({ type: CreateUserDto })
   async createUser(
-    @Body('id') id: number,
-    @Body('secretO2FA') secretO2FA: string,
-    @Body('avatar') avatar: string,
+    @Body() createUserDto: CreateUserDto,
   ): Promise<User> {
-    return this.userService.createUser(id, secretO2FA, avatar);
+    return this.userService.createUser(createUserDto.id, createUserDto.secretO2FA, createUserDto.avatar);
   }
 
   @Get()

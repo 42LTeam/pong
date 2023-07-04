@@ -13,9 +13,11 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const redisStore = require("cache-manager-redis-store");
 const config_1 = require("@nestjs/config");
-const prisma_service_1 = require("./prisma.service");
-const user_service_1 = require("./user.service");
-const user_controller_1 = require("./user.controller");
+const prisma_service_1 = require("./prisma/prisma.service");
+const user_service_1 = require("./prisma/user.service");
+const user_controller_1 = require("./prisma/user.controller");
+const friend_service_1 = require("./prisma/friend.service");
+const friend_controller_1 = require("./prisma/friend.controller");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -29,8 +31,8 @@ AppModule = __decorate([
                 port: process.env.REDIS_PORT,
             }),
         ],
-        controllers: [app_controller_1.AppController, user_controller_1.UserController],
-        providers: [app_service_1.AppService, prisma_service_1.PrismaService, user_service_1.UserService],
+        controllers: [app_controller_1.AppController, user_controller_1.UserController, friend_controller_1.FriendController],
+        providers: [app_service_1.AppService, prisma_service_1.PrismaService, user_service_1.UserService, friend_service_1.FriendService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

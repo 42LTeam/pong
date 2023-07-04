@@ -6,7 +6,6 @@ export function setupSwagger(app: INestApplication) {
     .setTitle('Trans Pi Rance')
     .setDescription('The is the Trans-Pi-Rence API doc')
     .setVersion('1.0')
-    .addTag('i\'m not a tag')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
