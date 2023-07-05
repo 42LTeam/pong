@@ -9,7 +9,7 @@ volumes:
 	@docker volume ls -q
 
 rmvol:
-	@docker volume rm back_docker-nest-postgres back_pgadmin back_redis
+	@docker volume rm pong_docker-nest-postgres pong_pgadmin pong_redis
 
 up:
 	@docker-compose -f docker-compose.yml up -d

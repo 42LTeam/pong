@@ -37,6 +37,16 @@ let FriendService = class FriendService {
             },
         });
     }
+    async updateFriendStatus(id, status) {
+        return this.prisma.friends.update({
+            where: {
+                id_count: id,
+            },
+            data: {
+                status,
+            },
+        });
+    }
 };
 FriendService = __decorate([
     (0, common_1.Injectable)(),

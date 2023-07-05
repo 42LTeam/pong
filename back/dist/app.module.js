@@ -16,8 +16,7 @@ const config_1 = require("@nestjs/config");
 const prisma_service_1 = require("./prisma/prisma.service");
 const user_service_1 = require("./prisma/user.service");
 const user_controller_1 = require("./prisma/user.controller");
-const friend_service_1 = require("./prisma/friend.service");
-const friend_controller_1 = require("./prisma/friend.controller");
+const chat_gateway_1 = require("./chat/chat.gateway");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -31,8 +30,8 @@ AppModule = __decorate([
                 port: process.env.REDIS_PORT,
             }),
         ],
-        controllers: [app_controller_1.AppController, user_controller_1.UserController, friend_controller_1.FriendController],
-        providers: [app_service_1.AppService, prisma_service_1.PrismaService, user_service_1.UserService, friend_service_1.FriendService],
+        controllers: [app_controller_1.AppController, user_controller_1.UserController],
+        providers: [app_service_1.AppService, prisma_service_1.PrismaService, user_service_1.UserService, chat_gateway_1.ChatGateway],
     })
 ], AppModule);
 exports.AppModule = AppModule;

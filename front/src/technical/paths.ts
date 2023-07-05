@@ -3,5 +3,6 @@ export const Paths = {
     leaderboard: "/leaderboard",
     skins: "/skins",
     profile: "/profile",
-    settings: "/settings"
+    settings: "/settings",
+    chat: "/chat"
 }
