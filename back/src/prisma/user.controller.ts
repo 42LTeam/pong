@@ -8,10 +8,16 @@ class CreateUserDto {
   id: number;
 
   @ApiProperty()
+  username: string;
+
+  @ApiProperty()
   secretO2FA: string;
 
   @ApiProperty()
   avatar: string;
+
+  @ApiProperty()
+  xp: number;
 }
 
 @ApiTags('users')
@@ -24,7 +30,7 @@ export class UserController {
   async createUser(
     @Body() createUserDto: CreateUserDto,
   ): Promise<User> {
-    return this.userService.createUser(createUserDto.id, createUserDto.secretO2FA, createUserDto.avatar);
+    return this.userService.createUser(createUserDto.id, createUserDto.username, createUserDto.secretO2FA, createUserDto.avatar, createUserDto.xp);
   }
 
   @Get()

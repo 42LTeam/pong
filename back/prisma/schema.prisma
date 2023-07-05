@@ -7,13 +7,14 @@ generator client {
 
 model User {
   id          Int     @id @unique
+  username    String
   secretO2FA  String
   avatar      String
+  xp          Int
 }
 
 model Friends {
-  id_count    Int     @id @default(autoincrement())
-  id          Int
+  id          Int     @id @unique
   user_1      Int
   user_2      Int
   status      String
@@ -31,7 +32,7 @@ model Match {
 }
 
 model Message {
-  id_count      Int     @id @default(autoincrement())
+  id            Int     @id @unique @default(autoincrement())
   user          Int
   channel       Int
   text       String

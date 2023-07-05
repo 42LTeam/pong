@@ -6,8 +6,8 @@ import { Friends } from '@prisma/client';
 export class FriendService {
   constructor(private prisma: PrismaService) {}
 
-  async createFriend(id: number, user_1: string, user_2: string, status: string, created_at: string): Promise<Friend> {
-    return this.prisma.friend.create({
+  async createFriend(id: number, user_1: number, user_2: number, status: string, created_at: Date): Promise<Friends> {
+    return this.prisma.friends.create({
       data: {
         id,
         user_1,
@@ -19,11 +19,11 @@ export class FriendService {
   }
 
   async getAllFriends(): Promise<Friends[]> {
-    return this.prisma.friend.findMany();
+    return this.prisma.friends.findMany();
   }
 
   async getFriendById(id: number): Promise<Friends | null> {
-    return this.prisma.friend.findUnique({
+    return this.prisma.friends.findUnique({
       where: {
         id: id,
       },
@@ -33,7 +33,7 @@ export class FriendService {
   async updateFriendStatus(id: number, status: string): Promise<Friends> {
     return this.prisma.friends.update({
       where: {
-        id_count: id,
+        id: id,
       },
       data: {
         status,
