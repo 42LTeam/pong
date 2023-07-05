@@ -25,17 +25,25 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
+], CreateUserDto.prototype, "username", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
 ], CreateUserDto.prototype, "secretO2FA", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "avatar", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateUserDto.prototype, "xp", void 0);
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
     async createUser(createUserDto) {
-        return this.userService.createUser(createUserDto.id, createUserDto.secretO2FA, createUserDto.avatar);
+        return this.userService.createUser(createUserDto.id, createUserDto.username, createUserDto.secretO2FA, createUserDto.avatar, createUserDto.xp);
     }
     async getAllUsers() {
         return this.userService.getAllUsers();

@@ -8,7 +8,10 @@ import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './prisma/user.service';
 import { UserController } from './prisma/user.controller';
 import { ChatGateway } from './chat/chat.gateway';
-
+import { FriendService } from './prisma/friend.service';
+import { FriendController } from './prisma/friend.controller';
+import { MessageController } from './prisma/message.controller';
+import { MessageService } from './prisma/message.service';
 
 @Module({
   imports: [
@@ -20,8 +23,8 @@ import { ChatGateway } from './chat/chat.gateway';
       port: process.env.REDIS_PORT,
     }),
   ],
-  controllers: [AppController, UserController],
-  providers: [AppService, PrismaService, UserService, ChatGateway],
+  controllers: [AppController, UserController, FriendController, MessageController],
+  providers: [AppService, PrismaService, UserService, FriendService, MessageService, ChatGateway],
 })
 export class AppModule {}
 

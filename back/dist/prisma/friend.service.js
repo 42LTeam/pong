@@ -17,7 +17,7 @@ let FriendService = class FriendService {
         this.prisma = prisma;
     }
     async createFriend(id, user_1, user_2, status, created_at) {
-        return this.prisma.friend.create({
+        return this.prisma.friends.create({
             data: {
                 id,
                 user_1,
@@ -28,10 +28,10 @@ let FriendService = class FriendService {
         });
     }
     async getAllFriends() {
-        return this.prisma.friend.findMany();
+        return this.prisma.friends.findMany();
     }
     async getFriendById(id) {
-        return this.prisma.friend.findUnique({
+        return this.prisma.friends.findUnique({
             where: {
                 id: id,
             },
@@ -40,7 +40,7 @@ let FriendService = class FriendService {
     async updateFriendStatus(id, status) {
         return this.prisma.friends.update({
             where: {
-                id_count: id,
+                id: id,
             },
             data: {
                 status,

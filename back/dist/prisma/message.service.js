@@ -9,38 +9,51 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = void 0;
+exports.MessageService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("./prisma.service");
-let UserService = class UserService {
+let MessageService = class MessageService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async createUser(id, username, secretO2FA, avatar, xp) {
-        return this.prisma.user.create({
+    async createMessage(id, user, channel, text) {
+        return this.prisma.message.create({
             data: {
                 id,
-                username,
-                secretO2FA,
-                avatar,
-                xp
+                user,
+                channel,
+                text,
             },
         });
     }
-    async getAllUsers() {
-        return this.prisma.user.findMany();
+    async getAllMessages() {
+        return this.prisma.message.findMany();
     }
-    async getUserById(id) {
-        return this.prisma.user.findUnique({
+    async getMessageById(id) {
+        return this.prisma.message.findUnique({
             where: {
                 id: id,
             },
         });
     }
+    async getMessageByUser(user) {
+        return this.prisma.message.findMany({
+            where: {
+                user: user,
+            },
+        });
+    }
+    async getMessageByChannel(channel) {
+        return this.prisma.message.findMany({
+            where: {
+                channel: channel,
+            },
+        });
+    }
 };
-UserService = __decorate([
+MessageService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
-], UserService);
-exports.UserService = UserService;
-//# sourceMappingURL=user.service.js.map
+], MessageService);
+exports.MessageService = MessageService;
+//# sourceMappingURL=message.service.js.map
