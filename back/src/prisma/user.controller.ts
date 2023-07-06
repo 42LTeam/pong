@@ -38,8 +38,8 @@ export class UserController {
     return this.userService.getAllUsers();
   }
 
-  @Get(':id')
-  async getUserById(@Param('id') id: string): Promise<User | null> {
+  @Get('id/:id')
+  async getUserById(@Param('id') id: number): Promise<User | null> {
     return this.userService.getUserById(Number(id));
   }
 }
