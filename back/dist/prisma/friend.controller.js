@@ -14,13 +14,36 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FriendController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const friend_service_1 = require("./friend.service");
+class CreateFriendDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateFriendDto.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateFriendDto.prototype, "user_1", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateFriendDto.prototype, "user_2", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreateFriendDto.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Date)
+], CreateFriendDto.prototype, "created_at", void 0);
 let FriendController = class FriendController {
     constructor(friendService) {
         this.friendService = friendService;
     }
-    async createFriend(id, user_1, user_2, status, created_at) {
-        return this.friendService.createFriend(id, user_1, user_2, status, created_at);
+    async createFriend(createFriendDto) {
+        return this.friendService.createFriend(createFriendDto.id, createFriendDto.user_1, createFriendDto.user_2, createFriendDto.status, createFriendDto.created_at);
     }
     async getAllUsers() {
         return this.friendService.getAllFriends();
@@ -31,13 +54,10 @@ let FriendController = class FriendController {
 };
 __decorate([
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)('id')),
-    __param(1, (0, common_1.Body)('user_1')),
-    __param(2, (0, common_1.Body)('user_2')),
-    __param(3, (0, common_1.Body)('status')),
-    __param(4, (0, common_1.Body)('created_at')),
+    (0, swagger_1.ApiBody)({ type: CreateFriendDto }),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, String, String, String, String]),
+    __metadata("design:paramtypes", [CreateFriendDto]),
     __metadata("design:returntype", Promise)
 ], FriendController.prototype, "createFriend", null);
 __decorate([
@@ -54,6 +74,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], FriendController.prototype, "getUserById", null);
 FriendController = __decorate([
+    (0, swagger_1.ApiTags)('friends'),
     (0, common_1.Controller)('friends'),
     __metadata("design:paramtypes", [friend_service_1.FriendService])
 ], FriendController);

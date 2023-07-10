@@ -16,12 +16,14 @@ let UserService = class UserService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async createUser(id, secretO2FA, avatar) {
+    async createUser(id, username, secretO2FA, avatar, xp) {
         return this.prisma.user.create({
             data: {
                 id,
+                username,
                 secretO2FA,
-                avatar
+                avatar,
+                xp
             },
         });
     }

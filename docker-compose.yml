@@ -39,6 +39,7 @@ services:
     command: sh -c "npm install && npx prisma generate && npm run start:migrate:prod"
     ports:
       - 3000:3000
+      - 8001:8001
     depends_on:
       - redis
       - postgres

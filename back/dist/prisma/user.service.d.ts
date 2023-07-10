@@ -3,7 +3,7 @@ import { User } from '@prisma/client';
 export declare class UserService {
     private prisma;
     constructor(prisma: PrismaService);
-    createUser(id: number, secretO2FA: string, avatar: string): Promise<User>;
+    createUser(id: number, username: string, secretO2FA: string, avatar: string, xp: number): Promise<User>;
     getAllUsers(): Promise<User[]>;
     getUserById(id: number): Promise<User | null>;
 }
