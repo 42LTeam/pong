@@ -6,10 +6,9 @@ import { Message } from '@prisma/client';
 export class MessageService {
   constructor(private prisma: PrismaService) {}
 
-  async createMessage(id: number, user: number, channel: number, text: string): Promise<Message> {
+  async createMessage(user: number, channel: number, text: string): Promise<Message> {
     return this.prisma.message.create({
       data: {
-        id,
         user,
         channel,
         text,
@@ -18,8 +17,18 @@ export class MessageService {
   }
 
   async getAllMessages(): Promise<Message[]> {
-    return this.prisma.message.findMany();
+    return this.prisma.message.findMany({
+      select: {
+        id: true,
+        user: true,
+        channel: true,
+        text: true,
+        created_at: true
+      }
+    });
   }
+  
+
 
   async getMessageById(id: number): Promise<Message> {
     return this.prisma.message.findUnique({
@@ -37,11 +46,18 @@ export class MessageService {
     });
   }
 
-  async getMessageByChannel(channel: number): Promise<Message[]> {
+  async getMessageByChannel(channel_requested: number): Promise<Message[]> {
     return this.prisma.message.findMany({
       where: {
-        channel: channel,
+        channel: channel_requested,
       },
+      select: {
+        id: true,
+        user: true,
+        channel: true,
+        text: true,
+        created_at: true
+      }
     });
   }
 }

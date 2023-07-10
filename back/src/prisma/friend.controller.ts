@@ -39,7 +39,7 @@ export class FriendController {
     return this.friendService.getAllFriends();
   }
 
-  @Get(':id')
+  @Get('id/:id')
   async getUserById(@Param('id') id: string): Promise<Friends | null> {
     return this.friendService.getFriendById(Number(id));
   }
