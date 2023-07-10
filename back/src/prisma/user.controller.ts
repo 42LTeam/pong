@@ -1,22 +1,31 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, UseGuards} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
+import {IsEmail, IsNotEmpty, IsNumber} from "@nestjs/class-validator";
+import {AuthenticatedGuard, FortyTwoAuthGuard} from "../guards";
 
 class CreateUserDto {
   @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
   id: number;
 
   @ApiProperty()
+  @IsNotEmpty()
   username: string;
 
   @ApiProperty()
+  @IsNotEmpty()
   secretO2FA: string;
 
   @ApiProperty()
+  @IsNotEmpty()
   avatar: string;
 
   @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
   xp: number;
 }
 
@@ -34,6 +43,7 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(AuthenticatedGuard)
   async getAllUsers(): Promise<User[]> {
     return this.userService.getAllUsers();
   }

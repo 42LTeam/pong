@@ -10,10 +10,9 @@ import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @UseInterceptors(CacheInterceptor) // automatically cache the response
-  @CacheTTL(30) // sets the TTL to 30 seconds
   @Get()
   getHello(): string {
+	  console.log('test');
     return this.appService.getHello();
   }
 }

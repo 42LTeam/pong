@@ -11,28 +11,25 @@ const common_1 = require("@nestjs/common");
 const cache_manager_1 = require("@nestjs/cache-manager");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
-const redisStore = require("cache-manager-redis-store");
 const config_1 = require("@nestjs/config");
-const prisma_service_1 = require("./prisma/prisma.service");
-const user_service_1 = require("./prisma/user.service");
-const user_controller_1 = require("./prisma/user.controller");
-const friend_service_1 = require("./prisma/friend.service");
-const friend_controller_1 = require("./prisma/friend.controller");
+const auth_module_1 = require("./auth/auth.module");
+const passport_1 = require("@nestjs/passport");
+const user_module_1 = require("./prisma/user.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            passport_1.PassportModule.register({ session: true }),
             config_1.ConfigModule.forRoot(),
             cache_manager_1.CacheModule.register({
                 isGlobal: true,
-                store: redisStore,
-                host: process.env.REDIS_HOST,
-                port: process.env.REDIS_PORT,
             }),
+            auth_module_1.AuthModule,
+            user_module_1.UserModule,
         ],
-        controllers: [app_controller_1.AppController, user_controller_1.UserController, friend_controller_1.FriendController],
-        providers: [app_service_1.AppService, prisma_service_1.PrismaService, user_service_1.UserService, friend_service_1.FriendService],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

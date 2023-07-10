@@ -10,6 +10,8 @@ services:
       - '5432:5432'
     volumes:
       - docker-nest-postgres:/var/lib/postgresql/data
+    networks:
+      - net
 
   pgadmin:
     image: dpage/pgadmin4
@@ -23,6 +25,8 @@ services:
       - pgadmin:/root/.pgadmin
     depends_on:
       - postgres
+    networks:
+      - net
 
 
   api:
@@ -42,6 +46,8 @@ services:
     depends_on:
       - redis
       - postgres
+    networks:
+      - net
 
 
   redis: # Name of container
@@ -70,3 +76,8 @@ volumes:
     driver: local
   pgadmin:
   front:
+
+networks:
+  net:
+    driver: bridge
+

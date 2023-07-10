@@ -12,18 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
-const cache_manager_1 = require("@nestjs/cache-manager");
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
     getHello() {
+        console.log('test');
         return this.appService.getHello();
     }
 };
 __decorate([
-    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
-    (0, cache_manager_1.CacheTTL)(30),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
