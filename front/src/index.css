@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-    --header-height: 72px;
+    /*--header-height: 72px;*/
 }
 
 body {
-    padding: 0;
+
 }
 
 #header {

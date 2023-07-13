@@ -15,7 +15,7 @@ import Auth from './Auth';
 import { Paths } from './technical/paths';
 import ProfilePage from './ProfilePage';
 import SettingPage from './SettingPage';
-import Chat from './ChatPage';
+import Chat from './chat/pages/ChatPage';
 
 
 const SomeRoutes = () => {

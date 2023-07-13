@@ -25,7 +25,7 @@ function Main_app() {
       {cookies.monCookieDeConnexion ? <Home /> : <LoginPage />}
     </div>*/
 
-   <div> 
+   <div>
       {toCheckHome ? <Home /> : <LoginPage />}
    </div>
   );

@@ -1,13 +1,16 @@
 import {useEffect, useState} from 'react'
 import io, { Socket } from "socket.io-client"
-import MessageInput from "./MessageInput";
-import Messages from "./Messages";
+import MessageInput from "../MessageInput";
+import Messages from "../Messages";
+import ChatRoom from "./ChatRoom";
 import axios from "axios";
 
 /* Get Message Front */
 // const client = axios.create({
     const baseURL = "http://localhost:3000/message/"
 // });
+
+
 
 function App() {
   const [socket, setSocket] = useState<Socket>()
@@ -43,6 +46,9 @@ function App() {
 
   return (
    <>
+       {/*<div>*/}
+       {/*    <ChatRoom />*/}
+       {/*</div>*/}
 
        {" "}
        <MessageInput send={send}/>
