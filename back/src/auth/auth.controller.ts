@@ -1,6 +1,6 @@
 import {Controller, Get, Res, UseGuards} from '@nestjs/common';
 import {Response} from "express";
-import {FortyTwoAuthGuard} from "../guards";
+import {FortyTwoAuthGuard} from "./guards/fortytwo.guard";
 
 @Controller('auth')
 export class AuthController {

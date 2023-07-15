@@ -2,10 +2,10 @@ import { Strategy } from 'passport-42';
 import { PassportStrategy} from "@nestjs/passport";
 import {Injectable, UnauthorizedException} from "@nestjs/common";
 import * as process from "process";
-import {AuthService} from "../auth/auth.service";
+import {AuthService} from "../auth.service";
 
 @Injectable()
-export class FortyTwoStrategy extends PassportStrategy(Strategy){
+export class FortyTwoStrategy extends PassportStrategy(Strategy, '42'){
     constructor(private authService: AuthService) {
         super({
             clientID: process.env.FORTYTWO_UID,
