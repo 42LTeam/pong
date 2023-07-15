@@ -30,6 +30,14 @@ model Match {
   created_at    DateTime
 }
 
+// model Whisp {
+//   id            Int  @id @default(autoincrement())
+//   sender        Int
+//   receiver      Int
+//   text          String
+//   created_at    DateTime @default(now())
+// }
+
 model Message {
   id            Int  @id @default(autoincrement())
   user          Int

@@ -5,6 +5,9 @@ REDIS=pong_redis
 all: build up
 
 VOLUMES = docker volume ls -q
+DB=pong_docker-nest-postgres
+PG=pong_pgadmin
+REDIS=pong_redis
 
 build:
 	@docker compose -f docker-compose.yml build

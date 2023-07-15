@@ -15,6 +15,7 @@ import Auth from './Auth';
 import { Paths } from './technical/paths';
 import ProfilePage from './ProfilePage';
 import SettingPage from './SettingPage';
+import Chat from './ChatPage';
 
 
 const SomeRoutes = () => {
@@ -27,6 +28,7 @@ const SomeRoutes = () => {
           <Route path={Paths.skins} element={<SkinPage />} />
           <Route path={Paths.profile} element={<ProfilePage />} />
           <Route path={Paths.settings} element={<SettingPage />} />
+          <Route path={Paths.chat} element={<Chat />} />
         </Route>
       </Routes>
     </BrowserRouter>
@@ -34,10 +36,8 @@ const SomeRoutes = () => {
 }
 
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+ReactDOM.createRoot(document.getElementById('root')).render(
     <Auth>
       <SomeRoutes />
     </Auth>
-  </React.StrictMode>,
-)
+);
