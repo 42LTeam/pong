@@ -1,9 +1,9 @@
-import {Controller, Get, Param, Post, Body, UseGuards} from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, UseGuards, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
-import {IsEmail, IsNotEmpty, IsNumber} from "@nestjs/class-validator";
-import {AuthenticatedGuard, FortyTwoAuthGuard} from "../guards";
+import {IsNotEmpty, IsNumber} from "@nestjs/class-validator";
+import {AuthenticatedGuard} from "../auth/guards/authenticated.guard"
 
 class CreateUserDto {
   @ApiProperty()
@@ -44,7 +44,9 @@ export class UserController {
 
   @Get()
   @UseGuards(AuthenticatedGuard)
-  async getAllUsers(): Promise<User[]> {
+  async getAllUsers(@Req() req): Promise<User[]> {
+    await req.user;
+    console.log(req.user);
     return this.userService.getAllUsers();
   }
 
