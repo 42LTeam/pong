@@ -8,7 +8,7 @@ export class AuthService {
     async validateUser(profile: any): Promise<any> {
         const user = await this.usersService.getUserById(parseInt(profile.id));
         if (!user)
-            await this.usersService.createUser(parseInt(profile.id), profile.username, 'jsp', 'jsp', 0);
+            return this.usersService.createUser(parseInt(profile.id), profile.username, 'jsp', 'jsp', 0);
         return user;
     }
 }
