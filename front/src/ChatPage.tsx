@@ -14,7 +14,7 @@ function App() {
     const[messages, setMessages] = useState<string[]>([])
 
     useEffect(() => {
-        axios.get(`${baseURL}`).then((response) => {
+        axios.get(`${baseURL}`, {withCredentials: true}).then((response) => {
             const texts = response.data.map(e => e.text);
             setMessages(prev => [...prev, ...texts]);
         })
