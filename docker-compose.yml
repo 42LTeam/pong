@@ -59,6 +59,8 @@ services:
       - ./front:/usr/src/app
     # Run in dev Mode: npm run start:dev
     command: npm run dev
+    depends_on:
+      - api
     ports:
       - 5173:5173
     networks:
