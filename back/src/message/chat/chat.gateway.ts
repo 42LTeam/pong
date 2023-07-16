@@ -1,5 +1,5 @@
 import {MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer} from '@nestjs/websockets';
-import {MessageService} from "../prisma/message.service";
+import {MessageService} from "../message.service";
 
 @WebSocketGateway(8001, {cors: '*'})
 export class ChatGateway {
