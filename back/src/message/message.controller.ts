@@ -1,19 +1,19 @@
-import {Controller, Get, Param, Post, Body, UseGuards} from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Message } from '@prisma/client';
 import { MessageService } from './message.service';
-import {AuthenticatedGuard} from "../auth/guards/authenticated.guard";
+import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 
 class CreateMessageDto {
 
   @ApiProperty()
-  user: number;
+  userId: number;
 
   @ApiProperty()
-  channel: number;
+  channelId: number;
 
   @ApiProperty()
-  text: string;
+  content: string;
 
 }
 
@@ -28,7 +28,7 @@ export class MessageController {
   async createMessage(
     @Body() createMessageDto: CreateMessageDto,
   ): Promise<Message> {
-    return this.messageService.createMessage(createMessageDto.user, createMessageDto.channel, createMessageDto.text);
+    return this.messageService.createMessage(createMessageDto.userId, createMessageDto.channelId, createMessageDto.content);
   }
 
   @Get()

@@ -1,43 +1,84 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Friends } from '@prisma/client';
+import { Friendship } from '@prisma/client';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class FriendService {
   constructor(private prisma: PrismaService) {}
 
-  async createFriend(id: number, user_1: number, user_2: number, status: string, created_at: Date): Promise<Friends> {
-    return this.prisma.friends.create({
-      data: {
-        id,
-        user_1,
-        user_2,
-        status,
-        created_at,
-      },
-    });
-  }
-
-  async getAllFriends(): Promise<Friends[]> {
-    return this.prisma.friends.findMany();
-  }
-
-  async getFriendById(id: number): Promise<Friends | null> {
-    return this.prisma.friends.findUnique({
+  async createFriendRequest(initiatorId: number, acceptorId: number): Promise<Friendship> {
+    if (initiatorId == acceptorId) {
+      throw new Error('Both initiatorId and acceptorId shouldn\'t be the same');
+    }
+    const existingFriendship = await this.prisma.friendship.findFirst({
       where: {
-        id: id,
+        OR: [
+          { initiatorId: initiatorId, acceptorId: acceptorId },
+          { initiatorId: acceptorId, acceptorId: initiatorId },
+        ],
       },
     });
-  }
-
-  async updateFriendStatus(id: number, status: string): Promise<Friends> {
-    return this.prisma.friends.update({
-      where: {
-        id: id,
-      },
+    if (existingFriendship) {
+      if (existingFriendship.acceptedAt) {
+        throw new Error('Users are already friends');
+      } else {
+        throw new Error('Friend request already sent');
+      }
+    }
+    return this.prisma.friendship.create({
       data: {
-        status,
+        initiatorId,
+        acceptorId,
       },
     });
   }
+  
+
+  async acceptFriendRequest(id: number): Promise<Friendship> {
+    const friendshipExists = await this.prisma.friendship.findUnique({
+      where: { id: id },
+    });
+  
+    if (!friendshipExists) {
+      throw new Error('Friendship with provided ID not found');
+    }
+  
+    return this.prisma.friendship.update({
+      where: { id: id },
+      data: { acceptedAt: new Date() },
+    });
+  }
+  
+  
+  async getPendingFriendRequests(userId: number): Promise<Friendship[]> {
+    return this.prisma.friendship.findMany({
+      where: {
+        OR: [
+          { acceptorId: userId, acceptedAt: null },
+          { initiatorId: userId, acceptedAt: null },
+        ]
+      },
+    });
+  }
+  
+  
+  async getFriends(userId: number): Promise<User[]> {
+  const initiatedFriendships = await this.prisma.friendship.findMany({
+    where: { initiatorId: userId, acceptedAt: { not: null } },
+    include: { acceptedBy: true },
+  });
+
+  const acceptedFriendships = await this.prisma.friendship.findMany({
+    where: { acceptorId: userId, acceptedAt: { not: null } },
+    include: { initiatedBy: true },
+  });
+
+  return [
+    ...initiatedFriendships.map(friendship => friendship.acceptedBy),
+    ...acceptedFriendships.map(friendship => friendship.initiatedBy),
+  ];
+}
+
+  
 }

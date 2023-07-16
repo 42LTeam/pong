@@ -6,29 +6,21 @@ import { Message } from '@prisma/client';
 export class MessageService {
   constructor(private prisma: PrismaService) {}
 
-  async createMessage(user: number, channel: number, text: string): Promise<Message> {
+  async createMessage(userId: number, channelId: number, content: string): Promise<Message> {
     return this.prisma.message.create({
       data: {
-        user,
-        channel,
-        text,
+        userId,
+        channelId,
+        content,
       },
     });
-  }
+}
+
 
   async getAllMessages(): Promise<Message[]> {
     return this.prisma.message.findMany({
-      select: {
-        id: true,
-        user: true,
-        channel: true,
-        text: true,
-        created_at: true
-      }
     });
   }
-  
-
 
   async getMessageById(id: number): Promise<Message> {
     return this.prisma.message.findUnique({
@@ -38,26 +30,28 @@ export class MessageService {
     });
   }
 
-  async getMessageByUser(user: number): Promise<Message[]> {
+  async getMessageByUser(userId: number): Promise<Message[]> {
     return this.prisma.message.findMany({
       where: {
-        user: user,
+        userId: userId,
       },
+      include: {
+        user: true,
+        channel: true,
+      }
     });
   }
 
-  async getMessageByChannel(channel_requested: number): Promise<Message[]> {
+  async getMessageByChannel(channelId: number): Promise<Message[]> {
     return this.prisma.message.findMany({
       where: {
-        channel: channel_requested,
+        channelId: channelId,
       },
-      select: {
-        id: true,
+      include: {
         user: true,
         channel: true,
-        text: true,
-        created_at: true
       }
     });
   }
 }
+
