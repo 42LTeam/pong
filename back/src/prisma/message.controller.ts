@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, UseGuards} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Message } from '@prisma/client';
 import { MessageService } from './message.service';
+import {AuthenticatedGuard} from "../auth/guards/authenticated.guard";
 
 class CreateMessageDto {
 
@@ -18,6 +19,7 @@ class CreateMessageDto {
 
 @ApiTags('message')
 @Controller('message')
+@UseGuards(AuthenticatedGuard)
 export class MessageController {
   constructor(private messageService: MessageService) {}
 

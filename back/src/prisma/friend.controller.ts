@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, UseGuards} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Friends } from '@prisma/client';
 import { FriendService } from './friend.service';
+import {AuthenticatedGuard} from "../auth/guards/authenticated.guard";
 
 class CreateFriendDto {
   @ApiProperty()
@@ -23,6 +24,7 @@ class CreateFriendDto {
 
 @ApiTags('friends')
 @Controller('friends')
+@UseGuards(AuthenticatedGuard)
 export class FriendController {
   constructor(private friendService: FriendService) {}
 

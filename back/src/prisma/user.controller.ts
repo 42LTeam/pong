@@ -31,6 +31,7 @@ class CreateUserDto {
 
 @ApiTags('users')
 @Controller('users')
+@UseGuards(AuthenticatedGuard)
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -43,7 +44,6 @@ export class UserController {
   }
 
   @Get()
-  @UseGuards(AuthenticatedGuard)
   async getAllUsers(@Req() req): Promise<User[]> {
     await req.user;
     console.log(req.user);
