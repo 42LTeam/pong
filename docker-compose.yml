@@ -40,7 +40,7 @@ services:
     volumes:
       - ./back:/usr/src/app
     # Run in dev Mode: npm run start:dev
-    command: sh -c "npm install && npx prisma generate && npm run start:migrate:prod"
+    command: sh -c "npm install && npx friend generate && npm run start:migrate:prod"
     ports:
       - 3000:3000
       - 8001:8001
