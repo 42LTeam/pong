@@ -20,8 +20,4 @@ export class AuthController {
     status() {
         return 'ok';
     }
-
-
-    @Get('logout')
-    logout() {}
 }
