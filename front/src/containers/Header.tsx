@@ -1,10 +1,16 @@
 import "../css/header.css"
 import UserBubble from "../components/UserBubble";
-export default function Header(props) {
+// @ts-ignore
+
+const Header = function({user}) {
     return (
         <div className="header">
             <div className="header-title">Transendance</div>
-            <UserBubble username={props.user?.username}></UserBubble>
+            <UserBubble user={user}></UserBubble>
         </div>
     )
 }
+
+
+
+export default Header;

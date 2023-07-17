@@ -1,11 +1,15 @@
 import "../css/user.css"
 import ChatButton from "./ChatButton";
-export default function UserBubble(props){
+
+const  UserBubble= function({user}){
+
     return (
         <div className="user bubble">
-            <div className="user-title">{props.username || "NOM"}</div>
+            <div className="user-title">{user?.username}</div>
             <ChatButton></ChatButton>
-            <img alt="user's avatar" className="user-picture"/>
+            <img alt="user avatar" src={user?.avatar} className="user-picture"/>
         </div>
     )
 }
+
+export default UserBubble;

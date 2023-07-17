@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import  {useEffect, useState} from 'react';
 
 
 import axios from "axios";
@@ -42,7 +42,7 @@ function Auth() {
                     clientsocketid: socket.id,
                 }
             };
-            if (Boolean(user))
+            if (user)
                 axios(config).then((response) => {
                     socket.emit('register', {target: response.data});
                 });
@@ -59,6 +59,7 @@ function Auth() {
 
 
     }, [user]);
+
 
 
     return (

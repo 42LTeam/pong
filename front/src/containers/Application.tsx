@@ -1,13 +1,12 @@
-
-import React from "react";
 import Header from "./Header";
+// @ts-ignore
 
-export default function Application(props){
+const Application = function ({user}){
 
 
     return (
         <>
-            <Header user={props.user}></Header>
+            <Header user={user}></Header>
         </>
     )
 
@@ -26,3 +25,4 @@ export default function Application(props){
     //     </BrowserRouter>
     // )
 }
+export default Application;
