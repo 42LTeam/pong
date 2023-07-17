@@ -18,10 +18,13 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect{
 
   async handleDisconnect(client: any) {
     await this.clientService.unsubscribe(client.id)
+    console.log("deconnection " + client.id)
   }
+
   async handleConnection(client: any, ...args): Promise<any> {
     const socketId = client.id;
     const user = await this.clientService.getClientById(socketId);
+    console.log("connection " + client.id)
     if (!user) {
       client.emit('message', 'Unregistered.');
       return ;
