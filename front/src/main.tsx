@@ -44,18 +44,39 @@ const SomeRoutes = () => {
             });
     },[logged])
 
+    useEffect(() => {
 
-    if (logged) {
-        var config = {
-            method: 'get',
-            url: 'http://localhost:3000/auth/socketId',
-            withCredentials: true,
-            headers: {
-                clientsocketid: socket.id || 'null',
-            }
+
+        function onDisconnect() {
+            alert('deco mon reuf')
+        }
+        function onConnect() {
+            const config = {
+                method: 'get',
+                url: 'http://localhost:3000/auth/socketId',
+                withCredentials: true,
+                headers: {
+                    clientsocketid: socket.id,
+                }
+            };
+            axios(config).then((response) => {
+                socket.emit('register', {target: response.data});
+            });
+        }
+
+
+        socket.on('disconnect', onDisconnect);
+        socket.on('connect', onConnect);
+
+        return () => {
+            socket.off('disconnect', onDisconnect);
+            socket.off('connect', onConnect);
         };
-        axios(config);
-    }
+
+
+    }, [logged]);
+
+
     return(
         <>
             <BrowserRouter>

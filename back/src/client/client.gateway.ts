@@ -18,9 +18,7 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect{
 
   async handleDisconnect(client: any) {
     await this.clientService.unsubscribe(client.id)
-    console.log('disconnect ' + client.id);
   }
-
   async handleConnection(client: any, ...args): Promise<any> {
     const socketId = client.id;
     const user = await this.clientService.getClientById(socketId);
@@ -29,11 +27,10 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect{
       return ;
     }
   }
-
   @SubscribeMessage('register')
   @UseGuards(WSAuthenticatedGuard)
-  async handleRegister(): Promise<void> {
-    console.log('oui dans la fonction')
+  async handleRegister(client,data): Promise<void> {
+    if(data.target) this.server.sockets.sockets.get(data.target)?.disconnect()
   }
 }
 

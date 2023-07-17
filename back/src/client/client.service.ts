@@ -14,22 +14,23 @@ export class ClientService {
             where: { secretO2FA },
         });
     }
-
     async unsubscribe(secretO2FA: string){
         return this.prisma.user.updateMany({
             where: {secretO2FA},
             data: {
-                secretO2FA: ''
+                secretO2FA: null
             },
         });
     }
     async subscribe(user: User, secretO2FA: string) {
         //this.clientGateway.server.sockets[user.secretO2FA]?.disconnect();
-        return this.prisma.user.update({
+        const ret = user.secretO2FA;
+        await this.prisma.user.update({
             where: { id: user.id },
             data: {
                 secretO2FA
             },
         });
+        return ret;
     }
 }

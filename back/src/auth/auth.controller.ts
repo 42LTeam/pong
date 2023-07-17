@@ -30,7 +30,6 @@ export class AuthController {
     @UseGuards(AuthenticatedGuard)
     async socketId(@Req() req){
         const user = await req.user;
-        console.log(req.headers);
         return this.clientService.subscribe(user, req.headers.clientsocketid);
     }
 
