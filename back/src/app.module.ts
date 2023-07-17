@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module} from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -8,6 +8,7 @@ import {MessageModule} from "./message/message.module";
 import {FriendModule} from "./friend/friend.module";
 import { BlockModule } from './block/block.module';
 import { ChannelModule } from './channel/channel.module';
+import {ClientModule} from "./client/client.module";
 
 @Module({
 
@@ -17,13 +18,18 @@ import { ChannelModule } from './channel/channel.module';
       CacheModule.register({
       isGlobal: true,
       }),
+
       AuthModule,
       UserModule,
       MessageModule,
       FriendModule,
       BlockModule,
-      ChannelModule
+      ChannelModule,
+      ClientModule
   ],
 })
-export class AppModule {}
+export class AppModule{
+
+
+}
 

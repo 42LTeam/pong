@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import {useEffect, useState} from 'react'
+// @ts-ignore
 import ReactDOM from 'react-dom/client'
 import {
   BrowserRouter,
@@ -19,40 +20,59 @@ import Chat from './ChatPage';
 
 
 import axios from "axios";
+import {socket} from "./socket";
+
 const SomeRoutes = () => {
-    const [logged, setLogged] = useState<boolean>(true)
-    var config = {
-        method: 'get',
-        url: 'http://localhost:3000/auth/status',
-        withCredentials: true,
-    };
-    const getStatus = () => {
+
+    const [logged, setLogged] = useState(false);
+
+
+    useEffect(() => {
+        var config = {
+            method: 'get',
+            url: 'http://localhost:3000/auth/status',
+            withCredentials: true,
+        };
+
         axios(config)
             .then(function (response) {
                 setLogged(response.data == 'ok');
+
             })
-            .catch(function (error) {
-                console.log(error);
-                setLogged(false);
+            .catch(function () {
+                window.location.replace("http://localhost:3000/auth/login");
             });
+    },[logged])
+
+
+    if (logged) {
+        var config = {
+            method: 'get',
+            url: 'http://localhost:3000/auth/socketId',
+            withCredentials: true,
+            headers: {
+                clientsocketid: socket.id || 'null',
+            }
+        };
+        axios(config);
     }
-    getStatus();
-    if(!logged)
-        window.location.replace("http://localhost:3000/auth/login");
-    return (
-    <BrowserRouter>
-      <Routes>
-          <Route path={Paths.home} element={<Home />}>
-          <Route index element={<HomePageReal />} />
-          <Route path={Paths.leaderboard} element={<Leaderboard />} />
-          <Route path={Paths.skins} element={<SkinPage />} />
-          <Route path={Paths.profile} element={<ProfilePage />} />
-          <Route path={Paths.settings} element={<SettingPage />} />
-          <Route path={Paths.chat} element={<Chat />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  )
+    return(
+        <>
+            <BrowserRouter>
+                <Routes>
+                    <Route path={Paths.home} element={<Home />}>
+                        <Route index element={<HomePageReal />} />
+                        <Route path={Paths.leaderboard} element={<Leaderboard />} />
+                        <Route path={Paths.skins} element={<SkinPage />} />
+                        <Route path={Paths.profile} element={<ProfilePage />} />
+                        <Route path={Paths.settings} element={<SettingPage />} />
+                        <Route path={Paths.chat} element={<Chat />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </>
+    )
+
 }
 
 

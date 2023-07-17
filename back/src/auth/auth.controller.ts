@@ -1,10 +1,15 @@
-import {Controller, Get, Res, UseGuards} from '@nestjs/common';
+import {Controller, Get, Req, Res, UseGuards} from '@nestjs/common';
 import {Response} from "express";
 import {FortyTwoAuthGuard} from "./guards/fortytwo.guard";
 import {AuthenticatedGuard} from "./guards/authenticated.guard";
+import {ClientService} from "../client/client.service";
 
 @Controller('auth')
 export class AuthController {
+
+
+    constructor(private clientService:ClientService) {
+    }
     @Get('login')
     @UseGuards(FortyTwoAuthGuard)
     login() {console.log('login')}
@@ -17,7 +22,16 @@ export class AuthController {
     }
     @Get('status')
     @UseGuards(AuthenticatedGuard)
-    status() {
+    status(@Req() request) {
         return 'ok';
     }
+
+    @Get('socketId')
+    @UseGuards(AuthenticatedGuard)
+    async socketId(@Req() req){
+        const user = await req.user;
+        console.log(req.headers);
+        return this.clientService.subscribe(user, req.headers.clientsocketid);
+    }
+
 }
