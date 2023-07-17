@@ -22,8 +22,8 @@ export class AuthController {
     }
     @Get('status')
     @UseGuards(AuthenticatedGuard)
-    status(@Req() request) {
-        return 'ok';
+    async status(@Req() request) {
+        return await request.user;
     }
 
     @Get('socketId')
