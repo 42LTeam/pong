@@ -1,0 +1,5 @@
+.bubble{
+    border-radius: 10px;
+    background: #2C3E50;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
