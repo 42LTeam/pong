@@ -9,6 +9,7 @@ import {FriendModule} from "./friend/friend.module";
 import { BlockModule } from './block/block.module';
 import { ChannelModule } from './channel/channel.module';
 import {ClientModule} from "./client/client.module";
+import { MatchModule } from './match/match.module';
 
 @Module({
 
@@ -25,7 +26,8 @@ import {ClientModule} from "./client/client.module";
       FriendModule,
       BlockModule,
       ChannelModule,
-      ClientModule
+      ClientModule,
+      MatchModule
   ],
 })
 export class AppModule{

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Channel } from '@prisma/client';
+import { Channel, UserChannel } from '@prisma/client';
 
 @Injectable()
 export class ChannelService {
@@ -19,6 +19,45 @@ export class ChannelService {
       },
     });
   }
+
+  async addUserToChannel(userId: number, channelId: number): Promise<UserChannel> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found.`);
+    }
+  
+    const channel = await this.prisma.channel.findUnique({
+      where: { id: channelId },
+    });
+  
+    if (!channel) {
+      throw new NotFoundException(`Channel with ID ${channelId} not found.`);
+    }
+  
+    return this.prisma.userChannel.create({
+      data: {
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+        channel: {
+          connect: {
+            id: channelId,
+          },
+        },
+        isAdmin: false,
+        isBlocked: false,
+        exited: false,
+      },
+    });
+  }
+  
+  
+  
+  
 
   async getAllChannel(): Promise<Channel[]> {
     return this.prisma.channel.findMany({

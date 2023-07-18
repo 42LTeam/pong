@@ -7,16 +7,18 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async createUser(id: number, username: string, secretO2FA: string, avatar: string, xp: number): Promise<User> {
+    console.log(id, username, secretO2FA, avatar, xp);
     return this.prisma.user.create({
       data: {
-        id,
-        username,
-        secretO2FA,
-        avatar,
-        xp,
-      },
+        id: id,
+        username: username,
+        secretO2FA: secretO2FA,
+        avatar: avatar,
+        xp: xp,
+      }
     });
   }
+  
 
   async getAllUsers(): Promise<User[]> {
     return this.prisma.user.findMany();
@@ -32,7 +34,7 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: {
-        avatar
+        avatar: avatar
       },
     });
 }
@@ -41,7 +43,7 @@ async updateUserName(id: number, username: string): Promise<User> {
   return this.prisma.user.update({
     where: { id },
     data: {
-      username
+      username: username
     },
   });
 }
