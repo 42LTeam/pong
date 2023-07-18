@@ -1,0 +1,113 @@
+.chatbody{
+    display: flex;
+    padding: 10px 0;
+    align-items: center;
+    flex: 1 0 0;
+    align-self: stretch;
+    background-color: #2C3E50;
+}
+
+.conversations{
+    display: flex;
+    padding: 5px 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    align-self: stretch;
+    width: 15%;
+}
+
+
+.chatbody-right{
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+
+.conversations-friend-button{
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.conversations-friend-button:hover{
+    background: #BDC3C7;
+}
+
+.conversations-friend-button-text{
+    color: #7F8C8D;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.conversations-separator{
+    display: flex;
+    padding: 0 10px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+}
+
+.conversations-separator-text{
+    color: #7F8C8D;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.conversation {
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    gap: 10px;
+}
+
+.conversation-avatar{
+    width: 48px;
+    height: 48px;
+    background: #7F8C8D;
+    border-radius: 90px;
+}
+
+.conversation-content{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    align-self: stretch;
+}
+
+.conversation-username{
+    color: #ECF0F1;
+    text-align: center;
+    font-family: Krub, serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.conversation-preview{
+    color: #ECF0F1;
+    text-align: center;
+    font-family: Krub, serif;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}

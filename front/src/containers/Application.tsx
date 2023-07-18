@@ -1,28 +1,29 @@
 import Header from "./Header";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import ChatBody from "./ChatBody";
 // @ts-ignore
 
+
+const PATHS = {
+    chat: 'chat',
+
+};
+
 const Application = function ({user}){
+
 
 
     return (
         <>
             <Header user={user}></Header>
+            <BrowserRouter>
+                <Routes>
+                    <Route index element={"home"} />
+                    <Route path={PATHS.chat} element={<ChatBody />} />
+                </Routes>
+            </BrowserRouter>
         </>
     )
 
-    // return (
-    //     <BrowserRouter>
-    //         <Routes>
-    //             <Route path={Paths.home} element={<Home />}>
-    //                 <Route index element={<HomePageReal />} />
-    //                 <Route path={Paths.leaderboard} element={<Leaderboard />} />
-    //                 <Route path={Paths.skins} element={<SkinPage />} />
-    //                 <Route path={Paths.profile} element={<ProfilePage />} />
-    //                 <Route path={Paths.settings} element={<SettingPage />} />
-    //                 <Route path={Paths.chat} element={<Chat />} />
-    //             </Route>
-    //         </Routes>
-    //     </BrowserRouter>
-    // )
 }
 export default Application;

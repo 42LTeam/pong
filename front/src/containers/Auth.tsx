@@ -4,6 +4,7 @@ import  {useEffect, useState} from 'react';
 import axios from "axios";
 import {socket} from "../api";
 import Application from "./Application";
+import "../css/main.css";
 
 
 function Auth() {
