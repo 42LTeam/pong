@@ -1,0 +1,98 @@
+.friends{
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    flex: 1 0 0;
+    align-self: stretch;
+
+}
+
+.friend-tabs{
+    height: 4%;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.friend-button{
+    user-select: none;
+    cursor: default;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.friend-button-text{
+    color: #7F8C8D;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.friend-button-focused {
+    background: #34495E ! important;
+}
+
+.friend-tab{
+    user-select: none;
+    color: #7F8C8D;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.friend-tab-current {
+    border-radius: 10px;
+    background: #34495E;
+}
+
+.friend-tab:hover {
+    border-radius: 10px;
+    background: #2D3843;
+}
+
+.friend-add-button {
+    user-select: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #2ECC71;
+    padding: 5px;
+    color: #ECF0F1;
+    text-align: center;
+    font-family: Kulim Park serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.friend-add-button-current {
+    background: none;
+    color: #2ECC71;
+}
+
+.friend{
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    gap: 5px;
+    align-self: stretch;
+}
+
+.friend:hover{
+    background: #34495E;
+}

@@ -1,11 +1,11 @@
 import "../css/chat.css"
-import ConversationFriendButton from "../components/ConversationFriendButton";
+import FriendButton from "../components/FriendButton";
 import Conversation from "../components/Conversation";
 
-export default function Conversations(){
+export default function Conversations({state}){
     return (
         <div className="conversations">
-            <ConversationFriendButton></ConversationFriendButton>
+            <FriendButton state={state}></FriendButton>
             <div className="conversations-separator">
                 <div className="conversations-separator-text">Messages privés</div>
                 <img alt="plus logo" src="/svg/add.svg"/>

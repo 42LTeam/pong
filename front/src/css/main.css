@@ -17,3 +17,9 @@
     align-self: stretch;
     background: #34495E;
 }
+
+.horizontal-separator {
+    height: 1px;
+    background: #34495E;
+    align-self: stretch;
+}

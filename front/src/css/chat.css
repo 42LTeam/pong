@@ -14,7 +14,6 @@
     align-items: flex-start;
     gap: 5px;
     align-self: stretch;
-    width: 15%;
 }
 
 
@@ -22,34 +21,15 @@
     display: flex;
     padding: 10px;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    align-items: flex-start;
+    gap: 5px;
     flex: 1 0 0;
     align-self: stretch;
 }
 
 
-.conversations-friend-button{
-    display: flex;
-    padding: 10px;
-    align-items: center;
-    gap: 10px;
-    align-self: stretch;
-}
 
-.conversations-friend-button:hover{
-    background: #BDC3C7;
-}
 
-.conversations-friend-button-text{
-    color: #7F8C8D;
-    text-align: center;
-    font-family: Kulim Park, serif;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-}
 
 .conversations-separator{
     display: flex;
