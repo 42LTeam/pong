@@ -1,26 +1,37 @@
-import { Module } from '@nestjs/common';
+import { Module} from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { PrismaService } from './prisma/prisma.service';
-import { UserService } from './prisma/user.service';
-import { UserController } from './prisma/user.controller';
-import { ChatGateway } from './chat/chat.gateway';
-import { FriendService } from './prisma/friend.service';
-import { FriendController } from './prisma/friend.controller';
-import { MessageController } from './prisma/message.controller';
-import { MessageService } from './prisma/message.service';
+import { AuthModule } from './auth/auth.module';
+import {PassportModule} from "@nestjs/passport";
+import { UserModule } from './user/user.module';
+import {MessageModule} from "./message/message.module";
+import {FriendModule} from "./friend/friend.module";
+import { BlockModule } from './block/block.module';
+import { ChannelModule } from './channel/channel.module';
+import {ClientModule} from "./client/client.module";
+import { MatchModule } from './match/match.module';
 
 @Module({
+
   imports: [
-    ConfigModule.forRoot(),
-    CacheModule.register({
+      PassportModule.register({session: true}),
+      ConfigModule.forRoot(),
+      CacheModule.register({
       isGlobal: true,
-    }),
+      }),
+
+      AuthModule,
+      UserModule,
+      MessageModule,
+      FriendModule,
+      BlockModule,
+      ChannelModule,
+      ClientModule,
+      MatchModule
   ],
-  controllers: [AppController, UserController, FriendController, MessageController],
-  providers: [AppService, PrismaService, UserService, FriendService, MessageService, ChatGateway],
 })
-export class AppModule {}
+export class AppModule{
+
+
+}
 
