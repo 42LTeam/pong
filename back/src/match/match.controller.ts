@@ -2,7 +2,7 @@ import { Controller, Get, Param, Post, Put, Body } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { MatchService } from './match.service';
 import { Match } from '@prisma/client';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsBoolean  } from '@nestjs/class-validator';
 
 class CreateMatchDto {
     @ApiProperty()

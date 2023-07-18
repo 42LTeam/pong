@@ -2,8 +2,7 @@ import { Controller, Get, Param, Post, Body, ParseIntPipe, UsePipes, ValidationP
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Channel, UserChannel } from '@prisma/client';
 import { ChannelService } from './channel.service';
-import { IsNotEmpty, IsNumber } from '@nestjs/class-validator';
-import { IsBoolean, IsDate, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsBoolean  } from '@nestjs/class-validator';
 
 class CreateChannelDto {
   @ApiProperty()

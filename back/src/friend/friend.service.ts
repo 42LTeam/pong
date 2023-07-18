@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Friendship } from '@prisma/client';
-import { User } from '@prisma/client';
+import { User, UserFriendship, Friendship } from '@prisma/client';
 
 @Injectable()
 export class FriendService {
@@ -11,74 +10,93 @@ export class FriendService {
     if (initiatorId == acceptorId) {
       throw new Error('Both initiatorId and acceptorId shouldn\'t be the same');
     }
-    const existingFriendship = await this.prisma.friendship.findFirst({
-      where: {
-        OR: [
-          { initiatorId: initiatorId, acceptorId: acceptorId },
-          { initiatorId: acceptorId, acceptorId: initiatorId },
-        ],
-      },
+
+    const newFriendship = await this.prisma.friendship.create({
+      data: {},
     });
-    if (existingFriendship) {
-      if (existingFriendship.acceptedAt) {
-        throw new Error('Users are already friends');
-      } else {
-        throw new Error('Friend request already sent');
-      }
-    }
-    return this.prisma.friendship.create({
+    await this.prisma.userFriendship.create({
       data: {
-        initiatorId,
-        acceptorId,
+        userId: initiatorId,
+        friendshipId: newFriendship.id,
       },
     });
-  }
-  
 
-  async acceptFriendRequest(id: number): Promise<Friendship> {
-    const friendshipExists = await this.prisma.friendship.findUnique({
-      where: { id: id },
+    await this.prisma.userFriendship.create({
+      data: {
+        userId: acceptorId,
+        friendshipId: newFriendship.id,
+      },
     });
-  
-    if (!friendshipExists) {
-      throw new Error('Friendship with provided ID not found');
-    }
-  
-    return this.prisma.friendship.update({
-      where: { id: id },
-      data: { acceptedAt: new Date() },
-    });
+
+    return newFriendship;
   }
-  
-  
-  async getPendingFriendRequests(userId: number): Promise<Friendship[]> {
-    return this.prisma.friendship.findMany({
+
+  async acceptFriendRequest(userId: number, friendshipId: number): Promise<UserFriendship> {
+    const userFriendship = await this.prisma.userFriendship.findFirst({
       where: {
-        OR: [
-          { acceptorId: userId, acceptedAt: null },
-          { initiatorId: userId, acceptedAt: null },
-        ]
+        userId,
+        friendshipId,
+      },
+    });
+
+    if (!userFriendship) {
+      throw new Error('Friend request not found');
+    }
+
+    if (userFriendship.acceptedAt) {
+      throw new Error('Friend request already accepted');
+    }
+
+    return this.prisma.userFriendship.update({
+      where: {
+        id: userFriendship.id,
+      },
+      data: {
+        acceptedAt: new Date(),
       },
     });
   }
-  
-  
-  async getFriends(userId: number): Promise<User[]> {
-  const initiatedFriendships = await this.prisma.friendship.findMany({
-    where: { initiatorId: userId, acceptedAt: { not: null } },
-    include: { acceptedBy: true },
-  });
 
-  const acceptedFriendships = await this.prisma.friendship.findMany({
-    where: { acceptorId: userId, acceptedAt: { not: null } },
-    include: { initiatedBy: true },
-  });
+  async getPendingFriendRequests(userId: number): Promise<UserFriendship[]> {
+    return this.prisma.userFriendship.findMany({
+      where: {
+        userId,
+        acceptedAt: null,
+      },
+      include: {
+        friendship: true,
+      },
+    });
+  }
 
-  return [
-    ...initiatedFriendships.map(friendship => friendship.acceptedBy),
-    ...acceptedFriendships.map(friendship => friendship.initiatedBy),
-  ];
+  // async getFriends(userId: number): Promise<User[]> {
+    // const friendRelations = await this.prisma.userFriendship.findMany({
+    //   where: {
+    //     userId,
+    //     acceptedAt: {
+    //       not: null,
+    //     },
+    //   },
+    //   include: {
+    //     friendship: {
+    //       include: {
+    //         users: true,
+    //       },
+    //     },
+    //   },
+    // });
+
+    // let friends: User[] = [];
+
+    // for (let relation of friendRelations) {
+    //   for (let user of relation.friendship.users) {
+    //     if (user.id !== userId) {
+    //       friends.push(user);
+    //     }
+    //   }
+    // }
+
+    // return friends;
+  // }
 }
 
-  
-}

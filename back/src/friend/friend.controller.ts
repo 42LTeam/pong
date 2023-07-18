@@ -1,19 +1,26 @@
 import { Controller, Get, Param, Post, Put, Body } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { FriendService } from './friend.service';
-import { User, Friendship } from '@prisma/client';
+import { User, UserFriendship, Friendship } from '@prisma/client';
+import { IsNotEmpty, IsNumber, IsString, IsBoolean  } from '@nestjs/class-validator';
 
 class CreateFriendRequestDto {
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
   initiatorId: number;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
   acceptorId: number;
 }
 
 class AcceptFriendRequestDto {
   @ApiProperty()
-  id: number;
+  @IsNotEmpty()
+  @IsNumber()
+  friendshipId: number;
 }
 
 @ApiTags('friend')
@@ -30,24 +37,24 @@ export class FriendController {
     return this.friendService.createFriendRequest(createFriendRequestDto.initiatorId, createFriendRequestDto.acceptorId);
   }
 
-  @Put('friend-request/accept')
+  @Put('friend-request/accept/:friendshipId')
   @ApiOperation({ summary: 'Accept a friend request' })
-  @ApiBody({ type: AcceptFriendRequestDto })
   async acceptFriendRequest(
-    @Body() acceptFriendRequestDto: AcceptFriendRequestDto,
-  ): Promise<Friendship> {
-    return this.friendService.acceptFriendRequest(acceptFriendRequestDto.id);
+    @Param('friendshipId') friendshipId: number,
+    @Body('userId') userId: number,
+  ): Promise<UserFriendship> {
+    return this.friendService.acceptFriendRequest(userId, Number(friendshipId));
   }
 
   @Get('friend-request/pending/:userId')
   @ApiOperation({ summary: 'Get pending request' })
-  async getPendingFriendRequests(@Param('userId') userId: number): Promise<Friendship[]> {
+  async getPendingFriendRequests(@Param('userId') userId: number): Promise<UserFriendship[]> {
     return this.friendService.getPendingFriendRequests(Number(userId));
   }
 
-  @Get(':userId')
-  @ApiOperation({ summary: 'Get friendships' })
-  async getFriends(@Param('userId') userId: number): Promise<User[]> {
-    return this.friendService.getFriends(Number(userId));
-  }
+  // @Get(':userId')
+  // @ApiOperation({ summary: 'Get friends' })
+  // async getFriends(@Param('userId') userId: number): Promise<User[]> {
+  //   return this.friendService.getFriends(Number(userId));
+  // }
 }
