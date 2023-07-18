@@ -1,11 +1,8 @@
-import React from 'react'
+import Auth from "./containers/Auth";
+// @ts-ignore
 import ReactDOM from 'react-dom/client'
-import {
-  BrowserRouter,
-  Route,
-  Routes
-} from "react-router-dom";
 
+<<<<<<< HEAD
 import './index.css'
 import Leaderboard from './Leaderboard';
 import SkinPage from './SkinPage';
@@ -40,4 +37,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Auth>
       <SomeRoutes />
     </Auth>
+=======
+ReactDOM.createRoot(document.querySelector('body')).render(
+    <Auth/>
+>>>>>>> origin/shai
 );

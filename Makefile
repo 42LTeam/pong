@@ -1,3 +1,7 @@
+DB=pong_docker-nest-postgres
+PG=pong_pgadmin
+REDIS=pong_redis
+
 all: build up
 
 VOLUMES = docker volume ls -q
@@ -36,3 +40,4 @@ rebuild: stop down build up
 clean: stop down
 
 .PHONY: all build up down debug stop clean
+
