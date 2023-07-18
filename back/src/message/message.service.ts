@@ -12,9 +12,15 @@ export class MessageService {
         userId,
         channelId,
         content,
+        readBy: {
+          connect: {
+            id: userId
+          },
+        },
       },
     });
-}
+  }
+  
 
 
   async getAllMessages(): Promise<Message[]> {
@@ -52,6 +58,23 @@ export class MessageService {
         channel: true,
       }
     });
+  }
+
+  async isMessageReadByUser(messageId: number, userId: number): Promise<boolean> {
+    const message = await this.prisma.message.findUnique({
+      where: {
+        id: messageId,
+      },
+      include: {
+        readBy: true,
+      },
+    });
+
+    if (!message) {
+      throw new Error('Message not found');
+    }
+
+    return message.readBy.some(user => user.id === userId);
   }
 }
 

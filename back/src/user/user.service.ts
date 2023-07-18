@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User, Friendship, Block } from '@prisma/client';
+import { User, UserFriendship, Friendship, Block } from '@prisma/client';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async createUser(id: number, username: string, secretO2FA: string, avatar: string, xp: number): Promise<User> {
-    console.log(id, username, secretO2FA, avatar, xp);
     return this.prisma.user.create({
       data: {
         id: id,
@@ -37,45 +36,44 @@ export class UserService {
         avatar: avatar
       },
     });
-}
+  }
 
-async updateUserName(id: number, username: string): Promise<User> {
-  return this.prisma.user.update({
-    where: { id },
-    data: {
-      username: username
-    },
-  });
-}
-
+  async updateUserName(id: number, username: string): Promise<User> {
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        username: username
+      },
+    });
+  }
 
   async deleteUser(id: number): Promise<User> {
     return this.prisma.user.delete({ where: { id } });
   }
 
   async getFriendsOfUser(id: number): Promise<User[]> {
-    const initiatedFriends = await this.prisma.friendship.findMany({
-      where: { initiatorId: id },
-      include: { acceptedBy: true }
+    const friendships = await this.prisma.userFriendship.findMany({
+      where: { userId: id, acceptedAt: { not: null } },
+      include: { friendship: true }
     });
   
-    const acceptedFriends = await this.prisma.friendship.findMany({
-      where: { acceptorId: id },
-      include: { initiatedBy: true }
+    const friendshipIds = friendships.map(f => f.friendshipId);
+  
+    const friendsUserFriendships = await this.prisma.userFriendship.findMany({
+      where: {
+        friendshipId: { in: friendshipIds },
+        userId: { not: id }
+      },
     });
   
-    const allFriends = [
-      ...initiatedFriends.map(friendship => friendship.acceptedBy).filter(friend => friend.id !== id),
-      ...acceptedFriends.map(friendship => friendship.initiatedBy).filter(friend => friend.id !== id)
-    ];
-
-    const uniqueFriends = Array.from(new Set(allFriends.map(friend => friend.id)))
-    .map(id => {
-      return allFriends.find(friend => friend.id === id)
-    })
-
-  return uniqueFriends;
-}
+    const friendUserIds = friendsUserFriendships.map(f => f.userId);
+  
+    const friends = await this.prisma.user.findMany({
+      where: { id: { in: friendUserIds } },
+    });
+  
+    return friends;
+  }
 
   async getBlocksOfUser(id: number): Promise<User[]> {
     const blocks = await this.prisma.block.findMany({
@@ -88,9 +86,6 @@ async updateUserName(id: number, username: string): Promise<User> {
     const blockedUsers = blocks.map(block => block.receivedBy);
 
     return blockedUsers;
+  }
 }
 
-  
-  
-  
-}

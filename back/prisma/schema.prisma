@@ -6,19 +6,33 @@ generator client {
 }
 
 model User {
-  id                  Int            @id @unique
+  id                  Int              @id @unique
   avatar              String
   username            String
   secretO2FA          String?
   xp                  Int
   userMatches         UserMatch[]
-  friendsInitiated    Friendship[]  @relation("friendshipInitiator")
-  friendsAccepted     Friendship[]  @relation("friendshipAcceptor")
-  blocksInitiated     Block[]       @relation("blockInitiator")
-  blocksReceived      Block[]       @relation("blockReceiver")
+  userFriendships     UserFriendship[]
+  blocksInitiated     Block[]         @relation("blockInitiator")
+  blocksReceived      Block[]         @relation("blockReceiver")
   channels            UserChannel[]
   createdChannels     Channel[]
   messages            Message[]
+  messagesReaded      Message[]       @relation("UserReadedMessages")
+}
+
+model Friendship {
+  id         Int             @id @default(autoincrement())
+  users      UserFriendship[]
+}
+
+model UserFriendship {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  friendshipId  Int
+  acceptedAt    DateTime?
+  user          User      @relation(fields: [userId], references: [id])
+  friendship    Friendship @relation(fields: [friendshipId], references: [id])
 }
 
 model Match {
@@ -35,15 +49,6 @@ model UserMatch {
   match       Match  @relation(fields: [matchId], references: [id])
 }
 
-model Friendship {
-  id             Int     @id @default(autoincrement())
-  initiatorId    Int
-  acceptorId     Int
-  initiatedBy    User    @relation("friendshipInitiator", fields: [initiatorId], references: [id])
-  acceptedBy     User    @relation("friendshipAcceptor", fields: [acceptorId], references: [id])
-  createdAt      DateTime @default(now())
-  acceptedAt     DateTime?
-}
 
 model Block {
   id             Int     @id @default(autoincrement())
@@ -68,7 +73,6 @@ model Channel {
 }
 
 model UserChannel {
-  id        Int
   userId    Int
   channelId Int
   isAdmin   Boolean
@@ -85,10 +89,12 @@ model Message {
   content     String
   userId      Int
   channelId   Int
+  readBy      User[]   @relation("UserReadedMessages")
   user        User     @relation(fields: [userId], references: [id])
   channel     Channel  @relation(fields: [channelId], references: [id])
   created_at  DateTime @default(now())
 }
+
 
 datasource db {
   provider = "postgresql"

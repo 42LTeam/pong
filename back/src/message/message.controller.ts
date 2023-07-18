@@ -1,18 +1,25 @@
-import { Controller, Get, Param, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Message } from '@prisma/client';
 import { MessageService } from './message.service';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+import { IsNotEmpty, IsNumber, IsString, IsBoolean  } from '@nestjs/class-validator';
 
 class CreateMessageDto {
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
   userId: number;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
   channelId: number;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   content: string;
 
 }
@@ -51,4 +58,12 @@ export class MessageController {
     return this.messageService.getMessageByChannel(Number(channel));
   }
 
+  @Get(':messageId/readBy/:userId')
+  async isMessageReadByUser(
+    @Param('messageId', ParseIntPipe) messageId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<{read: boolean}> {
+    const isRead = await this.messageService.isMessageReadByUser(messageId, userId);
+    return { read: isRead };
+  }
 }
