@@ -16,7 +16,7 @@ function Auth() {
             url: 'http://localhost:3000/auth/status',
             withCredentials: true,
         };
-
+        if (!user)
         axios(config)
             .then(function (response) {
                 setUser(response.data)

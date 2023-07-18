@@ -3,16 +3,26 @@ import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+import {IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 
 class CreateUserDto {
   @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
   id: number;
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   username: string;
+  @IsString()
   @ApiProperty()
   secretO2FA: string;
+  @IsNotEmpty()
+  @IsString()
   @ApiProperty()
   avatar: string;
+  @IsNotEmpty()
+  @IsNumber()
   @ApiProperty()
   xp: number;
 }
