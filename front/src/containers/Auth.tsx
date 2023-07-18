@@ -7,6 +7,7 @@ import Application from "./Application";
 
 
 function Auth() {
+    const [wsConnected, setConnected] = useState(false);
 
     const [user, setUser] = useState(null);
 
@@ -34,20 +35,8 @@ function Auth() {
             alert('deco mon reuf')
         }
         function onConnect() {
-            const config = {
-                method: 'get',
-                url: 'http://localhost:3000/auth/socketId',
-                withCredentials: true,
-                headers: {
-                    clientsocketid: socket.id,
-                }
-            };
-            if (user)
-                axios(config).then((response) => {
-                    socket.emit('register', {target: response.data});
-                });
+            setConnected(true);
         }
-
 
         socket.on('disconnect', onDisconnect);
         socket.on('connect', onConnect);
@@ -57,9 +46,19 @@ function Auth() {
             socket.off('connect', onConnect);
         };
 
-
-    }, [user]);
-
+    }, [wsConnected]);
+    const config = {
+        method: 'get',
+        url: 'http://localhost:3000/auth/socketId',
+        withCredentials: true,
+        headers: {
+            clientsocketid: socket.id,
+        }
+    };
+    if (user && wsConnected)
+        axios(config).then((response) => {
+            socket.emit('register', {target: response.data});
+        });
 
 
     return (

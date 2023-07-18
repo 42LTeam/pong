@@ -23,7 +23,6 @@ export class ClientService {
         });
     }
     async subscribe(user: User, secretO2FA: string) {
-        //this.clientGateway.server.sockets[user.secretO2FA]?.disconnect();
         const ret = user.secretO2FA;
         await this.prisma.user.update({
             where: { id: user.id },
