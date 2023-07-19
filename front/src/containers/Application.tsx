@@ -19,7 +19,7 @@ const Application = function ({user}){
             <BrowserRouter>
                 <Routes>
                     <Route index element={"home"} />
-                    <Route path={PATHS.chat} element={<ChatBody />} />
+                    <Route path={PATHS.chat} element={<ChatBody user={user}/>} />
                 </Routes>
             </BrowserRouter>
         </>

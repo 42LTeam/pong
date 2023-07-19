@@ -5,18 +5,18 @@ import FriendList from "./FriendList";
 import { AddFriendInvite } from "../components/AddFriendInvite";
 import React from "react";
 
-export default function ChatBody(){
+export default function ChatBody({user}){
 
-    const [state, setState]=useState(null);
+    const [state]=useState(null);
 
 
 
     return (
         <div className="chatbody bubble">
-            <Conversations stats={state}></Conversations>
+            <Conversations state={state} user={user}></Conversations>
             <div className="vertical-separator"></div>
 
-            {state ? 'Pas dans friend' : (<FriendList></FriendList>)}
+            {state ? 'Pas dans friend' : (<FriendList user={user}></FriendList>)}
 
         </div>
     )
