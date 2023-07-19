@@ -24,7 +24,7 @@ export default function AddFriend(){
             <div className="add-friend-bubble">
                 <TextInput
                     text={"Trouve ami.e, tape nom..."}
-                    onChange={event => handleInputChange(event)}  onKeyPress={}/>
+                    onChange={event => handleInputChange(event)} />
             </div>
             {suggestions?.map((current) => {return (<Friend username={current.username} status="on est la"/>)})}
         </>
