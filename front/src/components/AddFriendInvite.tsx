@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import "../css/chat.css";
 import TextInput from "./TextInput";
 import React from "react";
@@ -25,7 +25,9 @@ import axios from "axios";
 //     );
 //   };
 
-export default function AddFriendBubble({user}){
+
+export default function AddFriendBubble(){
+
     const [inviteText, setInviteText] = useState('');
     const [allusers, setAllUsers] = useState('');
 
@@ -76,6 +78,7 @@ export default function AddFriendBubble({user}){
 
     };
 
+
     const handleSendFriendRequest = () => {
         // Replace myUser with the ID of the current user (the one sending the request)
         const myUser = user.id;
@@ -90,12 +93,10 @@ export default function AddFriendBubble({user}){
         }
     };
 
-
-
     const handleInputChange = (event) => {
         setInviteText(event.target.value);
-      };
-    
+    };
+
     return (
         
         <>
