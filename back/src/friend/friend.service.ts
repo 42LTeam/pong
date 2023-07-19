@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User, UserFriendship, Friendship } from '@prisma/client';
+import { UserFriendship, Friendship } from '@prisma/client';
 
 @Injectable()
 export class FriendService {
@@ -86,17 +86,17 @@ export class FriendService {
     //   },
     // });
 
-    // let friends: User[] = [];
+    // let friend: User[] = [];
 
     // for (let relation of friendRelations) {
     //   for (let user of relation.friendship.users) {
     //     if (user.id !== userId) {
-    //       friends.push(user);
+    //       friend.push(user);
     //     }
     //   }
     // }
 
-    // return friends;
+    // return friend;
   // }
 }
 

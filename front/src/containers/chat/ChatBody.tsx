@@ -1,8 +1,7 @@
-import "../css/chat.css";
-import Conversations from "./Conversations";
+import "../../css/chat.css";
+import Conversations from "./conversation/Conversations";
 import {useState} from "react";
-import FriendList from "./FriendList";
-import { AddFriendInvite } from "../components/AddFriendInvite";
+import Friends from "./friend/Friends";
 import React from "react";
 
 export default function ChatBody({user}){
@@ -16,7 +15,7 @@ export default function ChatBody({user}){
             <Conversations state={state} user={user}></Conversations>
             <div className="vertical-separator"></div>
 
-            {state ? 'Pas dans friend' : (<FriendList user={user}></FriendList>)}
+            {state ? 'Pas dans friend' : (<Friends key="friends" user={user}></Friends>)}
 
         </div>
     )

@@ -1,6 +1,6 @@
 import Header from "./Header";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import ChatBody from "./ChatBody";
+import ChatBody from "./chat/ChatBody";
 // @ts-ignore
 
 
@@ -19,7 +19,7 @@ const Application = function ({user}){
             <BrowserRouter>
                 <Routes>
                     <Route index element={"home"} />
-                    <Route path={PATHS.chat} element={<ChatBody user={user}/>} />
+                    <Route path={PATHS.chat} element={<ChatBody key="chatbody" user={user}/>} />
                 </Routes>
             </BrowserRouter>
         </>

@@ -1,27 +1,25 @@
-import "../css/chat.css"
-import FriendButton from "../components/FriendButton";
-import Conversation from "../components/Conversation";
+import "../../../css/chat.css"
+import FriendButton from "../../../components/chat/friend/FriendButton";
+import Conversation from "../../../components/chat/conversation/Conversation";
 import {useState} from "react";
 import axios from "axios";
 
 export default function Conversations({ state, user }){
     const [conversations, setConversations] = useState(null);
 
-    let config = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: 'http://localhost:3000/users/friends/' + user?.id,
-        withCredentials: true,
-    };
-    if (!conversations)
+
+    if (!conversations && user) {
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: 'http://localhost:3000/users/friend/' + user?.id,
+            withCredentials: true,
+        };
         axios.request(config)
             .then((response) => {
                 setConversations(response.data);
             })
-            .catch((error) => {
-                // console.log(error);
-            });
-
+    }
     return (
         <div className="conversations">
             <FriendButton state={state}></FriendButton>

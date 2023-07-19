@@ -10,7 +10,7 @@ export default function Friend(props: Props){
             <div className="conversation-avatar"></div>
             <div className="conversation-content">
                 <div className="conversation-username">{props.username}</div>
-                <div className="conversation-preview"> {props.status} Status Online / Offline </div>
+                <div className="conversation-preview">{props.status}</div>
             </div>
         </div>
     )

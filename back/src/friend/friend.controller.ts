@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Post, Put, Body } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { FriendService } from './friend.service';
-import { User, UserFriendship, Friendship } from '@prisma/client';
-import { IsNotEmpty, IsNumber, IsString, IsBoolean  } from '@nestjs/class-validator';
+import { UserFriendship, Friendship } from '@prisma/client';
+import { IsNotEmpty, IsNumber } from '@nestjs/class-validator';
 
 class CreateFriendRequestDto {
   @ApiProperty()
@@ -53,7 +53,7 @@ export class FriendController {
   }
 
   // @Get(':userId')
-  // @ApiOperation({ summary: 'Get friends' })
+  // @ApiOperation({ summary: 'Get friend' })
   // async getFriends(@Param('userId') userId: number): Promise<User[]> {
   //   return this.friendService.getFriends(Number(userId));
   // }

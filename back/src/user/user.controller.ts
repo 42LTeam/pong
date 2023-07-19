@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Put, Delete, UseGuards } from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
@@ -78,15 +78,21 @@ export class UserController {
     return this.userService.updateUserName(Number(id), updateUserNameDto.username);
   }
 
-  @Get('friends/:id')
-  @ApiOperation({ summary: 'Get friends of user' })
-  async getFriendsOfUser(@Param('id') id: number): Promise<User[]> {
+  @Get('friend/:id')
+  @ApiOperation({ summary: 'Get friend of user' })
+  async getFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id));
+  }
+
+  @Get('search/:query')
+  @ApiOperation({ summary: 'Search user by username' })
+  async search(@Param('query') query: string): Promise<User[]> {
+    return this.userService.search(query);
   }
 
   @Get('blocks/:id')
   @ApiOperation({ summary: 'Get blocked of user' })
-  async getBlocksOfUser(@Param('id') id: number): Promise<User[]> {
+  async getBlocksOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getBlocksOfUser(Number(id));
   }
 
