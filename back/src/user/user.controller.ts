@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { Status, User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
+import {StringPipe} from "./pipes/string.pipe";
 
 class CreateUserDto {
   @ApiProperty()
@@ -29,16 +30,21 @@ class CreateUserDto {
 
 class UpdateUserAvatarDto {
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   avatar: string;
 }
 
 class UpdateUserNameDto {
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   username: string;
 }
 
 export class UpdateUserStatusDto {
   @ApiProperty({ enum: Status })
+  @IsNotEmpty()
   @IsEnum(Status)
   status: Status;
 }
@@ -90,17 +96,9 @@ export class UserController {
     return this.userService.getFriendsOfUser(Number(id));
   }
 
-
-  @Get('friend/online/:id')
-  @ApiOperation({ summary: 'Get online friend of user' })
-  async getOnlineFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
-    return this.userService.getOnlineFriendsOfUser(Number(id));
-  }
-
-
   @Get('search/:query')
   @ApiOperation({ summary: 'Search user by username' })
-  async search(@Param('query') query: string): Promise<User[]> {
+  async search(@Param('query', StringPipe) query: string): Promise<User[]> {
     return this.userService.search(query);
   }
 
