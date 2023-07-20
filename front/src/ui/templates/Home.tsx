@@ -9,7 +9,7 @@ function Home() {
       <div>
         <Header />
       </div>
-      <div className={"grid grid-cols-8 grid-rows-6 h-screen"} style={{marginTop: "var(--header-height)"}}>
+      <div>
         <Outlet />
       </div>
     </>

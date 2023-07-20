@@ -1,0 +1,45 @@
+
+.frame
+{
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.frame-left
+{
+    display: flex;
+    width: 700px;
+    height: 533px;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.frame-right
+{
+    display: flex;
+    padding: 25px 10px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 10px;
+}
+
+.skin-selection
+{
+    display: flex;
+    width: 573px;
+    height: 359px;
+    padding: 20px 0px;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    flex-shrink: 0;
+}
