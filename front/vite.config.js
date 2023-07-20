@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import svgr from 'vite-plugin-svgr'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [svgr({exportAsDefault: true}),react()],
   server: {
     watch: {
       usePolling: true,
@@ -13,3 +14,4 @@ export default defineConfig({
     port: 5173, // you can replace this port with any port
   }
 })
+ 
