@@ -22,4 +22,6 @@
     height: 30px;
     border-radius: 90px;
     background: #7F8C8D;
+    background-size: contain;
+    background-position: 50% 50%;
 }

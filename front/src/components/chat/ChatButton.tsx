@@ -1,4 +1,4 @@
-import "../css/chat.css"
+import "../../css/chat.css"
 
 export default function ChatButton() {
     return (

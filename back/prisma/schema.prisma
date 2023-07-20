@@ -8,7 +8,7 @@ generator client {
 model User {
   id                  Int              @id @unique
   avatar              String
-  username            String
+  username            String            @unique
   secretO2FA          String?
   xp                  Int
   role                Role             @default(USER)

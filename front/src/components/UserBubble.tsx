@@ -1,15 +1,20 @@
 import "../css/user.css"
-import ChatButton from "./ChatButton";
+import ChatButton from "./chat/ChatButton";
 
-const  UserBubble= function({user}){
 
+const UserBubble = ({ user }) => {
     return (
         <div className="user bubble">
             <div className="user-title">{user?.username}</div>
-            <ChatButton></ChatButton>
-            <img alt="user avatar" src={user?.avatar} className="user-picture"/>
+            <ChatButton />
+            {user?.avatar && (
+                <div
+                    className="user-picture"
+                    style={{ backgroundImage: `url(${user.avatar})` }}
+                />
+            )}
         </div>
-    )
-}
+    );
+};
 
 export default UserBubble;

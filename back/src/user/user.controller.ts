@@ -1,9 +1,10 @@
-import { Controller, Get, Param, Post, Body, Put, Delete, UseGuards } from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
+import {StringPipe} from "./pipes/string.pipe";
 
 class CreateUserDto {
   @ApiProperty()
@@ -60,39 +61,45 @@ export class UserController {
 
   @Get('id/:id')
   @ApiOperation({ summary: 'Get user by id' })
-  async getUserById(@Param('id') id: number): Promise<User | null> {
+  async getUserById(@Param('id', ParseIntPipe) id: number): Promise<User | null> {
     return this.userService.getUserById(Number(id));
   }
 
   @Put('avatar/:id')
   @ApiOperation({ summary: 'Update user\'s avatar' })
   @ApiBody({ type: UpdateUserAvatarDto })
-  async updateUserAvatar(@Param('id') id: number, @Body() updateUserAvatarDto: UpdateUserAvatarDto): Promise<User> {
+  async updateUserAvatar(@Param('id', ParseIntPipe) id: number, @Body() updateUserAvatarDto: UpdateUserAvatarDto): Promise<User> {
     return this.userService.updateUserAvatar(Number(id), updateUserAvatarDto.avatar);
   }
 
   @Put('username/:id')
   @ApiOperation({ summary: 'Update user\'s username' })
   @ApiBody({ type: UpdateUserNameDto })
-  async updateUserName(@Param('id') id: number, @Body() updateUserNameDto: UpdateUserNameDto): Promise<User> {
+  async updateUserName(@Param('id', ParseIntPipe) id: number, @Body() updateUserNameDto: UpdateUserNameDto): Promise<User> {
     return this.userService.updateUserName(Number(id), updateUserNameDto.username);
   }
 
-  @Get('friends/:id')
-  @ApiOperation({ summary: 'Get friends of user' })
-  async getFriendsOfUser(@Param('id') id: number): Promise<User[]> {
+  @Get('friend/:id')
+  @ApiOperation({ summary: 'Get friend of user' })
+  async getFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id));
+  }
+
+  @Get('search/:query')
+  @ApiOperation({ summary: 'Search user by username' })
+  async search(@Param('query', StringPipe) query: string): Promise<User[]> {
+    return this.userService.search(query);
   }
 
   @Get('blocks/:id')
   @ApiOperation({ summary: 'Get blocked of user' })
-  async getBlocksOfUser(@Param('id') id: number): Promise<User[]> {
+  async getBlocksOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getBlocksOfUser(Number(id));
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user' })
-  async deleteUser(@Param('id') id: number): Promise<User> {
+  async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.userService.deleteUser(Number(id));
   }
 

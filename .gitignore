@@ -2,3 +2,4 @@
 .env
 back/dist/
 front/dist/
+.idea

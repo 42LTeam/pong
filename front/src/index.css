@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /*--header-height: 72px;*/
+}
+
+body {
+
+}
+
+#header {
+    height: var(--header-height);
+}

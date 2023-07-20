@@ -4,31 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ft_transpirance</title>
- 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Keania+One&family=KoHo:wght@700&family=Krub:wght@300;600;700&family=Kulim+Park:wght@700&display=swap" rel="stylesheet">
     <style>
+      body {
+        margin: 0;
+        display: flex;
+        min-height: 100vh;
+      }
 
-        body {
-            margin: 0;
+      #root {
 
-            position: relative;
-            background: linear-gradient(179.36deg, #34495E 0.58%, #2980B9 52.1%, #34495E 99.49%);
-            min-height: 100vh;
-            overflow: hidden;
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-            padding-top: 10px;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-
+        display: flex;
+        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        flex: 1 0 0;
+        background: linear-gradient(180deg, #34495E 0%, #2980B9 52.08%, #34495E 100%), no-repeat;
+      }
 
 
         </style>
   </head>
   <body>
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

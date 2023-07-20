@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User, UserFriendship, Friendship, Block } from '@prisma/client';
+import { User} from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -68,11 +68,20 @@ export class UserService {
   
     const friendUserIds = friendsUserFriendships.map(f => f.userId);
   
-    const friends = await this.prisma.user.findMany({
+    return this.prisma.user.findMany({
       where: { id: { in: friendUserIds } },
     });
   
-    return friends;
+  }
+
+  async search(query: string): Promise<User[]>{
+    return this.prisma.user.findMany({
+      where : {
+        username: {
+          startsWith: query,
+        }
+      }
+    });
   }
 
   async getBlocksOfUser(id: number): Promise<User[]> {
@@ -83,9 +92,8 @@ export class UserService {
 
     if (!blocks) throw new Error("No blocked users found");
 
-    const blockedUsers = blocks.map(block => block.receivedBy);
+    return blocks.map(block => block.receivedBy);
 
-    return blockedUsers;
   }
 }
 
