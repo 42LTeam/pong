@@ -22,7 +22,7 @@ const Application = function ({user}){
                 <Routes>
                     <Route index element={"home"} />
                     <Route path={PATHS.chat} element={<ChatBody user={user}/>} />
-                    <Route path={PATHS.settings} element={<div>J'etre settings</div>} />
+                    <Route path={PATHS.settings} element={"settings"} />
                 </Routes>
             </BrowserRouter>
         </>

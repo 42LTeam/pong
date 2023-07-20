@@ -24,7 +24,7 @@ const NavigationBubble = () => {
     return (
     <div className="navigation bubble">
         <HeaderNavigationIcon handleClick={handleClick} text="/chat" state={state} children={<ChatButton />}></HeaderNavigationIcon>
-        <HeaderNavigationIcon handleClick={handleClick} text="/home" state={state} children={<PlayButton />}></HeaderNavigationIcon>
+        <HeaderNavigationIcon handleClick={handleClick} text="/" state={state} children={<PlayButton />}></HeaderNavigationIcon>
         <HeaderNavigationIcon handleClick={handleClick} text="/settings" state={state} children={<SettingsButton />}></HeaderNavigationIcon>
     </div>
     );
