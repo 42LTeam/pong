@@ -1,4 +1,5 @@
 import '../css/playerskin.css'
+import {useState} from "react";
 
 export const PlayerSkin = () => {
     const handleClickLeft = () => {

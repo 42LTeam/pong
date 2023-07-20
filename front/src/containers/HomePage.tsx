@@ -1,3 +1,4 @@
+import '../css/homepage.css'
 import {PlayerSkin} from "../components/PlayerSkin";
 import {BallSkin} from "../components/BallSkin"
 import {LaunchButton} from "../components/LaunchButton"
