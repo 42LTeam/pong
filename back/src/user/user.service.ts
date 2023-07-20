@@ -51,11 +51,16 @@ export class UserService {
     return this.prisma.user.delete({ where: { id } });
   }
 
-  async getFriendsOfUser(id: number): Promise<User[]> {
-    const friendships = await this.prisma.userFriendship.findMany({
+
+  async getFriendships(id: number){
+    return this.prisma.userFriendship.findMany({
       where: { userId: id, acceptedAt: { not: null } },
       include: { friendship: true }
     });
+  }
+
+  async getFriendsOfUser(id: number): Promise<User[]> {
+    const friendships = await this.getFriendships(id);
   
     const friendshipIds = friendships.map(f => f.friendshipId);
   
@@ -72,6 +77,26 @@ export class UserService {
       where: { id: { in: friendUserIds } },
     });
   
+  }
+
+
+  async getOnlineFriendsOfUser(id: number) {
+    const friendships = await this.getFriendships(id);
+
+    const friendshipIds = friendships.map(f => f.friendshipId);
+
+    const friendsUserFriendships = await this.prisma.userFriendship.findMany({
+      where: {
+        friendshipId: { in: friendshipIds },
+        userId: { not: id }
+      },
+    });
+
+    const friendUserIds = friendsUserFriendships.map(f => f.userId);
+
+    return this.prisma.user.findMany({
+      where: { id: { in: friendUserIds }, status: Status.ONLINE },
+    });
   }
 
   async search(query: string): Promise<User[]>{
@@ -117,6 +142,7 @@ export class UserService {
 
     return user.status;
   }
+
 
 }
 

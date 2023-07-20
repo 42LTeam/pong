@@ -1,9 +1,9 @@
 import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { User } from '@prisma/client';
+import { Status, User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
-import {IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
+import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 
 class CreateUserDto {
   @ApiProperty()
@@ -35,6 +35,12 @@ class UpdateUserAvatarDto {
 class UpdateUserNameDto {
   @ApiProperty()
   username: string;
+}
+
+export class UpdateUserStatusDto {
+  @ApiProperty({ enum: Status })
+  @IsEnum(Status)
+  status: Status;
 }
 
 @ApiTags('users')
@@ -83,6 +89,14 @@ export class UserController {
   async getFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id));
   }
+
+
+  @Get('friend/online/:id')
+  @ApiOperation({ summary: 'Get online friend of user' })
+  async getOnlineFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
+    return this.userService.getOnlineFriendsOfUser(Number(id));
+  }
+
 
   @Get('search/:query')
   @ApiOperation({ summary: 'Search user by username' })

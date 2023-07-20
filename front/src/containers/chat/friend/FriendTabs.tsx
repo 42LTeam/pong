@@ -10,9 +10,9 @@ export default function FriendTabs({states, handleClick ,state}){
             <div className="vertical-separator"></div>
             {states.map((current) => {
                 if (current == "Ajouter")
-                    return (<AddFriendButton handleClick={handleClick} text="Ajouter" state={state}></AddFriendButton>);
+                    return (<AddFriendButton key={current+"friendtab"} handleClick={handleClick} text="Ajouter" state={state}></AddFriendButton>);
                 return (
-                  <FriendTab handleClick={handleClick} text={current} state={state}></FriendTab>
+                  <FriendTab key={current+"friendtab"} handleClick={handleClick} text={current} state={state}></FriendTab>
                 );
             })}
 

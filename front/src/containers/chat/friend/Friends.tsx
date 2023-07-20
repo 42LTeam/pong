@@ -2,24 +2,40 @@ import "../../../css/friend.css"
 import FriendTabs from "./FriendTabs";
 import {useState} from "react";
 import AddFriend from "./AddFriend";
-import FriendList from "./FriendList";
+import Friendlist from "./Friendlist";
+import axios from "axios";
 
 
-export const states = ["En ligne","Tous","En attente","Bloqué","Ajouter"];
+const states = ["En ligne","Tous","En attente","Bloqué","Ajouter"];
+const paths = ["/users/friend/online/","/users/friend/","/friend/friend-request/pending/","/block/blocked/"]
 
 export default function Friends({user}){
     const [state, setState] = useState("En ligne");
 
     const handleClick = (text) => {
         setState(text);
+        setFriends(null);
     }
+
+    const [friends, setFriends] = useState(null);
+    var config = {
+        method: 'get',
+        url: 'http://localhost:3000' + paths[states.indexOf(state)] +user.id,
+        withCredentials: true,
+    };
+    if(!friends)
+        axios(config)
+            .then(function (response) {
+                setFriends(response.data);
+            })
+
 
     return (
 
         <div className="friends">
             <FriendTabs key="friendtabs" states={states} handleClick={handleClick} state={state}></FriendTabs>
             <div className="horizontal-separator"></div>
-            {state == states[states.length - 1] ? (<AddFriend></AddFriend>) : (<FriendList user={user} state={state}></FriendList>)}
+            {state == states[states.length - 1] ? (<AddFriend></AddFriend>) : (<Friendlist friends={friends}></Friendlist>)}
         </div>
     );
 }
