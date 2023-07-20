@@ -29,7 +29,8 @@
 }
 
 .textinput-button {
-    cursor: pointer;
+    cursor: not-allowed;
+
     white-space: nowrap;
     padding: 5px;
     align-items: center;
@@ -46,4 +47,6 @@
 
 .textinput-button-focus {
     background: #2ECC71;
+    cursor: pointer;
+
 }
