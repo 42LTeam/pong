@@ -96,6 +96,12 @@ export class UserController {
     return this.userService.getFriendsOfUser(Number(id));
   }
 
+  @Get('friend/online/:id')
+  @ApiOperation({ summary: 'Get friend of user' })
+  async getOnlineFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
+    return this.userService.getOnlineFriendsOfUser(Number(id));
+  }
+
   @Get('search/:query')
   @ApiOperation({ summary: 'Search user by username' })
   async search(@Param('query', StringPipe) query: string): Promise<User[]> {
