@@ -5,6 +5,7 @@ import { Status, User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
+import { isNotEmpty, isString } from 'class-validator';
 
 class CreateUserDto {
   @ApiProperty()
@@ -30,16 +31,21 @@ class CreateUserDto {
 
 class UpdateUserAvatarDto {
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   avatar: string;
 }
 
 class UpdateUserNameDto {
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   username: string;
 }
 
 export class UpdateUserStatusDto {
   @ApiProperty({ enum: Status })
+  @IsNotEmpty()
   @IsEnum(Status)
   status: Status;
 }
