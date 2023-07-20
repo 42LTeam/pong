@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserFriendship, Friendship } from '@prisma/client';
+import { UserFriendship, Friendship, User } from '@prisma/client';
 
 @Injectable()
 export class FriendService {
@@ -57,21 +57,24 @@ export class FriendService {
     });
   }
 
-  async getPendingFriendRequests(userId: number): Promise<UserFriendship[]> {
-    return this.prisma.userFriendship.findMany({
+  async getPendingFriendRequests(userId: number): Promise<User[]> {
+    const userFriendships = await this.prisma.userFriendship.findMany({
       where: {
         userId,
         acceptedAt: null,
       },
       include: {
-        friendship: true,
+        user: true,
       },
     });
+    const pendingUsers = userFriendships.map(friendship => friendship.user);
+
+    return pendingUsers;
   }
 
   // async getFriends(userId: number): Promise<User[]> {
     // const friendRelations = await this.prisma.userFriendship.findMany({
-    //   where: {
+    //   where: {eewiuwwehh
     //     userId,
     //     acceptedAt: {
     //       not: null,
