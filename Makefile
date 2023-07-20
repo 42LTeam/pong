@@ -1,13 +1,11 @@
 DB=pong_docker-nest-postgres
 PG=pong_pgadmin
-REDIS=pong_redis
 
 all: build up
 
 VOLUMES = docker volume ls -q
 DB=pong_docker-nest-postgres
 PG=pong_pgadmin
-REDIS=pong_redis
 
 build:
 	@docker compose -f docker-compose.yml build
@@ -16,7 +14,7 @@ volumes:
 	@docker volume ls -q
 
 rmvol:
-	@docker volume rm $(DB) $(PG) $(REDIS)
+	@docker volume rm $(DB) $(PG) 
 
 up:
 	@docker compose -f docker-compose.yml up -d
