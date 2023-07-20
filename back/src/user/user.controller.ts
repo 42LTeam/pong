@@ -4,7 +4,6 @@ import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
-import {StringPipe} from "./pipes/string.pipe";
 
 class CreateUserDto {
   @ApiProperty()
@@ -87,7 +86,7 @@ export class UserController {
 
   @Get('search/:query')
   @ApiOperation({ summary: 'Search user by username' })
-  async search(@Param('query', StringPipe) query: string): Promise<User[]> {
+  async search(@Param('query') query: string): Promise<User[]> {
     return this.userService.search(query);
   }
 
