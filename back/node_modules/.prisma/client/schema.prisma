@@ -11,6 +11,8 @@ model User {
   username            String            @unique
   secretO2FA          String?
   xp                  Int
+  role                Role             @default(USER)
+  status              Status           @default(OFFLINE)
   userMatches         UserMatch[]
   userFriendships     UserFriendship[]
   blocksInitiated     Block[]         @relation("blockInitiator")
@@ -95,6 +97,16 @@ model Message {
   created_at  DateTime @default(now())
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  OFFLINE
+  ONLINE
+  INGAME
+}
 
 datasource db {
   provider = "postgresql"

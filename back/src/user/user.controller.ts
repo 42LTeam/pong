@@ -1,9 +1,9 @@
 import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { User } from '@prisma/client';
+import { Status, User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
-import {IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
+import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
 
 class CreateUserDto {
@@ -36,6 +36,12 @@ class UpdateUserAvatarDto {
 class UpdateUserNameDto {
   @ApiProperty()
   username: string;
+}
+
+export class UpdateUserStatusDto {
+  @ApiProperty({ enum: Status })
+  @IsEnum(Status)
+  status: Status;
 }
 
 @ApiTags('users')
@@ -101,6 +107,21 @@ export class UserController {
   @ApiOperation({ summary: 'Delete user' })
   async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.userService.deleteUser(Number(id));
+  }
+
+  @Get(':id/status')
+  async getUserStatus(@Param('id') id: string): Promise<Status> {
+    return this.userService.getUserStatusById(Number(id));
+  }
+
+  @Put(':id/status')
+  @ApiBody({ type: UpdateUserStatusDto })
+  @ApiOperation({ summary: 'Update user status' })
+  async updateUserStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserStatusDto: UpdateUserStatusDto,
+  ): Promise<Status> {
+    return this.userService.updateUserStatusById(id, updateUserStatusDto.status);
   }
 
 }

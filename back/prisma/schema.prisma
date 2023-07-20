@@ -10,6 +10,7 @@ model User {
   avatar              String
   username            String            @unique
   secretO2FA          String?
+  session             String?
   xp                  Int
   role                Role             @default(USER)
   status              Status           @default(OFFLINE)
