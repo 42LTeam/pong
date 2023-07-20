@@ -21,11 +21,12 @@ export default function AddFriend(){
         <>
             <div className="ajouter-text"> Ajouter</div>
             <div className="ajouter-description"> Tu peux ajouter des amis grâce à leurs noms d utilisateur. </div>
-            <div className="add-friend-bubble">
-                <TextInput
-                    text={"Trouve ami.e, tape nom..."}
-                    onChange={event => handleInputChange(event)} />
-            </div>
+            <TextInput
+                text={"Trouve ami.e, tape nom..."}
+                onChange={event => handleInputChange(event)}
+                buttonProps={null}
+                buttonContent="Envoyer une demande d’ami"
+            />
             {suggestions?.map((current) => {return (<Friend key={current.username + "suggestion-key"} username={current.username} status="on est la"/>)})}
         </>
     )
