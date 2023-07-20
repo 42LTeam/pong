@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
+import {StringPipe} from "./pipes/string.pipe";
 
 class CreateUserDto {
   @ApiProperty()
@@ -60,21 +61,21 @@ export class UserController {
 
   @Get('id/:id')
   @ApiOperation({ summary: 'Get user by id' })
-  async getUserById(@Param('id') id: number): Promise<User | null> {
+  async getUserById(@Param('id', ParseIntPipe) id: number): Promise<User | null> {
     return this.userService.getUserById(Number(id));
   }
 
   @Put('avatar/:id')
   @ApiOperation({ summary: 'Update user\'s avatar' })
   @ApiBody({ type: UpdateUserAvatarDto })
-  async updateUserAvatar(@Param('id') id: number, @Body() updateUserAvatarDto: UpdateUserAvatarDto): Promise<User> {
+  async updateUserAvatar(@Param('id', ParseIntPipe) id: number, @Body() updateUserAvatarDto: UpdateUserAvatarDto): Promise<User> {
     return this.userService.updateUserAvatar(Number(id), updateUserAvatarDto.avatar);
   }
 
   @Put('username/:id')
   @ApiOperation({ summary: 'Update user\'s username' })
   @ApiBody({ type: UpdateUserNameDto })
-  async updateUserName(@Param('id') id: number, @Body() updateUserNameDto: UpdateUserNameDto): Promise<User> {
+  async updateUserName(@Param('id', ParseIntPipe) id: number, @Body() updateUserNameDto: UpdateUserNameDto): Promise<User> {
     return this.userService.updateUserName(Number(id), updateUserNameDto.username);
   }
 
@@ -86,7 +87,7 @@ export class UserController {
 
   @Get('search/:query')
   @ApiOperation({ summary: 'Search user by username' })
-  async search(@Param('query') query: string): Promise<User[]> {
+  async search(@Param('query', StringPipe) query: string): Promise<User[]> {
     return this.userService.search(query);
   }
 
@@ -98,7 +99,7 @@ export class UserController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user' })
-  async deleteUser(@Param('id') id: number): Promise<User> {
+  async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.userService.deleteUser(Number(id));
   }
 
