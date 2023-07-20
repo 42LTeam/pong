@@ -70,7 +70,7 @@ async function main() {
     const block = await prisma.block.create({
         data: {
             blockerId: user1.id,
-            blockedId: user2.id,
+            blockedId: 3,
             createdAt: new Date(),
         },
     });
