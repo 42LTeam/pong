@@ -11,7 +11,12 @@ const PATHS = {
 
 const Application = function ({user}){
 
-
+    if (!user)
+        return (
+            <div>
+                Ah ouais chaud t'es pas log
+            </div>
+        );
 
     return (
         <>

@@ -26,7 +26,7 @@ export default function AddFriend(){
                     text={"Trouve ami.e, tape nom..."}
                     onChange={event => handleInputChange(event)} />
             </div>
-            {suggestions?.map((current) => {return (<Friend username={current.username} status="on est la"/>)})}
+            {suggestions?.map((current) => {return (<Friend key={current.username + "suggestion-key"} username={current.username} status="on est la"/>)})}
         </>
     )
 }

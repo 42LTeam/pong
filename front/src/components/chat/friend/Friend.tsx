@@ -1,7 +1,7 @@
 
 type Props = {
     username: string,
-    status : number,
+    status : string,
 }
 
 export default function Friend(props: Props){
