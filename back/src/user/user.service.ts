@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User} from '@prisma/client';
+import { Status, User} from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -95,5 +95,28 @@ export class UserService {
     return blocks.map(block => block.receivedBy);
 
   }
+
+  async getUserStatusById(id: number): Promise<Status> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: { status: true },
+    });
+
+    if (!user) {
+      throw new Error(`No user found for id: ${id}`);
+    }
+
+    return user.status;
+  }
+
+  async updateUserStatusById(id: number, newStatus: Status): Promise<Status> {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { status: newStatus },
+    });
+
+    return user.status;
+  }
+
 }
 

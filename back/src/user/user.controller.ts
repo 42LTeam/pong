@@ -102,4 +102,19 @@ export class UserController {
     return this.userService.deleteUser(Number(id));
   }
 
+  @Get(':id/status')
+  async getUserStatus(@Param('id') id: string): Promise<Status> {
+    return this.userService.getUserStatusById(Number(id));
+  }
+
+  @Put(':id/status')
+  @ApiBody({ type: UpdateUserStatusDto })
+  @ApiOperation({ summary: 'Update user status' })
+  async updateUserStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserStatusDto: UpdateUserStatusDto,
+  ): Promise<Status> {
+    return this.userService.updateUserStatusById(id, updateUserStatusDto.status);
+  }
+
 }
