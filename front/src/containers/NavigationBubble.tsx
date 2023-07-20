@@ -1,11 +1,10 @@
 import "../css/header.css";
 
-import React from "react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import ChatButton from "../components/ChatButton";
-import PlayButton from "../components/LauchButton";
+import PlayButton from "../components/PlayButton";
 import SettingsButton from "../components/SettingsButton";
 import HeaderNavigationIcon from "../components/HeaderNavigationIcon";
 

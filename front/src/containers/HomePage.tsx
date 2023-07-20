@@ -1,8 +1,6 @@
-import React, {useState} from "react";
-import '../css/homepage.css'
 import {PlayerSkin} from "../components/PlayerSkin";
 import {BallSkin} from "../components/BallSkin"
-import {LauchButton} from "../components/LauchButton"
+import {LaunchButton} from "../components/LaunchButton"
 
 export default function HomePage({user}){
 
@@ -13,12 +11,12 @@ export default function HomePage({user}){
                     <div className="skin-selection">
                         <PlayerSkin />
                         <BallSkin />
-                        <LauchButton />
+                        <LaunchButton />
                     </div>
 
                 </div>
                 <div className="frame-right">
-                    <SearchFriend />
+                    {/*<SearchFriend />*/}
                     {/*<friendTabs />*/}
                 </div>
             </div>
