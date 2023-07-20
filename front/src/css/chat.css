@@ -185,3 +185,7 @@
     font-weight: 700;
     line-height: normal; 
 }
+
+.chat-logo{
+    filter: invert(57%) sepia(10%) saturate(300%) hue-rotate(136deg) brightness(94%) contrast(88%);
+}
