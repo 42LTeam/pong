@@ -12,7 +12,7 @@ model User {
   secretO2FA          String?
   session             String?
   xp                  Int
-  role                Role             @default(USER)
+  role                Int              @default(0)
   status              Status           @default(OFFLINE)
   userMatches         UserMatch[]
   userFriendships     UserFriendship[]
@@ -96,11 +96,6 @@ model Message {
   user        User     @relation(fields: [userId], references: [id])
   channel     Channel  @relation(fields: [channelId], references: [id])
   created_at  DateTime @default(now())
-}
-
-enum Role {
-  USER
-  ADMIN
 }
 
 enum Status {

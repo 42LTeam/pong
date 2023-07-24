@@ -143,6 +143,5 @@ export class UserService {
     return user.status;
   }
 
-
 }
 

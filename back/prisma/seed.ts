@@ -3,6 +3,17 @@ import { PrismaClient, User } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+
+    await prisma.userFriendship.deleteMany();
+    await prisma.userMatch.deleteMany();
+    await prisma.block.deleteMany();
+    await prisma.userChannel.deleteMany();
+    await prisma.message.deleteMany();
+    await prisma.channel.deleteMany();
+    await prisma.match.deleteMany();
+    await prisma.friendship.deleteMany();
+    await prisma.user.deleteMany();
+
     for (let i = 3; i < 10; i++) {
         await prisma.user.create({
             data: {
@@ -70,7 +81,7 @@ async function main() {
     const block = await prisma.block.create({
         data: {
             blockerId: user1.id,
-            blockedId: user2.id,
+            blockedId: 3,
             createdAt: new Date(),
         },
     });

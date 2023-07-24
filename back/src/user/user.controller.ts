@@ -5,6 +5,7 @@ import { Status, User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
+import { Roles } from 'src/auth/roles.decorator';
 
 class CreateUserDto {
   @ApiProperty()
@@ -26,6 +27,12 @@ class CreateUserDto {
   @IsNumber()
   @ApiProperty()
   xp: number;
+}
+
+
+enum Role {
+  USER = 0,
+  ADMIN = 1,
 }
 
 class UpdateUserAvatarDto {
@@ -56,6 +63,7 @@ export class UserController {
   constructor(private userService: UserService) { }
 
   @Post()
+  @Roles(Role.ADMIN)  // For admin restrictions
   @ApiBody({ type: CreateUserDto })
   @ApiOperation({ summary: 'Create a user' })
   async createUser(
@@ -65,6 +73,7 @@ export class UserController {
   }
 
   @Get()
+  @Roles(Role.USER) 
   @ApiOperation({ summary: 'Get all users' })
   async getAllUsers(): Promise<User[]> {
     return this.userService.getAllUsers();

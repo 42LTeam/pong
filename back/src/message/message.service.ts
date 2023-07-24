@@ -76,5 +76,18 @@ export class MessageService {
 
     return message.readBy.some(user => user.id === userId);
   }
+
+  async getLastMessageInChannel(channelId: number) {
+    const lastMessage = await this.prisma.message.findFirst({
+      where: { channelId },
+      orderBy: { created_at: 'desc' },
+    });
+
+    if (!lastMessage) {
+      throw new Error(`No messages found for channel id: ${channelId}`);
+    }
+
+    return lastMessage;
+  }
 }
 
