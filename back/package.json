@@ -10,6 +10,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "seed": "npx prisma db seed",
+    "migrate": "npx prisma migrate dev",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
