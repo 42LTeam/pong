@@ -6,7 +6,6 @@ import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
 import { Roles } from 'src/auth/roles.decorator';
-import { RolesGuard } from 'src/auth/admin.guard';
 
 class CreateUserDto {
   @ApiProperty()
@@ -57,7 +56,6 @@ export class UpdateUserStatusDto {
   status: Status;
 }
 
-@UseGuards(RolesGuard) // For admin restrictions
 @ApiTags('users')
 @Controller('users')
 @UseGuards(AuthenticatedGuard)

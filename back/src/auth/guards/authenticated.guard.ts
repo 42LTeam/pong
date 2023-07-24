@@ -1,10 +1,20 @@
 import { CanActivate, ExecutionContext, Injectable} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
 
 @Injectable()
 export class AuthenticatedGuard implements CanActivate {
-    canActivate(context: ExecutionContext): Promise<any>{
+    constructor(private reflector: Reflector) {}
+
+
+    async canActivate(context: ExecutionContext): Promise<any>{
         const req = context.switchToHttp().getRequest();
-        return req.isAuthenticated();
+        const role = this.reflector.get<number>('roles', context.getHandler());
+        if (!role) {
+          return req.isAuthenticated();
+        }
+        const user = await req.user;
+
+        return req.isAuthenticated() && user.role >= role;
     }
 
 }
