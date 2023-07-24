@@ -1,10 +1,12 @@
 import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { Status, User } from '@prisma/client';
+import { Role, Status, User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/admin.guard';
 
 class CreateUserDto {
   @ApiProperty()
@@ -49,6 +51,7 @@ export class UpdateUserStatusDto {
   status: Status;
 }
 
+@UseGuards(RolesGuard) // For admin restrictions
 @ApiTags('users')
 @Controller('users')
 @UseGuards(AuthenticatedGuard)
@@ -56,6 +59,7 @@ export class UserController {
   constructor(private userService: UserService) { }
 
   @Post()
+  @Roles(Role.ADMIN)  // For admin restrictions
   @ApiBody({ type: CreateUserDto })
   @ApiOperation({ summary: 'Create a user' })
   async createUser(
