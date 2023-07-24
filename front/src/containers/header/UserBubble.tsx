@@ -1,5 +1,5 @@
-import "../css/user.css"
-import ChatButton from "./chat/ChatButton";
+import "../../css/user.css"
+import ChatButton from "../../components/chat/ChatButton";
 
 
 const UserBubble = ({ user }) => {
