@@ -1,7 +1,7 @@
 import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { Role, Status, User } from '@prisma/client';
+import { Status, User } from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
@@ -28,6 +28,12 @@ class CreateUserDto {
   @IsNumber()
   @ApiProperty()
   xp: number;
+}
+
+
+enum Role {
+  USER = 0,
+  ADMIN = 1,
 }
 
 class UpdateUserAvatarDto {
@@ -69,6 +75,7 @@ export class UserController {
   }
 
   @Get()
+  @Roles(Role.USER) 
   @ApiOperation({ summary: 'Get all users' })
   async getAllUsers(): Promise<User[]> {
     return this.userService.getAllUsers();
