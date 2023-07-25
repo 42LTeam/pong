@@ -5,6 +5,7 @@ import Friend from "../../../components/chat/friend/Friend";
 
 export default function AddFriend(){
     const [suggestions, setSuggestions] = useState(null);
+    const [friend, setFriend] = useState(null);
     const handleInputChange = (event) => {
         let config = {
             method: 'get',
@@ -12,9 +13,22 @@ export default function AddFriend(){
             url: 'http://localhost:3000/users/search/'+event.target.value,
             withCredentials: true,
         };
-        if(event.target.value)
-            axios(config).then((response) => {setSuggestions(response.data)});
-        else setSuggestions(null);
+        if(event.target.value && !friend) {
+            axios(config).then((response) => {
+                setSuggestions(response.data);
+                if (suggestions.length == 1 && event.target.value == response.data[0].username)
+                    setFriend(response.data[0]);
+                else
+                    setFriend(null);
+            });
+        }else {
+            setSuggestions(null);
+            setFriend(null);
+        }
+    }
+
+    const handleSuggestionClick = (friend) => {
+        setFriend(friend)
     }
 
     return (
@@ -26,8 +40,9 @@ export default function AddFriend(){
                 onChange={event => handleInputChange(event)}
                 buttonProps={null}
                 buttonContent="Envoyer une demande d’ami"
+                friend={friend}
             />
-            {suggestions?.map((current) => {return (<Friend key={current.username + "suggestion-key"} username={current.username} status="on est la"/>)})}
+            {suggestions?.map((current) => {return (<Friend onClick={handleSuggestionClick} key={current.username + "suggestion-key"} friend={current}/>)})}
         </>
     )
 }

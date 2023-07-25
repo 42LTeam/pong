@@ -1,16 +1,17 @@
 
 type Props = {
-    username: string,
-    status : string,
+    friend: any,
+    onClick: any,
 }
 
 export default function Friend(props: Props){
+    const {username, status} = props.friend;
     return (
-        <div className="friend">
+        <div onClick={() => {props.onClick(props.friend)}} className="friend">
             <div className="conversation-avatar"></div>
             <div className="conversation-content">
-                <div className="conversation-username">{props.username}</div>
-                <div className="conversation-preview">{props.status}</div>
+                <div className="conversation-username">{username}</div>
+                <div className="conversation-preview">{status}</div>
             </div>
         </div>
     )
