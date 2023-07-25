@@ -4,28 +4,6 @@ import TextInput from "./TextInput";
 import React from "react";
 import axios from "axios";
 
-// type TextInputProps = {
-//     text: string;
-//   };
-  
-//   const TextInput: React.FC<TextInputProps> = (props) => {
-//     const [value, setValue] = useState('');
-  
-//     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//       setValue(event.target.value);
-//     };
-  
-//     return (
-//       <input
-//         className="text-input"
-//         onChange={handleInputChange}
-//         placeholder={props.text}
-//         value={value}
-//       />
-//     );
-//   };
-
-
 export default function AddFriendBubble(){
 
     const [inviteText, setInviteText] = useState('');
@@ -105,6 +83,7 @@ export default function AddFriendBubble(){
         <div className="add-friend-bubble">
             <TextInput
                 text={"Trouve ami.e, tape nom..."}
+                cssClass={'text-input'}
                 onChange={event => handleInputChange(event)} />
             <button onClick={() => handleSendFriendRequest()} className="add-friend-button">
                 Envoyer une demande d'ami.e</button>

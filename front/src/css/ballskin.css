@@ -15,7 +15,8 @@
     height: 50px;
 }
 
-.player-skin .vector {
+.ball-skin .vector {
     width: 57px;
     height: 49px;
+    cursor: pointer;
 }

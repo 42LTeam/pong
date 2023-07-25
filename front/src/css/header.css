@@ -39,6 +39,7 @@ https://codepen.io/sosuke/pen/Pjoqqp
 
 .header-navigation-icon{
     filter: invert(57%) sepia(10%) saturate(300%) hue-rotate(136deg) brightness(94%) contrast(88%);
+    cursor: pointer;
 }
 
 .header-navigation-icon-current{
