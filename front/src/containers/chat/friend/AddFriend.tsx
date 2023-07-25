@@ -3,7 +3,7 @@ import {useState} from "react";
 import axios from "axios";
 import Friend from "../../../components/chat/friend/Friend";
 
-export default function AddFriend(){
+export default function AddFriend({user}){
     const [suggestions, setSuggestions] = useState(null);
     const [friend, setFriend] = useState(null);
     const handleInputChange = (event) => {
@@ -31,6 +31,27 @@ export default function AddFriend(){
         setFriend(friend)
     }
 
+    const onButtonClick = () => {
+        if (!friend) return ;
+
+
+        const config = {
+            method: 'post',
+            url: 'http://localhost:3000/friend/friend-request/',
+            withCredentials: true,
+            data : {
+                initiatorId: user.id,
+                acceptorId: friend.id,
+            }
+        };
+
+        axios(config)
+            .then(function (response) {
+                alert(response.id);
+                setFriend(null);
+            });
+    }
+
     return (
         <>
             <div className="ajouter-text"> Ajouter</div>
@@ -38,7 +59,7 @@ export default function AddFriend(){
             <TextInput
                 text={"Trouve ami.e, tape nom..."}
                 onChange={event => handleInputChange(event)}
-                buttonProps={null}
+                buttonProps={{onClick: onButtonClick}}
                 buttonContent="Envoyer une demande d’ami"
                 friend={friend}
             />
