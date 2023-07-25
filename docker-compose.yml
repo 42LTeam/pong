@@ -36,7 +36,7 @@ services:
         - .env
     volumes:
       - ./back:/usr/src/app
-    command: sh -c "npm install && npx prisma generate && npx tsc && npm run start:migrate:prod"
+    command: sh -c "npm install && npx prisma generate && npx tsc && npm run migrate && npm run start:migrate:prod"
     ports:
       - 3000:3000
       - 8001:8001

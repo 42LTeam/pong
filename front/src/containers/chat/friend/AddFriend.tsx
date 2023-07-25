@@ -32,7 +32,6 @@ export default function AddFriend({user}){
     const onButtonClick = () => {
         if (!friend) return ;
 
-
         const config = {
             method: 'post',
             url: 'http://localhost:3000/friend/friend-request/',

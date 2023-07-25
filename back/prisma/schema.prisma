@@ -6,73 +6,65 @@ generator client {
 }
 
 model User {
-  id                  Int              @id @unique
-  avatar              String
-  username            String            @unique
-  secretO2FA          String?
-  session             String?
-  xp                  Int
-  role                Int              @default(0)
-  status              Status           @default(OFFLINE)
-  userMatches         UserMatch[]
-  userFriendships     UserFriendship[]
-  blocksInitiated     Block[]         @relation("blockInitiator")
-  blocksReceived      Block[]         @relation("blockReceiver")
-  channels            UserChannel[]
-  createdChannels     Channel[]
-  messages            Message[]
-  messagesReaded      Message[]       @relation("UserReadedMessages")
-}
-
-model Friendship {
-  id         Int             @id @default(autoincrement())
-  users      UserFriendship[]
+  id              Int              @id @unique
+  avatar          String
+  username        String           @unique
+  secretO2FA      String?
+  session         String?
+  xp              Int
+  role            Int              @default(0)
+  status          Status           @default(OFFLINE)
+  userMatches     UserMatch[]
+  userFriendships UserFriendship[]
+  blocksInitiated Block[]          @relation("blockInitiator")
+  blocksReceived  Block[]          @relation("blockReceiver")
+  channels        UserChannel[]
+  createdChannels Channel[]
+  messages        Message[]
+  messagesReaded  Message[]        @relation("UserReadedMessages")
 }
 
 model UserFriendship {
-  id            Int       @id @default(autoincrement())
-  userId        Int
-  friendshipId  Int
-  acceptedAt    DateTime?
-  user          User      @relation(fields: [userId], references: [id])
-  friendship    Friendship @relation(fields: [friendshipId], references: [id])
+  id         Int       @id @default(autoincrement())
+  senderId   Int
+  acceptedAt DateTime?
+  sender     User      @relation(fields: [senderId], references: [id])
 }
 
 model Match {
-  id      Int          @id @default(autoincrement())
-  users   UserMatch[]
+  id    Int         @id @default(autoincrement())
+  users UserMatch[]
 }
 
 model UserMatch {
-  id          Int    @id @default(autoincrement())
-  userId      Int
-  matchId     Int
-  score       Int
-  user        User   @relation(fields: [userId], references: [id])
-  match       Match  @relation(fields: [matchId], references: [id])
+  id      Int   @id @default(autoincrement())
+  userId  Int
+  matchId Int
+  score   Int
+  user    User  @relation(fields: [userId], references: [id])
+  match   Match @relation(fields: [matchId], references: [id])
 }
 
-
 model Block {
-  id             Int     @id @default(autoincrement())
-  blockerId      Int
-  blockedId      Int
-  blockedBy      User    @relation("blockInitiator", fields: [blockerId], references: [id])
-  receivedBy     User    @relation("blockReceiver", fields: [blockedId], references: [id])
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime?
+  id         Int       @id @default(autoincrement())
+  blockerId  Int
+  blockedId  Int
+  blockedBy  User      @relation("blockInitiator", fields: [blockerId], references: [id])
+  receivedBy User      @relation("blockReceiver", fields: [blockedId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime?
 }
 
 model Channel {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
-  password    String?
-  creatorId   Int
-  creator     User          @relation(fields: [creatorId], references: [id])
-  users       UserChannel[]
-  privated    Boolean
-  messages    Message[]
-  created_at  DateTime
+  id         Int           @id @default(autoincrement())
+  name       String        @unique
+  password   String?
+  creatorId  Int
+  creator    User          @relation(fields: [creatorId], references: [id])
+  users      UserChannel[]
+  privated   Boolean
+  messages   Message[]
+  created_at DateTime
 }
 
 model UserChannel {
@@ -81,21 +73,21 @@ model UserChannel {
   isAdmin   Boolean
   isBlocked Boolean
   exited    Boolean
-  user      User     @relation(fields: [userId], references: [id])
-  channel   Channel  @relation(fields: [channelId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+  channel   Channel @relation(fields: [channelId], references: [id])
 
   @@id([userId, channelId])
 }
 
 model Message {
-  id          Int      @id @default(autoincrement())
-  content     String
-  userId      Int
-  channelId   Int
-  readBy      User[]   @relation("UserReadedMessages")
-  user        User     @relation(fields: [userId], references: [id])
-  channel     Channel  @relation(fields: [channelId], references: [id])
-  created_at  DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  content    String
+  userId     Int
+  channelId  Int
+  readBy     User[]   @relation("UserReadedMessages")
+  user       User     @relation(fields: [userId], references: [id])
+  channel    Channel  @relation(fields: [channelId], references: [id])
+  created_at DateTime @default(now())
 }
 
 enum Status {

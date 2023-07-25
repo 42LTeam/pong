@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Status, User} from '@prisma/client';
+import {Status, User, UserFriendship} from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -52,50 +52,35 @@ export class UserService {
   }
 
 
-  async getFriendships(id: number){
-    return this.prisma.userFriendship.findMany({
-      where: { userId: id, acceptedAt: { not: null } },
-      include: { friendship: true }
-    });
-  }
 
-  async getFriendsOfUser(id: number): Promise<User[]> {
-    const friendships = await this.getFriendships(id);
-  
-    const friendshipIds = friendships.map(f => f.friendshipId);
-  
-    const friendsUserFriendships = await this.prisma.userFriendship.findMany({
-      where: {
-        friendshipId: { in: friendshipIds },
-        userId: { not: id }
+
+  async getFriendsOfUser(id: number): Promise<UserFriendship[]> {
+    const user = this.prisma.user.findUnique({
+      where : {
+        id
       },
+      select: {
+        userFriendships: true,
+      }
     });
-  
-    const friendUserIds = friendsUserFriendships.map(f => f.userId);
-  
-    return this.prisma.user.findMany({
-      where: { id: { in: friendUserIds } },
-    });
+    const friendship = await user.userFriendships();
+    return friendship;
   
   }
 
 
   async getOnlineFriendsOfUser(id: number) {
-    const friendships = await this.getFriendships(id);
 
-    const friendshipIds = friendships.map(f => f.friendshipId);
 
     const friendsUserFriendships = await this.prisma.userFriendship.findMany({
       where: {
-        friendshipId: { in: friendshipIds },
-        userId: { not: id }
+        senderId: { not: id }
       },
     });
 
-    const friendUserIds = friendsUserFriendships.map(f => f.userId);
 
     return this.prisma.user.findMany({
-      where: { id: { in: friendUserIds }, status: Status.ONLINE },
+      where: { id: { in: [4] }, status: Status.ONLINE },
     });
   }
 
