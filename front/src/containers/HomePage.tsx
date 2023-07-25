@@ -2,6 +2,8 @@ import '../css/homepage.css'
 import {PlayerSkin} from "../components/PlayerSkin";
 import {BallSkin} from "../components/BallSkin"
 import {LaunchButton} from "../components/LaunchButton"
+import React from 'react';
+import SearchBar from '../components/SearchBar';
 
 export default function HomePage({user}){
 
@@ -17,7 +19,7 @@ export default function HomePage({user}){
 
                 </div>
                 <div className="frame-right">
-                    {/*<SearchFriend />*/}
+                    <SearchBar />
                     {/*<friendTabs />*/}
                 </div>
             </div>

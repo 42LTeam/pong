@@ -1,12 +1,12 @@
+import React from 'react';
 import '../css/playerskin.css'
-import {useState} from "react";
 
 export const PlayerSkin = () => {
     const handleClickLeft = () => {
-        console.log("clickkkkkkk");
+        console.log("click on gauche #PlayerSkin");
     };
     const handleClickRight = () => {
-        console.log("click on droite");
+        console.log("click on droite #PlayerSkin");
     };
 
     return (
