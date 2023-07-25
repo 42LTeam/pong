@@ -4,7 +4,7 @@ import axios from "axios";
 import Friend from "../../../components/chat/friend/Friend";
 
 export default function AddFriend({user}){
-    const [suggestions, setSuggestions] = useState(null);
+    const [suggestions, setSuggestions] = useState([]);
     const [friend, setFriend] = useState(null);
     const handleInputChange = (event) => {
         let config = {
@@ -13,18 +13,16 @@ export default function AddFriend({user}){
             url: 'http://localhost:3000/users/search/'+event.target.value,
             withCredentials: true,
         };
-        if(event.target.value && !friend) {
+        if(event.target.value) {
+            setFriend(null);
             axios(config).then((response) => {
                 setSuggestions(response.data);
                 if (suggestions.length == 1 && event.target.value == response.data[0].username)
                     setFriend(response.data[0]);
-                else
-                    setFriend(null);
             });
-        }else {
+        }else
             setSuggestions(null);
-            setFriend(null);
-        }
+
     }
 
     const handleSuggestionClick = (friend) => {
