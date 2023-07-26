@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import {PrismaService} from "../prisma/prisma.service";
-import {User} from "@prisma/client";
+import {Status, User} from "@prisma/client";
 
 @Injectable()
 export class ClientService {
@@ -8,26 +8,27 @@ export class ClientService {
     constructor(private prisma: PrismaService) {}
 
 
-    async getClientById(secretO2FA: string): Promise<User | null> {
-        //TODO create real slot for this
+    async getClientById(session: string): Promise<User | null> {
         return this.prisma.user.findFirst({
-            where: { secretO2FA },
+            where: { session },
         });
     }
-    async unsubscribe(secretO2FA: string){
+    async unsubscribe(session: string){
         return this.prisma.user.updateMany({
-            where: {secretO2FA},
+            where: {session},
             data: {
-                secretO2FA: null
+                status: Status.OFFLINE,
+                session: null
             },
         });
     }
-    async subscribe(user: User, secretO2FA: string) {
-        const ret = user.secretO2FA;
+    async subscribe(user: User, session: string) {
+        const ret = user.session;
         await this.prisma.user.update({
             where: { id: user.id },
             data: {
-                secretO2FA
+                session,
+                status: Status.ONLINE,
             },
         });
         return ret;

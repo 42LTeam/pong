@@ -11,7 +11,6 @@ async function main() {
     await prisma.message.deleteMany();
     await prisma.channel.deleteMany();
     await prisma.match.deleteMany();
-    await prisma.friendship.deleteMany();
     await prisma.user.deleteMany();
 
     for (let i = 3; i < 10; i++) {
@@ -45,21 +44,7 @@ async function main() {
         },
     });
 
-    const friendship = await prisma.friendship.create({
-        data: {
-            users: {
-                create: [
-                    {
-                        user: { connect: { id: user1.id } },
-                    },
-                    {
-                        user: { connect: { id: user2.id } },
-                        acceptedAt: new Date(),
-                    },
-                ],
-            },
-        },
-    });
+
 
     const match = await prisma.match.create({
         data: {

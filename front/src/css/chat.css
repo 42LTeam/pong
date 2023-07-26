@@ -13,6 +13,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
+    flex: 15%;
     align-self: stretch;
 }
 
@@ -101,7 +102,7 @@
     align-self: stretch; 
     border-radius: 10px;
     background: #ECF0F1;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); 
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 
 /*A CHECKER : le css de figma ressmeble a R*/
@@ -148,7 +149,7 @@
     justify-content: center;
     color: #ECF0F1;
     text-align: center;
-    font-family: Kulim Park;
+    font-family: Kulim Park, serif;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -156,20 +157,11 @@
 }
 /*Pas sur de ca*/
 
-.text-input{
-    border: none;
-    background: #ECF0F1;
-    width: 100%;
-}
-
-.text-input:focus{
-    outline: none;
-}
 
 .ajouter-text{
     color: #ECF0F1;
     text-align: center;
-    font-family: Kulim Park;
+    font-family: Kulim Park, serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -179,7 +171,7 @@
 .ajouter-description{
     color: #7F8C8D;
     text-align: center;
-    font-family: Kulim Park;
+    font-family: Kulim Park, serif;
     font-size: 12px;
     font-style: normal;
     font-weight: 700;

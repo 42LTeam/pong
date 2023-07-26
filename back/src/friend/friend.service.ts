@@ -1,75 +1,89 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserFriendship, Friendship, User } from '@prisma/client';
+import { UserFriendship,  User } from '@prisma/client';
+import {use} from "passport";
 
 @Injectable()
 export class FriendService {
   constructor(private prisma: PrismaService) {}
 
-  async createFriendRequest(initiatorId: number, acceptorId: number): Promise<Friendship> {
+  //TODO check that isn't already pending
+
+  async createFriendRequest(initiatorId: number, acceptorId: number): Promise<UserFriendship> {
     if (initiatorId == acceptorId) {
       throw new Error('Both initiatorId and acceptorId shouldn\'t be the same');
     }
 
-    const newFriendship = await this.prisma.friendship.create({
-      data: {},
-    });
-    await this.prisma.userFriendship.create({
+    const userFriendship = await this.prisma.userFriendship.create({
       data: {
-        userId: initiatorId,
-        friendshipId: newFriendship.id,
-      },
+        senderId: initiatorId,
+      }
     });
-
-    await this.prisma.userFriendship.create({
+    await this.prisma.user.update({
+      where: {
+        id: acceptorId,
+      },
       data: {
-        userId: acceptorId,
-        friendshipId: newFriendship.id,
+        userFriendships: {
+          push: userFriendship,
+        }
       },
-    });
-
-    return newFriendship;
+    })
+    return userFriendship;
   }
 
-  async acceptFriendRequest(userId: number, friendshipId: number): Promise<UserFriendship> {
-    const userFriendship = await this.prisma.userFriendship.findFirst({
+  async acceptFriendRequest(acceptorId: number, friendshipId: number): Promise<UserFriendship> {
+    const acceptedFriendship = await this.prisma.userFriendship.update({
       where: {
-        userId,
-        friendshipId,
-      },
-    });
-
-    if (!userFriendship) {
-      throw new Error('Friend request not found');
-    }
-
-    if (userFriendship.acceptedAt) {
-      throw new Error('Friend request already accepted');
-    }
-
-    return this.prisma.userFriendship.update({
-      where: {
-        id: userFriendship.id,
+        id: friendshipId
       },
       data: {
         acceptedAt: new Date(),
       },
+      include: {
+        sender: true,
+      }
+    })
+    const userFriendship = await this.prisma.userFriendship.create({
+      data: {
+        senderId: acceptorId,
+        acceptedAt: new Date(),
+      }
     });
+
+    await this.prisma.user.update({
+      where: {
+        id: acceptedFriendship.sender.id,
+      },
+      data: {
+        push: {
+          userFriendships: userFriendship,
+        }
+      }
+    })
+
+    return userFriendship;
   }
 
-  async getPendingFriendRequests(userId: number): Promise<User[]> {
-    const userFriendships = await this.prisma.userFriendship.findMany({
+  async getPendingFriendRequests(senderId: number): Promise<User[]> {
+    const user = await this.prisma.user.findUnique({
       where: {
-        userId,
-        acceptedAt: null,
+        id: senderId,
       },
       include: {
-        user: true,
-      },
+        userFriendships: true,
+      }
     });
-    const pendingUsers = userFriendships.map(friendship => friendship.user);
 
-    return pendingUsers;
+    const userFriendships = await user.userFriendships();
+    const pending = userFriendships.map(current => current.senderId);
+    return this.prisma.user.findMany({
+      where: {
+        id: {
+          in: pending,
+        }
+      }
+    })
   }
 
   // async getFriends(userId: number): Promise<User[]> {
