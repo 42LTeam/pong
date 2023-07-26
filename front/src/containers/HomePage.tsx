@@ -4,6 +4,7 @@ import {BallSkin} from "../components/BallSkin"
 import {LaunchButton} from "../components/LaunchButton"
 import React from 'react';
 import SearchBar from '../components/SearchBar';
+import FriendQuickInviteBubble from './FriendQuickInviteBubble';
 
 export default function HomePage({user}){
 
@@ -20,7 +21,9 @@ export default function HomePage({user}){
                 </div>
                 <div className="frame-right">
                     <SearchBar />
-                    {/*<friendTabs />*/}
+                    {Array.from({ length: 35 }, (_, index) => (
+                        <FriendQuickInviteBubble key={index} userID={index} />
+                    ))} {/* A voir comment on fait pour boucler avec le back */}
                 </div>
             </div>
         </>

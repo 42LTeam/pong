@@ -2,6 +2,7 @@ import FriendButton from "../components/FriendButton";
 import FriendTab from "../components/FriendTab";
 import {useState} from "react";
 import AddFriendButton from "../components/AddFriendButton";
+import React from "react";
 
 export default function FriendTabs(){
     const [state, setState] = useState("Tous");
