@@ -6,8 +6,8 @@ type Props = {
     friend: any,
     onClick?: any,
     pending?: any,
-    reset: any,
-    userId: number,
+    reset?: any,
+    userId?: number,
 }
 
 export default function Friend(props: Props){
