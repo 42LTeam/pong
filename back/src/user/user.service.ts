@@ -57,30 +57,47 @@ export class UserService {
   async getFriendsOfUser(id: number, online = false): Promise<User[]> {
     const friendShips = await this.prisma.userFriendship.findMany({
       where: {
-        targetId: id,
-        AND: [{
-              acceptedAt: {
-                not: null,
-              }
-            }]
+        OR: [
+          {
+            targetId: id,
+            acceptedAt: {
+              not: null,
+            },
+          },
+          {
+            senderId: id,
+            acceptedAt: {
+              not: null,
+            },
+          },
+        ],
       },
-      select:{
+      select: {
         senderId: true,
-      }
+        targetId: true,
+      },
     });
-
-    const ids = friendShips.map(current => current.senderId);
+  
+    const ids = friendShips.reduce((friendIds, current) => {
+      if (current.senderId === id) {
+        friendIds.push(current.targetId);
+      } else {
+        friendIds.push(current.senderId);
+      }
+  
+      return friendIds;
+    }, []);
+  
     return this.prisma.user.findMany({
       where: {
         id: {
           in: ids,
         },
-        AND: [
-            (online ? {status: "ONLINE"}: {})
-        ]
-      }
-    })
+        ...((online) ? { status: "ONLINE" } : {})
+      },
+    });
   }
+  
 
 
   async search(query: string): Promise<User[]>{
