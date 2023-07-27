@@ -22,7 +22,7 @@ class CreateFriendRequestDto {
 @Controller('friend')
 @UseGuards(AuthenticatedGuard)
 export class FriendController {
-  constructor(private friendService: FriendService) {}
+  constructor(private friendService: FriendService) { }
 
   @Post('friend-request')
   @ApiOperation({ summary: 'Create a friend request' })
@@ -68,3 +68,5 @@ export class FriendController {
 
 
 }
+
+  }
