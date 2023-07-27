@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Post, Put, Body } from '@nestjs/common';
+import {Controller, Get, Param, Post, Put, Body, Req, UseGuards} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { FriendService } from './friend.service';
 import { UserFriendship,  User } from '@prisma/client';
 import { IsNotEmpty, IsNumber } from '@nestjs/class-validator';
+import {AuthenticatedGuard} from "../auth/guards/authenticated.guard";
 
 class CreateFriendRequestDto {
   @ApiProperty()
@@ -16,15 +17,10 @@ class CreateFriendRequestDto {
   acceptorId: number;
 }
 
-class AcceptFriendRequestDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  friendshipId: number;
-}
 
 @ApiTags('friend')
 @Controller('friend')
+@UseGuards(AuthenticatedGuard)
 export class FriendController {
   constructor(private friendService: FriendService) {}
 
@@ -40,9 +36,10 @@ export class FriendController {
   @ApiOperation({ summary: 'Accept a friend request' })
   async acceptFriendRequest(
     @Param('friendshipId') friendshipId: number,
-    @Body('userId') userId: number,
+    @Req() req: any
   ): Promise<UserFriendship> {
-    return this.friendService.acceptFriendRequest(userId, Number(friendshipId));
+    const user = await req.user;
+    return this.friendService.acceptFriendRequest(user.id, Number(friendshipId));
   }
 
   @Get('friend-request/pending/:userId')
@@ -56,4 +53,6 @@ export class FriendController {
   // async getFriends(@Param('userId') userId: number): Promise<User[]> {
   //   return this.friendService.getFriends(Number(userId));
   // }
+
+
 }

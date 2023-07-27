@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {Status, User, UserFriendship} from '@prisma/client';
+import {Status, User} from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -54,35 +54,34 @@ export class UserService {
 
 
 
-  async getFriendsOfUser(id: number): Promise<UserFriendship[]> {
-    const user = this.prisma.user.findUnique({
-      where : {
-        id
+  async getFriendsOfUser(id: number, online = false): Promise<User[]> {
+    const friendShips = await this.prisma.userFriendship.findMany({
+      where: {
+        targetId: id,
+        AND: [{
+              acceptedAt: {
+                not: null,
+              }
+            }]
       },
-      select: {
-        userFriendships: true,
+      select:{
+        senderId: true,
       }
     });
-    const friendship = await user.userFriendships();
-    return friendship;
-  
-  }
 
-
-  async getOnlineFriendsOfUser(id: number) {
-
-
-    const friendsUserFriendships = await this.prisma.userFriendship.findMany({
-      where: {
-        senderId: { not: id }
-      },
-    });
-
-
+    const ids = friendShips.map(current => current.senderId);
     return this.prisma.user.findMany({
-      where: { id: { in: [4] }, status: Status.ONLINE },
-    });
+      where: {
+        id: {
+          in: ids,
+        },
+        AND: [
+            (online ? {status: "ONLINE"}: {})
+        ]
+      }
+    })
   }
+
 
   async search(query: string): Promise<User[]>{
     return this.prisma.user.findMany({
