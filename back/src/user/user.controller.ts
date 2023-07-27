@@ -1,7 +1,7 @@
 import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import {Status, User, UserFriendship} from '@prisma/client';
+import {Status, User} from '@prisma/client';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
@@ -101,14 +101,14 @@ export class UserController {
 
   @Get('friend/:id')
   @ApiOperation({ summary: 'Get friend of user' })
-  async getFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<UserFriendship[]> {
+  async getFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id));
   }
 
   @Get('friend/online/:id')
   @ApiOperation({ summary: 'Get friend of user' })
   async getOnlineFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
-    return this.userService.getOnlineFriendsOfUser(Number(id));
+    return this.userService.getFriendsOfUser(Number(id), true);
   }
 
   @Get('search/:query')

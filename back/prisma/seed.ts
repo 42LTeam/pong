@@ -1,4 +1,4 @@
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -24,17 +24,22 @@ async function main() {
             },
         });
     }
-    const user1: User = await prisma.user.create({
-        data: {
-            id:1,
-            avatar: 'avatar1',
-            username: 'ragotte',
-            secretO2FA: 'secret1',
-            xp: 100,
-        },
-    });
 
-    const user2: User = await prisma.user.create({
+
+
+
+    const user1 = await prisma.user.create(
+        {
+            data: {
+                id: 1,
+                avatar: `avatar1`,
+                username: `shai`,
+                secretO2FA: `j'aime les hommes`,
+                xp: 0,
+            },
+        });
+
+    const user2 = await prisma.user.create({
         data: {
             id:2,
             avatar: 'avatar2',
@@ -46,7 +51,7 @@ async function main() {
 
 
 
-    const match = await prisma.match.create({
+    prisma.match.create({
         data: {
             users: {
                 create: [
@@ -63,7 +68,7 @@ async function main() {
         },
     });
 
-    const block = await prisma.block.create({
+    await prisma.block.create({
         data: {
             blockerId: user1.id,
             blockedId: 3,
@@ -97,7 +102,7 @@ async function main() {
         },
     });
 
-    const message = await prisma.message.create({
+    prisma.message.create({
         data: {
             content: 'Hello, World!',
             userId: user1.id,
@@ -113,7 +118,6 @@ async function main() {
 main()
     .catch((e) => {
         console.error(e);
-        process.exit(1);
     })
     .finally(async () => {
         await prisma.$disconnect();

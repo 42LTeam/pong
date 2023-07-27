@@ -41,12 +41,7 @@ export default function AddFriend({user}){
                 acceptorId: friend.id,
             }
         };
-
         axios(config)
-            .then(function (response) {
-                alert(response.id);
-                setFriend(null);
-            });
     }
 
     return (

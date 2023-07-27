@@ -96,3 +96,34 @@
 .friend:hover{
     background: #34495E;
 }
+
+.friend:hover .approve-friend-button{
+    background-color: #2C3E50;
+}
+
+
+.approve-friend-buttons {
+    display: flex;
+    padding: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.approve-friend-button {
+    background-color: #34495E;
+    padding: 5px;
+    border-radius: 90px;
+    fill: #95A5A6;
+}
+
+.approve:hover{
+    fill: #2ECC71;
+}
+
+.decline:hover{
+    fill: #E74C3C;
+}
+

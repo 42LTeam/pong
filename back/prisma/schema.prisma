@@ -27,8 +27,9 @@ model User {
 model UserFriendship {
   id         Int       @id @default(autoincrement())
   senderId   Int
+  targetId   Int
   acceptedAt DateTime?
-  sender     User      @relation(fields: [senderId], references: [id])
+  target     User      @relation(fields: [targetId], references: [id])
 }
 
 model Match {
