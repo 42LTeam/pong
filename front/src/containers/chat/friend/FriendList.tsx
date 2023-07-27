@@ -1,19 +1,19 @@
 
 import Friend from "../../../components/chat/friend/Friend";
-import axios from "axios/index";
 
 type Props = {
+    user: any,
     friends: any,
     pending: boolean,
-
+    reset: any
 }
-export default function FriendList({friends, pending} : Props){
+export default function FriendList({user, friends, pending, reset} : Props){
 
 
     return (<>
         {friends?.map((current) => {
             return (
-              <Friend pending={pending} key={current.username +'friendlist'} friend={current}></Friend>
+              <Friend userId={user.id} reset={reset} pending={pending} key={current.username +'friendlist'} friend={current}></Friend>
             );
         })}
     </>);

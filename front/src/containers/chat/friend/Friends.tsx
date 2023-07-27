@@ -30,12 +30,16 @@ export default function Friends({user}){
             })
 
 
+    const resetFriend = function (){
+        setFriends(null);
+    }
+
     return (
 
         <div className="friends">
             <FriendTabs key="friendtabs" states={states} handleClick={handleClick} state={state}></FriendTabs>
             <div className="horizontal-separator"></div>
-            {state == states[states.length - 1] ? (<AddFriend user={user} ></AddFriend>) : (<Friendlist friends={friends}></Friendlist>)}
+            {state == states[states.length - 1] ? (<AddFriend user={user} ></AddFriend>) : (<Friendlist reset={resetFriend} pending={state == states[2]} user={user} friends={friends}></Friendlist>)}
         </div>
     );
 }

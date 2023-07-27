@@ -18,6 +18,7 @@ export default function TextInput (props: Props) {
         setFocus(false);
     };
 
+    const obj = {value: props.friend?.username}
 
     return (
         <div className={"textinput-root" + (focus ? " textinput-root-focus" : '')}>
@@ -27,7 +28,7 @@ export default function TextInput (props: Props) {
                 className='textinput-input'
                 onChange={props.onChange}
                 placeholder={props.text}
-                value={props.friend?.username}
+                {...obj}
             />
             <div className={"textinput-button" + (props.friend ? " textinput-button-focus" : '')} {...(props.buttonProps)}>{props.buttonContent}</div>
         </div>
