@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm install vite && vite --host --port 5173",
+    "prisma:generate": "npx prisma generate",
     "prod": "npm install vite && vite --host --port 5173",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",

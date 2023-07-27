@@ -4,7 +4,7 @@ import React from 'react';
 
 
 import LoginPage from './Login_page'
-import Home from './ui/templates/Home';
+import Home from './Home';
 
 
 function Main_app() {
