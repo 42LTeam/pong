@@ -2,7 +2,7 @@ import "../../../css/friend.css"
 import FriendTabs from "./FriendTabs";
 import {useState} from "react";
 import AddFriend from "./AddFriend";
-import Friendlist from "./Friendlist";
+import Friendlist from "./FriendList";
 import axios from "axios";
 
 
