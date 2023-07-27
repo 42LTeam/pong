@@ -9,7 +9,6 @@ export default function AddFriend({user}){
     const handleInputChange = (event) => {
         let config = {
             method: 'get',
-            maxBodyLength: Infinity,
             url: 'http://localhost:3000/users/search/'+event.target.value,
             withCredentials: true,
         };
@@ -17,8 +16,9 @@ export default function AddFriend({user}){
             setFriend(null);
             axios(config).then((response) => {
                 setSuggestions(response.data);
-                if (suggestions.length == 1 && event.target.value == response.data[0].username)
+                if (response.data.length == 1 && event.target.value == response.data[0].username) {
                     setFriend(response.data[0]);
+                }
             });
         }else
             setSuggestions(null);
@@ -42,6 +42,7 @@ export default function AddFriend({user}){
             }
         };
         axios(config)
+        setFriend(null);
     }
 
     return (
