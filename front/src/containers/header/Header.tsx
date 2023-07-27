@@ -7,7 +7,7 @@ import Settings from "../../components/svg/Settings";
 
 // @ts-ignore
 
-const Header = function({user}) {
+const Header = function() {
     const location = useLocation();
 
     const { hash, pathname, search } = location;
@@ -20,7 +20,7 @@ const Header = function({user}) {
                 <Play url="/" color="#7F8C8D"></Play>
                 <Settings color="#7F8C8D"></Settings>
             </div>
-            <UserBubble user={user}></UserBubble>
+            <UserBubble></UserBubble>
 
         </div>
     )

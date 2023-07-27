@@ -1,13 +1,15 @@
 
 import Friend from "../../../components/chat/friend/Friend";
+import {useContext} from "react";
+import {ApplicationContext} from "../../Auth";
 
 type Props = {
-    user: any,
     friends: any,
     pending: boolean,
     reset: any
 }
-export default function FriendList({user, friends, pending, reset} : Props){
+export default function FriendList({friends, pending, reset} : Props){
+    const user = useContext(ApplicationContext)
 
 
     return (<>
