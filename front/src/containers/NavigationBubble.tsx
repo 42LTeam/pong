@@ -1,6 +1,7 @@
 import "../css/header.css";
 
-import { useState } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import ChatButton from "../components/ChatButton";
@@ -9,16 +10,21 @@ import SettingsButton from "../components/SettingsButton";
 import HeaderNavigationIcon from "../components/HeaderNavigationIcon";
 
 
+
 const NavigationBubble = () => {
     const navigate = useNavigate();
     let location = useLocation();
 
-    const [state, setState] = useState(location.pathname); //how to get the actual route used ?
+    const [state, setState] = useState(location.pathname);
 
     const handleClick = (text) => {
         setState(text);
-        navigate(text);   //Need to configure the routes with React routes
+        navigate(text);
     };
+
+    useEffect(() => {
+        setState(location.pathname);
+      }, [location.pathname]);
     
     return (
     <div className="navigation bubble">

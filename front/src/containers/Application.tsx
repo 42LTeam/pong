@@ -3,13 +3,15 @@ import Header from "./Header";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ChatBody from "./ChatBody";
 import HomePage from "./HomePage"
+import ProfilePage from "./ProfilePage";
 // @ts-ignore
 
 
 const PATHS = {
     chat: 'chat',
     home: '/',
-    settings: 'settings'
+    settings: 'settings',
+    profile: 'profile'
 };
 
 
@@ -26,6 +28,7 @@ const Application = function ({user}){
                     <Route path={PATHS.chat} element={<ChatBody user={user}/>} />
                     <Route path={PATHS.home} element={<HomePage user={user}/>} />
                     <Route path={PATHS.settings} element={"settings"} />
+                    <Route path={PATHS.profile} element={<ProfilePage user={user}/>} />
                 </Routes>
             </BrowserRouter>
         </>
