@@ -5,6 +5,7 @@ import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
 import { Roles } from 'src/auth/roles.decorator';
+import {Status, User} from "@prisma/client";
 
 class CreateUserDto {
   @ApiProperty()
