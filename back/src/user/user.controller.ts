@@ -2,10 +2,10 @@ import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import {Status, User} from '@prisma/client';
-import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+import {AuthenticatedGuard} from "../auth/guards/authenticated.guard";
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
-import { Roles } from 'src/auth/roles.decorator';
+import { Roles } from '../auth/roles.decorator';
 
 class CreateUserDto {
   @ApiProperty()
@@ -100,13 +100,13 @@ export class UserController {
   }
 
   @Get('friend/:id')
-  @ApiOperation({ summary: 'Get friend of user' })
+  @ApiOperation({ summary: 'Get all friends of user' })
   async getFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id));
   }
 
   @Get('friend/online/:id')
-  @ApiOperation({ summary: 'Get friend of user' })
+  @ApiOperation({ summary: 'Get online friends of user' })
   async getOnlineFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id), true);
   }
