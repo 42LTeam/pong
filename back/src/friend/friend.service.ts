@@ -60,6 +60,16 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
     return userFriendship;
   }
 
+
+  declineFriendRequest(acceptorId, friendshipId: number) {
+    this.prisma.userFriendship.delete({
+      where: {
+        id: friendshipId,
+        AND: [{targetId: acceptorId}],
+      }
+    })
+  }
+
   async getPendingFriendRequests(senderId: number): Promise<User[]> {
     const user = await this.prisma.user.findUnique({
       where: {

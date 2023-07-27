@@ -42,6 +42,18 @@ export class FriendController {
     return this.friendService.acceptFriendRequest(user.id, Number(friendshipId));
   }
 
+
+  @Put('friend-request/decline/:friendshipId')
+  @ApiOperation({ summary: 'Decline a friend request' })
+  async declineFriendRequest(
+      @Param('friendshipId') friendshipId: number,
+      @Req() req: any
+  ) {
+    const user = await req.user;
+    this.friendService.declineFriendRequest(user.id, Number(friendshipId));
+    req.send(200);
+  }
+
   @Get('friend-request/pending/:userId')
   @ApiOperation({ summary: 'Get pending request' })
   async getPendingFriendRequests(@Param('userId') userId: number): Promise<User[]> {
