@@ -5,17 +5,24 @@
     align-items: center;
     gap: 20px;
     align-self: stretch;
+    cursor: pointer;
+    color: #7F8C8D;
+}
+
+.user:hover{
+    color: #ECF0F1;
 }
 
 .user-title{
-    color: #ECF0F1;
     text-align: center;
     font-family: KoHo, serif;
     font-size: 18px;
-    font-style: normal;
+    font-style:normal;
     font-weight: 700;
     line-height: normal;
 }
+
+
 
 .user-picture {
     width: 30px;

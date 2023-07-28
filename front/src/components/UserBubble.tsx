@@ -1,10 +1,20 @@
+import React from "react";
+import { useNavigate} from "react-router-dom";
+
 import "../css/user.css"
-import ChatButton from "./ChatButton";
+//import ChatButton from "./ChatButton";
 
 
 const UserBubble = ({ user }) => {
+    
+    const navigate = useNavigate();
+
+    function handleClick() {
+        navigate("/profile");
+    };
+    
     return (
-        <div className="user bubble">
+        <div className="user bubble" onClick={handleClick}>
             <div className="user-title">{user?.username}</div>
             {/* <ChatButton /> */}
             {user?.avatar && (
