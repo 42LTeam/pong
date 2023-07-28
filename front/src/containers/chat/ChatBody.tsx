@@ -3,7 +3,7 @@ import Conversations from "./conversation/Conversations";
 import {useState} from "react";
 import Friends from "./friend/Friends";
 
-export default function ChatBody({user}){
+export default function ChatBody(){
 
     const [state]=useState(null);
 
@@ -11,10 +11,10 @@ export default function ChatBody({user}){
 
     return (
         <div className="chatbody bubble">
-            <Conversations state={state} user={user}></Conversations>
+            <Conversations state={state} ></Conversations>
             <div className="vertical-separator"></div>
 
-            {state ? 'Pas dans friend' : (<Friends key="friends" user={user}></Friends>)}
+            {state ? 'Pas dans friend' : (<Friends key="friends"></Friends>)}
 
         </div>
     )

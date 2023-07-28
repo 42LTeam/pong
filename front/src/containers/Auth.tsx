@@ -1,4 +1,4 @@
-import  {useEffect, useState} from 'react';
+import {createContext, useEffect, useState} from 'react';
 
 
 import axios from "axios";
@@ -7,10 +7,18 @@ import Application from "./Application";
 import "../css/main.css";
 
 
+export interface User {
+    avatar: String,
+    username: String,
+    id: number,
+}
+
+export const ApplicationContext = createContext<User | undefined>(undefined);
+
 function Auth() {
     const [wsConnected, setConnected] = useState(false);
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User>(null);
 
     useEffect(() => {
         var config = {
@@ -63,9 +71,9 @@ function Auth() {
 
 
     return (
-        <>
-            <Application user={user}></Application>
-        </>
+        <ApplicationContext.Provider value={user}>
+            <Application></Application>
+        </ApplicationContext.Provider>
     );
 }
 

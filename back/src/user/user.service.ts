@@ -100,12 +100,18 @@ export class UserService {
   
 
 
-  async search(query: string): Promise<User[]>{
+  async search(id, query: string): Promise<User[]>{
     return this.prisma.user.findMany({
       where : {
         username: {
           startsWith: query,
-        }
+        },
+        AND: [{
+          id: {
+            not: id,
+          }
+        }]
+
       }
     });
   }

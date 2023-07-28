@@ -1,11 +1,11 @@
-import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe} from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import {Status, User} from '@prisma/client';
-import {AuthenticatedGuard} from "../auth/guards/authenticated.guard";
+import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
-import { Roles } from '../auth/roles.decorator';
+import { Roles } from 'src/auth/roles.decorator';
+import {Status, User} from "@prisma/client";
 
 class CreateUserDto {
   @ApiProperty()
@@ -113,8 +113,9 @@ export class UserController {
 
   @Get('search/:query')
   @ApiOperation({ summary: 'Search user by username' })
-  async search(@Param('query', StringPipe) query: string): Promise<User[]> {
-    return this.userService.search(query);
+  async search(@Param('query', StringPipe) query: string, @Req() req): Promise<User[]> {
+    const user = await req.user;
+    return this.userService.search(user.id, query);
   }
 
   @Get('blocks/:id')

@@ -32,6 +32,7 @@ export class FriendController {
     return this.friendService.createFriendRequest(createFriendRequestDto.initiatorId, createFriendRequestDto.acceptorId);
   }
 
+
   @Put('friend-request/accept/:friendshipId')
   @ApiOperation({ summary: 'Accept a friend request' })
   async acceptFriendRequest(
@@ -50,15 +51,17 @@ export class FriendController {
       @Req() req: any
   ) {
     const user = await req.user;
-    this.friendService.declineFriendRequest(user.id, Number(friendshipId));
-    req.send(200);
+    return this.friendService.declineFriendRequest(user.id, Number(friendshipId));
   }
 
   @Get('friend-request/pending/:userId')
   @ApiOperation({ summary: 'Get pending request' })
-  async getPendingFriendRequests(@Param('userId') userId: number): Promise<User[]> {
+  async getPendingFriends(@Param('userId') userId: number): Promise<any[]> {
     return this.friendService.getPendingFriendRequests(Number(userId));
   }
+
+
+
 
   // @Get(':userId')
   // @ApiOperation({ summary: 'Get friend' })

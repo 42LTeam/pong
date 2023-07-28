@@ -1,11 +1,13 @@
 import "../../../css/chat.css"
 import FriendButton from "../../../components/chat/friend/FriendButton";
 import Conversation from "../../../components/chat/conversation/Conversation";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import axios from "axios";
+import {ApplicationContext} from "../../Auth";
 
-export default function Conversations({ state, user }){
+export default function Conversations({ state }){
     const [conversations, setConversations] = useState(null);
+    const user = useContext(ApplicationContext)
 
 
     if (!conversations && user) {

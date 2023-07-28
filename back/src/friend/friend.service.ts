@@ -84,16 +84,15 @@ export class FriendService {
   }
 
 
-  declineFriendRequest(targetId, friendshipId: number) {
-    this.prisma.userFriendship.delete({
+  declineFriendRequest(acceptorId, friendshipId: number) {
+    return this.prisma.userFriendship.delete({
       where: {
         id: friendshipId,
-        AND: [{targetId: targetId}],
       }
     })
   }
 
-  async getPendingFriendRequests(senderId: number): Promise<User[]> {
+  async getPendingFriendRequests(senderId: number): Promise<any[]> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: senderId,
@@ -108,12 +107,18 @@ export class FriendService {
     });
 
     const pending = await user.userFriendships.map(current => current.senderId);
-    return this.prisma.user.findMany({
+    return (await this.prisma.user.findMany({
       where: {
         id: {
           in: pending,
         }
       }
-    })
+    })).map(current => {
+          return {
+            ...current,
+            friendShipId: user.userFriendships.filter(c => c.senderId == current.id)[0].id
+          }
+        }
+    );
   }
 }

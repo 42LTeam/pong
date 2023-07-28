@@ -1,6 +1,8 @@
 import Header from "./header/Header";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ChatBody from "./chat/ChatBody";
+import {useContext} from "react";
+import {ApplicationContext} from "./Auth";
 // @ts-ignore
 
 
@@ -10,8 +12,8 @@ const PATHS = {
 
 };
 
-const Application = function ({user}){
-
+const Application = function (){
+    const user = useContext(ApplicationContext)
     if (!user)
         return (
             <div>
@@ -22,10 +24,10 @@ const Application = function ({user}){
     return (
         <>
             <BrowserRouter>
-                <Header user={user}></Header>
+                <Header></Header>
                 <Routes>
                     <Route index element={"home"} />
-                    <Route path={PATHS.chat} element={<ChatBody key="chatbody" user={user}/>} />
+                    <Route path={PATHS.chat} element={<ChatBody key="chatbody"/>} />
                 </Routes>
             </BrowserRouter>
         </>
