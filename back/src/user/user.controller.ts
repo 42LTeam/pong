@@ -1,10 +1,10 @@
 import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+import { AuthenticatedGuard } from "../auth/guards/authenticated.guard";
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
-import { Roles } from 'src/auth/roles.decorator';
+import { Roles } from '../auth/roles.decorator';
 import {Status, User} from "@prisma/client";
 
 class CreateUserDto {
@@ -28,7 +28,6 @@ class CreateUserDto {
   @ApiProperty()
   xp: number;
 }
-
 
 enum Role {
   USER = 0,
@@ -63,7 +62,7 @@ export class UserController {
   constructor(private userService: UserService) { }
 
   @Post()
-  @Roles(Role.ADMIN)  // For admin restrictions
+  @Roles(Role.ADMIN)
   @ApiBody({ type: CreateUserDto })
   @ApiOperation({ summary: 'Create a user' })
   async createUser(
@@ -144,5 +143,4 @@ export class UserController {
   ): Promise<Status> {
     return this.userService.updateUserStatusById(id, updateUserStatusDto.status);
   }
-
 }
