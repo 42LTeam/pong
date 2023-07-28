@@ -23,3 +23,45 @@
     background: #34495E;
     align-self: stretch;
 }
+
+h1 {
+    color: #FFF;
+    font-family: "Kulim Park", serif;
+    margin: 0;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+h2 {
+    margin: 0;
+    color: #7F8C8D;
+    font-family: "Kulim Park", serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+.button {
+    user-select: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #2ECC71;
+    padding: 5px;
+    color: #ECF0F1;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    align-self: stretch;
+}
+
+.button-current {
+    background: none;
+    color: #2ECC71;
+}

@@ -2,12 +2,13 @@ import "../../css/text-input.css"
 import {useState} from "react";
 
 type Props = {
-    text: string
-    onChange: any,
-    buttonProps: any,
-    buttonContent: string,
-    friend: any,
+    text?: string
+    onChange?: any,
+    buttonProps?: any,
+    buttonContent?: string,
+    friend?: any,
     value? :string,
+    bgColor? :string,
 }
 export default function TextInput (props: Props) {
     const [focus, setFocus]=useState(false);
@@ -21,7 +22,9 @@ export default function TextInput (props: Props) {
     const obj = {value: props.friend?.username}
 
     return (
-        <div className={"textinput-root" + (focus ? " textinput-root-focus" : '')}>
+        <div
+            style={{background: props.bgColor || "#34495E"}}
+            className={"textinput-root" + (focus ? " textinput-root-focus" : '')}>
             <input
                 onFocus={handleFocus}
                 onBlur={handleBlur}
@@ -30,7 +33,11 @@ export default function TextInput (props: Props) {
                 placeholder={props.text}
                 {...obj}
             />
-            <div className={"textinput-button" + (props.friend ? " textinput-button-focus" : '')} {...(props.buttonProps)}>{props.buttonContent}</div>
+            { props.buttonContent ?
+                <div
+                className={"textinput-button" + (props.friend ? " textinput-button-focus" : '')} {...(props.buttonProps)}>{props.buttonContent}
+                </div> :
+                null}
         </div>
     )
 }

@@ -49,16 +49,16 @@ export default function AddFriend(){
 
     return (
         <>
-            <div className="ajouter-text"> Ajouter</div>
-            <div className="ajouter-description"> Tu peux ajouter des amis grâce à leurs noms d utilisateur. </div>
+            <h1> Ajouter</h1>
+            <h2> Tu peux ajouter des amis grâce à leurs noms d utilisateur. </h2>
             <TextInput
                 text={"Trouve ami.e, tape nom..."}
-                onChange={event => handleInputChange(event)}
+                onChange={(event) => handleInputChange(event)}
                 buttonProps={{onClick: onButtonClick}}
                 buttonContent="Envoyer une demande d’ami"
                 friend={friend}
             />
-            {suggestions?.map((current) => {return (<Friend onClick={handleSuggestionClick} key={current.username + "suggestion-key"} friend={current}/>)})}
+            {suggestions?.map((current) => {return (<Friend onClick={handleSuggestionClick} key={current.username + "suggestion-key"} friend={current}></Friend>)})}
         </>
     )
 }

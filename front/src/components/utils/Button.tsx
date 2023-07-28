@@ -1,5 +1,11 @@
-export default function Button({handleClick, text, state}){
+type Props = {
+    handleClick: any,
+    text: string,
+    state: any,
+}
+
+export default function Button({handleClick, text, state}: Props){
     return (
-        <div onClick={() => {handleClick(text)}} className={'friend-add-button ' + (state == text ? 'friend-add-button-current' : '')}>{text}</div>
+        <div onClick={() => {handleClick(text)}} className={'button ' + (state == text ? 'button-current' : '')}>{text}</div>
     );
 }

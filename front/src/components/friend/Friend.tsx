@@ -1,39 +1,13 @@
-import Approve from "../svg/Approve";
-import Decline from "../svg/Decline";
-import axios from "axios";
+import {Children} from "react";
 
 type Props = {
     friend: any,
     onClick?: any,
-    pending?: any,
-    reset?: any,
     userId?: number,
+    children?: any,
 }
 
 export default function Friend(props: Props){
-    const handleAccept = function (){
-        const config = {
-            method: 'put',
-            url: 'http://localhost:3000/friend/friend-request/accept/' + props.friend.friendShipId,
-            withCredentials: true,
-        };
-        axios(config)
-
-        props.reset();
-    }
-
-
-
-    const handleDecline = function (){
-        const config = {
-            method: 'put',
-            url: 'http://localhost:3000/friend/friend-request/decline/' + props.friend.friendShipId,
-            withCredentials: true,
-        };
-        axios(config)
-
-        props.reset();
-    }
 
 
     return (
@@ -43,11 +17,7 @@ export default function Friend(props: Props){
                 <div className="conversation-username">{props.friend?.username}</div>
                 <div className="conversation-preview">{props.friend?.status}</div>
             </div>
-            {props.pending ? <div className="approve-friend-buttons">
-                <Approve handleClick={handleAccept}></Approve>
-                <Decline handleClick={handleDecline}></Decline>
-            </div> :
-                null}
+            {Children.map(props.children, child => <>{child}</>)}
         </div>
     )
 }
