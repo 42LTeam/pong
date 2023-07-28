@@ -29,9 +29,6 @@
 }
 
 
-
-
-
 .conversations-separator{
     display: flex;
     padding: 0 10px;
@@ -39,6 +36,15 @@
     align-items: center;
     align-self: stretch;
 }
+
+.conversations-separator:hover .conversations-separator-text{
+    color: #ECF0F1;
+}
+
+.conversations-separator-icon {
+    cursor: pointer;
+}
+
 
 .conversations-separator-text{
     color: #7F8C8D;

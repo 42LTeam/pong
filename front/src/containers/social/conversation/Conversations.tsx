@@ -1,6 +1,6 @@
 import "../../../css/chat.css"
-import FriendButton from "../../../components/chat/friend/FriendButton";
-import Conversation from "../../../components/chat/conversation/Conversation";
+import FriendButton from "../../../components/friend/FriendButton";
+import Conversation from "../../../components/conversation/Conversation";
 import {useContext, useState} from "react";
 import axios from "axios";
 import {ApplicationContext} from "../../Auth";
@@ -27,10 +27,7 @@ export default function Conversations({ state }){
             <FriendButton state={state}></FriendButton>
             <div className="conversations-separator">
                 <div className="conversations-separator-text">Messages privés</div>
-                <img alt="plus logo" src="/svg/add.svg"/></div>
-            <div className="conversations-separator">
-                <div className="conversations-separator-text">Channels</div>
-                <img alt="plus logo" src="/svg/add.svg"/>
+                <img alt="plus logo" className="conversations-separator-icon" src="/svg/add.svg"/>
             </div>
                 { conversations ?
                     conversations.map((conversation) => {

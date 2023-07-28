@@ -1,5 +1,5 @@
 
-import Friend from "../../../components/chat/friend/Friend";
+import Friend from "../../../components/friend/Friend";
 import {useContext} from "react";
 import {ApplicationContext} from "../../Auth";
 

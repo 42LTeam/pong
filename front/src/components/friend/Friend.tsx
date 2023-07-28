@@ -1,5 +1,5 @@
-import Approve from "../../svg/Approve";
-import Decline from "../../svg/Decline";
+import Approve from "../svg/Approve";
+import Decline from "../svg/Decline";
 import axios from "axios";
 
 type Props = {

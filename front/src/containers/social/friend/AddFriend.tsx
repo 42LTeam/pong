@@ -1,7 +1,7 @@
-import TextInput from "../../../components/chat/TextInput";
+import TextInput from "../../../components/utils/TextInput";
 import {useContext, useState} from "react";
 import axios from "axios";
-import Friend from "../../../components/chat/friend/Friend";
+import Friend from "../../../components/friend/Friend";
 import {ApplicationContext} from "../../Auth";
 
 export default function AddFriend(){
