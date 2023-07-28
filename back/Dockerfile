@@ -1,14 +1,14 @@
 
 FROM node:18-alpine
 WORKDIR /usr/src/app
-RUN apt-get update && apt-get install -y openssl
 COPY --chown=node:node ./back/package*.json ./
 RUN npm ci; npm i -g @nestjs/cli
 COPY --chown=node:node ./back .
-RUN npx prisma generate
-RUN npm run start:migrate:prod
+
 USER node
 EXPOSE 3000
+
+
 
 
 # BUILD FOR LOCAL DEVELOPMENT
