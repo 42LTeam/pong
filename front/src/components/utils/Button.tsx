@@ -2,10 +2,11 @@ type Props = {
     handleClick: any,
     text: string,
     state: any,
+    fill?: any,
 }
 
-export default function Button({handleClick, text, state}: Props){
+export default function Button({fill, handleClick, text, state}: Props){
     return (
-        <div onClick={() => {handleClick(text)}} className={'button ' + (state == text ? 'button-current' : '')}>{text}</div>
+        <div style={{alignSelf: fill ? 'stretch' : null}} onClick={() => {handleClick(text)}} className={'button ' + (state == text ? 'button-current' : '')}>{text}</div>
     );
 }

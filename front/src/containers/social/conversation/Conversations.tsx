@@ -45,7 +45,7 @@ export default function Conversations({ state }){
                         text="Trouve taon ami.e tape sa on nom..."
                         bgColor="#2C3E50"
                     ></TextInput>
-                    <Button handleClick={null} text="Creer un MP ou un channel" state={null}></Button>
+                    <Button fill handleClick={null} text="Creer un MP ou un channel" state={null}></Button>
                 </PopUp> : null}
                 { conversations ?
                     conversations.map((conversation) => {
