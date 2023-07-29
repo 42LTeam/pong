@@ -74,6 +74,7 @@ export async function sendFriendRequest(acceptorId: number){
             acceptorId
         }
     };
+    console.log(config)
     return axios(config);
 }
 

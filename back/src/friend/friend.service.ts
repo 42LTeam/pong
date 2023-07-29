@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {UserFriendship, User} from '@prisma/client';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 @Injectable()
 export class FriendService {
@@ -21,9 +22,12 @@ export class FriendService {
     });
   }
 
-  async createFriendRequest(initiatorId: number, targetId: number): Promise<UserFriendship> {
+async createFriendRequest(initiatorId: number, targetId: number): Promise<UserFriendship> {
     if (initiatorId == targetId) {
-      throw new Error('Both initiatorId and targetId shouldn\'t be the same');
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: 'Both initiatorId and targetId shouldn\'t be the same',
+      }, HttpStatus.BAD_REQUEST);
     }
   
     const existingFriendship = await this.prisma.userFriendship.findFirst({
@@ -43,9 +47,15 @@ export class FriendService {
   
     if (existingFriendship) {
       if (existingFriendship.acceptedAt == null) {
-        throw new Error('A friend request is still pending between these users');
+        throw new HttpException({
+          status: HttpStatus.BAD_REQUEST,
+          error: 'A friend request is still pending between these users',
+        }, HttpStatus.BAD_REQUEST);
       } else {
-        throw new Error('A friendship already exists between these users');
+        throw new HttpException({
+          status: HttpStatus.BAD_REQUEST,
+          error: 'A friendship already exists between these users',
+        }, HttpStatus.BAD_REQUEST);
       }
     }
   
@@ -58,7 +68,8 @@ export class FriendService {
   
     await this.addFriendship(targetId, userFriendship);
     return userFriendship;
-  }
+}
+
   
 
   
