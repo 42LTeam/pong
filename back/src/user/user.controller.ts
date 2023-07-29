@@ -108,7 +108,7 @@ export class UserController {
   @Get('friend/online/:id')
   @ApiOperation({ summary: 'Get friend of user' })
   async getOnlineFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
-    return this.userService.getFriendsOfUser(Number(id), true);
+    return this.userService.getFriendsOfUser(Number(id), {online: true});
   }
 
   @Get('search/:query')
@@ -116,6 +116,13 @@ export class UserController {
   async search(@Param('query', StringPipe) query: string, @Req() req): Promise<User[]> {
     const user = await req.user;
     return this.userService.search(user.id, query);
+  }
+
+  @Get('search/friend/:query')
+  @ApiOperation({ summary: 'Search user by username' })
+  async searchFriendOnly(@Param('query', StringPipe) query: string, @Req() req): Promise<User[]> {
+    const user = await req.user;
+    return this.userService.getFriendsOfUser(user.id, {startWith: query});
   }
 
   @Get('blocks/:id')

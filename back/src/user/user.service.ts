@@ -54,7 +54,7 @@ export class UserService {
 
 
 
-  async getFriendsOfUser(id: number, online = false): Promise<User[]> {
+  async getFriendsOfUser(id: number, options: {startWith?: string, online?: boolean} = {}): Promise<User[]> {
     const friendShips = await this.prisma.userFriendship.findMany({
       where: {
         targetId: id,
@@ -76,7 +76,7 @@ export class UserService {
           in: ids,
         },
         AND: [
-            (online ? {status: "ONLINE"}: {})
+            (options.online ? {status: "ONLINE"}: {}), (options.startWith ? {username: { startsWith: options.startWith}} : {})
         ]
       }
     })
@@ -98,6 +98,8 @@ export class UserService {
       }
     });
   }
+
+
 
   async getBlocksOfUser(id: number): Promise<User[]> {
     const blocks = await this.prisma.block.findMany({
@@ -132,6 +134,7 @@ export class UserService {
 
     return user.status;
   }
+
 
 }
 
