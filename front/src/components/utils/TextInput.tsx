@@ -31,7 +31,7 @@ export default function TextInput (props: Props) {
                 className='textinput-input'
                 onChange={props.onChange}
                 placeholder={props.text}
-                value={props.value || ''}
+                {...(props.value ? {value: props.value} : {})}
             />
             { props.buttonContent ?
                 <div
