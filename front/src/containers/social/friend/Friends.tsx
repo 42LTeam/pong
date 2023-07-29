@@ -3,8 +3,8 @@ import FriendTabs from "./FriendTabs";
 import {useContext, useState} from "react";
 import AddFriend from "./AddFriend";
 import Friendlist from "./FriendList";
-import axios from "axios";
 import {ApplicationContext} from "../../Auth";
+import {getPath} from "../../../api";
 
 
 const states = ["En ligne","Tous","En attente","Bloqué","Ajouter"];
@@ -20,13 +20,9 @@ export default function Friends(){
     const user = useContext(ApplicationContext)
 
     const [friends, setFriends] = useState(null);
-    const config = {
-        method: 'get',
-        url: 'http://localhost:3000' + paths[states.indexOf(state)] +user.id,
-        withCredentials: true,
-    };
+
     if(!friends)
-        axios(config)
+        getPath(paths[states.indexOf(state)] +user.id)
             .then(function (response) {
                 setFriends(response.data);
             })

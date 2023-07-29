@@ -4,7 +4,7 @@ import {useContext} from "react";
 import {ApplicationContext} from "../../Auth";
 import Approve from "../../../components/svg/Approve";
 import Decline from "../../../components/svg/Decline";
-import axios from "axios";
+import {acceptFriendship, declineFriendship} from "../../../api";
 
 type Props = {
     friends: any,
@@ -14,25 +14,14 @@ type Props = {
 export default function FriendList({friends, pending, reset} : Props){
     const user = useContext(ApplicationContext)
     const handleAccept = function (current){
-        const config = {
-            method: 'put',
-            url: 'http://localhost:3000/friend/friend-request/accept/' + current.friendShipId,
-            withCredentials: true,
-        };
-        axios(config)
-
+        acceptFriendship(current.friendShipId);
         reset();
     }
 
 
 
     const handleDecline = function (current){
-        const config = {
-            method: 'put',
-            url: 'http://localhost:3000/friend/friend-request/decline/' + current.friendShipId,
-            withCredentials: true,
-        };
-        axios(config)
+        declineFriendship(current.friendShipId);
         reset();
     }
 
@@ -42,7 +31,7 @@ export default function FriendList({friends, pending, reset} : Props){
             return (
               <Friend userId={user.id} key={current.username +'friendlist'} friend={current}>
                   {pending ?
-                      <div className="approve-friend-buttons">
+                      <div className="align-left">
                           <Approve handleClick={() => handleAccept(current)}></Approve>
                           <Decline handleClick={() => handleDecline(current)}></Decline>
                       </div> : null}
