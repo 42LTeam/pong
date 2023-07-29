@@ -26,7 +26,7 @@ export default function AddFriend(){
 
     const onButtonClick = () => {
         if (!friend) return ;
-        sendFriendRequest(friend.id);
+        sendFriendRequest(friend.id).then(null);
         setFriend(null);
     }
 

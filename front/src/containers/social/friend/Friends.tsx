@@ -21,7 +21,7 @@ export default function Friends(){
 
     const [friends, setFriends] = useState(null);
 
-    if(!friends)
+    if(!friends && states.indexOf(state) != 4)
         getPath(paths[states.indexOf(state)] +user.id)
             .then(function (response) {
                 setFriends(response.data);
