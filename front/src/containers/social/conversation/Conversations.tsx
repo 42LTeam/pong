@@ -30,7 +30,7 @@ export default function Conversations({ state }){
                 <img onClick={(event) => handlePopUp(event)} alt="plus logo" className="conversations-separator-icon" src="/svg/add.svg"/>
             </div>
                 {popUpPosition ?
-                    <NewMessagePopup position={popUpPosition} clear={() => setPopUpPosition(null)}></NewMessagePopup>
+                    <NewMessagePopup key={"newMessagePopup"} position={popUpPosition} clear={() => setPopUpPosition(null)}></NewMessagePopup>
                 : null}
                 { conversations ?
                     conversations.map((conversation) => {
