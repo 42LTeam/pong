@@ -44,6 +44,20 @@ h2 {
     line-height: normal;
 }
 
+.align-left {
+    display: flex;
+    padding: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+input[type="checkbox"]{
+    width: 22px;
+    height: 22px;
+    accent-color: #2ECC71;
+}
 
 .button {
     user-select: none;

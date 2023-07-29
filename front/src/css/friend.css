@@ -108,3 +108,13 @@
     fill: #E74C3C;
 }
 
+.newmessage-suggestions{
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
