@@ -1,8 +1,7 @@
 import {createContext, useEffect, useState} from 'react';
 
 
-import axios from "axios";
-import {socket} from "../api";
+import {authSocketId, getStatus, socket} from "../api";
 import Application from "./Application";
 import "../css/main.css";
 
@@ -21,13 +20,8 @@ function Auth() {
     const [user, setUser] = useState<User>(null);
 
     useEffect(() => {
-        var config = {
-            method: 'get',
-            url: 'http://localhost:3000/auth/status',
-            withCredentials: true,
-        };
         if (!user)
-        axios(config)
+        getStatus()
             .then(function (response) {
                 setUser(response.data)
 
@@ -56,16 +50,9 @@ function Auth() {
         };
 
     }, [wsConnected]);
-    const config = {
-        method: 'get',
-        url: 'http://localhost:3000/auth/socketId',
-        withCredentials: true,
-        headers: {
-            clientsocketid: socket.id,
-        }
-    };
+
     if (user && wsConnected)
-        axios(config).then((response) => {
+        authSocketId(socket.id).then((response) => {
             socket.emit('register', {target: response.data});
         });
 

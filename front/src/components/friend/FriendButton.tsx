@@ -1,4 +1,4 @@
-import "../../../css/friend.css"
+import "../../css/friend.css"
 
 export default function FriendButton({state}){
     return (

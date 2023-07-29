@@ -3,7 +3,7 @@ import Conversations from "./conversation/Conversations";
 import {useState} from "react";
 import Friends from "./friend/Friends";
 
-export default function ChatBody(){
+export default function Body(){
 
     const [state]=useState(null);
 
