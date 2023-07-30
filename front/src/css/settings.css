@@ -1,0 +1,83 @@
+
+
+.settingsbody{
+    display: flex;
+    padding: 10px 0;
+    align-items: center;
+    flex: 1 0 0;
+    align-self: stretch;
+    background-color: #2C3E50;
+    width: 50%;
+    height: 80%;
+    margin: auto;
+}
+
+.container {
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.user-avatar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    width: 235px;
+    height: 100px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    z-index: 2;
+}
+
+.avatar {
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    background: #7F8C8D;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+
+.change-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 10px;
+    margin: 0 auto;
+    width: 81px;
+    height: 23px;
+    background: #2980B9;
+    background-color: #2980B9;
+    border-radius: 10px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.change {
+    width: 61px;
+    height: 23px;
+    font-family: 'KoHo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 23px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+  

@@ -1,17 +1,16 @@
 import "../../css/chat.css";
-import {useState} from "react";
+import "../../css/settings.css";
+import { useState } from "react";
 import React from "react";
+import UserSettings from "./UserSettings";
 
-export default function Body(){
+export default function SettingsBody() {
 
-    const [state]=useState(null);
-
-
+    const [state] = useState(null);
 
     return (
-        <div className="settings page">
-    
-
+        <div className="settingsbody bubble">
+            <UserSettings state={state} ></UserSettings>
         </div>
     )
 }

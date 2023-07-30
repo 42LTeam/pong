@@ -25,6 +25,18 @@ export async function getStatus(){
     return axios(config);
 }
 
+export async function updateUserAvatar(id, avatarUrl){
+    const config = {
+        method: 'put',
+        url: URL + '/users/avatar/' + id,
+        withCredentials: true,
+        data: {
+            avatar: avatarUrl
+        },
+    };
+    return await axios(config);
+};
+
 export async function getFriendOfUser(id: number){
     const config = {
         method: 'get',
