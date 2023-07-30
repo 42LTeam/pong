@@ -2,8 +2,9 @@ import "../../css/chat.css";
 import Conversations from "./conversation/Conversations";
 import {useState} from "react";
 import Friends from "./friend/Friends";
+import React from "react";
 
-export default function Body(){
+export default function SocialBody(){
 
     const [state]=useState(null);
 
