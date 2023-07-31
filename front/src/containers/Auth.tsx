@@ -10,6 +10,12 @@ import "../css/main.css";
 function Auth() {
     const [wsConnected, setConnected] = useState(false);
 
+    // const [user, setUser] = useState({
+    //     id: 8,
+    //     avatar: "https://cdn.intra.42.fr/users/fa69acc1dfa3b6097be387091ceda771/rmonney.jpg",
+    //     username: "rmonney"
+    //   });
+
     const [user, setUser] = useState(null);
 
     useEffect(() => {

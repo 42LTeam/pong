@@ -1,28 +1,62 @@
-import React from "react";
+import React, {useState} from "react";
 import { useNavigate} from "react-router-dom";
 
 import "../css/user.css"
-//import ChatButton from "./ChatButton";
 
 
 const UserBubble = ({ user }) => {
     
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+      };
+
     const navigate = useNavigate();
 
     function handleClick() {
         navigate("/profile");
     };
+
+    const handleOptionClick = (option: string) => {
+        if (option == "my_profile"){
+          setMenuOpen(!menuOpen);
+          navigate("profile");
+        }
+        else if (option == "settings"){
+          setMenuOpen(!menuOpen);
+          navigate("/settings");
+        }
+    
+      };
     
     return (
-        <div className="user bubble" onClick={handleClick}>
-            <div className="user-title">{user?.username}</div>
-            {/* <ChatButton /> */}
-            {user?.avatar && (
-                <div
-                    className="user-picture"
-                    style={{ backgroundImage: `url(${user.avatar})` }}
-                />
+        <div className="column">
+            <div className="user bubble" onClick={toggleMenu}>
+                <div className="user-title">{user?.username}</div>
+                {user?.avatar && (
+                    <div
+                        className="user-picture"
+                        style={{ backgroundImage: `url(${user.avatar})` }}
+                    />
+                )}
+            </div>
+            <div>
+            {menuOpen && (
+            <div className="bubble menu">
+            <ul className="list">
+                <li className="user user-title element" onClick={() => handleOptionClick("my_profile")}>
+                    My profile
+                </li>
+
+                <li className="user user-title" onClick={() => handleOptionClick("settings")}>
+                    Settings
+                </li>
+            </ul>
+            </div>
             )}
+
+            </div>
         </div>
     );
 };

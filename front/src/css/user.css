@@ -32,3 +32,20 @@
     background-size: contain;
     background-position: 50% 50%;
 }
+
+.column{
+    display: flex;
+    flex-direction: column;
+}
+
+.menu{
+    position: absolute;
+    /* width: 100%; */ /*   je sais pas faire en sorte que ca fasse la
+                            meme largeur que la user bubble u.U         */
+}
+
+.list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
