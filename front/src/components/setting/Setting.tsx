@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "../../css/settings.css";
 import { ApplicationContext } from "../../containers/Auth";
-import { updateUserAvatar } from "../../api";
+import { updateUserAvatar, updateUserUsername } from "../../api";
 import ButtonSetting from "../../components/utils/Button";
+
 
 type Props = {
 
@@ -11,18 +12,40 @@ type Props = {
 export default function Setting(props: Props) {
     const user = useContext(ApplicationContext);
 
+    const [username, setUsername] = useState(user.username);
+    const [avatarUrl, setAvatarUrl] = useState(user.avatar);
+    const [errorMsg, setErrorMsg] = useState('');
+
+    useEffect(() => {
+    }, [username]); 
+
     const handleChangeImage = async () => {
-        const newImageUrl = window.prompt('Enter the URL of your new avatar');
-        if (newImageUrl) {
-            const response = await updateUserAvatar(user.id, newImageUrl);
-            if (response.status === 200) {
-                console.log("User avatar updated successfully.");
-                user.avatar = newImageUrl;
-            } else {
-                console.error("Failed to update user avatar.");
-            }
+        const response = await updateUserAvatar(user.id, avatarUrl);
+        if (response.status === 200) {
+            console.log("User avatar updated successfully.");
+            user.avatar = avatarUrl;
+        } else {
+            console.error("Failed to update user avatar.");
+            setErrorMsg('Failed to update user avatar.');
         }
     };
+
+    const handleChangeUsername = async () => {
+        try {
+            const response = await updateUserUsername(user.id, username);
+            console.log(response.status)
+            if (response.status === 200) {
+                console.log("Username updated successfully.");
+                setErrorMsg('')
+                user.username = username;
+            }
+        } catch (error) {
+            console.error("Failed to update username.");
+            setErrorMsg('Failed to update username.');
+            console.error(error.response.data);
+        }
+    };
+
 
     return (
         <div className="container">
@@ -32,6 +55,18 @@ export default function Setting(props: Props) {
                     handleClick={handleChangeImage}
                     text='Change' state={undefined} />
             </div>
+            <div className="username-button">
+                <div className="input-container">
+                    {errorMsg && <div className="error-message">{errorMsg}</div>}
+                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                </div>
+                <ButtonSetting
+                    handleClick={handleChangeUsername}
+                    text='Change' state={undefined} />
+            </div>
+
         </div>
     );
 }
+
+
