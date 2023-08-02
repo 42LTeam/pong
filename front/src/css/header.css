@@ -38,3 +38,36 @@
     filter: invert(98%) sepia(2%) saturate(260%) hue-rotate(144deg) brightness(95%) contrast(100%);
 }
 
+
+
+.navigation {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    align-self: stretch;
+
+    /* border-radius: 10px;
+    background: #2C3E50;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); */
+}
+
+/*
+The change of svg colors can be computed on :
+https://codepen.io/sosuke/pen/Pjoqqp 
+*/
+
+.header-navigation-icon{
+    filter: invert(57%) sepia(10%) saturate(300%) hue-rotate(136deg) brightness(94%) contrast(88%);
+    cursor: pointer;
+}
+
+.header-navigation-icon-current{
+    filter: invert(95%) sepia(3%) saturate(148%) hue-rotate(145deg) brightness(100%) contrast(96%);
+    transform: scale(1.5);
+}
+
+.tooltip{
+    
+}

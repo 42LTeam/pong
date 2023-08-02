@@ -1,0 +1,23 @@
+.main-frame{
+    display: flex;
+    padding: 10px 0px;
+    align-items: center;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 10px;
+    background: #2C3E50;
+}
+
+.left-frame{
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.right-frame{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1 0 0;
+    align-self: stretch;
+}

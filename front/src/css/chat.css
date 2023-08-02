@@ -161,3 +161,37 @@
     font-weight: 600;
     line-height: normal;
 }
+
+.text-input{
+    border: none;
+    background: #ECF0F1;
+    width: 100%;
+}
+
+.text-input:focus{
+    outline: none;
+}
+
+.ajouter-text{
+    color: #ECF0F1;
+    text-align: center;
+    font-family: Kulim Park;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.ajouter-description{
+    color: #7F8C8D;
+    text-align: center;
+    font-family: Kulim Park;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal; 
+}
+
+.chat-logo{
+    filter: invert(57%) sepia(10%) saturate(300%) hue-rotate(136deg) brightness(94%) contrast(88%);
+}
