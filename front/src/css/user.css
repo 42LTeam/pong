@@ -27,9 +27,9 @@
 .user-picture {
     width: 30px;
     height: 30px;
-    border-radius: 90px;
+    border-radius: 50%;
     background: #7F8C8D;
-    background-size: contain;
+    background-size: 100%;
     background-position: 50% 50%;
 }
 

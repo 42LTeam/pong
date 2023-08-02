@@ -6,8 +6,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import ChatButton from "../components/ChatButton";
 import PlayButton from "../components/PlayButton";
-import SettingsButton from "../components/SettingsButton";
 import HeaderNavigationIcon from "../components/HeaderNavigationIcon";
+import LeaderboardButton from "../components/LeaderboardButton";
 
 
 
@@ -34,8 +34,8 @@ const NavigationBubble = () => {
         <HeaderNavigationIcon handleClick={handleClick} text="/"
         state={state} children={<PlayButton />} description="home"></HeaderNavigationIcon>
 
-        <HeaderNavigationIcon handleClick={handleClick} text="/settings"
-        state={state} children={<SettingsButton />} description="settings"></HeaderNavigationIcon>
+        <HeaderNavigationIcon handleClick={handleClick} text="/leaderboard"
+        state={state} children={<LeaderboardButton />} description="leaderboard"></HeaderNavigationIcon>
     </div>
     );
 };
