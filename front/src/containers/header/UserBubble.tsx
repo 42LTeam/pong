@@ -1,6 +1,7 @@
 import "../../css/user.css"
 import {useContext} from "react";
 import {ApplicationContext} from "../Auth";
+import React from "react";
 
 
 const UserBubble = () => {

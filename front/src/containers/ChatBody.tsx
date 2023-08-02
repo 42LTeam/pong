@@ -1,8 +1,7 @@
 import "../css/chat.css";
-import Conversations from "./Conversations";
+import Conversations from "./social/conversation/Conversations";
 import {useState} from "react";
-import FriendList from "./FriendList";
-import { AddFriendInvite } from "../components/AddFriendInvite";
+import FriendList from "./social/friend/FriendList";
 import React from "react";
 
 export default function ChatBody({user}){
