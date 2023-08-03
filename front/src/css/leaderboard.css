@@ -1,3 +1,36 @@
+.leaderboard-body{
+    display: flex;
+    padding: 10px 0px;
+    align-items: center;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 10px;
+    background: #2C3E50;
+}
+
+.leaderboard-main-frame{
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.leaderboard-content{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 0 0;
+    align-self: stretch;
+    padding: 25px 10px;
+    gap: 10px;
+    overflow-y: scroll;
+    overflow: auto;
+}
+
 .leaderboard-places{
     display: flex;
     height: 50px;
@@ -64,5 +97,93 @@
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
+    line-height: normal;
+}
+
+.leaderboard-tabs{
+    height: 4%;
+    display: flex;
+    padding: 10px;
+    justify-content: center; 
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.leaderboard-profile-picture{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #7F8C8D;
+        background-size: 100%;
+        background-position: 50% 50%;
+}
+
+.leaderboard-tabs-text{
+        color: #7F8C8D;
+        text-align: center;
+        font-family: Kulim Park, serif;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+}
+
+.leaderboard-tabs-text-place{
+    min-width: 20px;
+    color: #7F8C8D;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.leaderboard-content-bubble{
+    display: flex;
+    padding: 5px 10px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 10px;
+    background: #2C3E50;
+}
+
+.leaderboard-content-bubble-self{
+    display: flex;
+    padding: 5px 10px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 10px;
+    background: #34495E;
+}
+
+.leaderboard-pp-pseudo-group{
+    display: flex;
+    padding: 2px 0px;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+}
+
+.leaderboard-username{
+    color: #FFF;
+    text-align: center;
+    font-family: 'KoHo', sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.leaderboard-data{
+    color: #7F8C8D;
+    text-align: center;
+    font-family: 'KoHo', sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 275;
     line-height: normal;
 }

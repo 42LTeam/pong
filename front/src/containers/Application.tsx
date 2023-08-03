@@ -4,6 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ChatBody from "./ChatBody";
 import HomePage from "./HomePage"
 import ProfilePage from "./ProfilePage";
+import LeaderboardPage from "./LeaderboardPage";
 // @ts-ignore
 
 
@@ -11,7 +12,8 @@ const PATHS = {
     chat: 'chat',
     home: '/',
     settings: 'settings',
-    profile: 'profile'
+    profile: 'profile',
+    leaderboard: 'leaderboard'
 };
 
 
@@ -29,6 +31,7 @@ const Application = function ({user}){
                     <Route path={PATHS.home} element={<HomePage user={user}/>} />
                     <Route path={PATHS.settings} element={"settings"} />
                     <Route path={PATHS.profile} element={<ProfilePage user={user}/>} />
+                    <Route path={PATHS.leaderboard} element={<LeaderboardPage user={user}/>} />
                 </Routes>
             </BrowserRouter>
         </>

@@ -32,9 +32,9 @@ export default function ProfilePage({user}){
             <div className='right-frame-profile'>
 
                 <div className="leaderboard-places"> Leaderboard places</div>
-                <ProfileLeaderboardPlaceBubble user={user} type="TotalVictories"/>
+                <ProfileLeaderboardPlaceBubble user={user} type="Total Victories"/>
                 <ProfileLeaderboardPlaceBubble user={user} type="Ratio"/>
-                <ProfileLeaderboardPlaceBubble user={user} type="AveragePoints"/>
+                <ProfileLeaderboardPlaceBubble user={user} type="Average Points"/>
 
             </div>
         </div>

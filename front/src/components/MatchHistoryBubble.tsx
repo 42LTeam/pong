@@ -10,7 +10,7 @@ type Props = {
 }
 
 
-export default function FriendQuickInviteBubble(props: Props) {
+export default function MatchHistoryBubble(props: Props) {
     
     var OpponentPicture: string = "";
     var OpponentUsername: string = "";
