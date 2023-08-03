@@ -1,4 +1,4 @@
-import React, { TimeHTMLAttributes } from "react";
+import React from "react";
 
 import "../css/profile.css"
 import DefeatIcon from "./DefeatIcon";
