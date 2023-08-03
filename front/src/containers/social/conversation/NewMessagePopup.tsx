@@ -62,7 +62,7 @@ export default function NewMessagePopup({position, clear}: Props) {
                 {suggestions?.map(mapData)}
 
             </div>
-            <Button key={"newmessage-button"} fill handleClick={null} text="Creer un MP ou un channel" state={null}></Button>
+            <Button key={"newmessage-button"} fill handleClick={null} text="Creer un MP ou un channel" clickable={checked.length != 0}></Button>
         </PopUp>
     )
 }
