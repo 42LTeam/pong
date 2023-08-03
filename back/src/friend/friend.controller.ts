@@ -1,7 +1,7 @@
 import {Controller, Get, Param, Post, Put, Body, Req, UseGuards} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { FriendService } from './friend.service';
-import { UserFriendship,  User } from '@prisma/client';
+import { UserFriendship } from '@prisma/client';
 import { IsNotEmpty, IsNumber } from '@nestjs/class-validator';
 import {AuthenticatedGuard} from "../auth/guards/authenticated.guard";
 import {Roles} from "../auth/roles.decorator";
