@@ -78,3 +78,24 @@ input[type="checkbox"]{
     background: none;
     color: #2ECC71;
 }
+
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #2C3E50 transparent;
+}
+
+/* Chrome, Edge and Safari */
+*::-webkit-scrollbar {
+    width: 5px;
+}
+*::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #2C3E50;
+}
+
