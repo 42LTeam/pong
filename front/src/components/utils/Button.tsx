@@ -1,12 +1,36 @@
+import {useState} from "react";
+
 type Props = {
     handleClick: any,
     text: string,
-    state: any,
     fill?: any,
+    buttonProps?: any,
+    clickable?: boolean,
+    hoverProps?: any,
 }
 
-export default function Button({fill, handleClick, text, state}: Props){
+export default function Button({fill, handleClick, text, buttonProps, clickable,hoverProps}: Props){
+    const [hover, setHover] = useState(null);
+
+    const handleHover = () => {
+        setHover({
+            ...hoverProps,
+        });
+    }
+
+    const handleHoverOut = () => {
+        setHover(null);
+    }
+
     return (
-        <div style={{alignSelf: fill ? 'stretch' : null}} onClick={() => {handleClick(text)}} className={'button ' + (state == text ? 'button-current' : '')}>{text}</div>
+        <div
+            onMouseOver={handleHover}
+            onMouseOut={handleHoverOut}
+            style={{...buttonProps?.style,alignSelf: fill ? 'stretch' : null, ...hover}}
+            onClick={() => {handleClick(text)}}
+            className={'button' + (clickable ? ' button-clickable': '')}
+        >
+            {text}
+        </div>
     );
 }

@@ -60,24 +60,27 @@ input[type="checkbox"]{
 }
 
 .button {
+    background: linear-gradient(0deg, #7F8C8D 0%, #7F8C8D 100%), #2ECC71;
+    cursor: not-allowed;
     user-select: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #2ECC71;
     padding: 5px;
     color: #ECF0F1;
     text-align: center;
     font-family: Kulim Park, serif;
-    font-size: 15px;
     font-style: normal;
-    font-weight: 700;
     line-height: normal;
+    white-space: nowrap;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
 }
 
-.button-current {
-    background: none;
-    color: #2ECC71;
+.button-clickable {
+    background: #2ECC71;
+    cursor: pointer;
 }
+
 
 
 /* Firefox */

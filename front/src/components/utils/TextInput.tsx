@@ -1,5 +1,6 @@
 import "../../css/text-input.css"
 import {Children, useState} from "react";
+import Button from "./Button";
 
 type Props = {
     text?: string
@@ -34,9 +35,10 @@ export default function TextInput (props: Props) {
                 {...(props.value ? {value: props.value} : {})}
             />
             { props.buttonContent ?
-                <div
-                className={"textinput-button" + (props.value ? " textinput-button-focus" : '')} {...(props.buttonProps)}>{props.buttonContent}
-                </div> :
+                <Button handleClick={props.buttonProps.onClick} text={props.buttonContent} clickable={Boolean(props.value)}>
+
+                </Button>
+                :
                 null}
         </div>
     )
