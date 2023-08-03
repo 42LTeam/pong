@@ -1,6 +1,4 @@
 import FriendButton from "../../../components/friend/FriendButton";
-import FriendTab from "../../../components/friend/FriendTab";
-import Button from "../../../components/utils/Button";
 import ToggleButton from "../../../components/utils/ToggleButton";
 
 
