@@ -34,6 +34,16 @@ export async function getFriendOfUser(id: number){
     return axios(config);
 }
 
+export async function getChannels(){
+    const config = {
+        method: 'get',
+        url: URL + '/users/channels',
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
+
 export async function acceptFriendship(id: number){
     const config = {
         method: 'put',

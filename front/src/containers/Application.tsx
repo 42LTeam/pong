@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Body from "./social/Body";
 import {useContext} from "react";
 import {ApplicationContext} from "./Auth";
-// @ts-ignore
+
 
 
 const PATHS = {
@@ -26,7 +26,7 @@ const Application = function (){
             <BrowserRouter>
                 <Header></Header>
                 <Routes>
-                    <Route index element={"home"} />
+                    <Route index element={"Home"} />
                     <Route path={PATHS.chat} element={<Body key="chatbody"/>} />
                 </Routes>
             </BrowserRouter>

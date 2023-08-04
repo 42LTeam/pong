@@ -3,7 +3,7 @@ import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
 import {useContext, useState} from "react";
 import {ApplicationContext} from "../../Auth";
-import {getFriendOfUser} from "../../../api";
+import {getChannels} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 
 export default function Conversations({ state }){
@@ -12,7 +12,7 @@ export default function Conversations({ state }){
     const [popUpPosition, setPopUpPosition] = useState(null);
 
     if (!conversations && user) {
-        getFriendOfUser(user.id)
+        getChannels()
             .then((response) => {
                 setConversations(response.data);
             })
@@ -36,7 +36,7 @@ export default function Conversations({ state }){
                     conversations.map((conversation) => {
                         return (
                             <Conversation key={'conversation_id '+ conversation.id}
-                                          username={conversation.username} message={conversation.message} />
+                                          username={conversation.name} message={conversation.password} />
                         )
                     }) : null
                 }

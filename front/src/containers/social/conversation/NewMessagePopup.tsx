@@ -47,7 +47,7 @@ export default function NewMessagePopup({position, clear}: Props) {
     return (
         <PopUp key={"newmessage-root"} position={position} clear={clear}>
             <h1>Sélectionne des amis</h1>
-            <h2>Tu peux ajouter des amis.</h2>
+            <h3>Tu peux ajouter des amis.</h3>
             <TextInput
                 key={"newmessage-input"}
                 text="Trouve taon ami.e tape sa on nom..."

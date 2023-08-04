@@ -33,7 +33,7 @@ export default function AddFriend(){
     return (
         <>
             <h1> Ajouter</h1>
-            <h2> Tu peux ajouter des amis grâce à leurs noms d utilisateur. </h2>
+            <h3> Tu peux ajouter des amis grâce à leurs noms d utilisateur. </h3>
             <TextInput
                 text={"Trouve ami.e, tape nom..."}
                 onChange={(event) => handleInputChange(event)}

@@ -6,6 +6,12 @@
     gap: 10px;
 }
 
+.center{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .bubble{
     border-radius: 10px;
     background: #2C3E50;
@@ -34,7 +40,17 @@ h1 {
     line-height: normal;
 }
 
-h2 {
+h2{
+    color: #ECF0F1;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+h3 {
     margin: 0;
     color: #7F8C8D;
     font-family: "Kulim Park", serif;
@@ -75,6 +91,8 @@ input[type="checkbox"]{
     font-size: 15px;
     font-weight: 700;
 }
+
+
 
 .button-clickable {
     background: #2ECC71;
