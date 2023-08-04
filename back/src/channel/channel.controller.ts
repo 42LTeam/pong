@@ -1,15 +1,14 @@
-import {Controller, Get, Param, Post, Body, ParseIntPipe, UsePipes, ValidationPipe, Req} from '@nestjs/common';
+import {Controller, Post, Body, Req} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
-import { Channel, Message, UserChannel } from '@prisma/client';
+import { Channel} from '@prisma/client';
 import { ChannelService } from './channel.service';
 import {
   IsNotEmpty,
   IsNumber,
   IsString,
   IsBoolean,
-  ArrayMinSize, ArrayMaxSize, IsArray
+  ArrayMinSize, IsArray
 } from '@nestjs/class-validator';
-import {Type} from "class-transformer";
 /*
 class CreateChannelDto {
   @ApiProperty()

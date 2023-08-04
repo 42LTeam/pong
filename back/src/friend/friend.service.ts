@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {UserFriendship, User} from '@prisma/client';
+import {UserFriendship} from '@prisma/client';
 
 @Injectable()
 export class FriendService {
   constructor(private prisma: PrismaService) {}
 
   async addFriendship(id, friendship){
-
 
     const user = await this.prisma.user.findUnique({
       where: { id: id },
