@@ -56,11 +56,10 @@ export default function NewMessagePopup({position, clear}: Props) {
             >
                 {checked.map(current => <Removable  content={current} onInteract={() => {
                     toggleCheck(current, false);
-                }} icon={<Cancel/>} key={"removable="+current}/>)}
+                }} icon={<Cancel tiny />} key={"removable="+current}/>)}
             </TextInput>
             <div className="newmessage-suggestions">
                 {suggestions?.map(mapData)}
-
             </div>
             <Button key={"newmessage-button"} fill handleClick={null} text="Creer un MP ou un channel" clickable={checked.length != 0}></Button>
         </PopUp>

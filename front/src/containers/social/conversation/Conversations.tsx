@@ -8,8 +8,9 @@ import NewMessagePopup from "./NewMessagePopup";
 
 export default function Conversations({ state }){
     const [conversations, setConversations] = useState(null);
-    const user = useContext(ApplicationContext)
     const [popUpPosition, setPopUpPosition] = useState(null);
+
+    const user = useContext(ApplicationContext)
 
     if (!conversations && user) {
         getChannels()
@@ -19,7 +20,7 @@ export default function Conversations({ state }){
     }
 
     const handlePopUp = (event) => {
-        setPopUpPosition({left: event.clientX, top: event.clientY});
+        setPopUpPosition({left: event.clientX, top: event.clientY, width: '420px'});
     }
 
     return (
@@ -32,6 +33,7 @@ export default function Conversations({ state }){
                 {popUpPosition ?
                     <NewMessagePopup key={"newMessagePopup"} position={popUpPosition} clear={() => setPopUpPosition(null)}></NewMessagePopup>
                 : null}
+
                 { conversations ?
                     conversations.map((conversation) => {
                         return (
