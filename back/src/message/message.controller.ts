@@ -69,7 +69,7 @@ export class MessageController {
 
   @Get('channel/:id/last')
   async getLastMessageInChannel(@Param('id', ParseIntPipe) channelId: number): Promise<Message> {
-    return this.messageService.getLastMessageInChannel(channelId);
+    return await this.messageService.getLastMessageInChannel(channelId);
   }
   
 }

@@ -5,7 +5,7 @@ import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
 import { Roles } from 'src/auth/roles.decorator';
-import {Status, User} from "@prisma/client";
+import {Channel, Status, User} from "@prisma/client";
 
 class CreateUserDto {
   @ApiProperty()
@@ -104,6 +104,14 @@ export class UserController {
   async getFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id));
   }
+
+  @Get('channels')
+  @ApiOperation({ summary: 'Get channels of user' })
+  async getChannelOfUser(@Req() req): Promise<Channel[]> {
+    const user = await req.user;
+    return this.userService.getChannelOfuser(Number(user.id));
+  }
+
 
   @Get('friend/online/:id')
   @ApiOperation({ summary: 'Get friend of user' })
