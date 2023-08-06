@@ -1,6 +1,5 @@
 import "../../css/text-input.css"
 import {Children, useState} from "react";
-import Button from "./Button";
 
 type Props = {
     text?: string

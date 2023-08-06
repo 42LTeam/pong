@@ -1,6 +1,6 @@
 import TextInput from "../../../components/utils/TextInput";
 import {useContext, useState} from "react";
-import Message, {MessageProps} from "../../../components/chat/Message";
+import Message from "../../../components/chat/Message";
 import {ApplicationContext} from "../../Auth";
 import "../../../css/chatBody.css"
 import Send from "../../../components/svg/Send";
