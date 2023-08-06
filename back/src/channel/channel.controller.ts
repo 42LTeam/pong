@@ -7,7 +7,7 @@ import {
   IsNumber,
   IsString,
   IsBoolean,
-  ArrayMinSize, IsArray
+  ArrayMinSize, IsArray, IsOptional
 } from '@nestjs/class-validator';
 /*
 class CreateChannelDto {
@@ -55,8 +55,8 @@ export class CreateChannelDto {
   name: string;
 
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
+  @IsOptional()
   password?: string;
 
   @ApiProperty()
@@ -66,22 +66,21 @@ export class CreateChannelDto {
 
   @ApiProperty()
   @IsBoolean()
+  @IsOptional()
   privated?: boolean;
 
 }
 
 export class SendInviteDto {
-  @IsNumber({}, {each: true})
   @ApiProperty()
-  @IsNotEmpty()
   @IsArray()
   @ArrayMinSize(1)
-  ids: number[];
+  ids?: number[];
 
   @IsNumber()
   @ApiProperty()
   @IsNotEmpty()
-  channelId;
+  channelId: number;
 }
 
 @ApiTags('channels')

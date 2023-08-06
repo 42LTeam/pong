@@ -43,6 +43,40 @@ export async function getChannels(){
     return axios(config);
 }
 
+export async function createChannel(
+    data:
+        {
+            name: string,
+            password?: string,
+            creatorId: number,
+            privated?: boolean,
+        }, ){
+    const config = {
+        method: 'post',
+        url: URL + '/channels',
+        withCredentials: true,
+        data,
+    };
+    return axios(config);
+}
+
+export async function sendChannelInvite(
+    data:
+        {
+            ids?: number[],
+            usernames?: string[],
+            channelId: number,
+        }, ){
+    const config = {
+        method: 'post',
+        url: URL + '/channels/invite',
+        withCredentials: true,
+        data,
+    };
+    return axios(config);
+}
+
+
 
 export async function acceptFriendship(id: number){
     const config = {
