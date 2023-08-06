@@ -5,8 +5,7 @@ import Button from "./Button";
 type Props = {
     text?: string
     onChange?: any,
-    buttonProps?: any,
-    buttonContent?: string,
+    button?: any,
     value? :string,
     bgColor? :string,
     children?: any,
@@ -34,12 +33,7 @@ export default function TextInput (props: Props) {
                 placeholder={props.text}
                 {...(props.value ? {value: props.value} : {})}
             />
-            { props.buttonContent ?
-                <Button handleClick={props.buttonProps.onClick} text={props.buttonContent} clickable={Boolean(props.value)}>
-
-                </Button>
-                :
-                null}
+                {props.button}
         </div>
     )
 }
