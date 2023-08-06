@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     env:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
@@ -16,6 +16,7 @@ jobs:
       PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
       PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
       DOCKER_SERVER: 195.15.213.225:2375  
+      
 
     steps:
       - name: Checkout code
@@ -24,13 +25,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Log in to your Docker server
-        run: docker login $DOCKER_SERVER -u your-docker-username -p ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Build and push API image
-        run: docker build -t $DOCKER_SERVER/ubuntu/api:latest -f ./back/Dockerfile .
-        run: docker push $DOCKER_SERVER/ubuntu/api:latest
-
-      - name: Build and push Frontend image
-        run: docker build -t $DOCKER_SERVER/ubuntu/front:latest -f ./front/Dockerfile .
-        run: docker push $DOCKER_SERVER/ubuntu/front:latest
+        run: |
+          echo "$MY_ENV_VARIABLE" > ../../.env
+          docker-compose up -d --build
+        env:
+          MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
