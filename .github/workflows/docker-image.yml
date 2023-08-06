@@ -16,8 +16,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Clean up temporary files
         run: |
-          chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/front
-          rm -rf /home/ubuntu/actions-runner/_work/pong/pong/front/.vite/deps_temp_2925c38f
+          chmod -R 777 /home/ubuntu/actions-runner/
+        
 
       # Add any setup steps you need before running Docker Compose
       
