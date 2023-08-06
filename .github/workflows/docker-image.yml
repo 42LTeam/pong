@@ -18,6 +18,12 @@ jobs:
       DOCKER_SERVER: 195.15.213.225:2375
 
     steps:
+      - uses: actions/checkout@v3
+      - name: Clean up temporary files
+        run: |
+          sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong
+          sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/
+        
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -26,7 +32,7 @@ jobs:
 
       - name: Build and push API image
         run: |
-          echo "$MY_ENV_VARIABLE" > ../../.env
+          echo "$MY_ENV_VARIABLE" > .env
           docker-compose up -d --build
         env:
           MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
