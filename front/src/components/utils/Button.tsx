@@ -28,7 +28,7 @@ export default function Button({fill, handleClick, text, buttonProps, clickable,
             onMouseOver={handleHover}
             onMouseOut={handleHoverOut}
             style={{...buttonProps?.style,alignSelf: fill ? 'stretch' : null, ...hover}}
-            onClick={() => {handleClick && handleClick(text)}}
+            onClick={(clickable ? () => {handleClick && handleClick(text)} : null)}
             className={'button' + (clickable ? ' button-clickable': '')}
         >
             {text}
