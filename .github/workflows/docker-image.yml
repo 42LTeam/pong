@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Compose CI
 
 on:
   push:
@@ -7,12 +7,16 @@ on:
     branches: [ "dev" ]
 
 jobs:
-
   build:
-
     runs-on: self-hosted
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - uses: actions/checkout@v3
+
+      # Add any setup steps you need before running Docker Compose
+
+      - name: Build and Run Services with Docker Compose
+        run: |
+          docker-compose up -d --build
+
+      # Add any post-processing or testing steps you need after running Docker Compose
