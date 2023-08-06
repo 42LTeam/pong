@@ -13,10 +13,11 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v3
       - name: Clean up temporary files
         run: |
           chmod -R 777 /home/ubuntu/actions-runner/*
+      - uses: actions/checkout@v3
+
         
 
       # Add any setup steps you need before running Docker Compose
@@ -25,7 +26,7 @@ jobs:
         env:
             MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
         run: |
-          echo "$MY_ENV_VARIABLE" > .env
+          echo "$MY_ENV_VARIABLE" > ../../.env
           docker-compose up -d --build
 
       # Add any post-processing or testing steps you need after running Docker Compose
