@@ -36,16 +36,16 @@ export default function NewMessagePopup({position, clear}: Props) {
     }
 
     const handleClick = async () => {
-        createChannel({
+        const response  = await createChannel({
             name: user.username + '+' + suggestions.filter(f => checked.includes(f.username)).map(f => f.username + '+') + ' channel',
             creatorId: user.id,
-        }).then(response => {
-            const channel = response.data;
-            sendChannelInvite({
-                channelId: channel.id,
-                ids: [...suggestions.filter(f => checked.includes(f.username)).map(f => f.id), user.id],
-            });
         });
+        const channel = response.data;
+        await sendChannelInvite({
+            channelId: channel.id,
+            ids: [...suggestions.filter(f => checked.includes(f.username)).map(f => f.id), user.id],
+        });
+        clear(true);
     };
 
     const toggleCheck = (current, check) => {

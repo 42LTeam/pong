@@ -12,16 +12,27 @@ export default function Conversations({ state }){
 
     const user = useContext(ApplicationContext)
 
-    if (!conversations && user) {
-        getChannels()
-            .then((response) => {
-                setConversations(response.data);
-            })
-    }
 
     const handlePopUp = (event) => {
         setPopUpPosition({left: event.clientX, top: event.clientY, width: '420px'});
     }
+
+    const fetchConversations = () => {
+        getChannels()
+            .then((response) => {
+                setConversations(response.data);
+            })
+    };
+
+    const clear = async (refresh) => {
+        if (refresh)
+            fetchConversations()
+        setPopUpPosition(null);
+
+    }
+
+    if (!conversations && user) fetchConversations();
+
 
     return (
         <div className="conversations">
@@ -31,7 +42,7 @@ export default function Conversations({ state }){
                 <img onClick={(event) => handlePopUp(event)} alt="plus logo" className="conversations-separator-icon" src="/svg/add.svg"/>
             </div>
                 {popUpPosition ?
-                    <NewMessagePopup key={"newMessagePopup"} position={popUpPosition} clear={() => setPopUpPosition(null)}></NewMessagePopup>
+                    <NewMessagePopup key={"newMessagePopup"} position={popUpPosition} clear={clear}></NewMessagePopup>
                 : null}
 
                 { conversations ?
