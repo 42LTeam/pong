@@ -19,6 +19,11 @@ jobs:
       
 
     steps:
+      - uses: actions/checkout@v3
+      - name: Clean up temporary files
+        run: |
+          sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong
+          sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/
       - name: Checkout code
         uses: actions/checkout@v2
 
