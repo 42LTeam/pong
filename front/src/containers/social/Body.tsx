@@ -2,19 +2,20 @@ import "../../css/chat.css";
 import Conversations from "./conversation/Conversations";
 import {useState} from "react";
 import Friends from "./friend/Friends";
+import Chat from "./chat/Chat";
 
 export default function Body(){
 
-    const [state]=useState(null);
+    const [state, setState]=useState(null);
 
 
 
     return (
         <div className="chatbody bubble">
-            <Conversations state={state} ></Conversations>
+            <Conversations state={state} setState={setState} ></Conversations>
             <div className="vertical-separator"></div>
 
-            {state ? 'Pas dans friend' : (<Friends key="friends"></Friends>)}
+            {state ? (<Chat></Chat>): (<Friends></Friends>)}
 
         </div>
     )

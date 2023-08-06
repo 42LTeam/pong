@@ -6,7 +6,7 @@ import {ApplicationContext} from "../../Auth";
 import {getChannels} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 
-export default function Conversations({ state }){
+export default function Conversations({ state, setState }){
     const [conversations, setConversations] = useState(null);
     const [popUpPosition, setPopUpPosition] = useState(null);
 
@@ -36,7 +36,7 @@ export default function Conversations({ state }){
 
     return (
         <div className="conversations">
-            <FriendButton state={state}></FriendButton>
+            <FriendButton style={{cursor: 'pointer'}} handleClick={() => setState(null)} state={state}></FriendButton>
             <div className="conversations-separator">
                 <div className="conversations-separator-text">Messages privés</div>
                 <img onClick={(event) => handlePopUp(event)} alt="plus logo" className="conversations-separator-icon" src="/svg/add.svg"/>
@@ -48,8 +48,13 @@ export default function Conversations({ state }){
                 { conversations ?
                     conversations.map((conversation) => {
                         return (
-                            <Conversation key={'conversation_id '+ conversation.id}
-                                          username={conversation.name} message={conversation.password} />
+                            <Conversation
+                                handleClick={() => setState(conversation)}
+                                key={'conversation_id '+ conversation.id}
+                                username={conversation.name}
+                                message={conversation.password}
+                                state={state === conversation}
+                            />
                         )
                     }) : null
                 }

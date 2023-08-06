@@ -12,7 +12,6 @@
     padding: 5px 0;
     flex-direction: column;
     align-items: flex-start;
-    gap: 5px;
     flex: 15%;
     align-self: stretch;
 }
@@ -58,10 +57,21 @@
 }
 
 .conversation {
+    user-select: none;
+    cursor: pointer;
     display: flex;
     padding: 5px;
     align-items: center;
     gap: 10px;
+}
+
+.conversation-focus {
+    background: #34495E;
+}
+
+
+.conversation:hover {
+    background: #34495E;
 }
 
 .conversation-avatar{
@@ -77,6 +87,9 @@
     align-items: flex-start;
     gap: 5px;
     align-self: stretch;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .conversation-username{
