@@ -19,6 +19,11 @@ jobs:
 
     steps:
 
+      - name: Cleaning
+        run: |
+          sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
+          sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -31,4 +36,4 @@ jobs:
           docker-compose up -d --build
         env:
           MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
-        user: root
+        
