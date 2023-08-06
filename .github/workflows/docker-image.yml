@@ -1,32 +1,36 @@
-name: Docker Compose CI
+name: Build Docker Images
 
 on:
   push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "dev" ]
-
-
+    branches:
+      - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: self-hosted
 
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
+      PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
+      DOCKER_SERVER: 195.15.213.225:2375  
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Clean up temporary files
-        run: |
-          sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong
-          sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/
-        
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      # Add any setup steps you need before running Docker Compose
-      
-      - name: Build and Run Services with Docker Compose
-        env:
-            MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
-        run: |
-          echo "$MY_ENV_VARIABLE" > ../../.env
-          docker-compose up -d --build
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-      # Add any post-processing or testing steps you need after running Docker Compose
+      - name: Log in to your Docker server
+        run: docker login $DOCKER_SERVER -u your-docker-username -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push API image
+        run: docker build -t $DOCKER_SERVER/ubuntu/api:latest -f ./back/Dockerfile .
+        run: docker push $DOCKER_SERVER/ubuntu/api:latest
+
+      - name: Build and push Frontend image
+        run: docker build -t $DOCKER_SERVER/ubuntu/front:latest -f ./front/Dockerfile .
+        run: docker push $DOCKER_SERVER/ubuntu/front:latest
