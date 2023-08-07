@@ -36,3 +36,4 @@ jobs:
           docker-compose up -d --build
         env:
           MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
+
