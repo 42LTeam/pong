@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, UseGuards, ParseIntPipe } from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, UseGuards, ParseIntPipe, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Message } from '@prisma/client';
 import { MessageService } from './message.service';
@@ -7,10 +7,7 @@ import { IsNotEmpty, IsNumber, IsString  } from '@nestjs/class-validator';
 
 class CreateMessageDto {
 
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  userId: number;
+
 
   @ApiProperty()
   @IsNotEmpty()
@@ -34,8 +31,10 @@ export class MessageController {
   @ApiBody({ type: CreateMessageDto })
   async createMessage(
     @Body() createMessageDto: CreateMessageDto,
+    @Req() req,
   ): Promise<Message> {
-    return this.messageService.createMessage(createMessageDto.userId, createMessageDto.channelId, createMessageDto.content);
+    const user = await req.user;
+    return this.messageService.createMessage(user.id, createMessageDto.channelId, createMessageDto.content);
   }
 
   @Get()

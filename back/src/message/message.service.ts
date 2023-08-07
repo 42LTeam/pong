@@ -18,9 +18,16 @@ export class MessageService {
           },
         },
       },
+      include: {
+        user: {
+          select: {
+            avatar: true,
+          },
+        },
+      }
     });
   }
-  
+
 
 
   async getAllMessages(): Promise<Message[]> {
@@ -54,8 +61,11 @@ export class MessageService {
         channelId: channelId,
       },
       include: {
-        user: true,
-        channel: true,
+        user: {
+          select: {
+            avatar: true,
+          },
+        },
       }
     });
   }
