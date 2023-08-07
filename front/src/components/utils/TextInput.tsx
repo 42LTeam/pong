@@ -7,6 +7,7 @@ type Props = {
     button?: any,
     value? :string,
     bgColor? :string,
+    color?: string,
     children?: any,
 }
 export default function TextInput (props: Props) {
@@ -21,12 +22,13 @@ export default function TextInput (props: Props) {
 
     return (
         <div
-            style={{background: props.bgColor || "#34495E"}}
+            style={{ background: props.bgColor || "#34495E"}}
             className={"textinput-root" + (focus ? " textinput-root-focus" : '')}>
             {Children.map(props.children, child => <>{child}</>)}
             <input
                 onFocus={handleFocus}
                 onBlur={handleBlur}
+                style={{color: props.color || 'none'}}
                 className='textinput-input'
                 onChange={props.onChange}
                 placeholder={props.text}
