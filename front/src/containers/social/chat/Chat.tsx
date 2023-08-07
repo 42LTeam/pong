@@ -12,6 +12,7 @@ interface ChatProps {
 
 export default function Chat (props:ChatProps){
     const [messages, setMessages] = useState([]);
+    const [channel, setChannel] = useState(props.channel);
     const user = useContext(ApplicationContext);
 
     const addMessage = (message) => {
@@ -23,12 +24,13 @@ export default function Chat (props:ChatProps){
             const response = await getChannelMessages(props.channel.id);
             const data = response.data;
 
-            setMessages([...messages, ...data]);
+            setMessages([...data]);
         }
         fetchData().catch(console.error);
-    }, []);
+    }, [channel]);
 
-
+    if (props.channel != channel)
+        setChannel(props.channel);
     const handleSendMessage = async () => {
         const response = await sendMessageToChannel(props.channel.id, 'rien');
         addMessage(response.data);
