@@ -44,7 +44,7 @@
     border-radius: 10px 10px 10px 0;
     background: #BDC3C7;
     color: #34495E;
-    font-family: Kulim Park, serif;
+    font-family: 'Open Sans', sans-serif;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -55,6 +55,7 @@
 .chat-message-bubble-sent {
     border-radius: 10px 10px 0 10px;
     background: #2980B9;
+    color: #ECF0F1;
 }
 
 
