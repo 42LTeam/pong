@@ -1,9 +1,15 @@
-import { Controller, Get, Param, Post, Body, ParseIntPipe, UsePipes, ValidationPipe } from '@nestjs/common';
+import {Controller, Post, Body, Req} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
-import { Channel, Message, UserChannel } from '@prisma/client';
+import { Channel} from '@prisma/client';
 import { ChannelService } from './channel.service';
-import { IsNotEmpty, IsNumber, IsString, IsBoolean  } from '@nestjs/class-validator';
-
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsBoolean,
+  ArrayMinSize, IsArray, IsOptional
+} from '@nestjs/class-validator';
+/*
 class CreateChannelDto {
   @ApiProperty()
   @IsNotEmpty()
@@ -40,6 +46,41 @@ class CreateUserChannelDto {
   @IsNotEmpty()
   @IsNumber()
   channelId: number;
+}*/
+
+export class CreateChannelDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  password?: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  creatorId: number;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  privated?: boolean;
+
+}
+
+export class SendInviteDto {
+  @ApiProperty()
+  @IsArray()
+  @ArrayMinSize(1)
+  ids?: number[];
+
+  @IsNumber()
+  @ApiProperty()
+  @IsNotEmpty()
+  channelId: number;
 }
 
 @ApiTags('channels')
@@ -47,6 +88,23 @@ class CreateUserChannelDto {
 export class ChannelController {
   constructor(private channelService: ChannelService) {}
 
+
+  @Post()
+  @ApiOperation({summary: 'Create a channel'})
+  @ApiBody({type: CreateChannelDto})
+  async createChannel(@Body() body: CreateChannelDto): Promise<Channel>{
+    return this.channelService.createChannel(body);
+  }
+
+  @Post('invite')
+  @ApiOperation({ summary: 'Invite a list of user on a channel' })
+  @ApiBody({type: SendInviteDto})
+  async sendInvites(@Body() body: SendInviteDto, @Req() req){
+    return this.channelService.sendInvite(await req.user.id, body);
+  }
+
+
+/*
   @Post()
   @ApiOperation({ summary: 'Create a Channel to a channel' })
   @ApiBody({ type: CreateChannelDto })
@@ -68,7 +126,7 @@ export class ChannelController {
   }
   
   @Get()
-  async getAllFriends(): Promise<Channel[]> {
+  async getAllChannels(): Promise<Channel[]> {
     return this.channelService.getAllChannel();
   }
 
@@ -86,5 +144,5 @@ export class ChannelController {
   async getChannelMessages(@Param('id') id: number): Promise<Channel[] | null> {
     return this.channelService.getChannelMessages(Number(id));
   } 
-
+*/
 }

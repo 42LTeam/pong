@@ -9,6 +9,7 @@
     align-items: center;
     align-self: stretch;
     border-radius: 10px;
+    overflow-x: hidden;
 }
 
 .textinput-root-focus {
@@ -25,27 +26,4 @@
 
 .textinput-input:focus{
     outline: none;
-}
-
-.textinput-button {
-    cursor: not-allowed;
-
-    white-space: nowrap;
-    padding: 5px;
-    align-items: center;
-    border-radius: 10px;
-    background: linear-gradient(0deg, #7F8C8D 0%, #7F8C8D 100%), #2ECC71;
-    color: #ECF0F1;
-    text-align: center;
-    font-family: Kulim Park, serif;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-}
-
-.textinput-button-focus {
-    background: #2ECC71;
-    cursor: pointer;
-
 }

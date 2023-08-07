@@ -104,6 +104,14 @@ export class UserController {
     return this.userService.getFriendsOfUser(Number(id));
   }
 
+  @Get('channels')
+  @ApiOperation({ summary: 'Get channels of user' })
+  async getChannelOfUser(@Req() req): Promise<Channel[]> {
+    const user = await req.user;
+    return this.userService.getChannelOfuser(Number(user.id));
+  }
+
+
   @Get('friend/online/:id')
   @ApiOperation({ summary: 'Get online friends of user' })
   async getOnlineFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {

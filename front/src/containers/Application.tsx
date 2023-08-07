@@ -10,6 +10,7 @@ import ProfilePage from "./ProfilePage";
 // @ts-ignore
 
 
+
 const PATHS = {
     social: '/social',
     home: '/',

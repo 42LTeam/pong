@@ -2,6 +2,7 @@ import TextInput from "../../../components/utils/TextInput";
 import {useState} from "react";
 import Friend from "../../../components/friend/Friend";
 import {searchUser, sendFriendRequest} from "../../../api";
+import Button from "../../../components/utils/Button";
 
 export default function AddFriend(){
     const [suggestions, setSuggestions] = useState([]);
@@ -51,13 +52,15 @@ export default function AddFriend(){
     return (
         <>
             <h1> Ajouter</h1>
-            <h2> Tu peux ajouter des amis grâce à leurs noms d utilisateur. </h2>
+            <h3> Tu peux ajouter des amis grâce à leurs noms d utilisateur. </h3>
             <TextInput
                 text={"Trouve ami.e, tape nom..."}
                 onChange={(event) => handleInputChange(event)}
-                buttonProps={{onClick: onButtonClick}}
-                buttonContent="Envoyer une demande d’ami"
-                value={friend?.username || null}
+                button={
+                    <Button handleClick={onButtonClick} text={"Envoyer une demande d’ami"} clickable={friend?.username || null}>
+
+                    </Button>
+                }
             />
             {suggestions?.map((current) => {return (<Friend onClick={handleSuggestionClick} key={current.username + "suggestion-key"} friend={current}></Friend>)})}
         </>

@@ -1,12 +1,38 @@
-type Props = {
+import {Children, useState} from "react";
+
+export type ButtonProps = {
     handleClick: any,
     text: string,
-    state: any,
     fill?: any,
+    buttonProps?: any,
+    clickable?: boolean,
+    hoverProps?: any,
+    children?: any,
 }
 
-export default function Button({fill, handleClick, text, state}: Props){
+export default function Button({fill, handleClick, text, buttonProps, clickable,hoverProps, children}: ButtonProps){
+    const [hover, setHover] = useState(null);
+
+    const handleHover = () => {
+        setHover({
+            ...hoverProps,
+        });
+    }
+
+    const handleHoverOut = () => {
+        setHover(null);
+    }
+
     return (
-        <div style={{alignSelf: fill ? 'stretch' : null}} onClick={() => {handleClick(text)}} className={'button ' + (state == text ? 'button-current' : '')}>{text}</div>
+        <div
+            onMouseOver={handleHover}
+            onMouseOut={handleHoverOut}
+            style={{...buttonProps?.style,alignSelf: fill ? 'stretch' : null, ...hover}}
+            onClick={(clickable ? () => {handleClick && handleClick(text)} : null)}
+            className={'button' + (clickable ? ' button-clickable': '')}
+        >
+            {text}
+            {Children.map(children, child => <>{child}</>)}
+        </div>
     );
 }

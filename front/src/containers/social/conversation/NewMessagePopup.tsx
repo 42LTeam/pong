@@ -3,7 +3,7 @@ import Button from "../../../components/utils/Button";
 import PopUp from "../../../components/utils/PopUp";
 import {useContext, useState} from "react";
 import Friend from "../../../components/friend/Friend";
-import {getFriendOfUser, searchUser} from "../../../api";
+import {createChannel, getFriendOfUser, searchUser, sendChannelInvite} from "../../../api";
 import Removable from "../../../components/utils/Removable";
 import Cancel from "../../../components/svg/Cancel";
 import {ApplicationContext} from "../../Auth";
@@ -35,6 +35,19 @@ export default function NewMessagePopup({position, clear}: Props) {
         setSuggestions(data);
     }
 
+    const handleClick = async () => {
+        const response  = await createChannel({
+            name: user.username + '+' + suggestions.filter(f => checked.includes(f.username)).map(f => f.username + '+') + ' channel',
+            creatorId: user.id,
+        });
+        const channel = response.data;
+        await sendChannelInvite({
+            channelId: channel.id,
+            ids: [...suggestions.filter(f => checked.includes(f.username)).map(f => f.id), user.id],
+        });
+        clear(true);
+    };
+
     const toggleCheck = (current, check) => {
         if (check)
             setChecked(c => [...c, current]);
@@ -47,7 +60,7 @@ export default function NewMessagePopup({position, clear}: Props) {
     return (
         <PopUp key={"newmessage-root"} position={position} clear={clear}>
             <h1>Sélectionne des amis</h1>
-            <h2>Tu peux ajouter des amis.</h2>
+            <h3>Tu peux ajouter des amis.</h3>
             <TextInput
                 key={"newmessage-input"}
                 text="Trouve taon ami.e tape sa on nom..."
@@ -56,13 +69,12 @@ export default function NewMessagePopup({position, clear}: Props) {
             >
                 {checked.map(current => <Removable  content={current} onInteract={() => {
                     toggleCheck(current, false);
-                }} icon={<Cancel/>} key={"removable="+current}/>)}
+                }} icon={<Cancel tiny />} key={"removable="+current}/>)}
             </TextInput>
             <div className="newmessage-suggestions">
                 {suggestions?.map(mapData)}
-
             </div>
-            <Button key={"newmessage-button"} fill handleClick={null} text="Creer un MP ou un channel" state={null}></Button>
+            <Button key={"newmessage-button"} fill handleClick={handleClick} text="Creer un MP ou un channel" clickable={checked.length != 0}></Button>
         </PopUp>
     )
 }

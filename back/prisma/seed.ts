@@ -87,15 +87,9 @@ async function main() {
                 create: [
                     {
                         userId: user1.id,
-                        isAdmin: true,
-                        isBlocked: false,
-                        exited: false,
                     },
                     {
                         userId: user2.id,
-                        isAdmin: false,
-                        isBlocked: false,
-                        exited: false,
                     },
                 ],
             },

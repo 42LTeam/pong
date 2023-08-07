@@ -1,19 +1,20 @@
-import {Children, useEffect} from 'react';
+import {Children, useEffect, useRef} from 'react';
 import "../../css/popup.css"
 
-type Props = {
-    children: any,
+export type PopUpProps = {
+    children?: any,
     position? : {left: number, top: number},
     clear: any,
+    center?: boolean,
 }
-export default function PopUp({ children, position, clear }: Props) {
-
+export default function PopUp({ children, position, clear, center }: PopUpProps) {
+    const ref= useRef(null);
     useEffect(() => {
         /**
          * Alert if clicked on outside of element
          */
         function handleClickOutside(event) {
-            if (!document.querySelector(".popup-root").contains(event.target))
+            if (!ref?.current.contains(event.target))
                clear();
         }
         // Bind the event listener
@@ -24,7 +25,7 @@ export default function PopUp({ children, position, clear }: Props) {
         };
     }, );
     return (
-        <div className="popup-root" style={position}>
+        <div ref={ref} className={"popup-root" + (center ? ' center' : '')} style={{...position}}>
             {Children.map(children, child =>
                 <>
                 {child}

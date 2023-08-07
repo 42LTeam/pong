@@ -3,7 +3,7 @@ import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Message } from '@prisma/client';
 import { MessageService } from './message.service';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
-import { IsNotEmpty, IsNumber, IsString, IsBoolean  } from '@nestjs/class-validator';
+import { IsNotEmpty, IsNumber, IsString  } from '@nestjs/class-validator';
 
 class CreateMessageDto {
 
@@ -69,7 +69,7 @@ export class MessageController {
 
   @Get('channel/:id/last')
   async getLastMessageInChannel(@Param('id', ParseIntPipe) channelId: number): Promise<Message> {
-    return this.messageService.getLastMessageInChannel(channelId);
+    return await this.messageService.getLastMessageInChannel(channelId);
   }
   
 }

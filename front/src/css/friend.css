@@ -28,15 +28,7 @@
     align-self: stretch;
 }
 
-.friend-button-text{
-    color: #7F8C8D;
-    text-align: center;
-    font-family: Kulim Park, serif;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-}
+
 
 .friend-button-focused {
     background: #34495E ! important;
@@ -108,14 +100,14 @@
     fill: #E74C3C;
 }
 
-.newmessage-suggestions{
+.newmessage-suggestions {
     overflow-y: scroll;
     display: flex;
+    height: 250px;
     padding: 10px;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: flex-start;
     gap: 10px;
-    flex: 1 0 0;
     align-self: stretch;
+    flex: 1 0 0;
 }

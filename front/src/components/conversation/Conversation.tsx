@@ -2,11 +2,15 @@
 type Props = {
     username: string,
     message : string,
+    handleClick: any,
+    state?: boolean,
 }
 
 export default function Conversation(props: Props){
+
     return (
-        <div className="conversation">
+        <div onClick={props.handleClick} className={"conversation " + (props.state ? 'conversation-focus ' : '')}
+        >
             <div className="conversation-avatar"></div>
             <div className="conversation-content">
                 <div className="conversation-username">{props.username}</div>

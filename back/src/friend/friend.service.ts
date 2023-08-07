@@ -9,7 +9,6 @@ export class FriendService {
 
   async addFriendship(id, friendship){
 
-
     const user = await this.prisma.user.findUnique({
       where: { id: id },
       include: { userFriendships: true },
