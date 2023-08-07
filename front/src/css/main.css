@@ -12,6 +12,11 @@
     transform: translate(-50%, -50%);
 }
 
+
+.avatar-root {
+    border-radius: 90px;
+}
+
 .bubble{
     border-radius: 10px;
     background: #2C3E50;

@@ -14,8 +14,8 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-    flex: 1 0 0;
     align-self: stretch;
+    overflow-y: scroll;
 }
 
 .chat-message {

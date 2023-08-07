@@ -15,7 +15,7 @@ export default function Body(){
             <Conversations state={state} setState={setState} ></Conversations>
             <div className="vertical-separator"></div>
 
-            {state ? (<Chat></Chat>): (<Friends></Friends>)}
+            {state ? (<Chat channel={state}></Chat>): (<Friends></Friends>)}
 
         </div>
     )

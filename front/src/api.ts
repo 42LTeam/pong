@@ -121,6 +121,30 @@ export async function sendFriendRequest(acceptorId: number){
     return axios(config);
 }
 
+
+export async function getChannelMessages(channelId: number){
+    const config = {
+        method: 'get',
+        url: URL + '/message/channel/' + channelId,
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
+export async function sendMessageToChannel(channelId: number, content: string){
+    const config = {
+        method: 'post',
+        url: URL + '/message',
+        withCredentials: true,
+        data:{
+            channelId,
+            content,
+        }
+    };
+    return axios(config);
+}
+
+
 export async function getPath(path: string){
     const config = {
         method: 'get',
