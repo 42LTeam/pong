@@ -4,6 +4,7 @@ import {createContext, useEffect, useState} from 'react';
 import {authSocketId, getStatus, socket} from "../api";
 import Application from "./Application";
 import "../css/main.css";
+import React from 'react';
 
 
 export interface User {
