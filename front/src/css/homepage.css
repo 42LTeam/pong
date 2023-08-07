@@ -32,6 +32,7 @@
     border-radius: 10px;
     max-height: 80vh; /*a voir*/
     overflow-y: scroll;
+    overflow: auto;
     scrollbar-color: #2C3E50 #ECF0F1;
 }
 

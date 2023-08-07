@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { useNavigate} from "react-router-dom";
 
 import "../css/user.css"
@@ -7,16 +7,13 @@ import "../css/user.css"
 const UserBubble = ({ user }) => {
     
     const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
       };
 
     const navigate = useNavigate();
-
-    function handleClick() {
-        navigate("/profile");
-    };
 
     const handleOptionClick = (option: string) => {
         if (option == "my_profile"){
@@ -29,10 +26,29 @@ const UserBubble = ({ user }) => {
         }
     
       };
-    
+
+      const handleBubbleClick = (event) => {
+        event.stopPropagation();
+        toggleMenu();
+      };
+
+      useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+          if (menuRef.current && !(menuRef.current as HTMLElement).contains(event.target as Node)) {
+            setMenuOpen(false);
+          }
+        };
+      
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+          document.removeEventListener("click", handleClickOutside);
+        };
+      }, []);
+
+
     return (
         <div className="column">
-            <div className="user bubble" onClick={toggleMenu}>
+            <div className="user bubble" onClick={handleBubbleClick}>
                 <div className="user-title">{user?.username}</div>
                 {user?.avatar && (
                     <div
@@ -43,7 +59,7 @@ const UserBubble = ({ user }) => {
             </div>
             <div>
             {menuOpen && (
-            <div className="bubble menu">
+            <div ref={menuRef} className="bubble menu">
             <ul className="list">
                 <li className="user user-title element" onClick={() => handleOptionClick("my_profile")}>
                     My profile
@@ -62,9 +78,3 @@ const UserBubble = ({ user }) => {
 };
 
 export default UserBubble;
-
-//From Reno to Shai:
-//J'ai fait des modifs sur les svg pour qu'on puisse modifier leur couleurs
-//depuis le css mais du coup faudrait que chaque instance soit utilisée de la meme maniere.
-//pour l'instant j'ai viré le chat-logo de la user bubble mais au pire on peut doubler le svg
-//pour l'utiliser de plusieurs facons differentes.
