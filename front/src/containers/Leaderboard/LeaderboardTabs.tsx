@@ -1,9 +1,9 @@
 import {useState} from "react";
 import React from "react";
 
-import LeaderboardTab from "../components/LeaderboardTab";
+import LeaderboardTab from "../../components/LeaderboardTab";
 
-import "../css/leaderboard.css"
+import "../../css/leaderboard.css"
 
 export default function LeaderboardTabs({user}){
     const [state, setState] = useState("Total victories");

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import "../css/leaderboard.css"
+import "../../css/leaderboard.css"
 import LeaderboardTabs from './LeaderboardTabs';
-import LeaderboardPlaceBubble from '../components/LeaderboardPlaceBubble';
+import LeaderboardPlaceBubble from '../../components/LeaderboardPlaceBubble';
 
 
 export default function LeaderboardPage({user}){

@@ -5,10 +5,11 @@ import SocialBody from "./social/SocialBody";
 import SettingsBody from "./settings/SettingsBody";
 import { useContext } from "react";
 import { ApplicationContext } from "./Auth";
-import HomePage from "./HomePage"
+import HomePage from "./HomePage/HomePage"
 import ProfilePage from "./ProfilePage";
-import LeaderboardPage from "./LeaderboardPage";
+import LeaderboardPage from "./Leaderboard/LeaderboardPage";
 import ChatBody from "./ChatBody"
+import Setting from "../components/setting/Setting";
 // @ts-ignore
 
 
@@ -37,7 +38,7 @@ const Application = function () {
                 <Routes>
                     <Route path={PATHS.social} element={<ChatBody user={user}/>} />
                     <Route path={PATHS.home} element={<HomePage user={user}/>} />
-                    <Route path={PATHS.settings} element={"settings"} />
+                    <Route path={PATHS.settings} element={<Setting />} />
                     <Route path={PATHS.profile} element={<ProfilePage user={user}/>} />
                     <Route path={PATHS.leaderboard} element={<LeaderboardPage user={user}/>} />
                 </Routes>

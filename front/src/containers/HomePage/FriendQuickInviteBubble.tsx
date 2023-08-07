@@ -1,8 +1,8 @@
 import React from "react";
 
-import QuickInviteButton from "../components/QuickInviteButton"
+import QuickInviteButton from "../../components/QuickInviteButton"
 
-import "../css/homepage.css"
+import "../../css/homepage.css"
 
 type Props = {
     userID: number;

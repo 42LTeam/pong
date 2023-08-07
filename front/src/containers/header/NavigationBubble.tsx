@@ -1,13 +1,13 @@
-import "../css/header.css";
+import "../../css/header.css"
 
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import ChatButton from "../components/ChatButton";
-import PlayButton from "../components/PlayButton";
-import HeaderNavigationIcon from "../components/HeaderNavigationIcon";
-import LeaderboardButton from "../components/LeaderboardButton";
+import ChatButton from "../../components/ChatButton";
+import PlayButton from "../../components/PlayButton";
+import HeaderNavigationIcon from "../../components/HeaderNavigationIcon";
+import LeaderboardButton from "../../components/LeaderboardButton";
 
 
 
