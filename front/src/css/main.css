@@ -1,9 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
 #root {
     display: flex;
     padding: 10px;
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    flex: 1 0 0;
+    background: linear-gradient(180deg, #34495E 0%, #2980B9 52.08%, #34495E 100%), no-repeat;
+
 }
 
 .center{

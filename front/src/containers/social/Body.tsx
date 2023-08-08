@@ -11,12 +11,10 @@ export default function Body(){
 
 
     return (
-        <div className="chatbody bubble">
-            <Conversations state={state} setState={setState} ></Conversations>
-            <div className="vertical-separator"></div>
-
-            {state ? (<Chat channel={state}></Chat>): (<Friends></Friends>)}
-
-        </div>
+            <div className="chatbody bubble">
+                <Conversations state={state} setState={setState} ></Conversations>
+                <div className="vertical-separator"></div>
+                {state ? (<Chat channel={state}></Chat>): (<Friends></Friends>)}
+            </div>
     )
 }
