@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import MatchHistoryBubble from './MatchHistoryBubble';
 import ProfileLeaderboardPlaceBubble from './ProfileLeaderboardPlaceBubble';
+import {getUserByID} from "../../api";
+import { User } from '../Root/Auth';
 
 import "../../css/profile.css"
+
 //Il faudrait appeler la page avec le user correspondant (?)
 
-export default function ProfilePage({user}){
+export default function ProfilePage(){
+
+    const { userID } = useParams();
+
+    const [user, setUser] = useState<User>();
+
+    useEffect(() => {
+        if (!user)
+        getUserByID(userID)
+            .then(function (response) {
+                setUser(response.data)
+
+            });
+    },[user])
 
     return (
         <div className='main-frame'>

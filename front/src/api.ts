@@ -154,3 +154,12 @@ export async function getPath(path: string){
     };
     return axios(config);
 }
+
+export async function getUserByID(ID){
+    var config = {
+        method: 'get',
+        url: URL + '/users/id/' + ID,
+        withCredentials: true,
+    };
+    return axios(config);
+}

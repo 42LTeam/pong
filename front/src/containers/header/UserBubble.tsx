@@ -20,7 +20,7 @@ const UserBubble = () => {
     const handleOptionClick = (option: string) => {
         if (option == "my_profile"){
           setMenuOpen(!menuOpen);
-          navigate("profile");
+          navigate("profile/" + user?.id);
         }
         else if (option == "settings"){
           setMenuOpen(!menuOpen);
