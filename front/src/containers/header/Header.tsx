@@ -11,7 +11,7 @@ const Header = function({user}) {
         <div className="header">
             <div className="header-title">Transendance</div>
             <NavigationBubble></NavigationBubble>
-            <UserBubble user={user}></UserBubble>
+            <UserBubble ></UserBubble>
         </div>
     )
 }

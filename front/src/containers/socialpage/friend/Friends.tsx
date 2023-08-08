@@ -4,7 +4,7 @@ import {useContext, useState} from "react";
 import FriendTabs from "./FriendTabs";
 import AddFriend from "./AddFriend";
 import Friendlist from "./FriendList";
-import {ApplicationContext} from "../../root/Auth";
+import {ApplicationContext} from "../../Root/Auth";
 import {getPath} from "../../../api";
 
 import "../../../css/friend.css"

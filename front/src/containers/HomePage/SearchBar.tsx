@@ -9,13 +9,18 @@ export default function SearchBar(){
     const [inviteText, setSearchText] = useState('');
     
     const searchFriend = () => {
-        console.log(inviteText);
+        console.log("I wanna search " + inviteText);
 
     };
 
-
     const handleInputChange = (event) => {
         setSearchText(event.target.value);
+      };
+
+      const handleKeyPress = (event) => {
+        if (event.key === "Enter") {
+          searchFriend();
+        }
       };
     
     return (
@@ -24,9 +29,9 @@ export default function SearchBar(){
             <TextInput
                 text={"Pseudo"}
                 cssClass={"search-bar-text-fill"}
-                onChange={event => handleInputChange(event)} onKeyPress={function (event: React.KeyboardEvent<HTMLInputElement>): void {
-                    throw new Error("Function not implemented.");
-                } } />
+                onChange={event => handleInputChange(event)}
+                onKeyPress={handleKeyPress}
+            />
             <div className="search-bar-text"> Search </div>
         </div>
     )

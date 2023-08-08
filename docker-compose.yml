@@ -31,7 +31,6 @@ services:
     build:
       dockerfile: ./back/Dockerfile
       context: .
-      target: development
     env_file:
         - .env
     volumes:

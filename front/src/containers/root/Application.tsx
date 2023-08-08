@@ -4,7 +4,7 @@ import { useContext } from "react";
 
 import { ApplicationContext } from "./Auth";
 import Header from "../header/Header";
-import HomePage from "../homepage/HomePage";
+import HomePage from "../homepage/HomePage"
 import ProfilePage from "../profilepage/ProfilePage";
 import LeaderboardPage from "../leaderboardpage/LeaderboardPage";
 import ChatBody from "../socialpage/ChatBody";
