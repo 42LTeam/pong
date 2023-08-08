@@ -1,6 +1,6 @@
 import React from "react";
 
-import QuickInviteButton from "../../components/QuickInviteButton"
+import QuickInviteButton from "./QuickInviteButton"
 
 import "../../css/homepage.css"
 

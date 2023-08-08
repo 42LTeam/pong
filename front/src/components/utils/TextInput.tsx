@@ -1,5 +1,7 @@
-import "../../css/text-input.css"
+import React from 'react';
 import {Children, useState} from "react";
+
+import "../../css/utils/text-input.css"
 
 type Props = {
     text?: string

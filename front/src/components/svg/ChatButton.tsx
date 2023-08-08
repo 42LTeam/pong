@@ -1,0 +1,9 @@
+import React from 'react';
+
+import "../../css/social/chat.css"
+
+export default function ChatButton() {
+    return (
+        <img alt="A svg file representing chat logo" src="/svg/chatBubble.svg"/>
+    )
+}

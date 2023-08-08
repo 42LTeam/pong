@@ -1,5 +1,7 @@
-import Button, {ButtonProps} from "./Button";
+import React from 'react';
 import {useState} from "react";
+
+import Button, {ButtonProps} from "./Button";
 
 type ToggleButtonProps = {
     states: any[],

@@ -1,5 +1,8 @@
-import PopUp, {PopUpProps} from "./PopUp";
+import React from 'react';
 import {Children} from 'react';
+
+import PopUp, {PopUpProps} from "./PopUp";
+
 
 export default function PopOver(props: PopUpProps){
     return (

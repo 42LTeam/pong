@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "http://localhost:3000",
   "scripts": {
     "dev": "npm install vite && vite --host --port 5173",
     "prisma:generate": "npx prisma generate",

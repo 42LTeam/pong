@@ -1,10 +1,12 @@
-import "../../css/homepage.css"
-import {PlayerSkin} from "../../components/PlayerSkin";
-import {BallSkin} from "../../components/BallSkin"
-import {LaunchButton} from "../../components/LaunchButton"
 import React from 'react';
-import SearchBar from '../../components/SearchBar';
+
+import {PlayerSkin} from "./PlayerSkin";
+import {BallSkin} from "./BallSkin"
+import {LaunchButton} from "./LaunchButton"
+import SearchBar from "./SearchBar";
 import FriendQuickInviteBubble from './FriendQuickInviteBubble';
+
+import "../../css/homepage.css"
 
 export default function HomePage({user}){
 

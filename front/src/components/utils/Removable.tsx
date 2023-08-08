@@ -1,4 +1,6 @@
-import "../../css/removable.css"
+import React from 'react';
+
+import "../../css/utils/removable.css"
 
 type Props = {
     content: string,

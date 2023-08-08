@@ -1,8 +1,9 @@
-import "../../css/header.css"
-
-import UserBubble from "../../components/UserBubble";
 import React from "react";
+
+import UserBubble from "./UserBubble";
 import NavigationBubble from "./NavigationBubble";
+
+import "../../css/header.css"
 // @ts-ignore
 
 const Header = function({user}) {
