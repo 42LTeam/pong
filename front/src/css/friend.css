@@ -6,6 +6,7 @@
     gap: 10px;
     flex: 85%;
     align-self: stretch;
+    overflow: auto;
 
 }
 
