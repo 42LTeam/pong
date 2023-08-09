@@ -33,7 +33,8 @@ export default function Chat (props:ChatProps){
     if (props.channel != channel)
         setChannel(props.channel);
     const handleSendMessage = async (event) => {
-        if (!ref || !ref.current.value || event.key != 'Enter') return
+        if (!ref || !ref.current.value) return;
+        if (event.key != null && event.key != 'Enter') return;
         const response = await sendMessageToChannel(props.channel.id, ref.current.value);
         addMessage(response.data);
         ref.current.value = null;
