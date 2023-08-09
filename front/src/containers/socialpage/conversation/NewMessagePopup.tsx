@@ -8,7 +8,7 @@ import Friend from "../../../components/friend/Friend";
 import {createChannel, getFriendOfUser, searchUser, sendChannelInvite} from "../../../api";
 import Removable from "../../../components/utils/Removable";
 import Cancel from "../../../components/svg/Cancel";
-import {ApplicationContext} from "../../Root/Auth";
+import {ApplicationContext} from "../../root/Auth";
 
 type Props = {
     position: {left: number, top: number},

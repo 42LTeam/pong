@@ -1,6 +1,6 @@
 import React from "react";
 
-import PlacementIcon from "../../components/texticons/PlacementIcon";
+import TextIcon from "../../components/TextIcon"
 
 import "../../css/profile.css"
 import "../../css/leaderboard.css"
@@ -11,7 +11,7 @@ type Props = {
 }
 
 
-export default function FriendQuickInviteBubble(props: Props) {
+export default function ProfileLeaderboardPlaceBubble(props: Props) {
     
     var data: number = 0;
     var placement: number = 0;
@@ -42,7 +42,8 @@ export default function FriendQuickInviteBubble(props: Props) {
 
             <div className="leaderboard-data"> {data} </div>
 
-            <PlacementIcon placement={placement} />
+            <TextIcon style="leaderboard-placement-icon" text={placement} />
+
         </div>
     )
 }

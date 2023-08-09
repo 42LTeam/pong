@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import MatchHistoryBubble from './MatchHistoryBubble';
 import ProfileLeaderboardPlaceBubble from './ProfileLeaderboardPlaceBubble';
 import {getUserByID} from "../../api";
-import { User } from '../Root/Auth';
+import { User } from '../root/Auth';
 
 import "../../css/profile.css"
 

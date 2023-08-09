@@ -1,9 +1,9 @@
 import React from "react";
 
-import DefeatIcon from "../../components/texticons/DefeatIcon";
-import VictoryIcon from "../../components/texticons/VictoryIcon";
+import TextIcon from "../../components/TextIcon";
 
 import "../../css/profile.css"
+
 
 type Props = {
     user: any;
@@ -63,7 +63,9 @@ export default function MatchHistoryBubble(props: Props) {
 
             <div className="match-history-data"> {time} </div>
 
-            {scoreUser > scoreOpponent ? <VictoryIcon /> : <DefeatIcon/>}
+            {scoreUser > scoreOpponent ?
+            <TextIcon style={"victory-icon"} text={"Victory"} /> :
+            <TextIcon style={"defeat-icon"} text={"Defeat"} />}
         </div>
     )
 }
