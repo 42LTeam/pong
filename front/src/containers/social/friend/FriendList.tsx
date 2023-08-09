@@ -29,7 +29,7 @@ export default function FriendList({friends, pending, reset} : Props){
     return (<>
         {friends?.map((current) => {
             return (
-              <Friend userId={user.id} key={current.username +'friendlist'} friend={current}>
+              <Friend key={current.username +'friendlist'} friend={current}>
                   {pending ?
                       <div className="align-left">
                           <Approve handleClick={() => handleAccept(current)}></Approve>
