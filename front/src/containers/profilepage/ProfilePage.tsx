@@ -14,16 +14,18 @@ export default function ProfilePage(){
 
     const { userID } = useParams();
 
-    const [user, setUser] = useState<User>();
+    var [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-        if (!user)
         getUserByID(userID)
             .then(function (response) {
-                setUser(response.data)
-
+                setUser(response.data);
+            })
+            .catch(function (error) {
+                 console.error('Error fetching user data:', error);
+                setUser(null);
             });
-    },[user])
+    },[userID]);
 
     return (
         <div className='main-frame'>
