@@ -132,7 +132,8 @@ export async function getChannelMessages(channelId: number){
 }
 
 export async function sendMessageToChannel(channelId: number, content: string){
-    const config = {
+    socket.emit('new-message', {channelId, content});
+   /* const config = {
         method: 'post',
         url: URL + '/message',
         withCredentials: true,
@@ -141,7 +142,7 @@ export async function sendMessageToChannel(channelId: number, content: string){
             content,
         }
     };
-    return axios(config);
+    return axios(config);*/
 }
 
 

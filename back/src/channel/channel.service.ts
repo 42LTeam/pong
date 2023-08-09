@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Channel } from '@prisma/client';
+import {Channel} from '@prisma/client';
 import {CreateChannelDto, SendInviteDto} from "./channel.controller";
 
 @Injectable()
@@ -90,6 +90,16 @@ export class ChannelService {
       response.success.push(i);
     }
     return response;
+  }
+
+  async getUserInChannel(channelId: number): Promise<any> {
+    const channel = await this.prisma.userChannel.findMany({
+      where: { channelId },
+      select: {
+        user: true
+      }
+    });
+    return channel.map(current => current.user);
   }
 
   /*

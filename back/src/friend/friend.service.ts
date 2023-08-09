@@ -55,7 +55,7 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
       }
     });
 
-    await this.addFriendship(updatedFriendship.senderId, userFriendship)
+    await this.addFriendship(updatedFriendship.senderId, userFriendship);
     return userFriendship;
   }
 
