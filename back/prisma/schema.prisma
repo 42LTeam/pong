@@ -58,12 +58,12 @@ model Block {
 
 model Channel {
   id         Int           @id @default(autoincrement())
-  name       String        @unique
+  conv       Boolean       @default(false)
+  name       String?       @unique
   password   String?
-  creatorId  Int
-  creator    User          @relation(fields: [creatorId], references: [id])
+  creatorId  Int?
+  creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[]
-  privated   Boolean
   messages   Message[]
   created_at DateTime
 }
