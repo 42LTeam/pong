@@ -1,5 +1,5 @@
 import TextInput from "../../../components/utils/TextInput";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import Message from "../../../components/chat/Message";
 import {ApplicationContext} from "../../Auth";
 import "../../../css/chatBody.css"
@@ -14,9 +14,10 @@ export default function Chat (props:ChatProps){
     const [messages, setMessages] = useState([]);
     const [channel, setChannel] = useState(props.channel);
     const user = useContext(ApplicationContext);
+    const ref = useRef(null);
 
     const addMessage = (message) => {
-        setMessages([...messages, message])
+        setMessages([message, ...messages])
     }
 
     useEffect(() => {
@@ -24,16 +25,18 @@ export default function Chat (props:ChatProps){
             const response = await getChannelMessages(props.channel.id);
             const data = response.data;
 
-            setMessages([...data]);
+            setMessages([...data].reverse());
         }
         fetchData().catch(console.error);
     }, [channel]);
 
     if (props.channel != channel)
         setChannel(props.channel);
-    const handleSendMessage = async () => {
-        const response = await sendMessageToChannel(props.channel.id, 'rien');
+    const handleSendMessage = async (event) => {
+        if (!ref || !ref.current.value || event.key != 'Enter') return
+        const response = await sendMessageToChannel(props.channel.id, ref.current.value);
         addMessage(response.data);
+        ref.current.value = null;
     }
 
     return (
@@ -50,7 +53,7 @@ export default function Chat (props:ChatProps){
                     )
                 })}
             </div>
-            <TextInput color="#7F8C8D" text="Votre message..." bgColor="#ECF0F1" button={<Send handleClick={handleSendMessage}></Send>}></TextInput>
+            <TextInput ref={ref} color="#7F8C8D" text="Votre message..." bgColor="#ECF0F1" onKeyDown={handleSendMessage} button={<Send handleClick={handleSendMessage}></Send>}></TextInput>
         </div>
     )
 }
