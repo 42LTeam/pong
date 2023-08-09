@@ -55,6 +55,11 @@ export class CreateChannelDto {
   name: string;
 
   @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  conv?: boolean;
+
+  @ApiProperty()
   @IsString()
   @IsOptional()
   password?: string;
@@ -64,10 +69,6 @@ export class CreateChannelDto {
   @IsNumber()
   creatorId: number;
 
-  @ApiProperty()
-  @IsBoolean()
-  @IsOptional()
-  privated?: boolean;
 
 }
 

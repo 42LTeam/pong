@@ -31,8 +31,9 @@ export class ChannelService {
       name,
       password,
       creatorId,
-      privated,
     } = body;
+
+
 
     const channel = await this.prisma.channel.create({
       data: {
@@ -41,7 +42,6 @@ export class ChannelService {
         creator: {
           connect: { id: creatorId },
         },
-        privated: privated || false,
         created_at: new Date(),
       },
     });
