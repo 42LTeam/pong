@@ -13,7 +13,7 @@ async function main() {
     await prisma.match.deleteMany();
     await prisma.user.deleteMany();
 
-    for (let i = 3; i < 10; i++) {
+    for (let i = 6; i < 10; i++) {
         await prisma.user.create({
             data: {
                 id: i,
@@ -32,20 +32,50 @@ async function main() {
         {
             data: {
                 id: 1,
-                avatar: `avatar1`,
-                username: `shai`,
+                avatar: `https://cdn.intra.42.fr/users/d059badf1d05f4365aa5a664419b6dc1/shalimi.jpg`,
+                username: `shai_from_seed`,
                 secretO2FA: `j'aime les hommes`,
-                xp: 0,
+                xp: 10,
             },
         });
 
     const user2 = await prisma.user.create({
         data: {
             id:2,
-            avatar: 'avatar2',
-            username: 'username2',
+            avatar: 'https://cdn.intra.42.fr/users/5adf0bb2897326c325314edaeef0161e/ncotte.jpg',
+            username: 'ncotte_from_seed',
             secretO2FA: 'secret2',
-            xp: 200,
+            xp: 20120,
+        },
+    });
+
+    const user3 = await prisma.user.create({
+        data: {
+            id:3,
+            avatar: 'https://cdn.intra.42.fr/users/70f64fba2e18a69e9bef1f5baf2f49db/lzima.jpg',
+            username: 'lzima_from_seed',
+            secretO2FA: 'secret2',
+            xp: 2040,
+        },
+    });
+
+    const user4 = await prisma.user.create({
+        data: {
+            id:4,
+            avatar: 'https://cdn.intra.42.fr/users/628b6a897b44b6983dd7f52cc925c11c/esanchez.jpg',
+            username: 'esanchez_from_seed',
+            secretO2FA: 'secret2',
+            xp: 20,
+        },
+    });
+
+    const user5 = await prisma.user.create({
+        data: {
+            id:5,
+            avatar: 'https://cdn.intra.42.fr/users/fa69acc1dfa3b6097be387091ceda771/rmonney.jpg',
+            username: 'rmonney_from_seed',
+            secretO2FA: 'je suis chinois',
+            xp: 8,
         },
     });
 
