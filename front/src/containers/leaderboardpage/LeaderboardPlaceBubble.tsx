@@ -1,54 +1,53 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import PlacementIcon from "../../components/texticons/PlacementIcon";
+import TextIcon from "../../components/TextIcon";
+import { ApplicationContext, User } from "../Root/Auth";
 
 import "../../css/leaderboard.css"
 
 type Props = {
-    user: any;
+    user: User;
     kind: string;
+    rank: number;
 }
 
 
 export default function LeaderboardPlaceBubble(props: Props) {
     
-    var [avatar, setAvatar] = useState("");
-    var [username, setUsername] = useState("");
-    var [stat, setStat] = useState(0);
+  const user = useContext(ApplicationContext);
+    var stat: any = 0;
     var [description, setDescription] = useState("");
-    var [placement, setPlacement] = useState(0);
+
+    if (props.kind === "Total xp"){
+      stat = props.user.xp;
+    }
 
     useEffect(() => {
-        setAvatar(
-          "https://cdn.intra.42.fr/users/70f64fba2e18a69e9bef1f5baf2f49db/lzima.jpg"
-        );
-        setUsername("lzima");
-        setStat(4.2);
-        setPlacement(1);
-    
-        if (props.kind === "Total victories") {
-          setDescription("victories");
-        } else if (props.kind === "Victories / defeat ratio") {
-          setDescription("victories / defeat ratio");
-        } else if (props.kind === "Average points per match") {
-          setDescription("points per match");
-        }
-      }, [props.kind]);
+      
+      
+      if (props.kind === "Total xp") {
+        setDescription("XP");
+      } else if (props.kind === "Victories / defeat ratio") {
+        setDescription("victories / defeat ratio");
+      } else if (props.kind === "Average points per match") {
+        setDescription("points per match");
+      }
+    }, [props.kind]);
     
     return (
-        <div className="leaderboard-content-bubble">
+        <div className={"leaderboard-content-bubble " + (props.user.id === user?.id ? "leaderboard-content-bubble-self" : "")}>
             <div className="leaderboard-pp-pseudo-group">
                 
                 <div className="leaderboard-profile-picture"
-                style={{ backgroundImage: `url(${avatar})` }}>
+                style={{ backgroundImage: `url(${props.user.avatar})`}}>
                 </div>
                 
-                <div className="leaderboard-username"> {username} </div>
+                <div className="leaderboard-username"> {props.user.username} </div>
             </div>
 
-            <div className="leaderboard-data"> {stat} {description} </div>
+            <div className="leaderboard-data"> {props.user.xp} {description} </div>
 
-            <PlacementIcon placement={placement}/>
+            <TextIcon style="placement-icon" text={props.rank}/>
         </div>
     )
 }

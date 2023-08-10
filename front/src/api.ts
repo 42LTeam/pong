@@ -163,3 +163,12 @@ export async function getUserByID(ID){
     };
     return axios(config);
 }
+
+export async function getUsers(){
+    var config = {
+        method: 'get',
+        url: URL + '/users',
+        withCredentials: true,
+    };
+    return axios(config);
+}

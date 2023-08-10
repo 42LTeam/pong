@@ -31,7 +31,7 @@ const Application = function () {
     return (
         <>
             <BrowserRouter>
-                <Header user={user}></Header>
+                <Header />
                 <Routes>
                     <Route path={PATHS.social} element={<ChatBody user={user}/>} />
                     <Route path={PATHS.home} element={<HomePage user={user}/>} />

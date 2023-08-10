@@ -42,7 +42,7 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
 
             <div className="leaderboard-data"> {data} </div>
 
-            <TextIcon style="leaderboard-placement-icon" text={placement} />
+            <TextIcon style="placement-icon" text={placement} />
 
         </div>
     )

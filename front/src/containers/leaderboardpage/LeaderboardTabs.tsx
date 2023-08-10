@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import {useState} from "react";
 
 import LeaderboardTab from "./LeaderboardTab";
+import { ApplicationContext } from "../Root/Auth";
 
 import "../../css/leaderboard.css"
 
-export default function LeaderboardTabs({user}){
-    const [state, setState] = useState("Total victories");
+export default function LeaderboardTabs(){
+
+    const user = useContext(ApplicationContext);
+    const [state, setState] = useState("Total xp");
     var placement: number = 1;
 
     function getPlacement() {
-        if (state === "Total victories"){
+        if (state === "Total xp"){
             placement = 1;  //a chopper en back
         }
         else if (state === "Victories / defeat ratio"){
@@ -37,13 +40,13 @@ export default function LeaderboardTabs({user}){
                 />
             )}
             {user?.username && (
-                <div className="leaderboard-tabs-text"></div>
+                <div className="leaderboard-tabs-text"> {user.username} </div>
             )}
 
             <div className="leaderboard-tabs-text-place"> #{placement}</div>
 
             <div className="vertical-separator"></div>
-            <LeaderboardTab handleClick={handleClick} text="Total victories" state={state} />
+            <LeaderboardTab handleClick={handleClick} text="Total xp" state={state} />
             <LeaderboardTab handleClick={handleClick} text="Victories / defeat ratio" state={state} />
             <LeaderboardTab handleClick={handleClick} text="Average points per match" state={state} />
         </div>

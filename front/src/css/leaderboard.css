@@ -82,7 +82,7 @@
     line-height: normal;
 }
 
-.leaderboard-placement-icon{
+.placement-icon{
     min-width: 25px;
     display: flex;
     padding: 0px 10px;
@@ -170,12 +170,14 @@
 
 .leaderboard-username{
     color: #FFF;
-    text-align: center;
+    text-align:left;
     font-family: 'KoHo', sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+
+    min-width: 100px;
 }
 
 .leaderboard-data{

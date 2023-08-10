@@ -6,7 +6,7 @@ import NavigationBubble from "./NavigationBubble";
 import "../../css/header.css"
 // @ts-ignore
 
-const Header = function({user}) {
+const Header = function() {
     return (
         <div className="header">
             <div className="header-title">Transendance</div>
