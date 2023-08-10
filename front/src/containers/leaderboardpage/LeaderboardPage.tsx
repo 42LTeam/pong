@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import LeaderboardTabs from './LeaderboardTabs';
-import LeaderboardPlaceBubble from './LeaderboardPlaceBubble';
-import { ApplicationContext, User } from "../root/Auth";
+import { ApplicationContext } from "../Root/Auth";
 import {getUsers} from "../../api";
 import LeaderboardContent from './LeaderboardContent';
 
@@ -30,18 +29,13 @@ export default function LeaderboardPage(){
     return (
         <div className='leaderboard-body'>
             <div className='leaderboard-main-frame'>
-                <div className="leaderboard-places"> Leaderboard </div> {/*a changer en titre h1 ?*/}
+                <div className="leaderboard-places"> Leaderboard </div>
 
                 <LeaderboardTabs />
                 
                 <div className='horizontal-separator'></div>
                 
-                {/* <div className='leaderboard-content'> */}
-                    <LeaderboardContent users={users}/>
-                {/* <LeaderboardPlaceBubble user={user} kind={"Total victories"}/>
-                <LeaderboardPlaceBubble user={user} kind={"Victories / defeat ratio"}/>
-                <LeaderboardPlaceBubble user={user} kind={"Average points per match"}/> */}
-                {/* </div> */}
+                <LeaderboardContent users={users}/>
 
             </div>
         </div>
