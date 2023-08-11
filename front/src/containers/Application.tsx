@@ -1,15 +1,22 @@
 import Header from "./header/Header";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Body from "./social/Body";
+import SocialBody from "./social/SocialBody";
 import {useContext} from "react";
 import {ApplicationContext} from "./Auth";
 
 
+import Setting from "./settingspage/Settings";
+import ProfilePage from "./profilepage/ProfilePage";
+import LeaderboardPage from "./leaderboardpage/LeaderboardPage";
+import HomePage from "./HomePage/HomePage";
+
 
 const PATHS = {
     home: '/',
-    chat: '/social',
-
+    social: '/social',
+    settings: 'settings',
+    profile: 'profile',
+    leaderboard: 'leaderboard'
 };
 
 const Application = function (){
@@ -26,8 +33,11 @@ const Application = function (){
             <BrowserRouter>
                 <Header></Header>
                 <Routes>
-                    <Route index element={"Home"} />
-                    <Route path={PATHS.chat} element={<Body key="chatbody"/>} />
+                    <Route index path={PATHS.home} element={<HomePage user={user}/>} />
+                    <Route path={PATHS.social} element={<SocialBody key="chatbody"/>} />
+                    <Route path={PATHS.settings} element={<Setting />} />
+                    <Route path={PATHS.profile} element={<ProfilePage />} />
+                    <Route path={PATHS.leaderboard} element={<LeaderboardPage />} />
                 </Routes>
             </BrowserRouter>
         </>

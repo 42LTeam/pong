@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import LeaderboardTabs from './LeaderboardTabs';
-import { ApplicationContext } from "../Root/Auth";
+import { ApplicationContext } from "../Auth";
 import {getUsers} from "../../api";
 import LeaderboardContent from './LeaderboardContent';
 

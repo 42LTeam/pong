@@ -4,7 +4,7 @@ import {useState} from "react";
 import Friends from "./friend/Friends";
 import Chat from "./chat/Chat";
 
-export default function Body(){
+export default function SocialBody(){
 
     const [state, setState]=useState(null);
 

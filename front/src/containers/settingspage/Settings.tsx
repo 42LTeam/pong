@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import "../../css/settings.css";
-import { ApplicationContext } from "../../containers/root/Auth";
+import { ApplicationContext } from "../Auth";
 import { updateUserAvatar, updateUserUsername } from "../../api";
 import ButtonSetting from "../../components/utils/Button";
 

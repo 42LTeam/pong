@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import {useState} from "react";
 
 import LeaderboardTab from "./LeaderboardTab";
-import { ApplicationContext } from "../Root/Auth";
+import { ApplicationContext } from "../Auth";
 
 import "../../css/leaderboard.css"
 
