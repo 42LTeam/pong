@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import MatchHistoryBubble from './MatchHistoryBubble';
@@ -14,7 +14,7 @@ export default function ProfilePage(){
 
     const { userID } = useParams();
 
-    var [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         getUserByID(userID)
