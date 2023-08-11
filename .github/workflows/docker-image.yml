@@ -6,7 +6,7 @@ on:
       - 21-workflow-fix-docker-image
 
 jobs:
-  build-and-push:
+  build-on-push:
     runs-on: self-hosted
 
     env:
@@ -22,9 +22,9 @@ jobs:
       - name: Cleaning
         run: |
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
-          sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
           docker volume rm $(docker volume ls -qf dangling=true)
           docker system prune -af
+          sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
 
         continue-on-error: true
 
