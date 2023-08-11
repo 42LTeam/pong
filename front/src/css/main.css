@@ -1,15 +1,31 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+}
+
 #root {
     display: flex;
     padding: 10px;
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    flex: 1 0 0;
+    background: linear-gradient(180deg, #34495E 0%, #2980B9 52.08%, #34495E 100%), no-repeat;
+
 }
 
 .center{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+
+.avatar-root {
+    border-radius: 90px;
 }
 
 .bubble{

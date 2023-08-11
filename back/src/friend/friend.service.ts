@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {UserFriendship, User} from '@prisma/client';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import {UserFriendship} from '@prisma/client';
 
 @Injectable()
 export class FriendService {
@@ -20,59 +19,26 @@ export class FriendService {
       data: { userFriendships: { set: updatedFriendships } },
     });
   }
+//TODO check if friendship already exist
+async createFriendRequest(initiatorId: number, acceptorId: number): Promise<UserFriendship> {
+    if (initiatorId == acceptorId) {
+      throw new Error('Both initiatorId and acceptorId shouldn\'t be the same');
+    }
 
-async createFriendRequest(initiatorId: number, targetId: number): Promise<UserFriendship> {
-    if (initiatorId == targetId) {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: 'Both initiatorId and targetId shouldn\'t be the same',
-      }, HttpStatus.BAD_REQUEST);
-    }
-  
-    const existingFriendship = await this.prisma.userFriendship.findFirst({
-      where: {
-        OR: [
-          {
-            senderId: initiatorId,
-            targetId: targetId
-          },
-          {
-            senderId: targetId,
-            targetId: initiatorId
-          }
-        ]
-      }
-    });
-  
-    if (existingFriendship) {
-      if (existingFriendship.acceptedAt == null) {
-        throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          error: 'A friend request is still pending between these users',
-        }, HttpStatus.BAD_REQUEST);
-      } else {
-        throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          error: 'A friendship already exists between these users',
-        }, HttpStatus.BAD_REQUEST);
-      }
-    }
-  
+
+
     const userFriendship = await this.prisma.userFriendship.create({
       data: {
         senderId: initiatorId,
-        targetId: targetId,
+        targetId: acceptorId,
       }
     });
-  
-    await this.addFriendship(targetId, userFriendship);
+
+    await this.addFriendship(acceptorId, userFriendship);
     return userFriendship;
-}
+  }
 
-  
-
-  
-  async acceptFriendRequest(targetId, friendshipId: number): Promise<UserFriendship> {
+  async acceptFriendRequest(acceptorId, friendshipId: number): Promise<UserFriendship> {
     const updatedFriendship = await this.prisma.userFriendship.update({
       where: {
         id: friendshipId
@@ -81,16 +47,16 @@ async createFriendRequest(initiatorId: number, targetId: number): Promise<UserFr
         acceptedAt: new Date(),
       }
     })
-    // const userFriendship = await this.prisma.userFriendship.create({
-    //   data: {
-    //     senderId: targetId,
-    //     targetId: updatedFriendship.senderId,
-    //     acceptedAt: new Date(),
-    //   }
-    // });
+    const userFriendship = await this.prisma.userFriendship.create({
+      data: {
+        senderId: acceptorId,
+        targetId: updatedFriendship.senderId,
+        acceptedAt: new Date(),
+      }
+    });
 
-    // await this.addFriendship(updatedFriendship.senderId, userFriendship)
-    return updatedFriendship;
+    await this.addFriendship(updatedFriendship.senderId, userFriendship);
+    return userFriendship;
   }
 
 

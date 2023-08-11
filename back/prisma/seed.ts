@@ -37,6 +37,13 @@ async function main() {
                 secretO2FA: `j'aime les hommes`,
                 xp: 10,
             },
+            select: {
+                id: true,
+                avatar: true,
+                username: true,
+                secretO2FA: true,
+                xp: true,
+            }
         });
 
     const user2 = await prisma.user.create({
@@ -77,6 +84,13 @@ async function main() {
             secretO2FA: 'je suis chinois',
             xp: 8,
         },
+        select: {
+            id: true,
+            avatar: true,
+            username: true,
+            secretO2FA: true,
+            xp: true,
+        }
     });
 
 
@@ -111,7 +125,6 @@ async function main() {
             name: 'channel1',
             password: 'pass1',
             creatorId: user1.id,
-            privated: false,
             created_at: new Date(),
             users: {
                 create: [

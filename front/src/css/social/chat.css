@@ -1,8 +1,9 @@
 .chatbody{
+    height: 90%;
     display: flex;
     padding: 10px 0;
     align-items: center;
-    flex: 1 0 0;
+    flex-shrink: 0;
     align-self: stretch;
     background-color: #2C3E50;
 }
@@ -14,6 +15,8 @@
     align-items: flex-start;
     flex: 15%;
     align-self: stretch;
+    width: 20vw;
+    overflow: auto;
 }
 
 
@@ -63,6 +66,7 @@
     padding: 5px;
     align-items: center;
     gap: 10px;
+    align-self: stretch;
 }
 
 .conversation-focus {
@@ -77,6 +81,7 @@
 .conversation-avatar{
     width: 48px;
     height: 48px;
+    aspect-ratio: 1/1;
     background: #7F8C8D;
     border-radius: 90px;
 }

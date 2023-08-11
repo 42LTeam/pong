@@ -6,11 +6,12 @@
     gap: 10px;
     flex: 85%;
     align-self: stretch;
+    overflow: auto;
 
 }
 
 .friend-tabs{
-    height: 4%;
+    height: 10%;
     display: flex;
     padding: 10px;
     align-items: center;

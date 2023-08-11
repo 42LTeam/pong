@@ -1,62 +1,72 @@
-import React from "react";
-import {useContext, useState} from "react";
-
 import TextInput from "../../../components/utils/TextInput";
+import {useContext, useEffect, useRef, useState} from "react";
 import Message from "../../../components/chat/Message";
-import Send from "../../../components/svg/Send";
-import {ApplicationContext} from "../../root/Auth";
-
+import {ApplicationContext} from "../../Auth";
 import "../../../css/chatBody.css"
+import Send from "../../../components/svg/Send";
+import {getChannelMessages, sendMessageToChannel, socket} from "../../../api";
 
-export default function Chat ({}){
+interface ChatProps {
+    channel: any,
+}
+
+export default function Chat (props:ChatProps){
     const [messages, setMessages] = useState([]);
+    const [channel, setChannel] = useState(props.channel);
     const user = useContext(ApplicationContext);
-    const addMessage = (message) => {
-        setMessages([...messages, message])
+    const ref = useRef(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await getChannelMessages(props.channel.id);
+            const data = response.data;
+
+            setMessages([...data].reverse());
+        }
+        fetchData().catch(console.error);
+    }, [channel]);
+
+    const onNewMessage = (args) => {
+        if (args.id != channel.id) return;
+        setMessages([JSON.parse(args.message), ...messages])
     }
 
-    if (!messages.length)
-        setMessages([{
-            id: 0,
-            content: 'test',
-            created_at: '12:12',
-            user: {
-                avatar: 'url("https://cdn.intra.42.fr/users/d059badf1d05f4365aa5a664419b6dc1/shalimi.jpg")',
-                id: 117217
-            }
-        },
-            {
-                id: 0,
-                content: 'ok alors ceci est un test je dois ecrire enormement de texte pour que le truc doivent se replier sur lui meme je me demande si ca va marcher du premier coup ou si le message sera super long. c est marrant d avoir a ce demander ca quand meme',
-                created_at: '12:12',
-                user: {
-                    avatar: 'url("https://cdn.intra.42.fr/users/d059badf1d05f4365aa5a664419b6dc1/shalimi.jpg")',
-                    id: 2
-                }
-            }
 
-        ])
+    useEffect(() => {
+        socket.on('new-message', onNewMessage);
+
+        return () => {
+            socket.off('new-message', onNewMessage);
+        };
+
+    }, [messages]);
+
+
+
+    if (props.channel != channel)
+        setChannel(props.channel);
+    const handleSendMessage = async (event) => {
+        if (!ref || !ref.current.value) return;
+        if (event.key != null && event.key != 'Enter') return;
+        await sendMessageToChannel(props.channel.id, ref.current.value);
+        ref.current.value = null;
+    }
 
     return (
         <div className="chat-root">
             <div className="chat-messages">
-                {messages.map(current => (<Message
-                    key={current.id+'message'}
-                    content={current.content}
-                    date={current.created_at}
-                    sender={current.user.avatar}
-                    sent={current.user.id == user.id}
-                ></Message>))}
+                {messages.map((current) => {
+                    return (
+                        <Message
+                            key={current.id}
+                            sender={current.user?.avatar}
+                            content={current.content}
+                            date={new Date(current.created_at).toTimeString().slice(0,5)}
+                            sent={current.userId == user.id}></Message>
+                    )
+                })}
             </div>
-            <TextInput color="#7F8C8D" text="Votre message..." bgColor="#ECF0F1" button={<Send handleClick={() => addMessage({
-                id: 0,
-                content: 'test',
-                created_at: '12:12',
-                user: {
-                    avatar: 'url("https://cdn.intra.42.fr/users/d059badf1d05f4365aa5a664419b6dc1/shalimi.jpg")',
-                    id: 117217
-                }
-            })}></Send>}></TextInput>
+            <TextInput ref={ref} color="#7F8C8D" text="Votre message..." bgColor="#ECF0F1" onKeyDown={handleSendMessage} button={<Send handleClick={handleSendMessage}></Send>}></TextInput>
         </div>
     )
 }

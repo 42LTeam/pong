@@ -1,4 +1,4 @@
-import React from 'react';
+import Avatar from "../utils/Avatar";
 
 export type MessageProps = {
     sender: any,
@@ -14,7 +14,7 @@ export default function Message (props: MessageProps){
 
     return (
         <div className={rootClassName}>
-            <div className="chat-message-avatar"></div>
+            <Avatar height="30px" width="30px" url={props.sender}></Avatar>
             <div className={bubbleClassName}>{props.content}</div>
             <div className="chat-message-time">{props.date}</div>
         </div>

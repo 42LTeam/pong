@@ -10,6 +10,7 @@
     align-self: stretch;
     border-radius: 10px;
     overflow-x: hidden;
+    flex-shrink: 0;
 }
 
 .textinput-root-focus {

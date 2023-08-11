@@ -7,6 +7,7 @@ import {PrismaModule} from "../prisma/prisma.module";
     controllers: [ChannelController],
     providers: [ChannelService],
     imports: [PrismaModule],
+    exports: [ChannelService]
 
 })
 export class ChannelModule {}
