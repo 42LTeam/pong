@@ -24,6 +24,7 @@ jobs:
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
           docker volume rm $(docker volume ls -qf dangling=true)
           docker system prune -af
+          sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
 
         continue-on-error: true
