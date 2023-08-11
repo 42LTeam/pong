@@ -21,7 +21,6 @@ jobs:
 
       - name: Cleaning Pong's Folder + docker prune + erase all volumes
         run: |
-#          sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/*
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/*
           docker-compose -f down 
           docker system prune -a
