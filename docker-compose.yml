@@ -22,7 +22,7 @@ services:
       context: .
     volumes:
       - ./front:/usr/src/app
-    command: npm run build
+    command: npm run dev
     depends_on:
       - api
       - postgres
