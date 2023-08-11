@@ -23,7 +23,7 @@ jobs:
         run: |
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
-          docker compose -f docker-compose.yml down 
+          docker-compose -f down 
           docker system prune -a
           docker volume rm $(filter-out local,$(shell docker volume ls | grep $(NAME)))
 
