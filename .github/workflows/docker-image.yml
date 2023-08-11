@@ -28,7 +28,7 @@ jobs:
 
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 #       The actions/checkout action is a built-in action provided by GitHub. The @v2 tag indicates that version 2 of the
 #       action should be used. This action performs the task of cloning the repository's source code from the default branch
 #       (usually main or master, here it's dev set up as default) into the Actions runner environment.
