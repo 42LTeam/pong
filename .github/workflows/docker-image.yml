@@ -24,7 +24,8 @@ jobs:
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/*
           docker-compose -f down 
           docker system prune -a
-          docker volume rm $(filter-out local,$(shell docker volume ls | grep $(NAME)))
+          docker volume rm $(docker volume ls | grep $(NAME) | awk '{print $2}') 2>/dev/null || true
+
 
 
       - name: Checkout code
