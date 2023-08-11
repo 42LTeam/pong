@@ -27,12 +27,6 @@ jobs:
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/*
 
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-
-
       - name: Checkout code
         uses: actions/checkout@v2
 #       The actions/checkout action is a built-in action provided by GitHub. The @v2 tag indicates that version 2 of the
