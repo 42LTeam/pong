@@ -1,8 +1,8 @@
 import Header from "./header/Header";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import SocialBody from "./social/SocialBody";
-import {useContext} from "react";
-import {ApplicationContext} from "./Auth";
+import {useContext, useEffect, useState} from "react";
+import {AuthContext} from "./Auth";
 
 
 import Setting from "./settingspage/Settings";
@@ -20,13 +20,17 @@ const PATHS = {
 };
 
 const Application = function (){
-    const user = useContext(ApplicationContext)
+    const user = useContext(AuthContext);
+
     if (!user)
         return (
             <div>
                 Ah ouais chaud t'es pas log
             </div>
         );
+
+
+
 
     return (
         <>

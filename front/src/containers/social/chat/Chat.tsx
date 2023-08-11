@@ -1,7 +1,7 @@
 import TextInput from "../../../components/utils/TextInput";
 import {useContext, useEffect, useRef, useState} from "react";
 import Message from "../../../components/chat/Message";
-import {ApplicationContext} from "../../Auth";
+import {AuthContext} from "../../Auth";
 import "../../../css/chatBody.css"
 import Send from "../../../components/svg/Send";
 import {getChannelMessages, sendMessageToChannel, socket} from "../../../api";
@@ -13,7 +13,7 @@ interface ChatProps {
 export default function Chat (props:ChatProps){
     const [messages, setMessages] = useState([]);
     const [channel, setChannel] = useState(props.channel);
-    const user = useContext(ApplicationContext);
+    const user = useContext(AuthContext);
     const ref = useRef(null);
 
     useEffect(() => {

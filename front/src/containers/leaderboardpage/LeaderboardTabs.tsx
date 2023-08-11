@@ -2,13 +2,13 @@ import React, { useContext } from "react";
 import {useState} from "react";
 
 import LeaderboardTab from "./LeaderboardTab";
-import { ApplicationContext } from "../Auth";
+import { AuthContext } from "../Auth";
 
 import "../../css/leaderboard.css"
 
 export default function LeaderboardTabs(){
 
-    const user = useContext(ApplicationContext);
+    const user = useContext(AuthContext);
     const [state, setState] = useState("Total xp");
     var placement: number = 1;
 

@@ -12,7 +12,7 @@ export interface User {
     id: number,
 }
 
-export const ApplicationContext = createContext<User | undefined>(undefined);
+export const AuthContext = createContext<User | undefined>(undefined);
 
 function Auth() {
     const [wsConnected, setConnected] = useState(false);
@@ -58,9 +58,9 @@ function Auth() {
 
 
     return (
-        <ApplicationContext.Provider value={user}>
+        <AuthContext.Provider value={user}>
             <Application></Application>
-        </ApplicationContext.Provider>
+        </AuthContext.Provider>
     );
 }
 

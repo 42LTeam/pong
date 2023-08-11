@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import "../../css/settings.css";
-import { ApplicationContext } from "../Auth";
+import { AuthContext } from "../Auth";
 import { updateUserAvatar, updateUserUsername } from "../../api";
 import ButtonSetting from "../../components/utils/Button";
 
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function Settings(props: Props) {
-    const user = useContext(ApplicationContext);
+    const user = useContext(AuthContext);
 
     const [username, setUsername] = useState(user.username);
     const [avatarUrl, setAvatarUrl] = useState(user.avatar);

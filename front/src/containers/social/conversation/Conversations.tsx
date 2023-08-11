@@ -2,15 +2,21 @@ import "../../../css/chat.css"
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
 import {useContext, useState} from "react";
-import {ApplicationContext} from "../../Auth";
+import {AuthContext} from "../../Auth";
 import {getChannels} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 
-export default function Conversations({ state, setState }){
-    const [conversations, setConversations] = useState(null);
+type Props = {
+    state: any,
+    setStare: any,
+    newConversations?: any[],
+}
+
+export default function Conversations({ state, setState, newConversations }){
+    const [conversations, setConversations] = useState([]);
     const [popUpPosition, setPopUpPosition] = useState(null);
 
-    const user = useContext(ApplicationContext)
+    const user = useContext(AuthContext)
 
 
     const handlePopUp = (event) => {
