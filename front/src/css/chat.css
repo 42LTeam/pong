@@ -13,6 +13,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
+    flex: 15%;
     align-self: stretch;
 }
 
@@ -28,9 +29,6 @@
 }
 
 
-
-
-
 .conversations-separator{
     display: flex;
     padding: 0 10px;
@@ -38,6 +36,15 @@
     align-items: center;
     align-self: stretch;
 }
+
+.conversations-separator:hover .conversations-separator-text{
+    color: #ECF0F1;
+}
+
+.conversations-separator-icon {
+    cursor: pointer;
+}
+
 
 .conversations-separator-text{
     color: #7F8C8D;
@@ -75,7 +82,7 @@
 .conversation-username{
     color: #ECF0F1;
     text-align: center;
-    font-family: Krub, serif;
+    font-family: "Kulim Park", serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -85,7 +92,7 @@
 .conversation-preview{
     color: #ECF0F1;
     text-align: center;
-    font-family: Krub, serif;
+    font-family: "Kulim Park", serif;
     font-size: 8px;
     font-style: normal;
     font-weight: 300;
@@ -101,7 +108,7 @@
     align-self: stretch; 
     border-radius: 10px;
     background: #ECF0F1;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); 
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 
 /*A CHECKER : le css de figma ressmeble a R*/
@@ -148,13 +155,12 @@
     justify-content: center;
     color: #ECF0F1;
     text-align: center;
-    font-family: Kulim Park;
+    font-family: Kulim Park, serif;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
 }
-/*Pas sur de ca*/
 
 .text-input{
     border: none;

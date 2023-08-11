@@ -66,4 +66,10 @@ export class MessageController {
     const isRead = await this.messageService.isMessageReadByUser(messageId, userId);
     return { read: isRead };
   }
+
+  @Get('channel/:id/last')
+  async getLastMessageInChannel(@Param('id', ParseIntPipe) channelId: number): Promise<Message> {
+    return this.messageService.getLastMessageInChannel(channelId);
+  }
+  
 }

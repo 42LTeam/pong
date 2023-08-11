@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post, Body, ParseIntPipe, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
-import { Channel, UserChannel } from '@prisma/client';
+import { Channel, Message, UserChannel } from '@prisma/client';
 import { ChannelService } from './channel.service';
 import { IsNotEmpty, IsNumber, IsString, IsBoolean  } from '@nestjs/class-validator';
 
@@ -85,6 +85,6 @@ export class ChannelController {
   @Get('messages/:id')
   async getChannelMessages(@Param('id') id: number): Promise<Channel[] | null> {
     return this.channelService.getChannelMessages(Number(id));
-  }
+  } 
 
 }

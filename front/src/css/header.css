@@ -19,6 +19,27 @@
     line-height: normal;
 }
 
+.header-tabs {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    align-self: stretch;
+}
+
+.header-tab {
+    transition: 100ms;
+    transition-timing-function: ease-out;
+}
+
+.header-tab:hover {
+    transform: scale(1.4);
+    filter: invert(98%) sepia(2%) saturate(260%) hue-rotate(144deg) brightness(95%) contrast(100%);
+}
+
+
+
 .navigation {
     display: flex;
     padding: 10px;

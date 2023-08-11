@@ -1,43 +1,24 @@
-DB=pong_docker-nest-postgres
-PG=pong_pgadmin
-REDIS=pong_redis
+NAME=$(shell basename $(CURDIR))
 
-all: build up
+CMD=docker compose -f
+VOLUMES=$(filter-out local,$(shell docker volume ls | grep $(NAME)))
+DATA=./data/
 
-VOLUMES = docker volume ls -q
-DB=pong_docker-nest-postgres
-PG=pong_pgadmin
-REDIS=pong_redis
+all:
+	$(CMD) docker-compose.yml up --build -d
 
 build:
-	@docker compose -f docker-compose.yml build
+	$(CMD) docker-compose.yml build
 
-volumes:
-	@docker volume ls -q
-
-rmvol:
-	@docker volume rm $(DB) $(PG) $(REDIS)
+re: down up
 
 up:
-	@docker compose -f docker-compose.yml up -d
+	$(CMD) docker-compose.yml up -d
 
 down:
-	@docker compose -f docker-compose.yml down
+	$(CMD) docker-compose.yml down 
 
-debug: build
-	@docker compose -f docker-compose.yml up
-
-stop:
-	@docker compose -f docker-compose.yml stop
-
-prune:
-	@docker system prune -a
-
-re: stop up
-
-rebuild: stop down build up
-	@docker ps
-clean: stop down
-
-.PHONY: all build up down debug stop clean
-
+rmvol:	down
+	 docker volume rm $(VOLUMES)
+	
+.PHONY: all build re up down rmvol

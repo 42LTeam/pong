@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User, UserFriendship, Friendship, Block } from '@prisma/client';
+import {Status, User} from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -39,10 +39,16 @@ export class UserService {
   }
 
   async updateUserName(id: number, username: string): Promise<User> {
+    const existingUser = await this.prisma.user.findUnique({ where: { username } });
+
+    if (existingUser && existingUser.id !== id) {
+      throw new ConflictException('Username is already taken');
+    }
+
     return this.prisma.user.update({
       where: { id },
       data: {
-        username: username
+        username,
       },
     });
   }
@@ -51,29 +57,74 @@ export class UserService {
     return this.prisma.user.delete({ where: { id } });
   }
 
-  async getFriendsOfUser(id: number): Promise<User[]> {
-    const friendships = await this.prisma.userFriendship.findMany({
-      where: { userId: id, acceptedAt: { not: null } },
-      include: { friendship: true }
-    });
-  
-    const friendshipIds = friendships.map(f => f.friendshipId);
-  
-    const friendsUserFriendships = await this.prisma.userFriendship.findMany({
+
+
+
+  async getFriendsOfUser(id: number, options: {startWith?: string, online?: boolean} = {}): Promise<User[]> {
+    const friendShips = await this.prisma.userFriendship.findMany({
       where: {
-        friendshipId: { in: friendshipIds },
-        userId: { not: id }
+        OR: [
+          {
+            targetId: id,
+            acceptedAt: {
+              not: null,
+            },
+          },
+          {
+            senderId: id,
+            acceptedAt: {
+              not: null,
+            },
+          },
+        ],
+      },
+      select: {
+        senderId: true,
+        targetId: true,
       },
     });
   
-    const friendUserIds = friendsUserFriendships.map(f => f.userId);
+    const ids = friendShips.reduce((friendIds, current) => {
+      if (current.senderId === id) {
+        friendIds.push(current.targetId);
+      } else {
+        friendIds.push(current.senderId);
+      }
   
-    const friends = await this.prisma.user.findMany({
-      where: { id: { in: friendUserIds } },
-    });
+      return friendIds;
+    }, []);
   
-    return friends;
+    return this.prisma.user.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+        AND: [
+            (options.online ? {status: "ONLINE"}: {}), (options.startWith ? {username: { startsWith: options.startWith}} : {})
+        ]
+      }
+    })
   }
+  
+
+
+  async search(id, query: string): Promise<User[]>{
+    return this.prisma.user.findMany({
+      where : {
+        username: {
+          startsWith: query,
+        },
+        AND: [{
+          id: {
+            not: id,
+          }
+        }]
+
+      }
+    });
+  }
+
+
 
   async getBlocksOfUser(id: number): Promise<User[]> {
     const blocks = await this.prisma.block.findMany({
@@ -83,9 +134,32 @@ export class UserService {
 
     if (!blocks) throw new Error("No blocked users found");
 
-    const blockedUsers = blocks.map(block => block.receivedBy);
+    return blocks.map(block => block.receivedBy);
 
-    return blockedUsers;
   }
+
+  async getUserStatusById(id: number): Promise<Status> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: { status: true },
+    });
+
+    if (!user) {
+      throw new Error(`No user found for id: ${id}`);
+    }
+
+    return user.status;
+  }
+
+  async updateUserStatusById(id: number, newStatus: Status): Promise<Status> {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { status: newStatus },
+    });
+
+    return user.status;
+  }
+
+
 }
 

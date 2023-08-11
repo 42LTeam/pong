@@ -1,0 +1,24 @@
+.removable-root{
+    display: flex;
+    padding: 2px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 10px;
+    background: #34495E;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.removable-root:hover{
+    filter: brightness(80%);
+}
+
+.removable-content{
+    color: #7F8C8D;
+    font-family: Kulim Park, serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}

@@ -3,8 +3,8 @@
     padding: 10px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 5px;
-    flex: 1 0 0;
+    gap: 10px;
+    flex: 85%;
     align-self: stretch;
 
 }
@@ -65,25 +65,6 @@
     background: #2D3843;
 }
 
-.friend-add-button {
-    user-select: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #2ECC71;
-    padding: 5px;
-    color: #ECF0F1;
-    text-align: center;
-    font-family: Kulim Park, serif;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-}
-
-.friend-add-button-current {
-    background: none;
-    color: #2ECC71;
-}
 
 .friend{
     display: flex;
@@ -97,7 +78,44 @@
     background: #34495E;
 }
 
-/*
-The change of svg colors can be computed on :
-https://codepen.io/sosuke/pen/Pjoqqp 
-*/
+.friend:hover .approve-friend-button{
+    background-color: #2C3E50;
+}
+
+
+.approve-friend-buttons {
+    display: flex;
+    padding: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.approve-friend-button {
+    background-color: #34495E;
+    padding: 5px;
+    border-radius: 90px;
+    fill: #95A5A6;
+}
+
+.approve:hover{
+    fill: #2ECC71;
+}
+
+.decline:hover{
+    fill: #E74C3C;
+}
+
+.newmessage-suggestions{
+    overflow-y: scroll;
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+}

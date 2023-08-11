@@ -1,31 +1,27 @@
-import  {useEffect, useState} from 'react';
+import {createContext, useEffect, useState} from 'react';
 
 
-import axios from "axios";
-import {socket} from "../api";
+import {authSocketId, getStatus, socket} from "../api";
 import Application from "./Application";
 import "../css/main.css";
 
 
+export interface User {
+    avatar: String,
+    username: String,
+    id: number,
+}
+
+export const ApplicationContext = createContext<User | undefined>(undefined);
+
 function Auth() {
     const [wsConnected, setConnected] = useState(false);
 
-    // const [user, setUser] = useState({
-    //     id: 8,
-    //     avatar: "https://cdn.intra.42.fr/users/fa69acc1dfa3b6097be387091ceda771/rmonney.jpg",
-    //     username: "rmonney"
-    //   });
-
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User>(null);
 
     useEffect(() => {
-        var config = {
-            method: 'get',
-            url: 'http://localhost:3000/auth/status',
-            withCredentials: true,
-        };
         if (!user)
-        axios(config)
+        getStatus()
             .then(function (response) {
                 setUser(response.data)
 
@@ -54,24 +50,17 @@ function Auth() {
         };
 
     }, [wsConnected]);
-    const config = {
-        method: 'get',
-        url: 'http://localhost:3000/auth/socketId',
-        withCredentials: true,
-        headers: {
-            clientsocketid: socket.id,
-        }
-    };
+
     if (user && wsConnected)
-        axios(config).then((response) => {
+        authSocketId(socket.id).then((response) => {
             socket.emit('register', {target: response.data});
         });
 
 
     return (
-        <>
-            <Application user={user}></Application>
-        </>
+        <ApplicationContext.Provider value={user}>
+            <Application></Application>
+        </ApplicationContext.Provider>
     );
 }
 
