@@ -1,0 +1,44 @@
+.header{
+    display: flex;
+    height: 5%;
+    padding: 0 10px;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    align-self: stretch;
+    border-radius: 10px;
+}
+
+.header-title {
+    color: #ECF0F1;
+    text-align: center;
+    font-family: Keania One, serif;
+    font-size: 19px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.header-tabs {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    align-self: stretch;
+}
+
+.header-tab {
+    transition: 100ms;
+    transition-timing-function: ease-out;
+}
+
+.header-tab:hover {
+    transform: scale(1.4);
+    filter: invert(98%) sepia(2%) saturate(260%) hue-rotate(144deg) brightness(95%) contrast(100%);
+}
+
+.navigation{
+    display: flex;
+    flex-direction: row;
+}

@@ -1,0 +1,141 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+}
+
+#root {
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    background: linear-gradient(180deg, #34495E 0%, #2980B9 52.08%, #34495E 100%), no-repeat;
+
+}
+
+.center{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.avatar-root {
+    border-radius: 90px;
+}
+
+.bubble{
+    border-radius: 10px;
+    background: #2C3E50;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.vertical-separator {
+    width: 1px;
+    align-self: stretch;
+    background: #34495E;
+}
+
+.horizontal-separator {
+    height: 1px;
+    background: #34495E;
+    align-self: stretch;
+}
+
+h1 {
+    color: #FFF;
+    font-family: "Kulim Park", serif;
+    margin: 0;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+h2{
+    color: #ECF0F1;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+h3 {
+    margin: 0;
+    color: #7F8C8D;
+    font-family: "Kulim Park", serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.align-left {
+    display: flex;
+    padding: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+input[type="checkbox"]{
+    width: 22px;
+    height: 22px;
+    accent-color: #2ECC71;
+}
+
+.button {
+    background: linear-gradient(0deg, #7F8C8D 0%, #7F8C8D 100%), #2ECC71;
+    cursor: not-allowed;
+    user-select: none;
+    padding: 5px;
+    color: #ECF0F1;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    font-style: normal;
+    line-height: normal;
+    white-space: nowrap;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+
+.button-clickable {
+    background: #2ECC71;
+    cursor: pointer;
+}
+
+
+
+
+
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #2C3E50 transparent;
+}
+
+/* Chrome, Edge and Safari */
+*::-webkit-scrollbar {
+    width: 5px;
+}
+*::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #2C3E50;
+}
+

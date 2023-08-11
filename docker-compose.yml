@@ -1,0 +1,68 @@
+services:
+  api:
+    build:
+      dockerfile: ./back/Dockerfile
+      context: .
+      target: development
+    env_file:
+        - .env
+    volumes:
+      - ./back:/usr/src/app
+    command: sh -c "npm install && npx prisma generate && npx tsc && (date | npm run migrate) && npm run start:migrate:prod"
+    ports:
+      - 3000:3000
+      - 8001:8001
+    depends_on:
+      - postgres
+    networks:
+      - net
+
+  front:
+    build:
+      dockerfile: ./front/Dockerfile
+      context: .
+    volumes:
+      - ./front:/usr/src/app
+    command: npm run dev
+    depends_on:
+      - api
+      - postgres
+    ports:
+      - 5173:5173
+    networks:
+      - net
+  postgres:
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - docker-nest-postgres:/var/lib/postgresql/data
+    networks:
+      - net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    environment:
+      GUNICORN_ACCESS_LOGFILE: '/dev/null'
+    ports:
+      - '5050:80'
+    volumes:
+      - pgadmin:/root/.pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - net
+
+volumes:
+  docker-nest-postgres:
+  pgadmin:
+  front:
+
+networks:
+  net:
+    driver: bridge

@@ -1,0 +1,9 @@
+.DS_Store
+.env
+back/dist/
+back/node_modules/
+front/dist/
+front/node_modules/
+node_modules/
+.idea
+*/node_modules/

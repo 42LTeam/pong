@@ -1,0 +1,114 @@
+.friends{
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 85%;
+    align-self: stretch;
+    overflow: auto;
+
+}
+
+.friend-tabs{
+    height: 10%;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.friend-button{
+    user-select: none;
+    cursor: default;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
+
+
+.friend-button-focused {
+    background: #34495E ! important;
+}
+
+.friend-tab{
+    user-select: none;
+    color: #7F8C8D;
+    text-align: center;
+    font-family: Kulim Park, serif;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.friend-tab-current {
+    border-radius: 10px;
+    background: #34495E;
+}
+
+.friend-tab:hover {
+    border-radius: 10px;
+    background: #2D3843;
+}
+
+
+.friend{
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    gap: 5px;
+    align-self: stretch;
+}
+
+.friend:hover{
+    background: #34495E;
+}
+
+.friend:hover .approve-friend-button{
+    background-color: #2C3E50;
+}
+
+
+.approve-friend-buttons {
+    display: flex;
+    padding: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.approve-friend-button {
+    background-color: #34495E;
+    padding: 5px;
+    border-radius: 90px;
+    fill: #95A5A6;
+}
+
+.approve:hover{
+    fill: #2ECC71;
+}
+
+.decline:hover{
+    fill: #E74C3C;
+}
+
+.newmessage-suggestions {
+    overflow-y: scroll;
+    display: flex;
+    height: 250px;
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    flex: 1 0 0;
+}
