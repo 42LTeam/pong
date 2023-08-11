@@ -26,6 +26,10 @@ jobs:
           docker system prune -a
           docker volume rm $(docker volume ls | grep $(NAME) | awk '{print $2}') 2>/dev/null || true
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
 
 
       - name: Checkout code
