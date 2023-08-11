@@ -6,6 +6,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import HeaderNavigationIcon from "./HeaderNavigationIcon";
 
 import "../../css/header.css"
+import ChatButton from "../../components/svg/ChatButton";
+import PlayButton from "../../components/svg/ChatButton";
+import LeaderboardButton from "../../components/svg/ChatButton";
 
 const NavigationBubble = () => {
     const navigate = useNavigate();

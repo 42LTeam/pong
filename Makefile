@@ -1,6 +1,6 @@
 NAME=$(shell basename $(CURDIR))
 
-CMD=docker compose -f
+CMD=docker-compose -f
 VOLUMES=$(filter-out local,$(shell docker volume ls | grep $(NAME)))
 DATA=./data/
 

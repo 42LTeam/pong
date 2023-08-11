@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "../../css/social/chat.css"
+import "../../css/chat.css"
 
 export default function ChatButton() {
     return (
