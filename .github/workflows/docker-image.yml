@@ -21,10 +21,11 @@ jobs:
 
       - name: Cleaning Pong's Folder + docker prune + erase all volumes
         run: |
-          sudo rm -rf /home/ubuntu/actions-runner/_work/pong/*
-          docker-compose -f down 
-          docker system prune -a
+          docker-compose -f /home/ubuntu/actions-runner/_work/pong/pong/docker-compose.yml down || echo "File doesn't exist"
+          echo y | docker system prune -a
           docker volume rm $(docker volume ls | grep $(NAME) | awk '{print $2}') 2>/dev/null || true
+          sudo rm -rf /home/ubuntu/actions-runner/_work/pong/*
+
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -50,6 +51,6 @@ jobs:
       - name: Build and push API image
         run: |
           echo "$MY_ENV_VARIABLE" > .env
-          docker-compose up -d --build
+          docker-compose -f /home/ubuntu/actions-runner/_work/pong/pong/docker-compose.yml up -d --build
         env:
           MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
