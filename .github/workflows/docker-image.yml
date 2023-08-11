@@ -3,7 +3,7 @@ name: Build Docker Images
 on:
   push:
     branches:
-      - dev
+      - 21-workflow-fix-docker-image
 
 jobs:
   build-and-push:
@@ -15,7 +15,7 @@ jobs:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
       PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
-      DOCKER_SERVER: 195.15.213.225:2375
+      DOCKER_SERVER: ${{ secrets.DOCKER_IP }}
 
     steps:
 
@@ -23,6 +23,10 @@ jobs:
         run: |
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
+          docker volume rm $(docker volume ls -qf dangling=true)
+          docker system prune -af
+
+        continue-on-error: true
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -34,6 +38,6 @@ jobs:
         run: |
           echo "$MY_ENV_VARIABLE" > .env
           docker-compose up -d --build
+          docker-compose logs
         env:
           MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
-        
