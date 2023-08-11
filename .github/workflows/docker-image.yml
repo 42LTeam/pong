@@ -27,7 +27,7 @@ jobs:
           docker compose -f docker-compose.yml down 
           docker system prune -a
           docker volume rm $(filter-out local,$(shell docker volume ls | grep $(NAME)))
-m
+
 
       - name: Checkout code
         uses: actions/checkout@v2
