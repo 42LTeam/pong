@@ -1,6 +1,4 @@
-import React from 'react';
-
-import "../../css/social/friend.css";
+import "../../css/friend.css"
 
 export default function FriendButton({state, handleClick,style}){
     return (

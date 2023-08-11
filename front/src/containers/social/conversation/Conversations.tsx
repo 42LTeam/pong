@@ -1,13 +1,10 @@
-import React from "react";
-import {useContext, useState} from "react";
-
+import "../../../css/chat.css"
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
-import NewMessagePopup from "./NewMessagePopup";
-import {ApplicationContext} from "../../root/Auth";
+import {useContext, useState} from "react";
+import {ApplicationContext} from "../../Auth";
 import {getChannels} from "../../../api";
-
-import "../../../css/social/chat.css";
+import NewMessagePopup from "./NewMessagePopup";
 
 export default function Conversations({ state, setState }){
     const [conversations, setConversations] = useState(null);

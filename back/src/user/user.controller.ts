@@ -1,10 +1,10 @@
 import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { AuthenticatedGuard } from "../auth/guards/authenticated.guard";
+import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
-import { Roles } from '../auth/roles.decorator';
+import { Roles } from 'src/auth/roles.decorator';
 import {Channel, Status, User} from "@prisma/client";
 
 class CreateUserDto {
@@ -28,6 +28,7 @@ class CreateUserDto {
   @ApiProperty()
   xp: number;
 }
+
 
 enum Role {
   USER = 0,
@@ -62,7 +63,7 @@ export class UserController {
   constructor(private userService: UserService) { }
 
   @Post()
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN)  // For admin restrictions
   @ApiBody({ type: CreateUserDto })
   @ApiOperation({ summary: 'Create a user' })
   async createUser(
@@ -99,22 +100,21 @@ export class UserController {
   }
 
   @Get('friend/:id')
-  @ApiOperation({ summary: 'Get all friends of user' })
+  @ApiOperation({ summary: 'Get friend of user' })
   async getFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id));
   }
 
-  // @Get('channels')
-  // @ApiOperation({ summary: 'Get channels of user' })
-  // async getChannelOfUser(@Req() req): Promise<Channel[]> {
-  //   const user = await req.user;
-  //   return this.userService.getChannelOfuser(Number(user.id));
-  // }
-  // Ca fait planter chet moi :(
+  @Get('channels')
+  @ApiOperation({ summary: 'Get channels of user' })
+  async getChannelOfUser(@Req() req): Promise<Channel[]> {
+    const user = await req.user;
+    return this.userService.getChannelOfuser(Number(user.id));
+  }
 
 
   @Get('friend/online/:id')
-  @ApiOperation({ summary: 'Get online friends of user' })
+  @ApiOperation({ summary: 'Get friend of user' })
   async getOnlineFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id), {online: true});
   }
@@ -159,4 +159,5 @@ export class UserController {
   ): Promise<Status> {
     return this.userService.updateUserStatusById(id, updateUserStatusDto.status);
   }
+
 }

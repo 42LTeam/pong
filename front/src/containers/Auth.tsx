@@ -1,16 +1,15 @@
-import React from 'react';
 import {createContext, useEffect, useState} from 'react';
 
-import {authSocketId, getStatus, socket} from "../../api";
-import Application from "./Application";
 
-import "../../css/main.css";
+import {authSocketId, getStatus, socket} from "../api";
+import Application from "./Application";
+import "../css/main.css";
+
 
 export interface User {
     avatar: String,
     username: String,
     id: number,
-    xp: number,
 }
 
 export const ApplicationContext = createContext<User | undefined>(undefined);

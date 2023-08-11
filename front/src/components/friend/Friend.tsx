@@ -1,4 +1,3 @@
-import React from 'react';
 import {Children} from "react";
 import Avatar from "../utils/Avatar";
 

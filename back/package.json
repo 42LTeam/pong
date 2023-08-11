@@ -24,7 +24,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "start:migrate:prod": "npm run start:dev"
+    "start:migrate:prod": "npx prisma migrate deploy && npm run start:dev"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.0.1",

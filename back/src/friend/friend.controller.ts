@@ -21,7 +21,7 @@ class CreateFriendRequestDto {
 @Controller('friend')
 @UseGuards(AuthenticatedGuard)
 export class FriendController {
-  constructor(private friendService: FriendService) { }
+  constructor(private friendService: FriendService) {}
 
 
 

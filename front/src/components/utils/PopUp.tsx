@@ -1,7 +1,5 @@
-import React from 'react';
 import {Children, useEffect, useRef} from 'react';
-
-import "../../css/utils/popup.css"
+import "../../css/popup.css"
 
 export type PopUpProps = {
     children?: any,

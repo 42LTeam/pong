@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {Channel, Status, User} from '@prisma/client';
 
@@ -39,16 +39,10 @@ export class UserService {
   }
 
   async updateUserName(id: number, username: string): Promise<User> {
-    const existingUser = await this.prisma.user.findUnique({ where: { username } });
-
-    if (existingUser && existingUser.id !== id) {
-      throw new ConflictException('Username is already taken');
-    }
-
     return this.prisma.user.update({
       where: { id },
       data: {
-        username,
+        username: username
       },
     });
   }
@@ -81,37 +75,19 @@ export class UserService {
   async getFriendsOfUser(id: number, options: {startWith?: string, online?: boolean} = {}): Promise<User[]> {
     const friendShips = await this.prisma.userFriendship.findMany({
       where: {
-        OR: [
-          {
-            targetId: id,
-            acceptedAt: {
-              not: null,
-            },
-          },
-          {
-            senderId: id,
-            acceptedAt: {
-              not: null,
-            },
-          },
-        ],
+        targetId: id,
+        AND: [{
+              acceptedAt: {
+                not: null,
+              }
+            }]
       },
-      select: {
+      select:{
         senderId: true,
-        targetId: true,
-      },
-    });
-  
-    const ids = friendShips.reduce((friendIds, current) => {
-      if (current.senderId === id) {
-        friendIds.push(current.targetId);
-      } else {
-        friendIds.push(current.senderId);
       }
-  
-      return friendIds;
-    }, []);
-  
+    });
+
+    const ids = friendShips.map(current => current.senderId);
     return this.prisma.user.findMany({
       where: {
         id: {
@@ -123,7 +99,6 @@ export class UserService {
       }
     })
   }
-  
 
 
   async search(id, query: string): Promise<User[]>{

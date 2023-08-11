@@ -1,6 +1,5 @@
-import React from 'react';
 
-type Props = {
+interface Props {
     username: string,
     message : string,
     handleClick: any,

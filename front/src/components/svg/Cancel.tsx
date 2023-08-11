@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Cancel({color, tiny}: {color?: string, tiny?: boolean}){
     return (
         <svg {...(tiny ? {style : {transform: 'scale(0.8)'}} : {})} xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">

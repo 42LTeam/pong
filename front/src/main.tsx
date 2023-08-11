@@ -4,7 +4,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import Auth from "./containers/Root/Auth"
+import Auth from "./containers/Auth"
 
 import "./css/main.css"
 

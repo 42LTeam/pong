@@ -1,13 +1,11 @@
-import React from "react";
-import {useContext, useState} from "react";
-
+import "../../../css/friend.css"
 import FriendTabs from "./FriendTabs";
+import {useContext, useState} from "react";
 import AddFriend from "./AddFriend";
 import Friendlist from "./FriendList";
-import {ApplicationContext} from "../../Root/Auth";
+import {ApplicationContext} from "../../Auth";
 import {getPath} from "../../../api";
 
-import "../../../css/friend.css"
 
 const states = ["En ligne","Tous","En attente","Bloqué","Ajouter"];
 const paths = ["/users/friend/online/","/users/friend/","/friend/friend-request/pending/","/block/blocked/"]

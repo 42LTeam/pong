@@ -1,7 +1,6 @@
-import React from "react";
-
 import FriendButton from "../../../components/friend/FriendButton";
 import ToggleButton from "../../../components/utils/ToggleButton";
+
 
 const addStates = [
     {

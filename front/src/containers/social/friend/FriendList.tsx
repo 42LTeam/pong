@@ -1,8 +1,7 @@
-import React from "react";
-import {useContext} from "react";
 
 import Friend from "../../../components/friend/Friend";
-import {ApplicationContext} from "../../root/Auth";
+import {useContext} from "react";
+import {ApplicationContext} from "../../Auth";
 import Approve from "../../../components/svg/Approve";
 import Decline from "../../../components/svg/Decline";
 import {acceptFriendship, declineFriendship} from "../../../api";

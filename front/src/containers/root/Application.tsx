@@ -33,7 +33,7 @@ const Application = function () {
             <BrowserRouter>
                 <Header />
                 <Routes>
-                    <Route path={PATHS.social} element={<ChatBody user={user}/>} />
+                    <Route path={PATHS.social} element={<Body key="chatbody"/>} />
                     <Route path={PATHS.home} element={<HomePage user={user}/>} />
                     <Route path={PATHS.settings} element={<Setting />} />
                     <Route path={`${PATHS.profile}/:userID`} element={<ProfilePage />} />

@@ -1,4 +1,4 @@
-import "../../css/utils/text-input.css"
+import "../../css/text-input.css"
 import {Children, forwardRef, useState} from "react";
 
 type Props = {

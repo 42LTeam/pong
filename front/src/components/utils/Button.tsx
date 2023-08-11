@@ -1,4 +1,3 @@
-import React from 'react';
 import {Children, useState} from "react";
 
 export type ButtonProps = {

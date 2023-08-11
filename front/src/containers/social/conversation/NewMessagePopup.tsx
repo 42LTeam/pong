@@ -1,14 +1,13 @@
-import React from "react";
-import {useContext, useState} from "react";
-
 import TextInput from "../../../components/utils/TextInput";
 import Button from "../../../components/utils/Button";
 import PopUp from "../../../components/utils/PopUp";
+import {useContext, useState} from "react";
 import Friend from "../../../components/friend/Friend";
 import {createChannel, getFriendOfUser, searchUser, sendChannelInvite} from "../../../api";
 import Removable from "../../../components/utils/Removable";
 import Cancel from "../../../components/svg/Cancel";
-import {ApplicationContext} from "../../root/Auth";
+import {ApplicationContext} from "../../Auth";
+
 
 type Props = {
     position: {left: number, top: number},
