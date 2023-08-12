@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, UseGuards, ParseIntPipe, Req } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, UseGuards, ParseIntPipe, Req, Query } from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Message } from '@prisma/client';
 import { MessageService } from './message.service';
@@ -48,9 +48,10 @@ export class MessageController {
   }
 
   @Get('user/:user')
-  async getMessageByUser(@Param('user') user: number): Promise<Message[] | null> {
-    return this.messageService.getMessageByUser(Number(user));
-  }
+async getMessageByUser(@Param('user') user: number, @Query('page') page?: string): Promise<Message[] | null> {
+    return this.messageService.getMessageByUser(Number(user), Number(page) || 1);
+}
+
 
   @Get('channel/:channel')
   async getMessageByChannel(@Param('channel') channel: number): Promise<Message[] | null> {

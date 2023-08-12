@@ -48,17 +48,21 @@ export class MessageService {
     });
   }
 
-  async getMessageByUser(userId: number): Promise<Message[]> {
+  async getMessageByUser(userId: number, page: number = 1): Promise<Message[]> {
+    const skip = (page - 1) * 100;
     return this.prisma.message.findMany({
-      where: {
-        userId: userId,
-      },
-      include: {
-        user: true,
-        channel: true,
-      }
+        where: {
+            userId: userId,
+        },
+        skip: skip,
+        take: 100,
+        include: {
+            user: true,
+            channel: true,
+        }
     });
-  }
+}
+
 
   async getMessageByChannel(channelId: number): Promise<Message[]> {
     return this.prisma.message.findMany({
