@@ -18,7 +18,7 @@ function Auth() {
     const [wsConnected, setConnected] = useState(false);
 
     const [user, setUser] = useState<User>(null);
-    const localhostback = process.env.LOCALHOST ? process.env.LOCALHOST + ':3000/auth/login' : 'http://localhost:3000/auth/login';
+    const localhostback = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':3000/auth/login' : 'http://localhost:3000/auth/login';
     useEffect(() => {
         if (!user)
         getStatus()
