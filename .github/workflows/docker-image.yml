@@ -20,7 +20,6 @@ jobs:
     steps:
       - name: Cleaning
         run: |
-#         Make files in the work directory writable for all users (use with caution)
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
           
 #          Stop and remove existing containers defined in docker-compose.yml
