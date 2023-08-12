@@ -95,7 +95,7 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
         sent.push(friendship.target.id);
       }
     }
-
+    
     for (const id of ids) {
       if (!forbidden.includes(id) && !sent.includes(id)) {
         forbidden.push(id);

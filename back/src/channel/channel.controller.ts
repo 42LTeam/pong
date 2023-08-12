@@ -9,44 +9,6 @@ import {
   IsBoolean,
   ArrayMinSize, IsArray, IsOptional
 } from '@nestjs/class-validator';
-/*
-class CreateChannelDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  creatorId: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  password: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsBoolean()
-  privated: boolean;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  created_at: Date;
-}
-
-class CreateUserChannelDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  userId: number;
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  channelId: number;
-}*/
 
 export class CreateChannelDto {
   @ApiProperty()

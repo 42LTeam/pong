@@ -29,7 +29,6 @@ class CreateUserDto {
   xp: number;
 }
 
-
 enum Role {
   USER = 0,
   ADMIN = 1,
