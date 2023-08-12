@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {Channel} from '@prisma/client';
-import {CreateChannelDto, SendInviteDto} from "./channel.controller";
-import { FriendService } from 'src/friend/friend.service';
+import { Channel } from '@prisma/client';
+import { CreateChannelDto, SendInviteDto } from "./channel.controller";
+import { FriendService } from '../friend/friend.service';
 
 @Injectable()
 export class ChannelService {
   constructor(
     private prisma: PrismaService,
+    @Inject(forwardRef(() => FriendService))
     private friendService: FriendService) {}
 
   async addInvite(id, userId){

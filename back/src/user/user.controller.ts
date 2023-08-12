@@ -1,10 +1,10 @@
 import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
-import { Roles } from 'src/auth/roles.decorator';
+import { Roles } from '../auth/roles.decorator';
 import {Channel, Status, User} from "@prisma/client";
 
 class CreateUserDto {

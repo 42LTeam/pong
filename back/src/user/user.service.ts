@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {Channel, Status, User} from '@prisma/client';
-import { FriendService } from 'src/friend/friend.service';
+import { FriendService } from '../friend/friend.service';
+import { query } from 'express';
+import { async } from 'rxjs';
 
 @Injectable()
 export class UserService {
   constructor(
     private prisma: PrismaService,
+    @Inject(forwardRef(() => FriendService))
     private friendService: FriendService) {}
 
   async createUser(id: number, username: string, secretO2FA: string, avatar: string, xp: number): Promise<User> {

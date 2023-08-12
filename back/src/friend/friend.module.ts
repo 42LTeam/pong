@@ -1,14 +1,15 @@
-import {Module} from "@nestjs/common";
+import {Module, forwardRef} from "@nestjs/common";
 import {FriendController} from "./friend.controller";
 import {FriendService} from "./friend.service";
 import {PrismaModule} from "../prisma/prisma.module";
 import {AdminController} from "./admin/admin.controller";
-import { UserService } from "src/user/user.service";
+import { UserService } from "../user/user.service";
+import { UserModule } from "../user/user.module";
 
 @Module({
     controllers: [FriendController, AdminController],
     providers: [FriendService, UserService],
-    imports: [PrismaModule],
-
+    imports: [PrismaModule, forwardRef(() => UserModule)],
+    exports: [FriendService],
 })
 export class FriendModule {}

@@ -59,20 +59,4 @@ export class FriendController {
     return this.friendService.declineFriendRequest(user.id, Number(friendshipId));
   }
 
-  @Get('friend-request/pending/:userId')
-  @ApiOperation({ summary: 'Get pending request' })
-  async getPendingFriends(@Param('userId') userId: number): Promise<any[]> {
-    return this.friendService.getPendingFriendRequests(Number(userId));
-  }
-
-
-
-
-  // @Get(':userId')
-  // @ApiOperation({ summary: 'Get friend' })
-  // async getFriends(@Param('userId') userId: number): Promise<User[]> {
-  //   return this.friendService.getFriends(Number(userId));
-  // }
-
-
 }
