@@ -1,8 +1,8 @@
 import Header from "./header/Header";
-import {BrowserRouter, Route, Routes, useLocation, useParams} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import SocialBody from "./social/SocialBody";
 import {createContext, useContext, useEffect, useState} from "react";
-import {AuthContext, User} from "./Auth";
+import {AuthContext} from "./Auth";
 
 import "../css/notification.css"
 import Setting from "./settingspage/Settings";
@@ -13,7 +13,7 @@ import Notification from "../components/utils/Notification";
 import {socket} from "../api";
 
 type ApplicationEngine = {
-    sendNotification: (key:number, title: string, content: string, image?: string) => void,
+    sendNotification: (key: number, title: string, content: string, image?: string, url?: string) => void,
     social: {
         newMessages: any[],
         newConversations: any[]
@@ -35,8 +35,8 @@ const Application = function (){
     const user = useContext(AuthContext);
     const [notifications, setNotifications] = useState<any[]>([]);
 
-    const sendNotification = (key: number, title: string, content: string, image?: string) => {
-        setNotifications([...notifications, {key, title, content, image}]);
+    const sendNotification = (key: number, title: string, content: string, image?: string, url?: string) => {
+        setNotifications([...notifications, {key, title, content, image, url}]);
     }
 
     const [application, setApplication] = useState<ApplicationEngine>({
@@ -62,8 +62,8 @@ const Application = function (){
     useEffect(() => {
         const onNewMessage = (args) => {
             addMessage(args);
-            if (window.location.pathname != "/social")
-                sendNotification(args.id, args.user.username, args.content, args.user.avatar);
+            if (!window.location.pathname.includes("/social"))
+                sendNotification(args.id, args.user.username, args.content, args.user.avatar, "/social/" + args.channelId);
         }
 
         socket.on('new-message', onNewMessage);
@@ -74,16 +74,17 @@ const Application = function (){
 
     }, [notifications]);
 
+
+    const handleNotificationClick = (url) => {
+        setNotifications([...notifications.filter(current => current.url != url)]);
+    }
+
     if (!user)
         return (
             <div>
                 Ah ouais chaud t'es pas log
             </div>
         );
-
-
-
-
 
     if (!application)
         setApplication({
@@ -109,7 +110,7 @@ const Application = function (){
                     <div className="notifications">
                         {notifications.reverse().map(current => {
                             return (
-                                <Notification {...current} ></Notification>
+                                <Notification {...current} close={handleNotificationClick} ></Notification>
                             )
                         })}
                     </div>

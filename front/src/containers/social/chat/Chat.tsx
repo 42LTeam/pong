@@ -1,12 +1,11 @@
 import TextInput from "../../../components/utils/TextInput";
-import {useContext, useEffect, useMemo, useRef, useState} from "react";
+import {useContext, useEffect,  useRef, useState} from "react";
 import Message from "../../../components/chat/Message";
 import {AuthContext} from "../../Auth";
 import "../../../css/chatBody.css"
 import Send from "../../../components/svg/Send";
-import {getChannelMessages, sendMessageToChannel, socket} from "../../../api";
+import {getChannelMessages, sendMessageToChannel} from "../../../api";
 import {ApplicationContext} from "../../Application";
-import {useParams} from "react-router-dom";
 
 interface ChatProps {
     channel: any,
@@ -30,7 +29,7 @@ export default function Chat (props:ChatProps){
     }, [channel]);
 
 
-    const toAdd = application.social.newMessages.filter(current => current.channelId == channel && messages.includes(current) == false);
+    const toAdd = application.social.newMessages.filter(current => current.channelId == channel && messages.map(c => c.id).includes(current.id) == false);
     if (toAdd.length){
         setMessages([...toAdd, ...messages]);
     }
@@ -47,7 +46,7 @@ export default function Chat (props:ChatProps){
     return (
         <div className="chat-root">
             <div className="chat-messages">
-                {messages.map((current) => {
+                {messages.filter((value, index, array) => array.indexOf(value) === index).map((current) => {
                     return (
                         <Message
                             key={current.id}

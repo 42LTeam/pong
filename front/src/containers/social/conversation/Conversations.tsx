@@ -8,7 +8,7 @@ import NewMessagePopup from "./NewMessagePopup";
 
 type Props = {
     state: any,
-    setStare: any,
+    setState: any,
 }
 
 export default function Conversations({ state, setState }: Props){

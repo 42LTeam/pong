@@ -4,12 +4,11 @@ import {useState} from "react";
 import Friends from "./friend/Friends";
 import Chat from "./chat/Chat";
 import {useParams} from "react-router-dom";
-import {channel} from "diagnostics_channel";
 
 export default function SocialBody(){
 
     const {channelId} = useParams();
-    const [state, setState]=useState((channelId as number) || null);
+    const [state, setState]=useState(Number.parseInt(channelId) || null);
     return (
             <div className="chatbody bubble">
                 <Conversations conversations={[]} state={state} setState={setState} ></Conversations>
