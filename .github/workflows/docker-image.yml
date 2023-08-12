@@ -18,7 +18,6 @@ jobs:
       DOCKER_SERVER: ${{ secrets.DOCKER_IP }}
 
     steps:
-
       - name: Cleaning
         run: |
 #         Make files in the work directory writable for all users (use with caution)
