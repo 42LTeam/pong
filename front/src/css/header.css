@@ -40,5 +40,19 @@
 
 .navigation{
     display: flex;
-    flex-direction: row;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    align-self: stretch;
+}
+
+.header-navigation-icon{
+    filter: invert(57%) sepia(10%) saturate(300%) hue-rotate(136deg) brightness(94%) contrast(88%);
+    cursor: pointer;
+}
+
+.header-navigation-icon-current{
+    filter: invert(95%) sepia(3%) saturate(148%) hue-rotate(145deg) brightness(100%) contrast(96%);
+    transform: scale(1.5);
 }
