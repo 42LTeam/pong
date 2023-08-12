@@ -1,10 +1,11 @@
 import TextInput from "../../../components/utils/TextInput";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useMemo, useRef, useState} from "react";
 import Message from "../../../components/chat/Message";
 import {AuthContext} from "../../Auth";
 import "../../../css/chatBody.css"
 import Send from "../../../components/svg/Send";
 import {getChannelMessages, sendMessageToChannel, socket} from "../../../api";
+import {ApplicationContext} from "../../Application";
 
 interface ChatProps {
     channel: any,
@@ -14,6 +15,7 @@ export default function Chat (props:ChatProps){
     const [messages, setMessages] = useState([]);
     const [channel, setChannel] = useState(props.channel);
     const user = useContext(AuthContext);
+    const application = useContext(ApplicationContext);
     const ref = useRef(null);
 
     useEffect(() => {
@@ -30,18 +32,10 @@ export default function Chat (props:ChatProps){
         if (args.id != channel.id) return;
         setMessages([JSON.parse(args.message), ...messages])
     }
-
-
-    useEffect(() => {
-        socket.on('new-message', onNewMessage);
-
-        return () => {
-            socket.off('new-message', onNewMessage);
-        };
-
-    }, [messages]);
-
-
+    const toAdd = application.social.newMessages.filter(current => current.channelId == channel.id && messages.includes(current) == false);
+    if (toAdd.length){
+        setMessages([...toAdd, ...messages]);
+    }
 
     if (props.channel != channel)
         setChannel(props.channel);
