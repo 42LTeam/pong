@@ -51,27 +51,6 @@ export class UserService {
     return this.prisma.user.delete({ where: { id } });
   }
 
-
-  async getChannelOfuser(id: number): Promise<Channel[]> {
-    const userChannel = await this.prisma.userChannel.findMany({
-      where: {
-        userId: id,
-      },
-
-    });
-
-    const ids = userChannel.map(current => current.channelId);
-    return this.prisma.channel.findMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      }
-    })
-  }
-
-
-
   async getFriendsOfUser(id: number, options: {startWith?: string, online?: boolean} = {}): Promise<User[]> {
     const friendShips = await this.prisma.userFriendship.findMany({
       where: {
