@@ -3,7 +3,7 @@ name: Build Docker Images
 on:
   push:
     branches:
-      - 21-workflow-fix-docker-image
+      - main
 
 jobs:
   build-on-push:
