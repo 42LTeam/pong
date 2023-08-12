@@ -54,11 +54,11 @@ export default function Conversations({ state, setState }: Props){
                     conversations.map((conversation) => {
                         return (
                             <Conversation
-                                handleClick={() => setState(conversation)}
+                                handleClick={() => setState(conversation.id)}
                                 key={'conversation_id '+ conversation.id}
                                 username={conversation.name}
                                 message={conversation.password}
-                                state={state === conversation}
+                                state={state === conversation.id}
                             />
                         )
                     }) : null
