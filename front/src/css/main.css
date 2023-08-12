@@ -23,6 +23,29 @@ body {
     transform: translate(-50%, -50%);
 }
 
+.row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;;
+    align-self: stretch;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    align-self: stretch;
+}
+
+.grow{
+    flex-grow: 1;
+}
+
+.align-start {
+    align-items: flex-start;
+}
 
 .avatar-root {
     border-radius: 90px;

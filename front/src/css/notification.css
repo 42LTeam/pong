@@ -1,0 +1,29 @@
+
+.notifications {
+    position: fixed;
+    display: flex;
+    flex-direction: column-reverse;
+    right: 5%;
+    bottom: 5%;
+    height: 80vh;
+    width: 30vw;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.notification {
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+.notification-content {
+    height: min-content;
+    margin: 5px;
+}
+
+.notification-image{
+    max-height: 75px;
+    border-radius: 10px;
+}
