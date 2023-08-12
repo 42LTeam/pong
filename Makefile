@@ -46,30 +46,30 @@ ls:
 
 env:
 				@if [ ! -e $(ENV_FILE) ]; then \
-					$(ECHO) $(RED)"$(ENV_FILE) does not exist. Abort" $(RESET_COLOR); \
+					echo $(RED) "$(ENV_FILE) does not exist. Abort" $(RESET_COLOR); \
 					exit 1; \
 				else \
-					$(ECHO) $(CYAN)"$(ENV_FILE) is already in place" $(RESET_COLOR); \
+					echo $(CYAN) "$(ENV_FILE) is already in place" $(RESET_COLOR); \
 				fi
 
-build:
+build:			env
 				$(DOCKER_COMPOSE) build
 
-up:				#env
+up:				env
 				$(DOCKER_COMPOSE) up -d
-
-down:
-				$(DOCKER_COMPOSE) down
 
 stop:
 				$(DOCKER_COMPOSE) stop
+
+down:
+				$(DOCKER_COMPOSE) down
 
 clean:			stop down
 
 prune:          clean
 				@docker system prune -a
 
-rmvol:			down
+rmvol:			clean
 				docker volume rm $(VOLUMES)
 
 fprune:         prune rmvol
@@ -77,8 +77,7 @@ fprune:         prune rmvol
 re:				stop up
 
 rebuild:        clean all
-				@docker ps
 
 reboot:         fprune all
 	
-.PHONY: all ls env build up down stop clean prune rmvol fprune re rebuild reboot
+.PHONY: all ls env build up stop down clean prune rmvol fprune re rebuild reboot
