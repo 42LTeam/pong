@@ -59,5 +59,18 @@ export class BlockService {
       },
     });
   }
+
+  async getBlocksOfUser(id: number): Promise<User[]> {
+    const blocks = await this.prisma.block.findMany({
+        where: { blockerId: id },
+        include: { receivedBy: true }
+    });
+
+    if (!blocks) throw new Error("No blocked users found");
+
+    return blocks.map(block => block.receivedBy);
+
+  }
+
 }
 

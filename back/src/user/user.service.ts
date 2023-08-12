@@ -1,10 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {Channel, Status, User} from '@prisma/client';
+import { FriendService } from '../friend/friend.service';
+import { query } from 'express';
+import { async } from 'rxjs';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => FriendService))
+    private friendService: FriendService) {}
 
   async createUser(id: number, username: string, secretO2FA: string, avatar: string, xp: number): Promise<User> {
     return this.prisma.user.create({
@@ -17,7 +23,6 @@ export class UserService {
       }
     });
   }
-  
 
   async getAllUsers(): Promise<User[]> {
     return this.prisma.user.findMany();
@@ -51,55 +56,62 @@ export class UserService {
     return this.prisma.user.delete({ where: { id } });
   }
 
-
-  async getChannelOfuser(id: number): Promise<Channel[]> {
-    const userChannel = await this.prisma.userChannel.findMany({
-      where: {
-        userId: id,
-      },
-
+  async addFriendship(id, friendship){
+    const user = await this.prisma.user.findUnique({
+      where: { id: id },
+      include: { userFriendships: true },
     });
 
-    const ids = userChannel.map(current => current.channelId);
-    return this.prisma.channel.findMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      }
-    })
+    const updatedFriendships = [...user.userFriendships, friendship];
+    await this.prisma.user.update({
+      where: { id: id },
+      data: { userFriendships: { set: updatedFriendships } },
+    });
   }
 
-
-
-  async getFriendsOfUser(id: number, options: {startWith?: string, online?: boolean} = {}): Promise<User[]> {
-    const friendShips = await this.prisma.userFriendship.findMany({
+  async getPendingFriendRequests(senderId: number): Promise<any[]> {
+    const user = await this.prisma.user.findUnique({
       where: {
-        targetId: id,
-        AND: [{
-              acceptedAt: {
-                not: null,
-              }
-            }]
+        id: senderId,
       },
-      select:{
-        senderId: true,
+      include: {
+        userFriendships: {
+          where: {
+            acceptedAt: null,
+          }
+        }
       }
     });
 
-    const ids = friendShips.map(current => current.senderId);
+    const pending = await user.userFriendships.map(current => current.senderId);
+    return (await this.prisma.user.findMany({
+      where: {
+        id: {
+          in: pending,
+        }
+      }
+    })).map(current => {
+          return {
+            ...current,
+            friendShipId: user.userFriendships.filter(c => c.senderId == current.id)[0].id
+          }
+        }
+    );
+  }
+
+  async getFriendsOfUser(id: number, options: { startWith?: string, online?: boolean } = {}): Promise<User[]> {
+    const ids = await this.friendService.getUserFriendships(id);
+
     return this.prisma.user.findMany({
       where: {
-        id: {
-          in: ids,
-        },
+        id: { in: ids },
         AND: [
-            (options.online ? {status: "ONLINE"}: {}), (options.startWith ? {username: { startsWith: options.startWith}} : {})
+            (options.online ? { status: "ONLINE" } : {}), 
+            (options.startWith ? { username: { startsWith: options.startWith } } : {})
         ]
       }
-    })
+    });
   }
-
 
   async search(id, query: string): Promise<User[]>{
     return this.prisma.user.findMany({
@@ -115,20 +127,6 @@ export class UserService {
 
       }
     });
-  }
-
-
-
-  async getBlocksOfUser(id: number): Promise<User[]> {
-    const blocks = await this.prisma.block.findMany({
-        where: { blockerId: id },
-        include: { receivedBy: true }
-    });
-
-    if (!blocks) throw new Error("No blocked users found");
-
-    return blocks.map(block => block.receivedBy);
-
   }
 
   async getUserStatusById(id: number): Promise<Status> {
@@ -152,7 +150,6 @@ export class UserService {
 
     return user.status;
   }
-
 
 }
 

@@ -1,10 +1,10 @@
 import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
-import { Roles } from 'src/auth/roles.decorator';
+import { Roles } from '../auth/roles.decorator';
 import {Channel, Status, User} from "@prisma/client";
 
 class CreateUserDto {
@@ -28,7 +28,6 @@ class CreateUserDto {
   @ApiProperty()
   xp: number;
 }
-
 
 enum Role {
   USER = 0,
@@ -105,14 +104,6 @@ export class UserController {
     return this.userService.getFriendsOfUser(Number(id));
   }
 
-  @Get('channels')
-  @ApiOperation({ summary: 'Get channels of user' })
-  async getChannelOfUser(@Req() req): Promise<Channel[]> {
-    const user = await req.user;
-    return this.userService.getChannelOfuser(Number(user.id));
-  }
-
-
   @Get('friend/online/:id')
   @ApiOperation({ summary: 'Get friend of user' })
   async getOnlineFriendsOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
@@ -133,10 +124,10 @@ export class UserController {
     return this.userService.getFriendsOfUser(user.id, {startWith: query});
   }
 
-  @Get('blocks/:id')
-  @ApiOperation({ summary: 'Get blocked of user' })
-  async getBlocksOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
-    return this.userService.getBlocksOfUser(Number(id));
+  @Get('friend-request/pending/:userId')
+  @ApiOperation({ summary: 'Get pending request' })
+  async getPendingFriends(@Param('userId') userId: number): Promise<any[]> {
+    return this.userService.getPendingFriendRequests(Number(userId));
   }
 
   @Delete(':id')

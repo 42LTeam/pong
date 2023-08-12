@@ -1,11 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {Channel} from '@prisma/client';
-import {CreateChannelDto, SendInviteDto} from "./channel.controller";
+import { Channel } from '@prisma/client';
+import { CreateChannelDto, SendInviteDto } from "./channel.controller";
+import { FriendService } from '../friend/friend.service';
 
 @Injectable()
 export class ChannelService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => FriendService))
+    private friendService: FriendService) {}
 
   async addInvite(id, userId){
     const newUser = await this.prisma.userChannel.create({
@@ -51,45 +55,21 @@ export class ChannelService {
 
 
   async sendInvite(sender: number, body: SendInviteDto) {
-    const response = {
-      forbidden: [],
-      sent: [],
-      success: []
-    }
+    const { ids, channelId } = body;
 
-    const {ids, channelId} = body;
-
-    const forbidden = await this.prisma.userFriendship.findMany({
-      where: {
-        senderId: sender,
-        AND: [{
-          targetId: {
-            in: ids,
-          },
-        },
-        ]
-      },
-      include: {
-        target: true,
-      }
-    });
-    response.forbidden = forbidden.map(f => {
-      if(!f.acceptedAt) return f.target.id;
-    });
-    response.sent = forbidden.map(f => {
-      if (!response.forbidden.includes(f.target.id)) return f.target.id;
-    });
-    response.forbidden = [...response.forbidden, ids.filter(current => {
-      if (!response.forbidden.includes(current)
-          && !response.sent.includes(current)
-          && ids.includes(current)) return current;
-    })]
-
-    for(const i of response.sent) {
+    const { forbidden, sent } = await this.friendService.processInvitations(sender, ids);
+    
+    const success = [];
+    for (const i of sent) {
       await this.addInvite(channelId, i);
-      response.success.push(i);
+      success.push(i);
     }
-    return response;
+
+    return {
+      forbidden,
+      sent,
+      success
+    };
   }
 
   async getUserInChannel(channelId: number): Promise<any> {
@@ -102,92 +82,22 @@ export class ChannelService {
     return channel.map(current => current.user);
   }
 
-  /*
-
-  async createChannel(name: string, password: string, creatorId: number, privated: boolean, created_at: Date): Promise<Channel> {
-    return this.prisma.channel.create({
-      data: {
-        name,
-        password,
-        creator: {
-          connect: { id: creatorId },
-        },
-        privated,
-        created_at,
-      },
-    });
-  }
-
-  async addUserToChannel(userId: number, channelId: number): Promise<UserChannel> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-    if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found.`);
-    }
-  
-    const channel = await this.prisma.channel.findUnique({
-      where: { id: channelId },
-    });
-  
-    if (!channel) {
-      throw new NotFoundException(`Channel with ID ${channelId} not found.`);
-    }
-  
-    return this.prisma.userChannel.create({
-      data: {
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
-        channel: {
-          connect: {
-            id: channelId,
-          },
-        },
-        isAdmin: false,
-        isBlocked: false,
-        exited: false,
-      },
-    });
-  }
-  
-  
-  
-  
-
-  async getAllChannel(): Promise<Channel[]> {
-    return this.prisma.channel.findMany({
-    });
-  }
-
-  async getChannelById(id: number): Promise<Channel | null> {
-    return this.prisma.channel.findUnique({
+  async getChannelOfuser(id: number): Promise<Channel[]> {
+    const userChannel = await this.prisma.userChannel.findMany({
       where: {
-        id: id,
-      }
-    });
-  }
+        userId: id,
+      },
 
-  async getChannelByUser(creatorId: number): Promise<Channel[]> {
-    return this.prisma.channel.findMany({
-        where: {
-            creatorId: creatorId,
-        }
     });
-  }
 
-  async getChannelMessages(id: number): Promise<Channel[]> {
+    const ids = userChannel.map(current => current.channelId);
     return this.prisma.channel.findMany({
-        where: {
-            id: id,
+      where: {
+        id: {
+          in: ids,
         },
-        include: {
-            messages: true,
-        }
-    });
+      }
+    })
   }
-  */
 
 }
