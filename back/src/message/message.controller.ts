@@ -1,9 +1,9 @@
-import {Controller, Get, Param, Post, Body, UseGuards, ParseIntPipe, Req} from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, UseGuards, ParseIntPipe, Req } from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Message } from '@prisma/client';
 import { MessageService } from './message.service';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
-import { IsNotEmpty, IsNumber, IsString  } from '@nestjs/class-validator';
+import { IsNotEmpty, IsNumber, IsString } from '@nestjs/class-validator';
 
 class CreateMessageDto {
 
@@ -25,7 +25,7 @@ class CreateMessageDto {
 @Controller('message')
 @UseGuards(AuthenticatedGuard)
 export class MessageController {
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService) { }
 
   @Post()
   @ApiBody({ type: CreateMessageDto })
@@ -37,9 +37,9 @@ export class MessageController {
     return this.messageService.createMessage(user.id, createMessageDto.channelId, createMessageDto.content);
   }
 
-  @Get()
-  async getAllMessage(): Promise<Message[]> {
-    return this.messageService.getAllMessages();
+  @Get(':page?')
+  async getAllMessage(@Param('page') page?: string): Promise<Message[]> {
+    return this.messageService.getAllMessages(Number(page) || 1);
   }
 
   @Get('id/:id')
@@ -61,7 +61,7 @@ export class MessageController {
   async isMessageReadByUser(
     @Param('messageId', ParseIntPipe) messageId: number,
     @Param('userId', ParseIntPipe) userId: number,
-  ): Promise<{read: boolean}> {
+  ): Promise<{ read: boolean }> {
     const isRead = await this.messageService.isMessageReadByUser(messageId, userId);
     return { read: isRead };
   }
@@ -70,5 +70,5 @@ export class MessageController {
   async getLastMessageInChannel(@Param('id', ParseIntPipe) channelId: number): Promise<Message> {
     return await this.messageService.getLastMessageInChannel(channelId);
   }
-  
+
 }

@@ -31,10 +31,14 @@ export class MessageService {
 
 
 
-  async getAllMessages(): Promise<Message[]> {
+  async getAllMessages(page: number = 1): Promise<Message[]> {
+    const skip = (page - 1) * 100;
     return this.prisma.message.findMany({
+        skip: skip,
+        take: 100,
     });
-  }
+}
+
 
   async getMessageById(id: number): Promise<Message> {
     return this.prisma.message.findUnique({
