@@ -7,7 +7,6 @@ export class FriendService {
   constructor(private prisma: PrismaService) {}
 
   async addFriendship(id, friendship){
-
     const user = await this.prisma.user.findUnique({
       where: { id: id },
       include: { userFriendships: true },
@@ -19,6 +18,7 @@ export class FriendService {
       data: { userFriendships: { set: updatedFriendships } },
     });
   }
+
 //TODO check if friendship already exist
 async createFriendRequest(initiatorId: number, acceptorId: number): Promise<UserFriendship> {
     if (initiatorId == acceptorId) {
@@ -97,4 +97,19 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
         }
     );
   }
+
+  async getUserFriendships(id: number): Promise<number[]> {
+    const friendShips = await this.prisma.userFriendship.findMany({
+      where: {
+        targetId: id,
+        AND: [{
+          acceptedAt: { not: null }
+        }]
+      },
+      select: { senderId: true }
+    });
+
+    return friendShips.map(current => current.senderId);
+  }
+  
 }

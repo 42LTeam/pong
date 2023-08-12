@@ -3,12 +3,13 @@ import {UserController} from "./user.controller";
 import {UserService} from "./user.service";
 import {PrismaModule} from "../prisma/prisma.module";
 import {StringPipe} from "./pipes/string.pipe";
+import { FriendService } from 'src/friend/friend.service';
 
 @Module({
 
 
     controllers: [UserController],
-    providers: [UserService, StringPipe],
+    providers: [UserService, StringPipe, FriendService],
     imports: [PrismaModule],
     exports: [UserService],
 
