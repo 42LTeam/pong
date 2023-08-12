@@ -125,6 +125,12 @@ export class UserController {
     return this.userService.getFriendsOfUser(user.id, {startWith: query});
   }
 
+  @Get('friend-request/pending/:userId')
+  @ApiOperation({ summary: 'Get pending request' })
+  async getPendingFriends(@Param('userId') userId: number): Promise<any[]> {
+    return this.userService.getPendingFriendRequests(Number(userId));
+  }
+
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user' })
   async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<User> {

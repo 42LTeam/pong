@@ -53,6 +53,49 @@ export class UserService {
     return this.prisma.user.delete({ where: { id } });
   }
 
+  async addFriendship(id, friendship){
+    const user = await this.prisma.user.findUnique({
+      where: { id: id },
+      include: { userFriendships: true },
+    });
+
+    const updatedFriendships = [...user.userFriendships, friendship];
+    await this.prisma.user.update({
+      where: { id: id },
+      data: { userFriendships: { set: updatedFriendships } },
+    });
+  }
+
+  async getPendingFriendRequests(senderId: number): Promise<any[]> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: senderId,
+      },
+      include: {
+        userFriendships: {
+          where: {
+            acceptedAt: null,
+          }
+        }
+      }
+    });
+
+    const pending = await user.userFriendships.map(current => current.senderId);
+    return (await this.prisma.user.findMany({
+      where: {
+        id: {
+          in: pending,
+        }
+      }
+    })).map(current => {
+          return {
+            ...current,
+            friendShipId: user.userFriendships.filter(c => c.senderId == current.id)[0].id
+          }
+        }
+    );
+  }
+
   async getFriendsOfUser(id: number, options: { startWith?: string, online?: boolean } = {}): Promise<User[]> {
     const ids = await this.friendService.getUserFriendships(id);
 

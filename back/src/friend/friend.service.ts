@@ -1,31 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {UserFriendship} from '@prisma/client';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class FriendService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private userService: UserService) {}
 
-  async addFriendship(id, friendship){
-    const user = await this.prisma.user.findUnique({
-      where: { id: id },
-      include: { userFriendships: true },
-    });
-
-    const updatedFriendships = [...user.userFriendships, friendship];
-    await this.prisma.user.update({
-      where: { id: id },
-      data: { userFriendships: { set: updatedFriendships } },
-    });
-  }
-
-//TODO check if friendship already exist
 async createFriendRequest(initiatorId: number, acceptorId: number): Promise<UserFriendship> {
     if (initiatorId == acceptorId) {
       throw new Error('Both initiatorId and acceptorId shouldn\'t be the same');
     }
-
-
 
     const userFriendship = await this.prisma.userFriendship.create({
       data: {
@@ -34,7 +21,7 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
       }
     });
 
-    await this.addFriendship(acceptorId, userFriendship);
+    await this.userService.addFriendship(acceptorId, userFriendship);
     return userFriendship;
   }
 
@@ -55,7 +42,7 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
       }
     });
 
-    await this.addFriendship(updatedFriendship.senderId, userFriendship);
+    await this.userService.addFriendship(updatedFriendship.senderId, userFriendship);
     return userFriendship;
   }
 
@@ -66,36 +53,6 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
         id: friendshipId,
       }
     })
-  }
-
-  async getPendingFriendRequests(senderId: number): Promise<any[]> {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: senderId,
-      },
-      include: {
-        userFriendships: {
-          where: {
-            acceptedAt: null,
-          }
-        }
-      }
-    });
-
-    const pending = await user.userFriendships.map(current => current.senderId);
-    return (await this.prisma.user.findMany({
-      where: {
-        id: {
-          in: pending,
-        }
-      }
-    })).map(current => {
-          return {
-            ...current,
-            friendShipId: user.userFriendships.filter(c => c.senderId == current.id)[0].id
-          }
-        }
-    );
   }
 
   async getUserFriendships(id: number): Promise<number[]> {
