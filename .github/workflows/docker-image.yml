@@ -37,6 +37,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Save state
+        run: echo "{name}={value}" >> $GITHUB_STATE
+
+      - name: Set output
+        run: echo "{name}={value}" >> $GITHUB_OUTPUT
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
