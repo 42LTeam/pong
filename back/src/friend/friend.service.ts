@@ -68,7 +68,9 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
     })
   }
 
-  async getPendingFriendRequests(senderId: number): Promise<any[]> {
+  async getPendingFriendRequests(senderId: number, page: number = 1): Promise<any[]> {
+    const skip = (page - 1) * 100;
+    
     const user = await this.prisma.user.findUnique({
       where: {
         id: senderId,
@@ -82,13 +84,15 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
       }
     });
 
-    const pending = await user.userFriendships.map(current => current.senderId);
+    const pending = user.userFriendships.map(current => current.senderId);
     return (await this.prisma.user.findMany({
       where: {
         id: {
           in: pending,
         }
-      }
+      },
+      skip: skip,
+      take: 100,
     })).map(current => {
           return {
             ...current,
@@ -96,5 +100,6 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
           }
         }
     );
-  }
+}
+
 }
