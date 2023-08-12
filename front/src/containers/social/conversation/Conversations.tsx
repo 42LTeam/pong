@@ -9,11 +9,10 @@ import NewMessagePopup from "./NewMessagePopup";
 type Props = {
     state: any,
     setStare: any,
-    newConversations?: any[],
 }
 
-export default function Conversations({ state, setState, newConversations }){
-    const [conversations, setConversations] = useState([]);
+export default function Conversations({ state, setState }: Props){
+    const [conversations, setConversations] = useState(null);
     const [popUpPosition, setPopUpPosition] = useState(null);
 
     const user = useContext(AuthContext)
