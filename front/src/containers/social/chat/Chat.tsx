@@ -1,10 +1,11 @@
 import TextInput from "../../../components/utils/TextInput";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect,  useRef, useState} from "react";
 import Message from "../../../components/chat/Message";
-import {ApplicationContext} from "../../Auth";
+import {AuthContext} from "../../Auth";
 import "../../../css/chatBody.css"
 import Send from "../../../components/svg/Send";
-import {getChannelMessages, sendMessageToChannel, socket} from "../../../api";
+import {getChannelMessages, sendMessageToChannel} from "../../../api";
+import {ApplicationContext} from "../../Application";
 
 interface ChatProps {
     channel: any,
@@ -12,13 +13,14 @@ interface ChatProps {
 
 export default function Chat (props:ChatProps){
     const [messages, setMessages] = useState([]);
-    const [channel, setChannel] = useState(props.channel);
-    const user = useContext(ApplicationContext);
+    const [channel, setChannel] = useState<number | null>(props.channel);
+    const user = useContext(AuthContext);
+    const application = useContext(ApplicationContext);
     const ref = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await getChannelMessages(props.channel.id);
+            const response = await getChannelMessages(props.channel);
             const data = response.data;
 
             setMessages([...data].reverse());
@@ -26,36 +28,25 @@ export default function Chat (props:ChatProps){
         fetchData().catch(console.error);
     }, [channel]);
 
-    const onNewMessage = (args) => {
-        if (args.id != channel.id) return;
-        setMessages([JSON.parse(args.message), ...messages])
+
+    const toAdd = application.social.newMessages.filter(current => current.channelId == channel && messages.map(c => c.id).includes(current.id) == false);
+    if (toAdd.length){
+        setMessages([...toAdd, ...messages]);
     }
-
-
-    useEffect(() => {
-        socket.on('new-message', onNewMessage);
-
-        return () => {
-            socket.off('new-message', onNewMessage);
-        };
-
-    }, [messages]);
-
-
 
     if (props.channel != channel)
         setChannel(props.channel);
     const handleSendMessage = async (event) => {
         if (!ref || !ref.current.value) return;
         if (event.key != null && event.key != 'Enter') return;
-        await sendMessageToChannel(props.channel.id, ref.current.value);
+        await sendMessageToChannel(channel, ref.current.value);
         ref.current.value = null;
     }
 
     return (
         <div className="chat-root">
             <div className="chat-messages">
-                {messages.map((current) => {
+                {messages.filter((value, index, array) => array.indexOf(value) === index).map((current) => {
                     return (
                         <Message
                             key={current.id}

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import TextIcon from "../../components/TextIcon";
-import { ApplicationContext, User } from "../Auth";
+import { AuthContext, User } from "../Auth";
 
 import "../../css/leaderboard.css"
 
@@ -14,7 +14,7 @@ type Props = {
 
 export default function LeaderboardPlaceBubble(props: Props) {
     
-  const user = useContext(ApplicationContext);
+  const user = useContext(AuthContext);
     var stat: any = 0;
     var [description, setDescription] = useState("");
 

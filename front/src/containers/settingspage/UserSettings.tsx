@@ -1,13 +1,13 @@
 // import "../../css/chat.css"
 import Setting from "../../components/setting/Setting";
 import {useContext, useState} from "react";
-import {ApplicationContext} from "../Auth";
+import {AuthContext} from "../Auth";
 import {getFriendOfUser} from "../../api";
 import React from "react";
 
 export default function UserSettings({ state }){
     const [settings, setSettings] = useState(null);
-    const user = useContext(ApplicationContext)
+    const user = useContext(AuthContext)
 
     if (!settings && user) {
         getFriendOfUser(user.id)

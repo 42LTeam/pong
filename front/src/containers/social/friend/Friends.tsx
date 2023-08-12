@@ -3,7 +3,7 @@ import FriendTabs from "./FriendTabs";
 import {useContext, useState} from "react";
 import AddFriend from "./AddFriend";
 import Friendlist from "./FriendList";
-import {ApplicationContext} from "../../Auth";
+import {AuthContext} from "../../Auth";
 import {getPath} from "../../../api";
 
 
@@ -17,7 +17,7 @@ export default function Friends(){
         setState(text);
         setFriends(null);
     }
-    const user = useContext(ApplicationContext)
+    const user = useContext(AuthContext)
 
     const [friends, setFriends] = useState(null);
 

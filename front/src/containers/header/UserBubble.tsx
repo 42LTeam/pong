@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef, useContext} from "react";
 import { useNavigate} from "react-router-dom";
-import { ApplicationContext } from "../Auth";
+import { AuthContext } from "../Auth";
 
 import "../../css/utils/user.css";
 
@@ -9,7 +9,7 @@ const UserBubble = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
-    const user = useContext(ApplicationContext);
+    const user = useContext(AuthContext);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);

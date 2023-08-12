@@ -6,7 +6,7 @@ import Friend from "../../../components/friend/Friend";
 import {createChannel, getFriendOfUser, searchUser, sendChannelInvite} from "../../../api";
 import Removable from "../../../components/utils/Removable";
 import Cancel from "../../../components/svg/Cancel";
-import {ApplicationContext} from "../../Auth";
+import {AuthContext} from "../../Auth";
 
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
     clear: any,
 }
 export default function NewMessagePopup({position, clear}: Props) {
-    const user = useContext(ApplicationContext);
+    const user = useContext(AuthContext);
     const [suggestions, setSuggestions] = useState([]);
     const [checked, setChecked] = useState([]);
 
