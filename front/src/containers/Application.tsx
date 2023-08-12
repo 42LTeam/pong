@@ -13,7 +13,7 @@ import Notification from "../components/utils/Notification";
 import {socket} from "../api";
 
 type ApplicationEngine = {
-    sendNotification: (title: string, content: string, image?: string) => void,
+    sendNotification: (key:number, title: string, content: string, image?: string) => void,
     social: {
         newMessages: any[],
         newConversations: any[]
@@ -35,8 +35,8 @@ const Application = function (){
     const user = useContext(AuthContext);
     const [notifications, setNotifications] = useState<any[]>([]);
 
-    const sendNotification = (title: string, content: string, image?: string) => {
-        setNotifications([...notifications, {title, content, image}]);
+    const sendNotification = (key: number, title: string, content: string, image?: string) => {
+        setNotifications([...notifications, {key, title, content, image}]);
     }
 
     const [application, setApplication] = useState<ApplicationEngine>({
@@ -53,7 +53,7 @@ const Application = function (){
                 ...application,
                 social:{
                     newConversations: (application.social.newConversations),
-                    newMessages: [...(application.social.newMessages), JSON.parse(args)],
+                    newMessages: [...(application.social.newMessages), (args)],
                 }
             }
         )
@@ -63,7 +63,7 @@ const Application = function (){
         const onNewMessage = (args) => {
             addMessage(args);
             if (window.location.pathname != "/social")
-                sendNotification(args.message.userId, args.message.content);
+                sendNotification(args.id, args.user.username, args.content, args.user.avatar);
         }
 
         socket.on('new-message', onNewMessage);
@@ -72,7 +72,7 @@ const Application = function (){
             socket.off('new-message', onNewMessage);
         };
 
-    }, []);
+    }, [notifications]);
 
     if (!user)
         return (
@@ -107,9 +107,9 @@ const Application = function (){
                         <Route path={PATHS.leaderboard} element={<LeaderboardPage />} />
                     </Routes>
                     <div className="notifications">
-                        {notifications.map(current => {
+                        {notifications.reverse().map(current => {
                             return (
-                                <Notification {...current}></Notification>
+                                <Notification {...current} ></Notification>
                             )
                         })}
                     </div>
