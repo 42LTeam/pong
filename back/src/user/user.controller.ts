@@ -125,12 +125,6 @@ export class UserController {
     return this.userService.getFriendsOfUser(user.id, {startWith: query});
   }
 
-  @Get('blocks/:id')
-  @ApiOperation({ summary: 'Get blocked of user' })
-  async getBlocksOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
-    return this.userService.getBlocksOfUser(Number(id));
-  }
-
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user' })
   async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<User> {

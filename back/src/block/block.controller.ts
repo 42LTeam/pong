@@ -42,4 +42,10 @@ export class BlockController {
   removeBlockRequest(@Body() removeBlockDto: CreateBlockDto): Promise<Block> {
     return this.blockService.removeBlockRequest(removeBlockDto.blockerId, removeBlockDto.blockedId);
   }
+
+  @Get('blocks/:id')
+  @ApiOperation({ summary: 'Get blocked of user' })
+  async getBlocksOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
+    return this.blockService.getBlocksOfUser(Number(id));
+  }
 }
