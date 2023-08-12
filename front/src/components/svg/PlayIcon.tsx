@@ -2,7 +2,7 @@ import React from 'react';
 
 import "../../css/header.css"
 
-export default function PlayButton() {
+export default function PlayIcon() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
         <path d="M0 0v24h24V0H0zm23 16c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2h18c1.1 0 2 .9 2 2v8z" fill="none"/>

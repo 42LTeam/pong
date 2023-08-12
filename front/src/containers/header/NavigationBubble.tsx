@@ -6,9 +6,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import HeaderNavigationIcon from "./HeaderNavigationIcon";
 
 import "../../css/header.css"
-import ChatButton from "../../components/svg/ChatButton";
-import PlayButton from "../../components/svg/ChatButton";
-import LeaderboardButton from "../../components/svg/ChatButton";
+import ChatIcon from "../../components/svg/ChatIcon";
+import PlayIcon from "../../components/svg/PlayIcon";
+import LeaderboardIcon from "../../components/svg/LeaderboardIcon";
 
 const NavigationBubble = () => {
     const navigate = useNavigate();
@@ -28,13 +28,13 @@ const NavigationBubble = () => {
     return (
     <div className="navigation bubble">
         <HeaderNavigationIcon handleClick={handleClick} text="/social"
-        state={state} children={<ChatButton />} description="social"></HeaderNavigationIcon>
+        state={state} children={<ChatIcon />} description="social"></HeaderNavigationIcon>
 
         <HeaderNavigationIcon handleClick={handleClick} text="/"
-        state={state} children={<PlayButton />} description="home"></HeaderNavigationIcon>
+        state={state} children={<PlayIcon />} description="home"></HeaderNavigationIcon>
 
         <HeaderNavigationIcon handleClick={handleClick} text="/leaderboard"
-        state={state} children={<LeaderboardButton />} description="leaderboard"></HeaderNavigationIcon>
+        state={state} children={<LeaderboardIcon />} description="leaderboard"></HeaderNavigationIcon>
     </div>
     );
 };

@@ -43,7 +43,7 @@ export default function NewMessagePopup({position, clear}: Props) {
         const channel = response.data;
         sendChannelInvite({
             channelId: channel.id,
-            ids: [...suggestions.filter(f => checked.includes(f.username)).map(f => f.id)],
+            ids: suggestions.filter(f => checked.includes(f.username)).map(f => f.id),
         }).then(() => {
             clear(true);
         });

@@ -10,7 +10,8 @@ export default function ToggleButton(props: ToggleButtonProps){
     const [state, setState] = useState(1);
     if (state && props.current != props.text) setState(0);
     const handleClick = (text) => {
-        setState(state == props.states.length - 1 ? 0 : state + 1);
+        if (props.current != props.text)
+            setState(state == props.states.length - 1 ? 0 : state + 1);
         props.handleClick && props.handleClick(text);
     }
 
