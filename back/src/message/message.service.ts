@@ -4,7 +4,7 @@ import { Message } from '@prisma/client';
 
 @Injectable()
 export class MessageService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async createMessage(userId: number, channelId: number, content: string): Promise<Message> {
     return this.prisma.message.create({
@@ -34,10 +34,10 @@ export class MessageService {
   async getAllMessages(page: number = 1): Promise<Message[]> {
     const skip = (page - 1) * 100;
     return this.prisma.message.findMany({
-        skip: skip,
-        take: 100,
+      skip: skip,
+      take: 100,
     });
-}
+  }
 
 
   async getMessageById(id: number): Promise<Message> {
@@ -51,24 +51,27 @@ export class MessageService {
   async getMessageByUser(userId: number, page: number = 1): Promise<Message[]> {
     const skip = (page - 1) * 100;
     return this.prisma.message.findMany({
-        where: {
-            userId: userId,
-        },
-        skip: skip,
-        take: 100,
-        include: {
-            user: true,
-            channel: true,
-        }
+      where: {
+        userId: userId,
+      },
+      skip: skip,
+      take: 100,
+      include: {
+        user: true,
+        channel: true,
+      }
     });
-}
+  }
 
 
-  async getMessageByChannel(channelId: number): Promise<Message[]> {
+  async getMessageByChannel(channelId: number, page: number = 1): Promise<Message[]> {
+    const skip = (page - 1) * 100;
     return this.prisma.message.findMany({
       where: {
         channelId: channelId,
       },
+      skip: skip,
+      take: 100,
       include: {
         user: {
           select: {
@@ -78,6 +81,7 @@ export class MessageService {
       }
     });
   }
+
 
   async isMessageReadByUser(messageId: number, userId: number): Promise<boolean> {
     const message = await this.prisma.message.findUnique({

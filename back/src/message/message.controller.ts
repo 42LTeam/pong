@@ -48,15 +48,16 @@ export class MessageController {
   }
 
   @Get('user/:user')
-async getMessageByUser(@Param('user') user: number, @Query('page') page?: string): Promise<Message[] | null> {
+  async getMessageByUser(@Param('user') user: number, @Query('page') page?: string): Promise<Message[] | null> {
     return this.messageService.getMessageByUser(Number(user), Number(page) || 1);
-}
+  }
 
 
   @Get('channel/:channel')
-  async getMessageByChannel(@Param('channel') channel: number): Promise<Message[] | null> {
-    return this.messageService.getMessageByChannel(Number(channel));
+  async getMessageByChannel(@Param('channel') channel: number, @Query('page') page?: string): Promise<Message[] | null> {
+    return this.messageService.getMessageByChannel(Number(channel), Number(page) || 1);
   }
+
 
   @Get(':messageId/readBy/:userId')
   async isMessageReadByUser(
