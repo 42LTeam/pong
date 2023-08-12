@@ -18,7 +18,7 @@ function Auth() {
     const [wsConnected, setConnected] = useState(false);
 
     const [user, setUser] = useState<User>(null);
-
+    const localhostback = process.env.LOCALHOST ? process.env.LOCALHOST + ':3000/auth/login' : 'http://localhost:3000/auth/login';
     useEffect(() => {
         if (!user)
         getStatus()
@@ -27,7 +27,7 @@ function Auth() {
 
             })
             .catch(function () {
-                window.location.replace("http://localhost:3000/auth/login");
+                window.location.replace(localhostback);
             });
     },[user])
 

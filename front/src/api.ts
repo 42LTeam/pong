@@ -1,8 +1,11 @@
 import io from "socket.io-client";
 import axios from "axios";
 
-const webSocketURL = "http://localhost:8001";
-const URL = "http://localhost:3000";
+const localhostwebsocket = process.env.LOCALHOST ? process.env.LOCALHOST + ':8001' : 'http://localhost:8001';
+const webSocketURL = localhostwebsocket;
+
+const localhostback = process.env.LOCALHOST ? process.env.LOCALHOST + ':3000' : 'http://localhost:3000';
+const URL = localhostback;
 export const socket = io(webSocketURL, { autoConnect: true});
 
 export async function searchUser(search, options = {friendOnly: false}){
@@ -35,7 +38,7 @@ export async function updateUserAvatar(id, avatarUrl){
         },
     };
     return await axios(config);
-};
+}
 
 export async function updateUserUsername(id, username){
     const config = {
@@ -47,7 +50,7 @@ export async function updateUserUsername(id, username){
         },
     };
     return await axios(config);
-};
+}
 
 export async function getFriendOfUser(id: number){
     const config = {
