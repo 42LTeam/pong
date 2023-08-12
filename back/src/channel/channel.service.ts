@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {Channel} from '@prisma/client';
 import {CreateChannelDto, SendInviteDto} from "./channel.controller";
+import { FriendService } from 'src/friend/friend.service';
 
 @Injectable()
 export class ChannelService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private friendService: FriendService) {}
 
   async addInvite(id, userId){
     const newUser = await this.prisma.userChannel.create({
@@ -51,45 +54,21 @@ export class ChannelService {
 
 
   async sendInvite(sender: number, body: SendInviteDto) {
-    const response = {
-      forbidden: [],
-      sent: [],
-      success: []
-    }
+    const { ids, channelId } = body;
 
-    const {ids, channelId} = body;
-
-    const forbidden = await this.prisma.userFriendship.findMany({
-      where: {
-        senderId: sender,
-        AND: [{
-          targetId: {
-            in: ids,
-          },
-        },
-        ]
-      },
-      include: {
-        target: true,
-      }
-    });
-    response.forbidden = forbidden.map(f => {
-      if(!f.acceptedAt) return f.target.id;
-    });
-    response.sent = forbidden.map(f => {
-      if (!response.forbidden.includes(f.target.id)) return f.target.id;
-    });
-    response.forbidden = [...response.forbidden, ids.filter(current => {
-      if (!response.forbidden.includes(current)
-          && !response.sent.includes(current)
-          && ids.includes(current)) return current;
-    })]
-
-    for(const i of response.sent) {
+    const { forbidden, sent } = await this.friendService.processInvitations(sender, ids);
+    
+    const success = [];
+    for (const i of sent) {
       await this.addInvite(channelId, i);
-      response.success.push(i);
+      success.push(i);
     }
-    return response;
+
+    return {
+      forbidden,
+      sent,
+      success
+    };
   }
 
   async getUserInChannel(channelId: number): Promise<any> {

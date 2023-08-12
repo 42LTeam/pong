@@ -112,4 +112,39 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
     return friendShips.map(current => current.senderId);
   }
   
+  async processInvitations(sender: number, ids: number[]): Promise<{ forbidden: number[], sent: number[] }> {
+    const forbidden = [];
+    const sent = [];
+
+    const friendships = await this.prisma.userFriendship.findMany({
+      where: {
+        senderId: sender,
+        AND: [{
+          targetId: {
+            in: ids,
+          },
+        }]
+      },
+      include: {
+        target: true,
+      }
+    });
+
+    for (const friendship of friendships) {
+      if (!friendship.acceptedAt) {
+        forbidden.push(friendship.target.id);
+      } else if (!forbidden.includes(friendship.target.id)) {
+        sent.push(friendship.target.id);
+      }
+    }
+
+    for (const id of ids) {
+      if (!forbidden.includes(id) && !sent.includes(id)) {
+        forbidden.push(id);
+      }
+    }
+
+    return { forbidden, sent };
+  }
+
 }
