@@ -1,5 +1,6 @@
 services:
   api:
+    container_name: api
     build:
       dockerfile: ./back/Dockerfile
       context: .
@@ -18,41 +19,45 @@ services:
       - net
 
   front:
+    container_name: front
     build:
       dockerfile: ./front/Dockerfile
       context: .
     volumes:
       - ./front:/usr/src/app
     command: npm run dev
+    ports:
+      - 5173:5173
     depends_on:
       - api
       - postgres
-    ports:
-      - 5173:5173
     networks:
       - net
+
   postgres:
+    container_name: postgres
     image: postgres
     restart: always
     env_file:
       - .env
-    ports:
-      - '5432:5432'
     volumes:
       - docker-nest-postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
     networks:
       - net
 
   pgadmin:
+    container_name: pgadmin
     image: dpage/pgadmin4
     env_file:
       - .env
     environment:
       GUNICORN_ACCESS_LOGFILE: '/dev/null'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
     ports:
       - '5050:80'
-    volumes:
-      - pgadmin:/root/.pgadmin
     depends_on:
       - postgres
     networks:
@@ -61,7 +66,6 @@ services:
 volumes:
   docker-nest-postgres:
   pgadmin:
-  front:
 
 networks:
   net:
