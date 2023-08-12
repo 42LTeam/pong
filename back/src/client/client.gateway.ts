@@ -49,9 +49,8 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect{
     const user = await this.clientService.getClientById(client.id);
     const message = await this.messageService.createMessage(user.id, data.channelId, data.content);
     const users: User[] = await this.channelService.getUserInChannel(data.channelId);
-    console.log(users.length);
     for (const u of users) {
-      this.server.sockets.sockets.get(u.session)?.emit('new-message', {id:data.channelId, message: JSON.stringify(message)});
+      this.server.sockets.sockets.get(u.session)?.emit('new-message',JSON.stringify(message));
     }
   }
 }
