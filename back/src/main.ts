@@ -7,7 +7,7 @@ import * as passport from 'passport'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const localhostfront = process.env.LOCALHOST ? process.env.LOCALHOST + ':5173' : 'http://localhost:5173';
+  const localhostfront = process.env.LOCALHOST ? 'http://' + process.env.LOCALHOST + ':5173' : 'http://localhost:5173';
 
   setupSwagger(app);  // Swagger API
   app.enableCors({
