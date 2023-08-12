@@ -11,7 +11,6 @@ type Props = {
     rank: number;
 }
 
-
 export default function LeaderboardPlaceBubble(props: Props) {
     
   const user = useContext(ApplicationContext);

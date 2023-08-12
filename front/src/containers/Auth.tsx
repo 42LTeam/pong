@@ -10,6 +10,7 @@ export interface User {
     avatar: String,
     username: String,
     id: number,
+    xp: number,
 }
 
 export const ApplicationContext = createContext<User | undefined>(undefined);
