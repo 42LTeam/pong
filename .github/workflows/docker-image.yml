@@ -22,10 +22,15 @@ jobs:
       - name: Cleaning
         run: |
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
+          docker compose down
+          if [[ $(docker volume ls -qf dangling=true) ]]; then
           docker volume rm $(docker volume ls -qf dangling=true)
+          fi
+          
           docker system prune -af
           sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
+        shell: /usr/bin/bash -e {0}
 
         continue-on-error: true
 
