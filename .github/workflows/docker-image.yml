@@ -21,35 +21,46 @@ jobs:
 
       - name: Cleaning
         run: |
+#         Make files in the work directory writable for all users (use with caution)
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
+          
+#          Stop and remove existing containers defined in docker-compose.yml
           docker compose down
+          
+#          Check if there are dangling volumes and remove them if found
           if [[ $(docker volume ls -qf dangling=true) ]]; then
-          docker volume rm $(docker volume ls -qf dangling=true)
+            docker volume rm $(docker volume ls -qf dangling=true)
           fi
           
+#          Prune all unused Docker resources
           docker system prune -af
+          
+#          Delete all files and subdirectories in the work directory
           sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
+          
+#          Recursively remove the work directory itself (use with caution)
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
+
+#          This run needs to be done in bash commands
         shell: /usr/bin/bash -e {0}
 
         continue-on-error: true
 
       - name: Checkout code
         uses: actions/checkout@v2
+#        Cloning the repository's source code from the default branch into the Actions runner environment.
 
       - name: Save state
         run: echo "{name}={value}" >> $GITHUB_STATE
-
       - name: Set output
         run: echo "{name}={value}" >> $GITHUB_OUTPUT
+#        Ask by Github Actions : https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+#        Prepares the environment to use Docker Buildx for building Docker images.
 
       - name: Build and push API image
         run: |
-          echo "$MY_ENV_VARIABLE" > .env
           docker-compose up -d --build
-          docker-compose logs
-        env:
-          MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
+          docker-compose logs --follow

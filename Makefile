@@ -6,6 +6,7 @@ DATA=./data/
 
 all:
 	$(CMD) docker-compose.yml up --build -d
+	docker-compose logs --follow
 
 build:
 	$(CMD) docker-compose.yml build
