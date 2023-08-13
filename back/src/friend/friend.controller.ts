@@ -54,7 +54,7 @@ export class FriendController {
 
   @Get('friend-request/pending/:userId')
   @ApiOperation({ summary: 'Get pending request' })
-  async getPendingFriends(@Param('userId') userId: number, @Query('page') page?: string): Promise<any[]> {
+  async getPendingFriends(@Param('userId') userId: number, @Query('page') page?: string): Promise<UserFriendship[]> {
     return this.friendService.getPendingFriendRequests(Number(userId), Number(page) || 1);
   }
 
