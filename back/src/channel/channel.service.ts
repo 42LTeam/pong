@@ -30,10 +30,12 @@ export class ChannelService {
     });
   }
 
+  //TODO proteger le bail faut qui c'est pas une conv le name soit forcement la
   async createChannel(body : CreateChannelDto): Promise<Channel> {
     const {
       name,
       password,
+      conv,
       creatorId,
     } = body;
 
@@ -41,6 +43,7 @@ export class ChannelService {
 
     const channel = await this.prisma.channel.create({
       data: {
+        conv,
         name,
         password,
         creator: {
