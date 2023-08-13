@@ -57,9 +57,9 @@ export default function Conversations({ state, setState }: Props){
                                 handleClick={() => setState(conversation.id)}
                                 key={'conversation_id '+ conversation.id}
                                 username={conversation.name}
-                                message={conversation.password}
                                 state={state === conversation.id}
                                 lastRead={conversation.lastRead}
+                                id={conversation.id}
                             />
                         )
                     }) : null

@@ -149,6 +149,14 @@ export async function sendFriendRequest(acceptorId: number){
     return axios(config);
 }
 
+export async function getChannelLastMessage(channelId: number) {
+    const config = {
+        method: 'get',
+        url: URL + '/message/channel/' + channelId + '/last',
+        withCredentials: true,
+    };
+    return axios(config)
+}
 
 export async function getChannelMessages(channelId: number){
     const config = {
