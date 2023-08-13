@@ -68,7 +68,7 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
     })
   }
 
-  async getPendingFriendRequests(senderId: number, page: number = 1): Promise<any[]> {
+  async getPendingFriendRequests(senderId: number, page: number = 1): Promise<UserFriendship[]> {
     const skip = (page - 1) * 100;
     
     const user = await this.prisma.user.findUnique({
