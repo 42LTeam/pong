@@ -1,5 +1,5 @@
-import {Controller, Post, Body, Req, Get, Param, UseGuards} from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import {Controller, Req, Get, Param, UseGuards} from '@nestjs/common';
+import {ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Channel} from '@prisma/client';
 import { ChannelService } from '../channel.service';
 import {
@@ -21,7 +21,7 @@ export class ConversationController {
   constructor(private channelService: ChannelService) {}
 
 
-  //TODO Check friendship
+  //TODO check if blocked
   @Get(":friendId")
   @ApiOperation({summary: 'Create or return conversation between friend'})
   async getConversation(@Param('friendId') friendId: number, @Req() req): Promise<Channel>{
