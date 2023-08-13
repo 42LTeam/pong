@@ -64,7 +64,7 @@ export async function getFriendOfUser(id: number){
 export async function getChannels(){
     const config = {
         method: 'get',
-        url: URL + '/users/channels',
+        url: URL + '/channels/channels',
         withCredentials: true,
     };
     return axios(config);

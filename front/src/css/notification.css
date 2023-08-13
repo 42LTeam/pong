@@ -9,6 +9,7 @@
     width: 30vw;
     gap: 10px;
     overflow-y: auto;
+    pointer-events: none;
 }
 
 .notification {

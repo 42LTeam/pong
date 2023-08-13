@@ -32,9 +32,9 @@ export class ChannelService {
 
   async createChannel(body : CreateChannelDto): Promise<any> {
     const {
-      conv,
       name,
       password,
+      conv,
       creatorId,
     } = body;
 

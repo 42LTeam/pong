@@ -13,14 +13,14 @@ type Props = {
 }
 export default function FriendList({friends, pending, reset} : Props){
     const user = useContext(AuthContext)
-    const handleAccept = async function (current){
+    const handleAccept = async (current) => {
         await acceptFriendship(current.friendShipId);
         reset();
     }
 
 
 
-    const handleDecline = async function (current){
+    const handleDecline = async (current) => {
         await declineFriendship(current.friendShipId);
         reset();
     }
