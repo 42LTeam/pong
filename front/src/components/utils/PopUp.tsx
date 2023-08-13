@@ -6,8 +6,9 @@ export type PopUpProps = {
     position? : {left: number, top: number},
     clear: any,
     center?: boolean,
+    height?: string,
 }
-export default function PopUp({ children, position, clear, center }: PopUpProps) {
+export default function PopUp({ children, position, clear, center, height }: PopUpProps) {
     const ref= useRef(null);
     useEffect(() => {
         /**
@@ -25,7 +26,7 @@ export default function PopUp({ children, position, clear, center }: PopUpProps)
         };
     }, );
     return (
-        <div ref={ref} className={"popup-root" + (center ? ' center' : '')} style={{...position}}>
+        <div ref={ref} className={"popup-root" + (center ? ' center' : '')} style={{...position, minHeight: height}}>
             {Children.map(children, child =>
                 <>
                 {child}
