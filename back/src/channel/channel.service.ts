@@ -95,17 +95,23 @@ export class ChannelService {
       where: {
         userId: id,
       },
-
+      select: {
+        channelId: true,
+        lastRead: true,
+      }
     });
-
     const ids = userChannel.map(current => current.channelId);
-    return this.prisma.channel.findMany({
+    const lastRead = userChannel.map(current => current.lastRead);
+    const channels = await this.prisma.channel.findMany({
       where: {
         id: {
           in: ids,
         },
       }
-    })
+    });
+    return channels.map(current => {
+        return {...current, lastRead: lastRead[ids.indexOf(current.id)]}
+      })
   }
 
     async getConversation(userId: number, friendId: number): Promise<any> {
