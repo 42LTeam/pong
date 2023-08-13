@@ -59,6 +59,7 @@ export default function Conversations({ state, setState }: Props){
                                 username={conversation.name}
                                 message={conversation.password}
                                 state={state === conversation.id}
+                                lastRead={conversation.lastRead}
                             />
                         )
                     }) : null
