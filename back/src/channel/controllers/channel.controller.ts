@@ -1,7 +1,7 @@
-import {Controller, Post, Body, Req, Get} from '@nestjs/common';
+import {Controller, Post, Body, Req, Get, UseGuards} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Channel} from '@prisma/client';
-import { ChannelService } from './channel.service';
+import { ChannelService } from '../channel.service';
 import {
   IsNotEmpty,
   IsNumber,
@@ -9,12 +9,13 @@ import {
   IsBoolean,
   ArrayMinSize, IsArray, IsOptional
 } from '@nestjs/class-validator';
+import {AuthenticatedGuard} from "../../auth/guards/authenticated.guard";
 
 export class CreateChannelDto {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @ApiProperty()
   @IsOptional()
@@ -46,6 +47,7 @@ export class SendInviteDto {
   channelId: number;
 }
 
+@UseGuards(AuthenticatedGuard)
 @ApiTags('channels')
 @Controller('channels')
 export class ChannelController {
