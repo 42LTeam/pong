@@ -1,7 +1,7 @@
 import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Channel } from '@prisma/client';
-import { CreateChannelDto, SendInviteDto } from "./channel.controller";
+import { CreateChannelDto, SendInviteDto } from "./controllers/channel.controller";
 import { FriendService } from '../friend/friend.service';
 
 @Injectable()
@@ -30,8 +30,9 @@ export class ChannelService {
     });
   }
 
-  async createChannel(body : CreateChannelDto): Promise<Channel> {
+  async createChannel(body : CreateChannelDto): Promise<any> {
     const {
+      conv,
       name,
       password,
       creatorId,
@@ -43,11 +44,18 @@ export class ChannelService {
       data: {
         name,
         password,
+        conv,
         creator: {
           connect: { id: creatorId },
         },
         created_at: new Date(),
       },
+      select: {
+        id: true,
+        creatorId: true,
+        users: true,
+        messages: true,
+      }
     });
     await this.addInvite(channel.id, creatorId);
     return channel;
@@ -100,4 +108,42 @@ export class ChannelService {
     })
   }
 
+    async getConversation(userId: number, friendId: number): Promise<any> {
+      const conversation = await this.prisma.channel.findMany({
+        where: {
+          conv: true,
+          AND: [{
+            creatorId: {
+              in: [userId, friendId]
+            }
+          }]
+        },
+        select: {
+          id: true,
+          creatorId: true,
+          users: true,
+          messages: true,
+        }
+      });
+
+      for (const conversationElement of conversation) {
+        const other = conversationElement.creatorId == userId ? friendId : userId;
+        const ret = await this.prisma.userChannel.findFirst({
+          where: {
+            channelId: conversationElement.id,
+            AND: [{
+              userId: other,
+            }]
+          },
+          select: {
+            channel: true,
+          }
+        });
+        if (ret) return conversationElement;
+      }
+
+      const newConv = await this.createChannel({conv: true, creatorId: userId});
+      await this.sendInvite(userId, {channelId: newConv.id, ids: [friendId]});
+      return newConv;
+    }
 }
