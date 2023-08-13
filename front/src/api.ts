@@ -64,7 +64,7 @@ export async function getFriendOfUser(id: number){
 export async function getChannels(){
     const config = {
         method: 'get',
-        url: URL + '/users/channels',
+        url: URL + '/channels/channels',
         withCredentials: true,
     };
     return axios(config);
@@ -158,6 +158,8 @@ export async function getChannelMessages(channelId: number){
     };
     return axios(config);
 }
+
+
 
 export async function sendMessageToChannel(channelId: number, content: string){
     socket.emit('new-message', {channelId, content});
