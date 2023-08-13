@@ -56,8 +56,8 @@ export class MessageService {
     });
   }
 
-  async getMessageByChannel(channelId: number): Promise<Message[]> {
-    return this.prisma.message.findMany({
+  async getMessageByChannel(userId: number, channelId: number): Promise<Message[]> {
+    const messages = await this.prisma.message.findMany({
       where: {
         channelId: channelId,
       },
@@ -69,6 +69,20 @@ export class MessageService {
         },
       }
     });
+
+    console.log(messages.sort((a,b) => a.id < b.id ? 1 : -1)[0].id)
+
+    await this.prisma.userChannel.updateMany({
+      where: {
+        userId: userId,
+        AND: [{channelId}]
+      },
+      data: {
+        lastRead: messages.sort((a,b) => a.id < b.id ? 1 : -1)[0].id,
+      }
+    })
+
+    return messages;
   }
 
   async isMessageReadByUser(messageId: number, userId: number): Promise<boolean> {
