@@ -84,7 +84,16 @@ export class ChannelService {
     const channel = await this.prisma.userChannel.findMany({
       where: { channelId },
       select: {
-        user: true
+        user: {
+          select: {
+            id: true,
+            avatar: true,
+            username: true,
+            xp: true,
+            status: true,
+            session: true,
+          }
+        }
       }
     });
     return channel.map(current => current.user);
