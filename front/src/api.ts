@@ -51,7 +51,14 @@ export async function updateUserUsername(id, username){
     };
     return await axios(config);
 }
-
+export async function getAllUsers(){
+    const config = {
+        method: 'get',
+        url: URL + '/users/',
+        withCredentials: true,
+    };
+    return axios(config);
+}
 export async function getFriendOfUser(id: number){
     const config = {
         method: 'get',
