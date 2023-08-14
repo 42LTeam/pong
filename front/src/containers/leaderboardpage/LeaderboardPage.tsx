@@ -6,23 +6,20 @@ import {getUsers} from "../../api";
 import LeaderboardContent from './LeaderboardContent';
 
 import "../../css/leaderboard.css"
-import { getUserRank, getUsersWithRanks } from './common';
+import { getUserRank, getUsersRanks } from './GetRanks';
 
 const states = ["Total xp", "Victories/defeat ratio", "Average points per match"];
 
 export default function LeaderboardPage(){
 
   const user = useContext(ApplicationContext);
-
+  const [placement, setPlacement] = useState(0);
+  const [users, setUsers] = useState([]);
   const [state, setState] = useState("Total xp");
 
   const handleClick = (text) => {
     setState(text);
   }
-
-  const [placement, setPlacement] = useState(0);
-
-  var [users, setUsers] = useState([]);
 
   useEffect(() => {
     getUsers()
@@ -34,7 +31,7 @@ export default function LeaderboardPage(){
       });
   }, []);
 
-  const usersWithRank = getUsersWithRanks(users);
+  const usersWithRank = getUsersRanks(users, state);
 
   useEffect(() => {
     if (user?.id === undefined )

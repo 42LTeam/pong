@@ -14,11 +14,17 @@ type Props = {
 export default function LeaderboardPlaceBubble(props: Props) {
     
     const user = useContext(ApplicationContext);
-    var stat: any = 0;
     var [description, setDescription] = useState("");
 
-    if (props.kind === "Total xp"){
-      stat = props.user.xp;
+    let statName = ""; //name of the column in DB
+    if (props.kind === "Total xp") {
+        statName = 'xp';
+    }
+    else if (props.kind === "Victories/defeat ratio"){
+        statName = 'id';    //to change
+    }
+    else if (props.kind === "Average points per match"){
+        statName = 'role';  //to change
     }
 
     useEffect(() => {
@@ -26,7 +32,7 @@ export default function LeaderboardPlaceBubble(props: Props) {
       
       if (props.kind === "Total xp") {
         setDescription("XP");
-      } else if (props.kind === "Victories / defeat ratio") {
+      } else if (props.kind === "Victories/defeat ratio") {
         setDescription("victories / defeat ratio");
       } else if (props.kind === "Average points per match") {
         setDescription("points per match");
@@ -44,7 +50,7 @@ export default function LeaderboardPlaceBubble(props: Props) {
                 <div className="leaderboard-username"> {props.user.username} </div>
             </div>
 
-            <div className="leaderboard-data"> {props.user.xp} {description} </div>
+            <div className="leaderboard-data"> {props.user[statName]} {description} </div>
 
             <TextIcon style="placement-icon" text={props.rank}/>
         </div>
