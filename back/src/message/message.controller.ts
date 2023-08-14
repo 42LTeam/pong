@@ -66,7 +66,7 @@ export class MessageController {
   }
 
   @Get('channel/:channel')
-  async getMessageByChannel(@Param('channel') channel: number, @Req() req): Promise<Message[] | null> {
+  async getMessageByChannel(@Param('channel') channel: number, @Req() req): Promise<{ lastRead: number, messages: Message[] } | null> {
     const user = await req.user;
     return this.messageService.getMessageByChannel(user.id, Number(channel));
   }

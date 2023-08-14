@@ -14,6 +14,7 @@ interface ChatProps {
 export default function Chat (props:ChatProps){
     const [messages, setMessages] = useState([]);
     const [channel, setChannel] = useState<number | null>(props.channel);
+    const [lastRead, setLastRead] = useState(0);
     const user = useContext(AuthContext);
     const application = useContext(ApplicationContext);
     const ref = useRef(null);
@@ -22,8 +23,8 @@ export default function Chat (props:ChatProps){
         const fetchData = async () => {
             const response = await getChannelMessages(props.channel);
             const data = response.data;
-
-            setMessages([...data].reverse());
+            setLastRead(data.lastRead);
+            setMessages([...data.messages].reverse());
         }
         fetchData().catch(console.error);
     }, [channel]);
@@ -44,6 +45,7 @@ export default function Chat (props:ChatProps){
 
     return (
         <div className="chat-root">
+            {(JSON.stringify(lastRead || ''))}
             <div className="chat-messages">
                 {messages.filter((value, index, array) => array.indexOf(value) === index).map((current) => {
                     return (
