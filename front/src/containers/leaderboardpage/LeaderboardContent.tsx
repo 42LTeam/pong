@@ -1,8 +1,14 @@
 import React from 'react';
 import LeaderboardPlaceBubble from './LeaderboardPlaceBubble';
+import { User } from '../Auth';
 
-export default function LeaderboardContent({ users }) {
-  const sortedUsers = [...users].sort((a, b) => b.xp - a.xp);
+type Props = {
+  users : User[];
+  state : string;
+}
+
+export default function LeaderboardContent(props : Props) {
+  const sortedUsers = [...props.users].sort((a, b) => b.xp - a.xp);
 
   let currentRank = 0;
   let currentXP = null;
@@ -17,6 +23,7 @@ export default function LeaderboardContent({ users }) {
 
   return (
     <div className='leaderboard-content'>
+      im on state : {props.state}
       {usersWithRanks.map((user) => (
         <LeaderboardPlaceBubble key={user.id} user={user} kind={"Total xp"} rank={user.rank} />
       ))}

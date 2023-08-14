@@ -7,37 +7,49 @@ import LeaderboardContent from './LeaderboardContent';
 
 import "../../css/leaderboard.css"
 
+const states = ["Total xp", "Victories/defeat ratio", "Average points per match"];
 
 export default function LeaderboardPage(){
 
-    const user = useContext(ApplicationContext);
+  const user = useContext(ApplicationContext);
 
-    var [users, setUsers] = useState([]);
+  const [state, setState] = useState("Total xp");
 
-    useEffect(() => {
-        getUsers()
-          .then(function (response) {
-            setUsers(response.data);
+  const handleClick = (text) => {
+    setState(text);
+  }
 
-          })
-          .catch(function (error) {
-            console.error('Error fetching user data:', error);
-          });
-      }, []);
+  var [users, setUsers] = useState([]);
+
+  useEffect(() => {
+      getUsers()
+        .then(function (response) {
+          setUsers(response.data);
+
+        })
+        .catch(function (error) {
+          console.error('Error fetching user data:', error);
+        });
+    }, []);
 
 
-    return (
-        <div className='leaderboard-body'>
-            <div className='leaderboard-main-frame'>
-                <div className="leaderboard-places"> Leaderboard </div>
+  return (
+    <div className='leaderboard-body'>
+        <div className='leaderboard-main-frame'>
+            <div className="leaderboard-places"> Leaderboard </div>
 
-                <LeaderboardTabs />
-                
-                <div className='horizontal-separator'></div>
-                
-                <LeaderboardContent users={users}/>
+            <LeaderboardTabs
+            key="tabs"
+            states={states}
+            handleClick={handleClick}
+            state={state}
+            placement={1} />
+            
+            <div className='horizontal-separator'></div>
+            
+            <LeaderboardContent users={users} state={state}/>
 
-            </div>
         </div>
-    )
+    </div>
+  )
 }
