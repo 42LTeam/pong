@@ -3,7 +3,7 @@ import Button from "../../../components/utils/Button";
 import PopUp from "../../../components/utils/PopUp";
 import {useContext, useState} from "react";
 import Friend from "../../../components/friend/Friend";
-import {createChannel, getFriendOfUser, searchUser, sendChannelInvite} from "../../../api";
+import {createChannel, getAllUsers, getFriendOfUser, searchUser, sendChannelInvite} from "../../../api";
 import Removable from "../../../components/utils/Removable";
 import Cancel from "../../../components/svg/Cancel";
 import {AuthContext} from "../../Auth";
@@ -56,7 +56,7 @@ export default function NewMessagePopup({position, clear}: Props) {
             setChecked(checked.filter(c => c != current));
     }
     if (!suggestions.length)
-        getFriendOfUser(user.id).then(response => setSuggestions(response.data));
+        getAllUsers().then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
 
     return (
         <PopUp key={"newmessage-root"} position={position} clear={clear}>
