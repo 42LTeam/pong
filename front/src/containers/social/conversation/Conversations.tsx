@@ -5,6 +5,7 @@ import {useContext, useState} from "react";
 import {AuthContext} from "../../Auth";
 import {getChannels} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
+import {ApplicationContext} from "../../Application";
 
 type Props = {
     state: any,
@@ -14,7 +15,7 @@ type Props = {
 export default function Conversations({ state, setState }: Props){
     const [conversations, setConversations] = useState(null);
     const [popUpPosition, setPopUpPosition] = useState(null);
-
+    const application = useContext(ApplicationContext);
     const user = useContext(AuthContext)
 
 
@@ -38,6 +39,12 @@ export default function Conversations({ state, setState }: Props){
 
     if (!conversations && user) fetchConversations();
 
+    const toAdd = application.social.newConversations.filter(current => {
+        return !conversations.map(c => c.id).includes(current)
+    })
+    if (toAdd.length){
+        fetchConversations();
+    }
 
     return (
         <div className="conversations">

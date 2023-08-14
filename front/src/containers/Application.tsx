@@ -35,7 +35,7 @@ const Application = function (){
     const user = useContext(AuthContext);
     const [notifications, setNotifications] = useState<any[]>([]);
 
-    const sendNotification = (key: number, title: string, content: string, image?: string, url?: string) => {
+    const sendNotification = (key: any, title: string, content: string, image?: string, url?: string) => {
         setNotifications([...notifications, {key, title, content, image, url}]);
     }
 
@@ -59,16 +59,37 @@ const Application = function (){
         )
     }
 
+    const addChannel = (args) => {
+        setApplication(
+            {
+                ...application,
+                social:{
+                    newMessages: (application.social.newConversations),
+                    newConversations: [...(application.social.newMessages), (args)],
+                }
+            }
+        )
+    }
+
+
     useEffect(() => {
         const onNewMessage = (args) => {
             addMessage(args);
             if (!window.location.pathname.includes("/social"))
-                sendNotification(args.id, args.user.username, args.content, args.user.avatar, "/social/" + args.channelId);
+                sendNotification(args.id+'message', args.user.username, args.content, args.user.avatar, "/social/" + args.channelId);
+        }
+
+        const onNewChannel = (args) => {
+            addChannel(args);
+            if (!window.location.pathname.includes("/social"))
+                sendNotification(args.channelId+'channel', args.creator.username + ' vous a ajouter a un channel', args.users.map(u => u.username).join(', '), args.creator.avatar, "/social/" + args.channelId);
         }
 
         socket.on('new-message', onNewMessage);
+        socket.on('new-channel', onNewChannel);
 
         return () => {
+            socket.off('new-channel', onNewChannel);
             socket.off('new-message', onNewMessage);
         };
 

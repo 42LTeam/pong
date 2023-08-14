@@ -87,20 +87,21 @@ export async function createChannel(
     return axios(config);
 }
 
-export async function sendChannelInvite(
-    data:
+export async function sendChannelInvite(data:
         {
             ids?: number[],
             usernames?: string[],
             channelId: number,
         }, ){
+    socket.emit('channel-invite', data);
+/*
     const config = {
         method: 'post',
         url: URL + '/channels/invite',
         withCredentials: true,
         data,
     };
-    return axios(config);
+    return axios(config);*/
 }
 
 
