@@ -21,6 +21,19 @@ class CreateMessageDto {
 
 }
 
+class ReadMessageDto {
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  channelId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  messageId: number;
+}
+
 @ApiTags('message')
 @Controller('message')
 @UseGuards(AuthenticatedGuard)
@@ -56,6 +69,13 @@ export class MessageController {
   async getMessageByChannel(@Param('channel') channel: number, @Req() req): Promise<Message[] | null> {
     const user = await req.user;
     return this.messageService.getMessageByChannel(user.id, Number(channel));
+  }
+
+
+  @Post('read')
+  async readMessage(@Body() body : ReadMessageDto, @Req() req){
+    const user = await req.user;
+    return this.messageService.readMessage(user.id, body);
   }
 
   @Get(':messageId/readBy/:userId')

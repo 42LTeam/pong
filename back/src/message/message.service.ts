@@ -115,5 +115,19 @@ export class MessageService {
 
     return lastMessage;
   }
+
+  async readMessage(id, body) {
+    return this.prisma.userChannel.updateMany({
+      where: {
+        userId: id,
+        AND: [{
+          channelId: body.channelId
+        }]
+      },
+      data: {
+        lastRead: body.messageId,
+      }
+    });
+  }
 }
 
