@@ -57,6 +57,12 @@ export default function Chat (props:ChatProps){
                     )
                 })}
             </div>
+            {props.channel.conv === false && (
+                <div className="conv-false-content">
+                    {}
+                    This is the content when 'conv' is false.
+                </div>
+                )}
             <TextInput ref={ref} color="#7F8C8D" text="Votre message..." bgColor="#ECF0F1" onKeyDown={handleSendMessage} button={<Send handleClick={handleSendMessage}></Send>}></TextInput>
         </div>
     )

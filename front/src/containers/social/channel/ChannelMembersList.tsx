@@ -4,7 +4,7 @@ import Conversation from "../../../components/conversation/Conversation";
 import {useContext, useState} from "react";
 import {AuthContext} from "../../Auth";
 import {getChannels} from "../../../api";
-import NewMessagePopup from "./NewMessagePopup";
+import NewMessagePopup from "../conversation/NewMessagePopup";
 import SidePanel from "../../../components/utils/SidePanel";
 
 type Props = {
