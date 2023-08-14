@@ -13,7 +13,7 @@ type Props = {
 }
 
 export default function Conversations({ state, setState }: Props){
-    const [conversations, setConversations] = useState(null);
+    const [conversations, setConversations] = useState([]);
     const [popUpPosition, setPopUpPosition] = useState(null);
     const application = useContext(ApplicationContext);
     const user = useContext(AuthContext)
@@ -37,7 +37,7 @@ export default function Conversations({ state, setState }: Props){
 
     }
 
-    if (!conversations && user) fetchConversations();
+    if (conversations.length == 0 && user) fetchConversations();
 
     const toAdd = application.social.newConversations.filter(current => {
         return !conversations.map(c => c.id).includes(current)
@@ -57,7 +57,7 @@ export default function Conversations({ state, setState }: Props){
                     <NewMessagePopup key={"newMessagePopup"} position={popUpPosition} clear={clear}></NewMessagePopup>
                 : null}
 
-                { conversations ?
+                {
                     conversations.map((conversation) => {
                         return (
                             <Conversation
@@ -69,7 +69,7 @@ export default function Conversations({ state, setState }: Props){
                                 id={conversation.id}
                             />
                         )
-                    }) : null
+                    })
                 }
         </div>
     )
