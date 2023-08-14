@@ -169,6 +169,19 @@ export async function getChannelMessages(channelId: number){
 }
 
 
+export async function readMessage(channelId: number, messageId: number) {
+    const config = {
+        method: 'post',
+        url: URL + '/message/read',
+        data: {
+            channelId,
+            messageId,
+        },
+        withCredentials: true,
+    }
+    return axios(config);
+}
+
 
 export async function sendMessageToChannel(channelId: number, content: string){
     socket.emit('new-message', {channelId, content});

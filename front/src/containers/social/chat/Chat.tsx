@@ -4,7 +4,7 @@ import Message from "../../../components/chat/Message";
 import {AuthContext} from "../../Auth";
 import "../../../css/chatBody.css"
 import Send from "../../../components/svg/Send";
-import {getChannelMessages, sendMessageToChannel} from "../../../api";
+import {getChannelMessages, readMessage, sendMessageToChannel} from "../../../api";
 import {ApplicationContext} from "../../Application";
 
 interface ChatProps {
@@ -27,11 +27,10 @@ export default function Chat (props:ChatProps){
         }
         fetchData().catch(console.error);
     }, [channel]);
-
-
     const toAdd = application.social.newMessages.filter(current => current.channelId == channel && messages.map(c => c.id).includes(current.id) == false);
-    if (toAdd.length){
+    if (toAdd.length) {
         setMessages([...toAdd, ...messages]);
+        readMessage(props.channel, toAdd[toAdd.length - 1].id)
     }
 
     if (props.channel != channel)
