@@ -36,6 +36,7 @@ type Props = {
 }
 
 export default function LeaderboardTabs(props: Props) {
+    console.log('Placement in LeaderboardTabs:', props.placement);
 
     const user = useContext(ApplicationContext);
 

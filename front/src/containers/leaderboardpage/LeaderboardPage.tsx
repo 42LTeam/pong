@@ -6,6 +6,7 @@ import {getUsers} from "../../api";
 import LeaderboardContent from './LeaderboardContent';
 
 import "../../css/leaderboard.css"
+import { getUserRank, getUsersWithRanks } from './common';
 
 const states = ["Total xp", "Victories/defeat ratio", "Average points per match"];
 
@@ -19,19 +20,27 @@ export default function LeaderboardPage(){
     setState(text);
   }
 
+  const [placement, setPlacement] = useState(0);
+
   var [users, setUsers] = useState([]);
 
   useEffect(() => {
-      getUsers()
-        .then(function (response) {
-          setUsers(response.data);
+    getUsers()
+      .then(function (response) {
+        setUsers(response.data);
+      })
+      .catch(function (error) {
+        console.error('Error fetching user data:', error);
+      });
+  }, []);
 
-        })
-        .catch(function (error) {
-          console.error('Error fetching user data:', error);
-        });
-    }, []);
+  const usersWithRank = getUsersWithRanks(users);
 
+  useEffect(() => {
+    if (user?.id === undefined )
+      return ;
+    setPlacement(getUserRank(user.id, usersWithRank) ?? 0)
+  }, [usersWithRank])
 
   return (
     <div className='leaderboard-body'>
@@ -43,11 +52,11 @@ export default function LeaderboardPage(){
             states={states}
             handleClick={handleClick}
             state={state}
-            placement={1} />
+            placement={placement} />
             
             <div className='horizontal-separator'></div>
             
-            <LeaderboardContent users={users} state={state}/>
+            <LeaderboardContent users={usersWithRank} state={state} />
 
         </div>
     </div>

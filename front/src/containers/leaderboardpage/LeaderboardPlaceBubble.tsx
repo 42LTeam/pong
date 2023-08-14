@@ -13,7 +13,7 @@ type Props = {
 
 export default function LeaderboardPlaceBubble(props: Props) {
     
-  const user = useContext(ApplicationContext);
+    const user = useContext(ApplicationContext);
     var stat: any = 0;
     var [description, setDescription] = useState("");
 
