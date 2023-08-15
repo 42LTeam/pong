@@ -14,6 +14,7 @@ import {socket} from "../api";
 
 type ApplicationEngine = {
     sendNotification: (key: number, title: string, content: string, image?: string, url?: string) => void,
+    clearMessage: (toClear: any[]) => void,
     social: {
         newMessages: any[],
         newConversations: any[]
@@ -39,8 +40,19 @@ const Application = function (){
         setNotifications([...notifications, {key, title, content, image, url}]);
     }
 
+    const clearMessage = (toAdd) => {
+        setApplication({
+            ...application,
+            social: {
+                ...application.social,
+                newMessages: application.social.newMessages.filter(c => !toAdd.includes(c)),
+            }
+        })
+    };
+
     const [application, setApplication] = useState<ApplicationEngine>({
         sendNotification,
+        clearMessage,
         social: {
             newMessages: [],
             newConversations: [],
