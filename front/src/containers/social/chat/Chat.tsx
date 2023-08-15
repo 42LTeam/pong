@@ -72,7 +72,6 @@ export default function Chat (props:ChatProps){
 
     return (
         <div className="chat-root">
-            {lastRead}
             <div className="chat-messages">
 
                 {unReadMessages.map((current) => {
