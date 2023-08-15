@@ -5,7 +5,8 @@ import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
 import { Roles } from '../auth/roles.decorator';
-import {Channel, Status, User} from "@prisma/client";
+import {Channel, Status, User, UserMatch} from "@prisma/client";
+import { MatchService } from 'src/match/match.service';
 
 class CreateUserDto {
   @ApiProperty()
@@ -59,7 +60,9 @@ export class UpdateUserStatusDto {
 @Controller('users')
 @UseGuards(AuthenticatedGuard)
 export class UserController {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+  private matchService: MatchService
+  ) { }
 
   @Post()
   @Roles(Role.ADMIN)  // For admin restrictions
@@ -151,4 +154,9 @@ export class UserController {
     return this.userService.updateUserStatusById(id, updateUserStatusDto.status);
   }
 
+  @Get(':id/matches')
+  @ApiOperation({ summary: 'Get all matches of user by Id' })
+  async getUserMatches(@Param('id', ParseIntPipe) id: number): Promise<UserMatch[]> {
+    return this.matchService.getUserMatches(id);
+  }
 }
