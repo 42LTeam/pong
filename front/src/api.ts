@@ -70,6 +70,15 @@ export async function getChannels(){
     return axios(config);
 }
 
+export async function getChannelMembers(id: number){
+    const config = {
+        method: 'get',
+        url: URL + `/channel/${id}/members`,
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
 export async function createChannel(
     data:
         {

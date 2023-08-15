@@ -41,27 +41,37 @@ export default function Conversations({ state, setState }: Props){
 
 
     return (
-        <SidePanel
-            header={<FriendButton style={{cursor: 'pointer'}} handleClick={() => setState(null)} state={state}></FriendButton>}
+        <>
+            <SidePanel
+            header={<FriendButton style={{cursor: 'pointer'}} handleClick={() => setState(null)}
+                                  state={state}></FriendButton>}
             subheader="Messages privés"
-            subheaderIcon={<img onClick={(event) => handlePopUp(event)} alt="plus logo" className="conversations-separator-icon" src="/svg/add.svg"/>}
-            body=
-                {
-                    <>
-                        {popUpPosition && <NewMessagePopup key={"newMessagePopup"} position={popUpPosition} clear={clear}></NewMessagePopup>}
-                    {
-                        conversations?.map((conversation) => (
-                            <Conversation
-                                handleClick={() => setState(conversation.id)}
-                                key={'conversation_id ' + conversation.id}
-                                username={conversation.name}
-                                message={conversation.password}
-                                state={state === conversation.id}
-                            />
-                        ))
-                    }
-                    </>
-                }
-        />
-    )
+            subheaderIcon={<img onClick={(event) => handlePopUp(event)} alt="plus logo"
+                                className="conversations-separator-icon" src="/svg/add.svg"/>}
+            body={
+                <>
+                    {popUpPosition &&
+                        <NewMessagePopup
+                            key={"newMessagePopup"}
+                            position={popUpPosition}
+                            clear={clear}>
+                        </NewMessagePopup>}
+                    {conversations?.map((conversation) => (
+                        <Conversation
+                            handleClick={() => setState(conversation.id)}
+                            key={'conversation_id ' + conversation.id}
+                            username={conversation.name}
+                            message={conversation.password}
+                            state={state === conversation.id}
+                        />
+                    ))}
+                </>
+            }
+            />
+
+        </>
+
+
+
+)
 }
