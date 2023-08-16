@@ -122,6 +122,7 @@ const Application = function (){
     if (!application)
         setApplication({
             sendNotification,
+            clearMessage,
             social: {
                 newMessages: [],
                 newConversations: [],
