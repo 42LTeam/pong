@@ -27,7 +27,7 @@ export default function Conversation(props: Props){
             <div className="conversation-avatar"></div>
             <div className="conversation-content">
                 <div className="conversation-username">{props.username}</div>
-                <div className="conversation-preview">{message?.content}</div>
+                <h3>{message?.content}</h3>
             </div>
         </div>
     )
