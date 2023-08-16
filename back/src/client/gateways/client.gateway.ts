@@ -4,12 +4,13 @@ import {
   WebSocketGateway,
   WebSocketServer
 } from '@nestjs/websockets';
-import {ClientService} from "./client.service";
+import {ClientService} from "../client.service";
 import {Injectable, UseGuards} from "@nestjs/common";
-import {WSAuthenticatedGuard} from "../auth/guards/wsauthenticated.guard";
+import {WSAuthenticatedGuard} from "../../auth/guards/wsauthenticated.guard";
 import {User} from "@prisma/client";
-import {ChannelService} from "../channel/channel.service";
-import {MessageService} from "../message/message.service";
+import {ChannelService} from "../../channel/channel.service";
+import {MessageService} from "../../message/message.service";
+import {MatchService} from "../../match/match.service";
 
 @WebSocketGateway(8001, {cors: '*'})
 @Injectable()
@@ -35,13 +36,13 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect{
       return ;
     }
   }
+
+
   @SubscribeMessage('register')
   @UseGuards(WSAuthenticatedGuard)
   async handleRegister(client,data): Promise<void> {
     if(data.target) this.server.sockets.sockets.get(data.target)?.disconnect()
   }
-
-
 
   @SubscribeMessage('new-message')
   @UseGuards(WSAuthenticatedGuard)
