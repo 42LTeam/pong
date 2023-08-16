@@ -32,19 +32,16 @@ export default function Chat (props:ChatProps){
     }
 
     useEffect(() => {
-        console.log('mount1');
         fetchData();
         return () => {
             setMessages([]);
             application.clearMessage(toAdd);
-            console.log('destroyed')
         }
     }, [channel]);
 
 
     useEffect(() => {
         if (toAdd.length) {
-            console.log('condition')
             const last = toAdd[toAdd.length - 1];
             setMessages([...toAdd, ...messages]);
             readMessage(props.channel, last.id).then(() => {
@@ -80,7 +77,7 @@ export default function Chat (props:ChatProps){
                             <Message
                                 key={current.id}
                                 sender={current.user?.avatar}
-                                content={current.content + ' ' + current.id}
+                                content={current.content}
                                 date={new Date(current.created_at).toTimeString().slice(0,5)}
                                 sent={current.userId == user.id}
                             ></Message>
@@ -110,7 +107,7 @@ export default function Chat (props:ChatProps){
                             <Message
                                 key={current.id}
                                 sender={current.user?.avatar}
-                                content={current.content + ' ' + current.id}
+                                content={current.content}
                                 date={new Date(current.created_at).toTimeString().slice(0,5)}
                                 sent={current.userId == user.id}
                             ></Message>
