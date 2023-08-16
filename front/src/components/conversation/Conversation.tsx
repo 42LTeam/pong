@@ -1,5 +1,6 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {getChannelLastMessage} from "../../api";
+import {ApplicationContext} from "../../containers/Application";
 
 interface Props {
     username: string,
@@ -12,6 +13,9 @@ interface Props {
 export default function Conversation(props: Props){
 
     const [message, setMessage] = useState(null);
+    const application = useContext(ApplicationContext);
+
+
 
 
     useEffect( () => {
@@ -19,7 +23,7 @@ export default function Conversation(props: Props){
             const data = response.data;
             setMessage(data);
         });
-    }, []);
+    }, [application]);
 
     return (
         <div onClick={props.handleClick} className={"conversation " + (props.state ? 'conversation-focus ' : '')}
@@ -27,7 +31,7 @@ export default function Conversation(props: Props){
             <div className="conversation-avatar"></div>
             <div className="conversation-content">
                 <div className="conversation-username">{props.username}</div>
-                <h3>{message?.content}</h3>
+                <h3>{message?.content || 'Nouvelle conversation'}</h3>
             </div>
         </div>
     )
