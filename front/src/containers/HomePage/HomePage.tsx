@@ -7,6 +7,9 @@ import SearchBar from "./SearchBar";
 import FriendQuickInviteBubble from './FriendQuickInviteBubble';
 
 import "../../css/homepage.css"
+import AddFriend from '../social/friend/AddFriend';
+import TextInput from '../../components/utils/TextInput';
+import FriendQuickInvite from './FriendQuickInvite';
 
 export default function HomePage({user}){
 
@@ -22,10 +25,12 @@ export default function HomePage({user}){
 
                 </div>
                 <div className="frame-right">
-                    <SearchBar />
+                {/* <AddFriend /> */}
+                <FriendQuickInvite />
+                    {/* <SearchBar />
                     {Array.from({ length: 35 }, (_, index) => (
                         <FriendQuickInviteBubble key={index} userID={index} />
-                    ))} {/* A voir comment on fait pour boucler avec le back */}
+                    ))} */}
                 </div>
             </div>
         </>
