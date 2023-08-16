@@ -12,10 +12,9 @@ export default function AddFriend(){
     const [suggestions, setSuggestions] = useState([]);
     const [checked, setChecked] = useState([]);
 
-    //TODO search only non friend user
     const handleInputChange = (event) => {
         if(event.target.value) {
-            searchUser(event.target.value).then((response) => {
+            searchUser(event.target.value, {notFriend: true}).then((response) => {
                 setSuggestions(response.data);
             });
         }else
@@ -47,7 +46,7 @@ export default function AddFriend(){
     }
 
     if (!suggestions.length)
-        getAllUsers().then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
+        getAllUsers({notFriend: true}).then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
 
     return (
         <>
