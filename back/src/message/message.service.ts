@@ -114,7 +114,7 @@ export class MessageService {
       throw new Error(`No messages found for channel id: ${channelId}`);
     }
 
-    return lastMessage;
+    return lastMessage[0];
   }
 
   async readMessage(id, body) {
