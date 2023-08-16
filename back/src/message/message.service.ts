@@ -111,7 +111,7 @@ export class MessageService {
     });
 
     if (!lastMessage) {
-      throw new Error(`No messages found for channel id: ${channelId}`);
+      return null;
     }
 
     return lastMessage[0];
