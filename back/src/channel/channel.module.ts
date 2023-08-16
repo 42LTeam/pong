@@ -6,11 +6,13 @@ import { FriendService } from '../friend/friend.service';
 import { FriendModule } from '../friend/friend.module';
 import { UserModule } from '../user/user.module';
 import {ConversationController} from "./controllers/conversation.controller";
+import {MessageModule} from "../message/message.module";
+import {MessageService} from "../message/message.service";
 
 @Module({
     controllers: [ChannelController, ConversationController],
-    providers: [ChannelService, FriendService],
-    imports: [PrismaModule, forwardRef(() => FriendModule), UserModule],
+    providers: [ChannelService, FriendService, MessageService],
+    imports: [PrismaModule, forwardRef(() => FriendModule), UserModule, MessageModule],
     exports: [ChannelService]
 })
 export class ChannelModule {}
