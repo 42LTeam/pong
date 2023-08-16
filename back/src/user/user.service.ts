@@ -2,6 +2,7 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Status, User} from '@prisma/client';
 import { FriendService } from '../friend/friend.service';
+import {SearchDTO} from "./user.controller";
 
 @Injectable()
 export class UserService {
@@ -22,8 +23,20 @@ export class UserService {
     });
   }
 
-  async getAllUsers(): Promise<User[]> {
-    return this.prisma.user.findMany();
+  async getAllUsers(id: number, options: SearchDTO): Promise<User[]> {
+    const forbiddenIds = [id]
+    if (options.notFriend)
+      forbiddenIds.push(...(await this.getFriendsOfUser(id)).map(c => c.id));
+
+    if (options.friendOnly)
+      return this.getFriendsOfUser(id);
+    return this.prisma.user.findMany({
+      where: {
+        id: {
+          notIn: forbiddenIds,
+        }
+      }
+    });
   }
 
   async getUserById(id: number): Promise<User | null> {
@@ -111,7 +124,14 @@ export class UserService {
     });
   }
 
-  async search(id, query: string): Promise<User[]>{
+  async search(id, query: string, options: SearchDTO): Promise<User[]>{
+    const forbiddenIds = [id]
+    if (options.notFriend)
+      forbiddenIds.push(...(await this.getFriendsOfUser(id, {startWith: query})).map(c => c.id));
+
+    if (options.friendOnly)
+      return this.getFriendsOfUser(id, {startWith: query});
+
     return this.prisma.user.findMany({
       where : {
         username: {
@@ -119,7 +139,9 @@ export class UserService {
         },
         AND: [{
           id: {
-            not: id,
+            not: {
+              in: forbiddenIds
+            },
           }
         }]
 
