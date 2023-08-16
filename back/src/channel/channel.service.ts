@@ -3,13 +3,16 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Channel } from '@prisma/client';
 import { CreateChannelDto, SendInviteDto } from "./controllers/channel.controller";
 import { FriendService } from '../friend/friend.service';
+import {MessageService} from "../message/message.service";
 
 @Injectable()
 export class ChannelService {
   constructor(
     private prisma: PrismaService,
     @Inject(forwardRef(() => FriendService))
-    private friendService: FriendService) {}
+    private friendService: FriendService,
+    private messageService: MessageService
+  ) {}
 
   async addInvite(id, userId){
     const newUser = await this.prisma.userChannel.create({
@@ -118,9 +121,15 @@ export class ChannelService {
         },
       }
     });
-    return channels.map(current => {
-        return {...current, lastRead: lastRead[ids.indexOf(current.id)]}
-      })
+
+    const mapFunc = async (current) => {
+      return {
+        ...current,
+        lastRead: lastRead[ids.indexOf(current.id)],
+        lastMessage: (await this.messageService.getLastMessageInChannel(current.id))}
+    }
+
+    return Promise.all(channels.map(mapFunc));
   }
 
     async getConversation(userId: number, friendId: number): Promise<any> {
