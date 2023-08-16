@@ -30,7 +30,7 @@ export default function AddFriend(){
     }
     const mapData =  (current) => {
         return (
-            <Friend key={"popupfriend-" + current.username} friend={current}
+            <Friend key={"popupfriend-" + current.username} friend={current} notFriend={true}
             onClick={() => toggleCheck(current, !checked.includes(current))}>
                 <div className="align-left">
                     <input

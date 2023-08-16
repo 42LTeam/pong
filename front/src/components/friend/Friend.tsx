@@ -7,6 +7,7 @@ type Props = {
     friend: any,
     onClick?: any,
     children?: any,
+    notFriend?: boolean
 }
 
 
@@ -31,15 +32,15 @@ export default function Friend(props: Props){
             text: 'Match amical',
             handleClick: () => alert('TODO'),
         },
-        {
+    ];
+    if (!props.notFriend) buttons.push({
             text: 'Retirer l\'ami',
             handleClick: () => alert('TODO'),
-        },
-        {
+        });
+    buttons.push({
             text: 'Bloquer',
             handleClick: () => alert('TODO'),
-        },
-    ]
+        });
 
     const buttonProps = {
         buttonProps: {
