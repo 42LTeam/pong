@@ -16,14 +16,14 @@ export default function HomePage({user}){
     return (
         <>
             <div className="frame">
-                <div className="frame-left">
+                {/* <div className="frame-left">
                     <div className="skin-selection">
                         <PlayerSkin />
                         <BallSkin />
                         <LaunchButton />
                     </div>
 
-                </div>
+                </div> */}
                 <div className="frame-right">
                 {/* <AddFriend /> */}
                 <FriendQuickInvite />
