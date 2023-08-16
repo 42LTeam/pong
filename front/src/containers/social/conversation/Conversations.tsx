@@ -1,7 +1,7 @@
 import "../../../css/chat.css"
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../Auth";
 import {getChannels} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
@@ -39,12 +39,11 @@ export default function Conversations({ state, setState }: Props){
 
     if (conversations.length == 0 && user) fetchConversations();
 
-    const toAdd = application.social.newConversations.filter(current => {
-        return !conversations.map(c => c.id).includes(current)
-    })
-    if (toAdd.length){
+
+    useEffect(() => {
         fetchConversations();
-    }
+    }, [application])
+
 
     return (
         <div className="conversations">
@@ -58,12 +57,17 @@ export default function Conversations({ state, setState }: Props){
                 : null}
 
                 {
-                    conversations.map((conversation) => {
+                    conversations.sort((a, b) => {
+                        const a_value = a.lastMessage ? a.lastMessage.created_at : a.created_at;
+                        const b_value = b.lastMessage ? b.lastMessage.created_at : b.created_at;
+                        return a_value < b_value ? 1 : -1;
+                    }).map((conversation) => {
                         return (
                             <Conversation
                                 handleClick={() => setState(conversation.id)}
                                 key={'conversation_id '+ conversation.id}
                                 username={conversation.name}
+                                lastMessage={conversation.lastMessage?.content}
                                 state={state === conversation.id}
                                 lastRead={conversation.lastRead}
                                 id={conversation.id}
