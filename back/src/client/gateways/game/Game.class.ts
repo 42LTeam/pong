@@ -7,11 +7,12 @@ export default class Game {
 	private engine : GameEngine;
 	players : GamePlayer[] = [];
 
-	constructor(@WebSocketServer()
+	constructor(
 				private server,
 				private matchId: number,
 	) {
 		this.engine = new GameEngine(this, this.server);
+		console.log('New gane ', this.matchId);
 	}
 
 	MATCH_ROOM = "Match-" + this.matchId;
