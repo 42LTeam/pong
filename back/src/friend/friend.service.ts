@@ -79,7 +79,7 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
 
 
   async removeFriendship(removerId: number, friendId: number) {
-    this.prisma.userFriendship.deleteMany({
+    await this.prisma.userFriendship.deleteMany({
       where: {
         senderId: friendId,
         AND: [{
