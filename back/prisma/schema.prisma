@@ -63,8 +63,8 @@ model Channel {
   password   String?
   creatorId  Int?
   creator    User?         @relation(fields: [creatorId], references: [id])
-  users      UserChannel[]
-  messages   Message[]
+  users      UserChannel[] @default([])
+  messages   Message[]     @default([])
   created_at DateTime
 }
 
