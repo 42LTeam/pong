@@ -24,7 +24,7 @@ export default class Game {
 	//TODO matchService
 	handleJoin(user) {
 		const socket = this.server.sockets.sockets.get(user.session);
-		if (this.players.length >= 2 || this.isWhitelisted(user)) {
+		if (this.players.length >= 2 || !this.isWhitelisted(user)) {
 			socket?.emit('error', 'Forbidden');
 			// socket?.emit('spectator');
 			return ;
