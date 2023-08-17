@@ -70,10 +70,10 @@ export async function getChannels(){
     return axios(config);
 }
 
-export async function getChannelMembers(id: number){
+export async function getChannelAllMembers(id: number){
     const config = {
         method: 'get',
-        url: URL + `/channel/${id}/members`,
+        url: URL + `/channels/${id}/members`,
         withCredentials: true,
     };
     return axios(config);

@@ -80,16 +80,7 @@ export class ChannelService {
     };
   }
 
-  async getAllUsernamesInChannel(channelId: number): Promise<any> {
-    const channel = await this.prisma.userChannel.findMany({
-      where: { channelId },
-      select: {
-        user: true
-      }
-    });
-    return channel.map(current => current.user);
-  }
-
+// rename with All attribute and not just s
   async getAllUsersInChannel(channelId: number): Promise<any> {
     const channel = await this.prisma.userChannel.findMany({
       where: { channelId },
@@ -100,7 +91,25 @@ export class ChannelService {
     return channel.map(current => current.user);
   }
 
-  async getChannelOfuser(id: number): Promise<Channel[]> {
+  async getChannelAllMembers(channelId: number): Promise<any> {
+    return this.prisma.userChannel.findMany({
+      where: {
+        channelId: channelId,
+      },
+      include: {
+        user: {
+          select: {
+            avatar: true,
+            username: true,
+            status: true,
+          },
+        },
+      }
+    });
+  }
+
+  //rename getChannelOfuser in getChannelOfUser
+  async getChannelOfUser(id: number): Promise<Channel[]> {
     const userChannel = await this.prisma.userChannel.findMany({
       where: {
         userId: id,

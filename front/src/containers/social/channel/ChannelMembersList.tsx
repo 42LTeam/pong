@@ -1,16 +1,19 @@
 import "../../../css/chat.css";
-import { useContext, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { AuthContext } from "../../Auth";
-import { getChannels } from "../../../api";
+import {getChannelAllMembers} from "../../../api";
 import SidePanel from "../../../components/utils/SidePanel";
+import NewMessagePopup from "../conversation/NewMessagePopup";
+import ChannelMember from "../../../components/channelpanel/ChannelMember";
 
-type Props = {
-  channelId: any;
-  setState: any;
-};
+type ChannelMembersListProps = {
+  setChannelId: any,
+  //state: number | null,
+  channelId: number
+}
 
-export default function ChannelMembersList({ channelId, setState }: Props) {
-  const [ChannelAllMembersList, setChannelAllMembersList] = useState(null);
+export default function ChannelMembersList({ channelId, setChannelId }: ChannelMembersListProps) {
+  const [ChannelAllMembers, setChannelAllMembers] = useState(null);
   const [popUpPosition, setPopUpPosition] = useState(null);
 
   const user = useContext(AuthContext);
@@ -24,10 +27,11 @@ export default function ChannelMembersList({ channelId, setState }: Props) {
   };
 
   const fetchChannelAllMembers = () => {
-    //TODO in back - getChannelAllMembers
-    getAllUsersInChannel(channelId).then((response) => {
+    getChannelAllMembers(channelId).then((response) => {
       setChannelAllMembers(response.data);
-    });
+      console.log(response);
+    })
+        .catch((err) => console.log(err));
   };
 
   const clear = async (refresh) => {
@@ -35,20 +39,28 @@ export default function ChannelMembersList({ channelId, setState }: Props) {
     setPopUpPosition(null);
   };
 
-  if (!ChannelAllMembersList && user) fetchChannelAllMembers();
+  useEffect(() => {
+    //if (state !== undefined && state !== null)
+      fetchChannelAllMembers();
+  }, [channelId]);
 
   return (
     <SidePanel
       subheader="Members"
       body={
         <>
-          {popUpPosition && (
-            //TODO popup new user on the channel list member
-
-          )}
-          {ChannelAllMembersList?.map((conversation) => (
-            //TODO add ChannelMember
-
+          {popUpPosition &&
+              <NewMessagePopup
+                key={"newMessagePopup"}
+                position={popUpPosition}
+                clear={clear}>
+              </NewMessagePopup>}
+          {ChannelAllMembers?.map((ChannelAllMembersList) => (
+            <ChannelMember
+                key={'conversation_id ' + ChannelAllMembersList.id}
+                username={ChannelAllMembersList.user.username}
+                status={ChannelAllMembersList.status}
+              />
           ))}
         </>
       }
