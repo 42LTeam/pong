@@ -1,24 +1,26 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {socket} from "../../api";
 
 export default function GamePage() {
     const canvas = useRef(null);
 
-    const [playing, setPlaying] = useState(false);
 
-    const [data, setData] = useState({
+    let playing = false;
+
+
+    const data={
         matchId: 1,
         playerId: 0,
         moveUp: false,
         moveDown: false
-    })
+    };
 
-    const [ball, setBall] = useState({
+    const ball = {
         x: 0.5,
         y: 0.5,
         semiSize: 0
-    })
-    const [players, setPlayers] = useState({
+    };
+    const players={
         player0: {
             x: 0,
             y: 0.5,
@@ -30,10 +32,10 @@ export default function GamePage() {
             score: 0
         },
         semiHeight: 0
-    });
+    };
 
     const draw = () => {
-        if (!canvas) return ;
+        if (!canvas?.current) return ;
         const c2d = canvas.current.getContext('2d');
         c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
         c2d.canvas.width = window.innerWidth * 0.97;
@@ -41,14 +43,6 @@ export default function GamePage() {
         c2d.fillStyle='black';
         c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
         c2d.fillStyle='white';
-        const ballBuffer = {
-            ...ball,
-        }
-        setBall(ballBuffer);
-        const playersBuffer = {
-            ...players,
-        }
-        setPlayers(playersBuffer);
         c2d.fillRect((ball.x - ball.semiSize) * c2d.canvas.width,
             (ball.y - ball.semiSize) * c2d.canvas.height,
             ball.semiSize * 2 * c2d.canvas.width, ball.semiSize * 2 * c2d.canvas.height);
@@ -62,7 +56,7 @@ export default function GamePage() {
 
 
     function loop(){
-        socket.emit('keep-alive', data);
+        //socket.emit('keep-alive', data);
         draw();
         if (playing)
             setTimeout(loop, 30);
@@ -75,58 +69,32 @@ export default function GamePage() {
         }
 
         const onGamePlay = (args) => {
-            const ballBuffer = {
-                ...ball,
-                x: args.ball[0],
-                y: args.ball[1],
+            console.log(args);
+            ball.x = args.ball[0];
+            ball.y = args.ball[1];
+
+            players.player0.y = args.playerPosY[0];
+            players.player1.y = args.playerPosY[1];
+            if (players.player0.score !== args.score[0] || players.player1.score !== args.score[1]) {
+                players.player0.score = args.score[0];
+                players.player1.score = args.score[1];
+                console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
             }
-            setBall(ballBuffer);
-            const playersBuffer = {
-                ...players,
-                player0: {
-                    ...players.player0,
-                    y: args.playerPosY[0],
-                },
-                player1: {
-                    ...players.player1,
-                    y: args.playerPosY[1],
-                },
-            }
-            setPlayers(playersBuffer);
-            if (playersBuffer.player0.score !== args.score[0] || playersBuffer.player1.score !== args.score[1]) {
-                playersBuffer.player0.score = args.score[0];
-                playersBuffer.player1.score = args.score[1];
-                console.log('Player 0 :', playersBuffer.player0.score, '- Player 1 :', playersBuffer.player1.score);
-            }
+
+
         };
 
         const onGameStart = (args) => {
             console.log('game-start');
             console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
-            const dataBuffer = {
-                ...data,
-                playerId: args.playerId,
-            }
-            setData(dataBuffer);
-            const ballBuffer = {
-                ...ball,
-                semiSize: args.ballSemiSize,
-            }
-            setBall(ballBuffer);
-            const playersBuffer = {
-                ...players,
-                player0: {
-                    ...players.player0,
-                    x: args.playerPosX[0],
-                },
-                player1: {
-                    ...players.player1,
-                    x: args.playerPosX[1],
-                },
-                semiHeight: args.playerSemiHeight,
-            }
-            setPlayers(playersBuffer);
-            setPlaying(true);
+
+            data.playerId = args.playerId;
+
+            ball.semiSize = args.ballSemiSize;
+            players.player0.x = args.playerPosX[0];
+            players.player1.x = args.playerPosX[1];
+            players.semiHeight = args.playerSemiHeight;
+            playing = true;
             loop();
         };
 
@@ -135,51 +103,27 @@ export default function GamePage() {
             console.log(args);
             socket.on('spectator', (args) => {
                 console.log('spectator');
-                const ballBuffer = {
-                    ...ball,
-                    x: args.ball[0],
-                    y: args.ball[1],
-                }
-                setBall(ballBuffer);
-                const playersBuffer = {
-                    ...players,
-                    player0: {
-                        ...players.player0,
-                        y: args.playerPosY[0],
-                    },
-                    player1: {
-                        ...players.player1,
-                        y: args.playerPosY[1],
-                    },
-                }
-                setPlayers(playersBuffer);
+                ball.x = args.ball[0];
+                ball.y = args.ball[1];
+
+                players.player0.y = args.playerPosY[0];
+                players.player1.y = args.playerPosY[1];
             });
         };
 
         const onGameFinish = (args) => {
             console.log('game-finish');
-            setPlaying(false);
-            const ballBuffer = {
-                ...ball,
-                x: args.ball[0],
-                y: args.ball[1],
-            }
-            setBall(ballBuffer);
-            const playersBuffer = {
-                ...players,
-                player0: {
-                    ...players.player0,
-                    y: args.playerPosY[0],
-                    score: args.score[0],
-                },
-                player1: {
-                    ...players.player1,
-                    y: args.playerPosY[1],
-                    score: args.score[1],
-                },
-            }
-            setPlayers(playersBuffer);
-            console.log('Player 0 :', playersBuffer.player0.score, '- Player 1 :', playersBuffer.player1.score);
+            playing = false;
+            ball.x = args.ball[0];
+            ball.y = args.ball[1];
+            players.player0.y = args.playerPosY[0];
+            players.player0.score = args.score[0];
+
+
+            players.player1.y = args.playerPosY[1];
+            players.player1.score = args.score[1];
+
+            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
             console.log('Player', players.player0.score > players.player1.score ? 0 : 1, 'win!');
         };
 
