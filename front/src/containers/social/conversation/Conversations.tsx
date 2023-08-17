@@ -37,9 +37,6 @@ export default function Conversations({ state }: Props){
 
     }
 
-    if (conversations.length == 0 && user) fetchConversations();
-
-
     useEffect(() => {
         fetchConversations();
     }, [application])
@@ -69,7 +66,7 @@ export default function Conversations({ state }: Props){
                             <Conversation
                                 handleClick={() => setState(conversation.id)}
                                 key={'conversation_id '+ conversation.id}
-                                username={conversation.name}
+                                username={conversation.conv ? conversation.users[0].user.username : conversation.name}
                                 lastMessage={conversation.lastMessage?.content}
                                 state={state === conversation.id}
                                 lastRead={conversation.lastRead}
