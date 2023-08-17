@@ -69,19 +69,18 @@ export default function GamePage() {
         }
 
         const onGamePlay = (args) => {
-            console.log(args);
-            ball.x = args.ball[0];
-            ball.y = args.ball[1];
+            ball.x = args.ball.x;
+            ball.y = args.ball.y;
 
-            players.player0.y = args.playerPosY[0];
-            players.player1.y = args.playerPosY[1];
+            players.player0.y = args.player0.y;
+            players.player1.y = args.player1.y;
             if (players.player0.score !== args.score[0] || players.player1.score !== args.score[1]) {
                 players.player0.score = args.score[0];
                 players.player1.score = args.score[1];
                 console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
             }
 
-
+            draw();
         };
 
         const onGameStart = (args) => {
@@ -89,10 +88,9 @@ export default function GamePage() {
             console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
 
             data.playerId = args.playerId;
-
             ball.semiSize = args.ballSemiSize;
-            players.player0.x = args.playerPosX[0];
-            players.player1.x = args.playerPosX[1];
+            players.player0.x = args.player0.x;
+            players.player1.x = args.player1.x;
             players.semiHeight = args.playerSemiHeight;
             playing = true;
             loop();
@@ -132,6 +130,7 @@ export default function GamePage() {
                 data.moveUp = true;
             if (event.key === 's')
                 data.moveDown = true;
+            socket.emit('keep-alive', data);
         }
 
         const keyUpHook = (event) => {
@@ -139,6 +138,8 @@ export default function GamePage() {
                 data.moveUp = false;
             if (event.key === 's')
                 data.moveDown = false;
+            socket.emit('keep-alive', data);
+
         }
 
         socket.on('gameplay', onGamePlay);

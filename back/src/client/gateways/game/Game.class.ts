@@ -4,19 +4,19 @@ import GameEngine from "./GameEngine.class";
 
 export default class Game {
 
-	private engine : GameEngine;
+	public engine : GameEngine;
 	players : GamePlayer[] = [];
+
 
 	constructor(
 				private server,
 				private matchId: number,
 	) {
-		this.engine = new GameEngine(this, this.server);
+		this.engine = new GameEngine(this, 0.05, 0.005);
 		console.log('New gane ', this.matchId);
 	}
 
 	MATCH_ROOM = "Match-" + this.matchId;
-
 	private isWhitelisted(user) {
 		return true;
 	}
@@ -29,7 +29,7 @@ export default class Game {
 			// socket?.emit('spectator');
 			return ;
 		}
-		const player = new GamePlayer(user.id, socket, this);
+		const player = new GamePlayer(user.id, socket, this, !Boolean(this.players.length));
 		this.players.push(player);
 		console.log('New connection, total :', this.players.length, ' matchId:', this.MATCH_ROOM);
 		socket?.join(this.MATCH_ROOM);
@@ -50,8 +50,9 @@ export default class Game {
 
 	keepAlive(user, data) {
 		if (this.isWhitelisted(user) && this.engine.playing) {
-			this.engine.playerMoveUp[user.session] = data.moveUp;
-			this.engine.playerMoveDown[user.session] = data.moveDown;
+			const index = this.players.findIndex(c => c.userId == user.id);
+			this.players[index].moveUp = data.moveUp;
+			this.players[index].moveDown = data.moveDown;
 		}
 	}
 }

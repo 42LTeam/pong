@@ -51,7 +51,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async keepAlive(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        const game = this.games[data.matchId];
+        const game : Game = this.games[data.matchId];
         game.keepAlive(user, data);
 
     }
