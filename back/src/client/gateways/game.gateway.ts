@@ -21,7 +21,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     server;
     games: any = {}
-
     async handleDisconnect(client: any) {
         //TODO handleLeave if client is in a game
     }
@@ -29,13 +28,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     async handleConnection(client: any, ...args): Promise<any> {
          // this.player = [];
     }
-
     @SubscribeMessage('join-game')
     @UseGuards(WSAuthenticatedGuard)
     async joinGame(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
         const {matchId} = data;
         const game = this.games[matchId] ? this.games[matchId] : new Game(this.server, matchId);
+        if (!this.games[matchId]) this.games[matchId] = game;
         game.handleJoin(user);
     }
 
