@@ -21,7 +21,7 @@ export default function Friend(props: Props){
         },
         {
             text: 'Envoyer un message',
-            handleClick: () => alert('TODO'),
+            handleClick: () => getConversation(props.friend.id).then((response) => navigate('/social/' + response.data.id)),
         },
         {separator: true},
         {
