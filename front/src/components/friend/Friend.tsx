@@ -2,16 +2,13 @@ import {Children} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
+import {getConversation} from "../../api";
 
 type Props = {
     friend: any,
     onClick?: any,
     children?: any,
 }
-
-
-
-
 
 export default function Friend(props: Props){
 
@@ -55,9 +52,15 @@ export default function Friend(props: Props){
         },
     };
 
+    const navigateToConversation = async (friend) => {
+        const response = await getConversation(friend.id);
+        navigate('/social/' + response.data.id);
+        console.log(response.data.id);
+    }
+
     return (
         <ContextMenu  buttons={buttons} buttonProps={buttonProps}>
-            <div onClick={() => {props.onClick ? props.onClick(props.friend) : null}} className="friend">
+            <div onClick={() => {props.onClick ? props.onClick(props.friend) : navigateToConversation(props.friend)}} className="friend">
                 <Avatar width="48px" height="48px" url={props.friend?.avatar}></Avatar>
 
                 <div className="conversation-content">

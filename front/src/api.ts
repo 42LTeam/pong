@@ -111,7 +111,14 @@ export async function sendChannelInvite(data:
     return axios(config);*/
 }
 
-
+export async function getConversation(userId: number) {
+    const config = {
+        method: 'get',
+        url: URL + '/conversation/' + userId,
+        withCredentials: true,
+    };
+    return axios(config);
+}
 
 export async function acceptFriendship(id: number){
     const config = {
