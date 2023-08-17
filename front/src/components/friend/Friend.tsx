@@ -55,7 +55,6 @@ export default function Friend(props: Props){
     const navigateToConversation = async (friend) => {
         const response = await getConversation(friend.id);
         navigate('/social/' + response.data.id);
-        console.log(response.data.id);
     }
 
     return (
