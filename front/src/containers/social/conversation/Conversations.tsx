@@ -1,10 +1,11 @@
 import "../../../css/chat.css"
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../Auth";
 import {getChannels} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
+import {ApplicationContext} from "../../Application";
 
 type Props = {
     state: any,
@@ -12,9 +13,9 @@ type Props = {
 }
 
 export default function Conversations({ state, setState }: Props){
-    const [conversations, setConversations] = useState(null);
+    const [conversations, setConversations] = useState([]);
     const [popUpPosition, setPopUpPosition] = useState(null);
-
+    const application = useContext(ApplicationContext);
     const user = useContext(AuthContext)
 
 
@@ -36,7 +37,12 @@ export default function Conversations({ state, setState }: Props){
 
     }
 
-    if (!conversations && user) fetchConversations();
+    if (conversations.length == 0 && user) fetchConversations();
+
+
+    useEffect(() => {
+        fetchConversations();
+    }, [application])
 
 
     return (
@@ -50,18 +56,24 @@ export default function Conversations({ state, setState }: Props){
                     <NewMessagePopup key={"newMessagePopup"} position={popUpPosition} clear={clear}></NewMessagePopup>
                 : null}
 
-                { conversations ?
-                    conversations.map((conversation) => {
+                {
+                    conversations.sort((a, b) => {
+                        const a_value = a.lastMessage ? a.lastMessage.created_at : a.created_at;
+                        const b_value = b.lastMessage ? b.lastMessage.created_at : b.created_at;
+                        return a_value < b_value ? 1 : -1;
+                    }).map((conversation) => {
                         return (
                             <Conversation
                                 handleClick={() => setState(conversation.id)}
                                 key={'conversation_id '+ conversation.id}
                                 username={conversation.name}
-                                message={conversation.password}
+                                lastMessage={conversation.lastMessage?.content}
                                 state={state === conversation.id}
+                                lastRead={conversation.lastRead}
+                                id={conversation.id}
                             />
                         )
-                    }) : null
+                    })
                 }
         </div>
     )

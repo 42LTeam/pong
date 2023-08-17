@@ -38,7 +38,7 @@ export default function NewMessagePopup({position, clear}: Props) {
 
     const handleClick = async () => {
         const response  = await createChannel({
-            name: [...suggestions, user].map(current => current.username).sort((a, b) => a > b ? 1 : -1).join('+'),
+            name: [...checked, user.username].map(current => current).sort((a, b) => a > b ? 1 : -1).join('+'),
             creatorId: user.id,
         });
         const channel = response.data;

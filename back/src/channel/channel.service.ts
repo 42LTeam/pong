@@ -3,13 +3,16 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Channel } from '@prisma/client';
 import { CreateChannelDto, SendInviteDto } from "./controllers/channel.controller";
 import { FriendService } from '../friend/friend.service';
+import {MessageService} from "../message/message.service";
 
 @Injectable()
 export class ChannelService {
   constructor(
     private prisma: PrismaService,
     @Inject(forwardRef(() => FriendService))
-    private friendService: FriendService) {}
+    private friendService: FriendService,
+    private messageService: MessageService
+  ) {}
 
   async addInvite(id, userId){
     const newUser = await this.prisma.userChannel.create({
@@ -84,7 +87,16 @@ export class ChannelService {
     const channel = await this.prisma.userChannel.findMany({
       where: { channelId },
       select: {
-        user: true
+        user: {
+          select: {
+            id: true,
+            avatar: true,
+            username: true,
+            xp: true,
+            status: true,
+            session: true,
+          }
+        }
       }
     });
     return channel.map(current => current.user);
@@ -95,17 +107,29 @@ export class ChannelService {
       where: {
         userId: id,
       },
-
+      select: {
+        channelId: true,
+        lastRead: true,
+      }
     });
-
     const ids = userChannel.map(current => current.channelId);
-    return this.prisma.channel.findMany({
+    const lastRead = userChannel.map(current => current.lastRead);
+    const channels = await this.prisma.channel.findMany({
       where: {
         id: {
           in: ids,
         },
       }
-    })
+    });
+
+    const mapFunc = async (current) => {
+      return {
+        ...current,
+        lastRead: lastRead[ids.indexOf(current.id)],
+        lastMessage: (await this.messageService.getLastMessageInChannel(current.id))}
+    }
+
+    return Promise.all(channels.map(mapFunc));
   }
 
     async getConversation(userId: number, friendId: number): Promise<any> {

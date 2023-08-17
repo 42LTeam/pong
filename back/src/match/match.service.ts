@@ -27,4 +27,13 @@ export class MatchService {
       return createdMatch;
     });
   }
+
+  async getUserMatches(userId: number): Promise<UserMatch[]> {
+    return this.prisma.userMatch.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+  }
+    
 }

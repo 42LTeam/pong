@@ -3,13 +3,17 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Status, User} from '@prisma/client';
 import { FriendService } from '../friend/friend.service';
 import {SearchDTO} from "./user.controller";
+import { MatchService } from 'src/match/match.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private prisma: PrismaService,
     @Inject(forwardRef(() => FriendService))
-    private friendService: FriendService) {}
+    private friendService: FriendService,
+    @Inject(forwardRef(() => MatchService))
+    private matchService: MatchService
+    ) {}
 
   async createUser(id: number, username: string, secretO2FA: string, avatar: string, xp: number): Promise<User> {
     return this.prisma.user.create({

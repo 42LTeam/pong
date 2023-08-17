@@ -100,20 +100,21 @@ export async function createChannel(
     return axios(config);
 }
 
-export async function sendChannelInvite(
-    data:
+export async function sendChannelInvite(data:
         {
             ids?: number[],
             usernames?: string[],
             channelId: number,
         }, ){
+    socket.emit('channel-invite', data);
+/*
     const config = {
         method: 'post',
         url: URL + '/channels/invite',
         withCredentials: true,
         data,
     };
-    return axios(config);
+    return axios(config);*/
 }
 
 
@@ -162,6 +163,14 @@ export async function sendFriendRequest(acceptorId: number){
     return axios(config);
 }
 
+export async function getChannelLastMessage(channelId: number) {
+    const config = {
+        method: 'get',
+        url: URL + '/message/channel/' + channelId + '/last',
+        withCredentials: true,
+    };
+    return axios(config)
+}
 
 export async function getChannelMessages(channelId: number){
     const config = {
@@ -171,6 +180,21 @@ export async function getChannelMessages(channelId: number){
     };
     return axios(config);
 }
+
+
+export async function readMessage(channelId: number, messageId: number) {
+    const config = {
+        method: 'post',
+        url: URL + '/message/read',
+        data: {
+            channelId,
+            messageId,
+        },
+        withCredentials: true,
+    }
+    return axios(config);
+}
+
 
 export async function sendMessageToChannel(channelId: number, content: string){
     socket.emit('new-message', {channelId, content});
