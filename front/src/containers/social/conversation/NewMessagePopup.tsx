@@ -3,7 +3,7 @@ import Button from "../../../components/utils/Button";
 import PopUp from "../../../components/utils/PopUp";
 import {useContext, useState} from "react";
 import Friend from "../../../components/friend/Friend";
-import {createChannel, getAllUsers, getFriendOfUser, searchUser, sendChannelInvite} from "../../../api";
+import {createChannel, getAllUsers, searchUser, sendChannelInvite} from "../../../api";
 import Removable from "../../../components/utils/Removable";
 import Cancel from "../../../components/svg/Cancel";
 import {AuthContext} from "../../Auth";
@@ -20,7 +20,8 @@ export default function NewMessagePopup({position, clear}: Props) {
 
     const mapData =  (current) => {
         return (
-            <Friend key={"popupfriend-" + current.username} friend={current}>
+            <Friend key={"popupfriend-" + current.username} friend={current} notFriend={true}
+                    onClick={() => toggleCheck(current.username, !checked.includes(current.username))}>
                 <div className="align-left">
                     <input
                         {...(checked.filter(c => c == current.username).length ? {checked:true}:{checked:false})} onChange={(event) => toggleCheck(current.username, event.target.checked)} type="checkbox"/>
