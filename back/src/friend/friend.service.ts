@@ -1,31 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {UserFriendship} from '@prisma/client';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class FriendService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => UserService))
+    private userService: UserService) {}
 
-  async addFriendship(id, friendship){
-
-    const user = await this.prisma.user.findUnique({
-      where: { id: id },
-      include: { userFriendships: true },
-    });
-
-    const updatedFriendships = [...user.userFriendships, friendship];
-    await this.prisma.user.update({
-      where: { id: id },
-      data: { userFriendships: { set: updatedFriendships } },
-    });
-  }
-//TODO check if friendship already exist
 async createFriendRequest(initiatorId: number, acceptorId: number): Promise<UserFriendship> {
-    if (initiatorId == acceptorId) {
+    if (initiatorId == acceptorId)
       throw new Error('Both initiatorId and acceptorId shouldn\'t be the same');
-    }
-
-
 
     const userFriendship = await this.prisma.userFriendship.create({
       data: {
@@ -34,28 +21,36 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
       }
     });
 
-    await this.addFriendship(acceptorId, userFriendship);
+    await this.userService.addFriendship(acceptorId, userFriendship);
     return userFriendship;
   }
 
   async acceptFriendRequest(acceptorId, friendshipId: number): Promise<UserFriendship> {
-    const updatedFriendship = await this.prisma.userFriendship.update({
+
+    const friendship = await this.prisma.userFriendship.findUnique({
       where: {
         id: friendshipId
       },
-      data: {
+    });
+    if (friendship.targetId != acceptorId)
+      throw new Error('Both acceptorId and targetId should be the same');
+    await this.prisma.userFriendship.update({
+      where: {
+        id: friendshipId
+      },
+      data:{
         acceptedAt: new Date(),
       }
     })
     const userFriendship = await this.prisma.userFriendship.create({
       data: {
         senderId: acceptorId,
-        targetId: updatedFriendship.senderId,
+        targetId: friendship.senderId,
         acceptedAt: new Date(),
       }
     });
 
-    await this.addFriendship(updatedFriendship.senderId, userFriendship);
+    await this.userService.addFriendship(friendship.senderId, userFriendship);
     return userFriendship;
   }
 
@@ -68,33 +63,53 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
     })
   }
 
-  async getPendingFriendRequests(senderId: number): Promise<any[]> {
-    const user = await this.prisma.user.findUnique({
+  async getUserFriendships(id: number): Promise<number[]> {
+    const friendShips = await this.prisma.userFriendship.findMany({
       where: {
-        id: senderId,
+        targetId: id,
+        AND: [{
+          acceptedAt: { not: null }
+        }]
+      },
+      select: { senderId: true }
+    });
+
+    return friendShips.map(current => current.senderId);
+  }
+  
+  async processInvitations(sender: number, ids: number[]): Promise<{ forbidden: number[], sent: number[] }> {
+    const forbidden = [];
+    const sent = [];
+
+    const friendships = await this.prisma.userFriendship.findMany({
+      where: {
+        senderId: sender,
+        AND: [{
+          targetId: {
+            in: ids,
+          },
+        }]
       },
       include: {
-        userFriendships: {
-          where: {
-            acceptedAt: null,
-          }
-        }
+        target: true,
       }
     });
 
-    const pending = await user.userFriendships.map(current => current.senderId);
-    return (await this.prisma.user.findMany({
-      where: {
-        id: {
-          in: pending,
-        }
+    for (const friendship of friendships) {
+      if (!friendship.acceptedAt) {
+        forbidden.push(friendship.target.id);
+      } else if (!forbidden.includes(friendship.target.id)) {
+        sent.push(friendship.target.id);
       }
-    })).map(current => {
-          return {
-            ...current,
-            friendShipId: user.userFriendships.filter(c => c.senderId == current.id)[0].id
-          }
-        }
-    );
+    }
+    
+    for (const id of ids) {
+      if (!forbidden.includes(id) && !sent.includes(id)) {
+        forbidden.push(id);
+      }
+    }
+
+    return { forbidden, sent };
   }
+
 }

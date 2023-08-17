@@ -13,13 +13,13 @@ export interface User {
     xp: number,
 }
 
-export const ApplicationContext = createContext<User | undefined>(undefined);
+export const AuthContext = createContext<User | undefined>(undefined);
 
 function Auth() {
     const [wsConnected, setConnected] = useState(false);
 
     const [user, setUser] = useState<User>(null);
-
+    const localhostback = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':3000/auth/login' : 'http://localhost:3000/auth/login';
     useEffect(() => {
         if (!user)
         getStatus()
@@ -28,7 +28,7 @@ function Auth() {
 
             })
             .catch(function () {
-                window.location.replace("http://localhost:3000/auth/login");
+                window.location.replace(localhostback);
             });
     },[user])
 
@@ -59,9 +59,9 @@ function Auth() {
 
 
     return (
-        <ApplicationContext.Provider value={user}>
+        <AuthContext.Provider value={user}>
             <Application></Application>
-        </ApplicationContext.Provider>
+        </AuthContext.Provider>
     );
 }
 

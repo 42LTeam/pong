@@ -3,10 +3,10 @@ name: Build Docker Images
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
-  build-and-push:
+  build-on-push:
     runs-on: self-hosted
 
     env:
@@ -15,25 +15,38 @@ jobs:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
       PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
-      DOCKER_SERVER: 195.15.213.225:2375
+      DOCKER_SERVER: ${{ secrets.DOCKER_IP }}
 
     steps:
-
       - name: Cleaning
         run: |
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
+          docker compose down
+          
+          if [[ $(docker volume ls -qf dangling=true) ]]; then
+            docker volume rm $(docker volume ls -qf dangling=true)
+          fi
+          
+          docker system prune -af
+          
+          sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
+          
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
+
+        shell: bash -e {0}
+
+        continue-on-error: true
 
       - name: Checkout code
         uses: actions/checkout@v2
+#        Cloning the repository's source code from the default branch into the Actions runner environment.
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+#        Prepares the environment to use Docker Buildx for building Docker images.
 
       - name: Build and push API image
         run: |
-          echo "$MY_ENV_VARIABLE" > .env
+          touch .env
           docker-compose up -d --build
-        env:
-          MY_ENV_VARIABLE: ${{ secrets.MY_ENV_VARIABLE }}
-        
+          docker-compose logs

@@ -3,12 +3,12 @@ import FriendTabs from "./FriendTabs";
 import {useContext, useState} from "react";
 import AddFriend from "./AddFriend";
 import Friendlist from "./FriendList";
-import {ApplicationContext} from "../../Auth";
+import {AuthContext} from "../../Auth";
 import {getPath} from "../../../api";
 
 
 const states = ["En ligne","Tous","En attente","Bloqué","Ajouter"];
-const paths = ["/users/friend/online/","/users/friend/","/friend/friend-request/pending/","/block/blocked/"]
+const paths = ["/users/friend/online/","/users/friend/","/users/friend-request/pending/","/block/blocked/"]
 
 export default function Friends(){
     const [state, setState] = useState("En ligne");
@@ -17,7 +17,7 @@ export default function Friends(){
         setState(text);
         setFriends(null);
     }
-    const user = useContext(ApplicationContext)
+    const user = useContext(AuthContext)
 
     const [friends, setFriends] = useState(null);
 

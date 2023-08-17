@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Delete, Param, HttpCode, ParseIntPipe, Use
 import { ApiBody, ApiProperty, ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { Block, User } from '@prisma/client';
 import { BlockService } from './block.service';
-import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 
 class CreateBlockDto {
   @ApiProperty()
@@ -41,5 +41,11 @@ export class BlockController {
   @ApiBody({ type: CreateBlockDto })
   removeBlockRequest(@Body() removeBlockDto: CreateBlockDto): Promise<Block> {
     return this.blockService.removeBlockRequest(removeBlockDto.blockerId, removeBlockDto.blockedId);
+  }
+
+  @Get('blocks/:id')
+  @ApiOperation({ summary: 'Get blocked of user' })
+  async getBlocksOfUser(@Param('id', ParseIntPipe) id: number): Promise<User[]> {
+    return this.blockService.getBlocksOfUser(Number(id));
   }
 }

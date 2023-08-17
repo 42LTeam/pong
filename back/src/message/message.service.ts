@@ -22,6 +22,7 @@ export class MessageService {
         user: {
           select: {
             avatar: true,
+            username: true,
           },
         },
       }
@@ -55,8 +56,8 @@ export class MessageService {
     });
   }
 
-  async getMessageByChannel(channelId: number): Promise<Message[]> {
-    return this.prisma.message.findMany({
+  async getMessageByChannel(userId: number, channelId: number): Promise<{ lastRead :number, messages:Message[] }> {
+    const messages = await this.prisma.message.findMany({
       where: {
         channelId: channelId,
       },
@@ -68,6 +69,20 @@ export class MessageService {
         },
       }
     });
+    const userChanel = await this.prisma.userChannel.findFirst({
+      where: {
+        userId,
+        channelId,
+      },
+      select: {
+        lastRead: true,
+      }
+    });
+    const lastRead = userChanel.lastRead;
+
+    if (messages.length == 0) return {messages: [], lastRead}
+
+    return {lastRead, messages};
   }
 
   async isMessageReadByUser(messageId: number, userId: number): Promise<boolean> {
@@ -87,17 +102,33 @@ export class MessageService {
     return message.readBy.some(user => user.id === userId);
   }
 
-  async getLastMessageInChannel(channelId: number) {
-    const lastMessage = await this.prisma.message.findFirst({
+  async getLastMessageInChannel(channelId: number): Promise<any> {
+    const lastMessage = await this.prisma.message.findMany({
       where: { channelId },
-      orderBy: { created_at: 'desc' },
+      orderBy: [{
+        id: 'desc',
+      }],
     });
 
     if (!lastMessage) {
-      throw new Error(`No messages found for channel id: ${channelId}`);
+      return null;
     }
 
-    return lastMessage;
+    return lastMessage[0];
+  }
+
+  async readMessage(id, body) {
+    return this.prisma.userChannel.updateMany({
+      where: {
+        userId: id,
+        AND: [{
+          channelId: body.channelId
+        }]
+      },
+      data: {
+        lastRead: body.messageId,
+      }
+    });
   }
 }
 

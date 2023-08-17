@@ -7,6 +7,10 @@ FROM node:18-alpine As development
 # Create app directory
 WORKDIR /usr/src/app
 
+# Install dumb-init to run as PID 1
+RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
+RUN chmod +x /usr/local/bin/dumb-init
+
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
 # Copying this first prevents re-running npm install on every code change.
@@ -25,6 +29,9 @@ COPY --chown=node:node ./back .
 USER node
 EXPOSE 3000
 
+# Handle Every Signal Correctly by Dumb Init to PID 1
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
+
 ###################
 # BUILD FOR PRODUCTION
 ###################
@@ -32,6 +39,10 @@ EXPOSE 3000
 FROM node:18-alpine As build
 
 WORKDIR /usr/src/app
+
+# Install dumb-init to run as PID 1
+RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
+RUN chmod +x /usr/local/bin/dumb-init
 
 COPY --chown=node:node package*.json ./
 
@@ -56,15 +67,25 @@ RUN npm ci --only=production && npm cache clean --force
 
 USER node
 
+# Handle Every Signal Correctly by Dumb Init to PID 1
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
+
 ###################
 # PRODUCTION
 ###################
 
 FROM node:18-alpine As production
 
+# Install dumb-init to run as PID 1
+RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
+RUN chmod +x /usr/local/bin/dumb-init
+
 # Copy the bundled code from the build stage to the production image
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+
+# Handle Every Signal Correctly by Dumb Init to PID 1
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 
 # Start the server using the production build
 CMD [ "node", "dist/main.js" ]

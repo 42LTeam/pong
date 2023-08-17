@@ -1,16 +1,20 @@
 import io from "socket.io-client";
 import axios from "axios";
 
-const webSocketURL = "http://localhost:8001";
-const URL = "http://localhost:3000";
+const localhostwebsocket = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':8001' : 'http://localhost:8001';
+const webSocketURL = localhostwebsocket;
+
+const localhostback = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':3000' : 'http://localhost:3000';
+const URL = localhostback;
 export const socket = io(webSocketURL, { autoConnect: true});
 
-export async function searchUser(search, options = {friendOnly: false}){
-    const {friendOnly} = options;
-
+export async function searchUser(search, options: {friendOnly?: boolean, notFriend?: boolean}){
     const config = {
         method: 'get',
-        url: URL + '/users/search/' + (friendOnly ? 'friend/' : '') +search,
+        url: URL + '/users/search/'  +search,
+        data: {
+            options
+        },
         withCredentials: true,
     };
     return axios(config);
@@ -35,7 +39,7 @@ export async function updateUserAvatar(id, avatarUrl){
         },
     };
     return await axios(config);
-};
+}
 
 export async function updateUserUsername(id, username){
     const config = {
@@ -47,8 +51,20 @@ export async function updateUserUsername(id, username){
         },
     };
     return await axios(config);
-};
+}
+export async function getAllUsers(options: {friendOnly?: boolean, notFriend?: boolean}){
 
+    const queryParams = Object.entries(options).map((key) => key[0]+'='+key[1]).join('&');
+    const config = {
+        method: 'get',
+        url: URL + '/users?' + queryParams,
+        withCredentials: true,
+
+    };
+    console.log(config);
+
+    return axios(config);
+}
 export async function getFriendOfUser(id: number){
     const config = {
         method: 'get',
@@ -61,7 +77,7 @@ export async function getFriendOfUser(id: number){
 export async function getChannels(){
     const config = {
         method: 'get',
-        url: URL + '/users/channels',
+        url: URL + '/channels/channels',
         withCredentials: true,
     };
     return axios(config);
@@ -84,20 +100,21 @@ export async function createChannel(
     return axios(config);
 }
 
-export async function sendChannelInvite(
-    data:
+export async function sendChannelInvite(data:
         {
             ids?: number[],
             usernames?: string[],
             channelId: number,
         }, ){
+    socket.emit('channel-invite', data);
+/*
     const config = {
         method: 'post',
         url: URL + '/channels/invite',
         withCredentials: true,
         data,
     };
-    return axios(config);
+    return axios(config);*/
 }
 
 
@@ -146,6 +163,14 @@ export async function sendFriendRequest(acceptorId: number){
     return axios(config);
 }
 
+export async function getChannelLastMessage(channelId: number) {
+    const config = {
+        method: 'get',
+        url: URL + '/message/channel/' + channelId + '/last',
+        withCredentials: true,
+    };
+    return axios(config)
+}
 
 export async function getChannelMessages(channelId: number){
     const config = {
@@ -155,6 +180,21 @@ export async function getChannelMessages(channelId: number){
     };
     return axios(config);
 }
+
+
+export async function readMessage(channelId: number, messageId: number) {
+    const config = {
+        method: 'post',
+        url: URL + '/message/read',
+        data: {
+            channelId,
+            messageId,
+        },
+        withCredentials: true,
+    }
+    return axios(config);
+}
+
 
 export async function sendMessageToChannel(channelId: number, content: string){
     socket.emit('new-message', {channelId, content});
