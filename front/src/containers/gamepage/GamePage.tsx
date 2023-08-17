@@ -38,8 +38,8 @@ export default function GamePage() {
         if (!canvas?.current) return ;
         const c2d = canvas.current.getContext('2d');
         c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
-        c2d.canvas.width = window.innerWidth * 0.97;
-        c2d.canvas.height = window.innerHeight * 0.97;
+        //c2d.canvas.width = window.innerWidth * 0.97;
+        //c2d.canvas.height = window.innerHeight * 0.97;
         c2d.fillStyle='black';
         c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
         c2d.fillStyle='white';
