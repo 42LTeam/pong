@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import TextIcon from "../../components/TextIcon";
-import { AuthContext, AuthContext, User } from "../Auth";
+import { AuthContext, User } from "../Auth";
 
 import "../../css/leaderboard.css"
 

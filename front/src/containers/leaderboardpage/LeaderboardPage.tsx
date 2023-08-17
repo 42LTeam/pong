@@ -12,7 +12,7 @@ const states = ["Total xp", "Victories/defeat ratio", "Average points per match"
 
 export default function LeaderboardPage(){
 
-  const user = useContext(ApplicationContext);
+  const user = useContext(AuthContext);
   const [placement, setPlacement] = useState(0);
   const [users, setUsers] = useState([]);
   const [state, setState] = useState("Total xp");
