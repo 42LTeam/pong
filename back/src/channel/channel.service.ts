@@ -70,15 +70,14 @@ export class ChannelService {
   }
 
 
-  async sendInvite(sender: number, body: SendInviteDto, returnAddInvite = false) {
+  async sendInvite(sender: number, body: SendInviteDto) {
     const { ids, channelId } = body;
 
     const { forbidden, sent } = await this.friendService.processInvitations(sender, ids);
     
     const success = [];
     for (const i of sent) {
-      const invite = await this.addInvite(channelId, i);
-      if (returnAddInvite) return invite;
+      await this.addInvite(channelId, i);
       success.push(i);
     }
 
@@ -181,23 +180,21 @@ export class ChannelService {
         }
       });
 
-      for (const conversationElement of conversation) {
-        const other = conversationElement.creatorId == userId ? friendId : userId;
-        const ret = await this.prisma.userChannel.findFirst({
-          where: {
-            channelId: conversationElement.id,
-            AND: [{
-              userId: other,
-            }]
-          },
-          select: {
-            channel: true,
-          }
-        });
-        if (ret) return conversationElement;
-      }
+      if (conversation.length) return conversation[0];
 
-      const newConv = await this.createChannel({conv: true, creatorId: userId});
-      return this.sendInvite(userId, {channelId: newConv.id, ids: [friendId]}, true);
+
+      const newConv = await this.prisma.channel.create({
+        data: {
+          conv: true,
+          creator: {
+            connect: {
+              id: userId,
+            }
+          },
+          created_at: new Date(),
+        }
+      });
+      await this.addInvite(newConv.id, userId);
+      return this.addInvite(newConv.id, friendId);
     }
 }
