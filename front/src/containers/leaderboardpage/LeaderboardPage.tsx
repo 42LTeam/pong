@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import LeaderboardTabs from './LeaderboardTabs';
 import { AuthContext } from "../Auth";
-import {getUsers} from "../../api";
+import {getAllUsers} from "../../api";
 import LeaderboardContent from './LeaderboardContent';
 
 import "../../css/leaderboard.css"
@@ -13,6 +13,7 @@ const states = ["Total xp", "Victories/defeat ratio", "Average points per match"
 export default function LeaderboardPage(){
 
   const user = useContext(AuthContext);
+  
   const [placement, setPlacement] = useState(0);
   const [users, setUsers] = useState([]);
   const [state, setState] = useState("Total xp");
@@ -22,14 +23,15 @@ export default function LeaderboardPage(){
   }
 
   useEffect(() => {
-    getUsers()
+    getAllUsers({friendOnly: false, notFriend: false})
       .then(function (response) {
-        setUsers(response.data);
+        const updatedUsers = [...response.data, user];
+        setUsers(updatedUsers);
       })
       .catch(function (error) {
         console.error('Error fetching user data:', error);
       });
-  }, []);
+  }, [user]);
 
   const usersWithRank = getUsersRanks(users, state);
 
