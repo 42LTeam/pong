@@ -8,7 +8,7 @@ const localhostback = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_UR
 const URL = localhostback;
 export const socket = io(webSocketURL, { autoConnect: true});
 
-export async function searchUser(search, options: {friendOnly?: boolean, notFriend?: boolean}){
+export async function searchUser(search, options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
     const config = {
         method: 'get',
         url: URL + '/users/search/'  +search,
@@ -52,7 +52,7 @@ export async function updateUserUsername(id, username){
     };
     return await axios(config);
 }
-export async function getAllUsers(options: {friendOnly?: boolean, notFriend?: boolean}){
+export async function getAllUsers(options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
 
     const queryParams = Object.entries(options).map((key) => key[0]+'='+key[1]).join('&');
     const config = {
