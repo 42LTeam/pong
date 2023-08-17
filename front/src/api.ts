@@ -129,6 +129,15 @@ export async function acceptFriendship(id: number){
     return axios(config)
 }
 
+export async function removeFriendship(friendId: number){
+    const config = {
+        method: 'delete',
+        url: URL + '/friend/friendship/' + friendId,
+        withCredentials: true,
+    };
+    return axios(config)
+}
+
 
 export async function declineFriendship(id: number){
     const config = {

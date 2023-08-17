@@ -44,7 +44,7 @@ export default function AddFriend(){
                     </Button>
                 }
             />
-            {suggestions?.map((current) => {return (<Friend onClick={handleSuggestionClick} key={current.username + "suggestion-key"} friend={current}></Friend>)})}
+            {suggestions?.map((current) => {return (<Friend unremovable={true} onClick={handleSuggestionClick} key={current.username + "suggestion-key"} friend={current}></Friend>)})}
         </>
     )
 }
