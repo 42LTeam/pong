@@ -7,6 +7,7 @@ export default function GamePage() {
     const [playing, setPlaying] = useState(false);
 
     const [data, setData] = useState({
+        matchId: 1,
         playerId: 0,
         moveUp: false,
         moveDown: false
@@ -205,7 +206,7 @@ export default function GamePage() {
         document.addEventListener('keyup', keyUpHook);
 
         return () => {
-            socket.emit('leave-game');
+            socket.emit('leave-game', {matchId: 1});
             socket.off('gameplay', onGamePlay);
             socket.off('game-wait', onGameWait);
             socket.off('game-start', onGameStart);
@@ -219,7 +220,7 @@ export default function GamePage() {
 
     useEffect(() => {
         if (canvas)
-            socket.emit('join-game', 1)
+            socket.emit('join-game', {matchId: 1})
     }, [canvas])
     return (
         <>
