@@ -27,7 +27,7 @@ export class ChannelService {
     });
 
     const updatedChannelUsers = [...channel.users, newUser];
-    await this.prisma.channel.update({
+    return this.prisma.channel.update({
       where: { id: id },
       data: { users: { set: updatedChannelUsers } },
     });
@@ -56,23 +56,29 @@ export class ChannelService {
       select: {
         id: true,
         creatorId: true,
-        users: true,
+        users: {
+          where: {
+            id: {
+              not: creatorId,
+            }
+          }
+        },
         messages: true,
       }
     });
-    await this.addInvite(channel.id, creatorId);
-    return channel;
+    return this.addInvite(channel.id, creatorId);
   }
 
 
-  async sendInvite(sender: number, body: SendInviteDto) {
+  async sendInvite(sender: number, body: SendInviteDto, returnAddInvite = false) {
     const { ids, channelId } = body;
 
     const { forbidden, sent } = await this.friendService.processInvitations(sender, ids);
     
     const success = [];
     for (const i of sent) {
-      await this.addInvite(channelId, i);
+      const invite = await this.addInvite(channelId, i);
+      if (returnAddInvite) return invite;
       success.push(i);
     }
 
@@ -119,6 +125,25 @@ export class ChannelService {
         id: {
           in: ids,
         },
+      },
+      select: {
+        id: true,
+        conv: true,
+        name: true,
+        users: {
+          take: 10,
+          where: {
+            userId: {
+              not: id,
+            }
+          },
+          select: {
+            user: true,
+          }
+        },
+        messages: {
+          take: 100,
+        },
       }
     });
 
@@ -145,7 +170,13 @@ export class ChannelService {
         select: {
           id: true,
           creatorId: true,
-          users: true,
+          users: {
+            where:{
+              id: {
+                not: userId,
+              }
+            }
+          },
           messages: true,
         }
       });
@@ -167,7 +198,6 @@ export class ChannelService {
       }
 
       const newConv = await this.createChannel({conv: true, creatorId: userId});
-      await this.sendInvite(userId, {channelId: newConv.id, ids: [friendId]});
-      return newConv;
+      return this.sendInvite(userId, {channelId: newConv.id, ids: [friendId]}, true);
     }
 }
