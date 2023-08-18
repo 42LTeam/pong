@@ -3,7 +3,7 @@ import Button from "../../../components/utils/Button";
 import PopUp from "../../../components/utils/PopUp";
 import {useContext, useState} from "react";
 import Friend from "../../../components/friend/Friend";
-import {createChannel, getFriendOfUser, searchUser, sendChannelInvite} from "../../../api";
+import {createChannel, getAllUsers, searchUser, sendChannelInvite} from "../../../api";
 import Removable from "../../../components/utils/Removable";
 import Cancel from "../../../components/svg/Cancel";
 import {AuthContext} from "../../Auth";
@@ -20,7 +20,8 @@ export default function NewMessagePopup({position, clear}: Props) {
 
     const mapData =  (current) => {
         return (
-            <Friend key={"popupfriend-" + current.username} friend={current}>
+            <Friend key={"popupfriend-" + current.username} friend={current} notFriend={true}
+                    onClick={() => toggleCheck(current.username, !checked.includes(current.username))}>
                 <div className="align-left">
                     <input
                         {...(checked.filter(c => c == current.username).length ? {checked:true}:{checked:false})} onChange={(event) => toggleCheck(current.username, event.target.checked)} type="checkbox"/>
@@ -37,7 +38,7 @@ export default function NewMessagePopup({position, clear}: Props) {
 
     const handleClick = async () => {
         const response  = await createChannel({
-            name: [...suggestions, user].map(current => current.username).sort((a, b) => a > b ? 1 : -1).join('+'),
+            name: [...checked, user.username].map(current => current).sort((a, b) => a > b ? 1 : -1).join('+'),
             creatorId: user.id,
         });
         const channel = response.data;
@@ -56,7 +57,7 @@ export default function NewMessagePopup({position, clear}: Props) {
             setChecked(checked.filter(c => c != current));
     }
     if (!suggestions.length)
-        getFriendOfUser(user.id).then(response => setSuggestions(response.data));
+        getAllUsers().then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
 
     return (
         <PopUp key={"newmessage-root"} position={position} clear={clear}>

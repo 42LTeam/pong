@@ -8,7 +8,7 @@ import {getPath} from "../../../api";
 
 
 const states = ["En ligne","Tous","En attente","Bloqué","Ajouter"];
-const paths = ["/users/friend/online/","/users/friend/","/friend/friend-request/pending/","/block/blocked/"]
+const paths = ["/users/friend/online/","/users/friend/","/users/friend-request/pending/","/block/blocked/"]
 
 export default function Friends(){
     const [state, setState] = useState("En ligne");
