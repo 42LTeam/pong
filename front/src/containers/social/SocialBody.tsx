@@ -23,6 +23,7 @@ export default function SocialBody(){
             </Conversations>
             <div className="vertical-separator"></div>
             {state ? (<Chat channel={state}></Chat>) : (<Friends></Friends>)}
+            <div className="vertical-separator"></div>
             {
                 isDef(state) &&
                 <ChannelMembersList
