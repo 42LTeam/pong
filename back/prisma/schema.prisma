@@ -72,6 +72,7 @@ model UserChannel {
   id        Int     @id @default(autoincrement())
   userId    Int
   channelId Int
+  lastRead  Int     @default(0)
   isBlocked Boolean @default(false)
   user      User    @relation(fields: [userId], references: [id])
   channel   Channel @relation(fields: [channelId], references: [id])

@@ -11,9 +11,8 @@ export class FriendService {
     private userService: UserService) {}
 
 async createFriendRequest(initiatorId: number, acceptorId: number): Promise<UserFriendship> {
-    if (initiatorId == acceptorId) {
+    if (initiatorId == acceptorId)
       throw new Error('Both initiatorId and acceptorId shouldn\'t be the same');
-    }
 
     const userFriendship = await this.prisma.userFriendship.create({
       data: {
@@ -27,23 +26,31 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
   }
 
   async acceptFriendRequest(acceptorId, friendshipId: number): Promise<UserFriendship> {
-    const updatedFriendship = await this.prisma.userFriendship.update({
+
+    const friendship = await this.prisma.userFriendship.findUnique({
       where: {
         id: friendshipId
       },
-      data: {
+    });
+    if (friendship.targetId != acceptorId)
+      throw new Error('Both acceptorId and targetId should be the same');
+    await this.prisma.userFriendship.update({
+      where: {
+        id: friendshipId
+      },
+      data:{
         acceptedAt: new Date(),
       }
     })
     const userFriendship = await this.prisma.userFriendship.create({
       data: {
         senderId: acceptorId,
-        targetId: updatedFriendship.senderId,
+        targetId: friendship.senderId,
         acceptedAt: new Date(),
       }
     });
 
-    await this.userService.addFriendship(updatedFriendship.senderId, userFriendship);
+    await this.userService.addFriendship(friendship.senderId, userFriendship);
     return userFriendship;
   }
 

@@ -1,11 +1,24 @@
-import {Controller, Get, Param, Post, Body, Put, Delete, UseGuards, ParseIntPipe, Req} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Put,
+  Delete,
+  UseGuards,
+  ParseIntPipe,
+  Req,
+  ParseBoolPipe, Query
+} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
-import {IsEnum, IsNotEmpty, IsNumber, IsString} from "@nestjs/class-validator";
+import {IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
 import { Roles } from '../auth/roles.decorator';
-import {Channel, Status, User} from "@prisma/client";
+import {Channel, Status, User, UserMatch} from "@prisma/client";
+import { MatchService } from 'src/match/match.service';
 
 class CreateUserDto {
   @ApiProperty()
@@ -55,11 +68,26 @@ export class UpdateUserStatusDto {
   status: Status;
 }
 
+export class SearchDTO {
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  friendOnly?: boolean;
+
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  notFriend?: boolean;
+}
+
 @ApiTags('users')
 @Controller('users')
 @UseGuards(AuthenticatedGuard)
 export class UserController {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+  private matchService: MatchService
+  ) { }
 
   @Post()
   @Roles(Role.ADMIN)  // For admin restrictions
@@ -74,8 +102,10 @@ export class UserController {
   @Get()
   @Roles(Role.USER) 
   @ApiOperation({ summary: 'Get all users' })
-  async getAllUsers(): Promise<User[]> {
-    return this.userService.getAllUsers();
+  @ApiBody({type: SearchDTO})
+  async getAllUsers(@Req() req, @Query('notFriend', ParseBoolPipe) notFriend: boolean): Promise<User[]> {
+    const user = await req.user;
+    return this.userService.getAllUsers(user.id , {notFriend});
   }
 
   @Get('id/:id')
@@ -112,9 +142,10 @@ export class UserController {
 
   @Get('search/:query')
   @ApiOperation({ summary: 'Search user by username' })
-  async search(@Param('query', StringPipe) query: string, @Req() req): Promise<User[]> {
+  @ApiBody({ type: SearchDTO })
+  async search(@Param('query', StringPipe) query: string,@Body() body : SearchDTO, @Req() req): Promise<User[]> {
     const user = await req.user;
-    return this.userService.search(user.id, query);
+    return this.userService.search(user.id, query, body);
   }
 
   @Get('search/friend/:query')
@@ -151,4 +182,9 @@ export class UserController {
     return this.userService.updateUserStatusById(id, updateUserStatusDto.status);
   }
 
+  @Get(':id/matches')
+  @ApiOperation({ summary: 'Get all matches of user by Id' })
+  async getUserMatches(@Param('id', ParseIntPipe) id: number): Promise<UserMatch[]> {
+    return this.matchService.getUserMatches(id);
+  }
 }
