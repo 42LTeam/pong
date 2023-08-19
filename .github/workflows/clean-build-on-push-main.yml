@@ -44,6 +44,5 @@ jobs:
       - name: Build and push API image
         run: |
           touch .env
-          docker-compose pull
           docker-compose up -d --build
           docker-compose logs
