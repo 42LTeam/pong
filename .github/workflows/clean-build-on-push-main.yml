@@ -49,3 +49,5 @@ jobs:
         run: |
           touch .env
           docker-compose -f docker-compose.dev.yml up -d --build
+          docker-compose -f docker-compose.build.yml up -d --build
+          docker-compose -f docker-compose.prod.yml up -d --build
