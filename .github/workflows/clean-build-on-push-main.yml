@@ -3,10 +3,10 @@ name: Build Docker Images
 on:
   push:
     branches:
-      - main
+      - 57-workflow-ci-improvements
 
 jobs:
-  build-on-push:
+  clean-build-on-push-main:
     runs-on: self-hosted
 
     env:
