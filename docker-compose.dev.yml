@@ -26,6 +26,8 @@ services:
       target: development
     volumes:
       - ./front:/usr/src/app
+    env_file:
+      - .env
     command: npm run dev
     ports:
       - 5173:5173
