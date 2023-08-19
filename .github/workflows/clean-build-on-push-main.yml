@@ -3,10 +3,10 @@ name: Build Docker Images
 on:
   push:
     branches:
-      - 57-workflow-ci-improvements
+      - main
 
 jobs:
-  clean-build-on-push-main:
+  build-on-push:
     runs-on: self-hosted
 
     env:
@@ -27,22 +27,26 @@ jobs:
             docker volume rm $(docker volume ls -qf dangling=true)
           fi
           
-          docker container prune -f
+          docker system prune -af
           
           sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
+          
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
 
         shell: bash -e {0}
+
         continue-on-error: true
 
       - name: Checkout code
         uses: actions/checkout@v2
+      #        Cloning the repository's source code from the default branch into the Actions runner environment.
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+      #        Prepares the environment to use Docker Buildx for building Docker images.
 
       - name: Build and push API image
         run: |
           touch .env
-          docker-compose -f docker-compose.dev.yml up -d --build
+          docker-compose up -d --build
           docker-compose logs
