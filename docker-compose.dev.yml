@@ -2,14 +2,14 @@ services:
   api:
     container_name: api
     build:
-      dockerfile: ./back/Dockerfile
       context: .
+      dockerfile: ./back/Dockerfile
       target: development
     env_file:
-        - .env
+      - .env
     volumes:
       - ./back:/usr/src/app
-    command: sh -c "npm install && npx prisma generate && npx tsc && (date | npm run migrate) && npm run start:migrate:prod"
+    command: sh -c "npx prisma generate && npx tsc && (date | npm run migrate) && npm run start:migrate:prod"
     ports:
       - 3000:3000
       - 8001:8001
@@ -21,8 +21,9 @@ services:
   front:
     container_name: front
     build:
-      dockerfile: ./front/Dockerfile
       context: .
+      dockerfile: ./front/Dockerfile
+      target: development
     volumes:
       - ./front:/usr/src/app
     command: npm run dev

@@ -1,18 +1,37 @@
-FROM node:18-alpine
-
+# Base Node
+FROM node:18-alpine AS base
 WORKDIR /usr/src/app
-
-# Install dumb-init to run as PID 1
+# Install dumb-init for better signal handling
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
 RUN chmod +x /usr/local/bin/dumb-init
+# Set ownership of app directory
+RUN chown -R node:node /usr/src/app
+# Set user to node for security
+USER node
 
-COPY --chown=node:node ./front/package*.json ./
-
+# Development
+FROM base AS development
+COPY --chown=node:node ./front/package.json ./
+COPY --chown=node:node ./front/package-lock.json ./
 RUN npm ci
-
-COPY --chown=node:node ./front .
+COPY --chown=node:node ./front/ ./
 
 EXPOSE 5173
-
-# Handle Every Signal Correctly by Dumb Init to PID 1
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
+CMD ["vite", "--host", "--port", "5173"]
+
+# Build
+FROM base AS build
+COPY --chown=node:node --from=development /usr/src/app/package.json ./
+COPY --chown=node:node --from=development /usr/src/app/package-lock.json ./
+COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules/
+COPY --chown=node:node --from=development /usr/src/app/ ./
+
+RUN npm run build
+
+# ---- Production ----
+FROM base AS production
+ENV NODE_ENV=production
+COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+CMD ["npm", "run", "start"]

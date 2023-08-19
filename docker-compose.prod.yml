@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: api-prod
+    build:
+      dockerfile: ./back/Dockerfile
+      target: production
+    env_file:
+      - .env
+    command: npm run start
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    networks:
+      - net
+
+  front:
+    container_name: front-prod
+    build:
+      dockerfile: ./front/Dockerfile
+      target: production
+    command: npm run start
+    ports:
+      - 5173:5173
+    depends_on:
+      - api
+    networks:
+      - net
+
+  postgres:
+    container_name: postgres-prod
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - docker-nest-postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - net
+
+volumes:
+  docker-nest-postgres:
+
+networks:
+  net:
+    driver: bridge

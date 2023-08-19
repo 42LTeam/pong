@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: api-build
+    build:
+      dockerfile: ./back/Dockerfile
+      target: build
+    env_file:
+      - .env
+    networks:
+      - net
+
+  front:
+    container_name: front-build
+    build:
+      dockerfile: ./front/Dockerfile
+      target: build
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
