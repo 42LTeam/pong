@@ -23,11 +23,11 @@ COPY --chown=node:node --from=development /usr/src/app/package.json ./
 COPY --chown=node:node --from=development /usr/src/app/package-lock.json ./
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules/
 COPY --chown=node:node --from=development /usr/src/app/ ./
-RUN npx tsc
+RUN npx npx prisma generate && npx tsc && (date | npm run migrate)
 
 # ---- Production ----
 FROM base AS production
 ENV NODE_ENV=production
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
-CMD ["sh", "-c", "npm run migrate && npm run start:migrate:prod"]
+CMD ["sh", "-c", "npm run start:migrate:prod"]
