@@ -4,6 +4,7 @@ services:
   api:
     container_name: api-build
     build:
+      context: .
       dockerfile: ./back/Dockerfile
       target: build
     env_file:
@@ -14,6 +15,7 @@ services:
   front:
     container_name: front-build
     build:
+      context: .
       dockerfile: ./front/Dockerfile
       target: build
     networks:
