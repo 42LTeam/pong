@@ -23,6 +23,8 @@ COPY --chown=node:node --from=development /usr/src/app/package.json ./
 COPY --chown=node:node --from=development /usr/src/app/package-lock.json ./
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules/
 COPY --chown=node:node --from=development /usr/src/app/ ./
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
 
 RUN npx prisma generate && npx tsc && (date | npm run migrate)
 
