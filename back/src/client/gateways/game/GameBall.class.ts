@@ -1,5 +1,4 @@
 import Game from "./Game.class";
-import GameEngine from "./GameEngine.class";
 
 export default class GameBall {
 

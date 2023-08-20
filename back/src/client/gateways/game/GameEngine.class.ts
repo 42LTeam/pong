@@ -3,7 +3,7 @@ import GameBall from "./GameBall.class";
 
 export default class GameEngine {
 
-	TIME_REFRESH = 10;
+	TIME_REFRESH = 20;
 	WIN_SCORE = 5;
 	ball: GameBall;
 	score = [0, 0];
@@ -15,21 +15,25 @@ export default class GameEngine {
 		this.ball = new GameBall(this.game);
 	}
 
+	printScores() {
+		console.log(
+			'Player 0 :',
+			this.score[0],
+			'- Player 1 :',
+			this.score[1],
+		);
+	}
+
 	checkScores() {
 		if (this.ball.position.x < this.ball.BALL_SEMI_SIZE * 3) this.score[1]++;
 		else if (this.ball.position.x > 1 - this.ball.BALL_SEMI_SIZE * 3)
 			this.score[0]++;
 		else return false;
+		this.printScores();
 		if (
 			this.score[0] === this.WIN_SCORE ||
 			this.score[1] === this.WIN_SCORE
 		) {
-			console.log(
-				'Player 0 :',
-				this.score[0],
-				'- Player 1 :',
-				this.score[1],
-			);
 			console.log(
 				'Player',
 				this.score[0] === this.WIN_SCORE ? 0 : 1,
@@ -60,7 +64,7 @@ export default class GameEngine {
 		else {
 			this.game.players.forEach((player) => {
 				player.send('gameplay', this.getData());
-				player.send('spectator', this.getData());
+				// player.send('spectator', this.getData());
 			});
 			setTimeout(() => {
 				this.loop();
@@ -77,9 +81,12 @@ export default class GameEngine {
 				player1: this.game.players[1].position,
 				playerSemiHeight: this.game.players[0].PLAYER_SEMI_HEIGHT,
 			});
+			player.start();
 		});
 		this.playing = true;
+		this.score = [0, 0];
 		this.ball.newBall();
+		this.printScores();
 		this.loop();
 	}
 }

@@ -49,14 +49,19 @@ export default function GamePage() {
     //         ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
     // }
 
-    useEffect(() => {
-        const getData = (args) => {
-            ball.x = args.ball.x;
-            ball.y = args.ball.y;
-            players.player0.y = args.player0.y;
-            players.player1.y = args.player1.y;
+    const getData = (args) => {
+        ball.x = args.ball.x;
+        ball.y = args.ball.y;
+        players.player0.y = args.player0.y;
+        players.player1.y = args.player1.y;
+        if (players.player0.score !== args.score[0] || players.player1.score !== args.score[1]) {
+            players.player0.score = args.score[0];
+            players.player1.score = args.score[1];
+            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
         }
+    }
 
+    useEffect(() => {
         const onGameWait = (args) => {
             console.log('game-wait');
             console.log(args);
@@ -64,18 +69,13 @@ export default function GamePage() {
 
         const onGamePlay = (args) => {
             getData(args);
-            if (players.player0.score !== args.score[0] || players.player1.score !== args.score[1]) {
-                players.player0.score = args.score[0];
-                players.player1.score = args.score[1];
-                console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
-            }
-
             // draw();
             if (!canvas?.current) return ;
             const c2d = canvas.current.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
             c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
-            //c2d.canvas.width = window.innerWidth * 0.97;
-            //c2d.canvas.height = window.innerHeight * 0.97;
+            c2d.canvas.width = window.outerWidth * dpr;
+            c2d.canvas.height = window.outerHeight * dpr;
             c2d.fillStyle='black';
             c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
             c2d.fillStyle='white';
@@ -104,19 +104,15 @@ export default function GamePage() {
         const onError = (args) => {
             console.log('error');
             console.log(args);
-            socket.on('spectator', (args) => {
-                console.log('spectator');
-                getData(args);
-            });
+            // socket.on('spectator', (args) => {
+            //     console.log('spectator');
+            //     getData(args);
+            // });
         };
 
         const onGameFinish = (args) => {
             console.log('game-finish');
             getData(args);
-            players.player0.score = args.score[0];
-            players.player1.score = args.score[1];
-
-            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
             if (players.player0.score > players.player1.score ? data.playerId === 0 : data.playerId === 1)
                 console.log('You win!');
             else

@@ -21,6 +21,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     server;
     games: any = {}
+
     async handleDisconnect(client: any) {
         //TODO handleLeave if client is in a game
     }

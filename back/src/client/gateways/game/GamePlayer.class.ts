@@ -26,24 +26,24 @@ export default class GamePlayer {
 		if (
 			this.moveUp &&
 			!this.moveDown &&
-			this.position.y -
-			this.PLAYER_SEMI_HEIGHT -
-			this.PLAYER_SPEED >=
-			0
+			this.position.y - this.PLAYER_SEMI_HEIGHT - this.PLAYER_SPEED >= 0
 		)
 			this.position.y -= this.PLAYER_SPEED;
 		else if (
 			this.moveDown &&
 			!this.moveUp &&
-			this.position.y +
-			this.PLAYER_SEMI_HEIGHT +
-			this.PLAYER_SPEED <=
-			1
+			this.position.y + this.PLAYER_SEMI_HEIGHT + this.PLAYER_SPEED <= 1
 		)
 			this.position.y += this.PLAYER_SPEED;
 	}
 
 	send(event, data) {
 		return this.socket.emit(event, data);
+	}
+
+	start() {
+		this.moveDown = false;
+		this.moveUp = false;
+		this.position.y = 0.5;
 	}
 }
