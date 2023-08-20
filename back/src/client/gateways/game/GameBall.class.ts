@@ -5,17 +5,16 @@ export default class GameBall {
 
 	BALL_MAX_SPEED = 0.0008;
 	BALL_SPEED_INCREASE = 0.00004;
+	BALL_START_SPEED = 0.0002;
 	MAX_BOUNCE_ANGLE = 1.3;
-
+	BALL_SEMI_SIZE = 0.005;
 	position: {x: number, y: number};
 	angle = 0;
 	speed = 0;
 	velocity: {x: number, y: number};
 
 	constructor(
-		private engine: GameEngine,
-		private game: Game,
-		speed: number) {
+		private game: Game) {
 		this.position = {
 			x: 0.5,
 			y: 0.5,
@@ -25,10 +24,11 @@ export default class GameBall {
 			y: 0,
 		}
 		this.angle = 0;
-		this.speed = speed;
+		this.speed = this.BALL_START_SPEED;
 	}
+
 	updateSpeed(newBall) {
-		if (newBall) this.speed = this.engine.BALL_START_SPEED;
+		if (newBall) this.speed = this.BALL_START_SPEED;
 		else if (this.speed < this.BALL_MAX_SPEED)
 			this.speed += this.BALL_SPEED_INCREASE;
 		this.velocity.x = Math.cos(this.angle) * this.speed;
@@ -47,43 +47,40 @@ export default class GameBall {
 		this.position.y = 0.5;
 	}
 
-
-
 	update() {
 		if (
-			this.position.y - this.engine.ballSemiSize <= 0 ||
-			1 <= this.position.y + this.engine.ballSemiSize
+			this.position.y - this.BALL_SEMI_SIZE <= 0 ||
+			1 <= this.position.y + this.BALL_SEMI_SIZE
 		) {
 			this.velocity.y *= -1;
 			this.angle *= -1;
 		} else if (
-			this.position.x <= this.engine.ballSemiSize * 5 &&
-			this.game.players[0].position.y - this.engine.playerSemiHeight <=
-			this.position.y + this.engine.ballSemiSize &&
-			this.position.y - this.engine.ballSemiSize <=
-			this.game.players[0].position.y + this.engine.playerSemiHeight
+			this.position.x <= this.BALL_SEMI_SIZE * 5 &&
+			this.game.players[0].position.y - this.game.players[0].PLAYER_SEMI_HEIGHT <=
+			this.position.y + this.BALL_SEMI_SIZE &&
+			this.position.y - this.BALL_SEMI_SIZE <=
+			this.game.players[0].position.y + this.game.players[0].PLAYER_SEMI_HEIGHT
 		) {
 			this.angle =
 				(this.position.y - this.game.players[0].position.y) *
 				(-this.MAX_BOUNCE_ANGLE /
-					(this.engine.playerSemiHeight + this.engine.ballSemiSize));
+					(this.game.players[0].PLAYER_SEMI_HEIGHT + this.BALL_SEMI_SIZE));
 			this.updateSpeed(false);
 		} else if (
-			this.position.x >= 1 - this.engine.ballSemiSize * 5 &&
-			this.game.players[1].position.y - this.engine.playerSemiHeight <=
-			this.position.y + this.engine.ballSemiSize &&
-			this.position.y - this.engine.ballSemiSize <=
-			this.game.players[1].position.y + this.engine.playerSemiHeight
+			this.position.x >= 1 - this.BALL_SEMI_SIZE * 5 &&
+			this.game.players[1].position.y - this.game.players[0].PLAYER_SEMI_HEIGHT <=
+			this.position.y + this.BALL_SEMI_SIZE &&
+			this.position.y - this.BALL_SEMI_SIZE <=
+			this.game.players[1].position.y + this.game.players[0].PLAYER_SEMI_HEIGHT
 		) {
 			this.angle =
 				(this.position.y - this.game.players[1].position.y) *
 				(this.MAX_BOUNCE_ANGLE /
-					(this.engine.playerSemiHeight + this.engine.ballSemiSize)) +
+					(this.game.players[0].PLAYER_SEMI_HEIGHT + this.BALL_SEMI_SIZE)) +
 				Math.PI;
 			this.updateSpeed(false);
 		}
-		this.position.x += this.velocity.x * this.engine.TIME_REFRESH;
-		this.position.y += this.velocity.y * this.engine.TIME_REFRESH;
+		this.position.x += this.velocity.x * this.game.engine.TIME_REFRESH;
+		this.position.y += this.velocity.y * this.game.engine.TIME_REFRESH;
 	}
-
 }

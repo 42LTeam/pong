@@ -28,6 +28,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     async handleConnection(client: any, ...args): Promise<any> {
          // this.player = [];
     }
+
     @SubscribeMessage('join-game')
     @UseGuards(WSAuthenticatedGuard)
     async joinGame(client, data): Promise<void> {
@@ -47,12 +48,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             game.handleLeave(user);
     }
 
-    @SubscribeMessage('keep-alive')
+    @SubscribeMessage('update-input')
     @UseGuards(WSAuthenticatedGuard)
-    async keepAlive(client, data): Promise<void> {
+    async updateInput(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
         const game : Game = this.games[data.matchId];
-        game.keepAlive(user, data);
-
+        game.updateInput(user, data);
     }
 }

@@ -4,17 +4,12 @@ import {socket} from "../../api";
 export default function GamePage() {
     const canvas = useRef(null);
 
-
-    let playing = false;
-
-
     const data={
         matchId: 1,
         playerId: 0,
         moveUp: false,
         moveDown: false
     };
-
     const ball = {
         x: 0.5,
         y: 0.5,
@@ -34,66 +29,76 @@ export default function GamePage() {
         semiHeight: 0
     };
 
-    const draw = () => {
-        if (!canvas?.current) return ;
-        const c2d = canvas.current.getContext('2d');
-        c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
-        //c2d.canvas.width = window.innerWidth * 0.97;
-        //c2d.canvas.height = window.innerHeight * 0.97;
-        c2d.fillStyle='black';
-        c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
-        c2d.fillStyle='white';
-        c2d.fillRect((ball.x - ball.semiSize) * c2d.canvas.width,
-            (ball.y - ball.semiSize) * c2d.canvas.height,
-            ball.semiSize * 2 * c2d.canvas.width, ball.semiSize * 2 * c2d.canvas.height);
-        c2d.fillRect((players.player0.x - ball.semiSize) * c2d.canvas.width,
-            (players.player0.y - players.semiHeight) * c2d.canvas.height,
-            ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
-        c2d.fillRect((players.player1.x - ball.semiSize) * c2d.canvas.width,
-            (players.player1.y - players.semiHeight) * c2d.canvas.height,
-            ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
-    }
-
-
-    function loop(){
-        //socket.emit('keep-alive', data);
-        draw();
-        if (playing)
-            setTimeout(loop, 30);
-    }
+    // const draw = () => {
+    //     if (!canvas?.current) return ;
+    //     const c2d = canvas.current.getContext('2d');
+    //     c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
+    //     //c2d.canvas.width = window.innerWidth * 0.97;
+    //     //c2d.canvas.height = window.innerHeight * 0.97;
+    //     c2d.fillStyle='black';
+    //     c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
+    //     c2d.fillStyle='white';
+    //     c2d.fillRect((ball.x - ball.semiSize) * c2d.canvas.width,
+    //         (ball.y - ball.semiSize) * c2d.canvas.height,
+    //         ball.semiSize * 2 * c2d.canvas.width, ball.semiSize * 2 * c2d.canvas.height);
+    //     c2d.fillRect((players.player0.x - ball.semiSize) * c2d.canvas.width,
+    //         (players.player0.y - players.semiHeight) * c2d.canvas.height,
+    //         ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
+    //     c2d.fillRect((players.player1.x - ball.semiSize) * c2d.canvas.width,
+    //         (players.player1.y - players.semiHeight) * c2d.canvas.height,
+    //         ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
+    // }
 
     useEffect(() => {
+        const getData = (args) => {
+            ball.x = args.ball.x;
+            ball.y = args.ball.y;
+            players.player0.y = args.player0.y;
+            players.player1.y = args.player1.y;
+        }
+
         const onGameWait = (args) => {
             console.log('game-wait');
             console.log(args);
         }
 
         const onGamePlay = (args) => {
-            ball.x = args.ball.x;
-            ball.y = args.ball.y;
-
-            players.player0.y = args.player0.y;
-            players.player1.y = args.player1.y;
+            getData(args);
             if (players.player0.score !== args.score[0] || players.player1.score !== args.score[1]) {
                 players.player0.score = args.score[0];
                 players.player1.score = args.score[1];
                 console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
             }
 
-            draw();
+            // draw();
+            if (!canvas?.current) return ;
+            const c2d = canvas.current.getContext('2d');
+            c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
+            //c2d.canvas.width = window.innerWidth * 0.97;
+            //c2d.canvas.height = window.innerHeight * 0.97;
+            c2d.fillStyle='black';
+            c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
+            c2d.fillStyle='white';
+            c2d.fillRect((ball.x - ball.semiSize) * c2d.canvas.width,
+                (ball.y - ball.semiSize) * c2d.canvas.height,
+                ball.semiSize * 2 * c2d.canvas.width, ball.semiSize * 2 * c2d.canvas.height);
+            c2d.fillRect((players.player0.x - ball.semiSize) * c2d.canvas.width,
+                (players.player0.y - players.semiHeight) * c2d.canvas.height,
+                ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
+            c2d.fillRect((players.player1.x - ball.semiSize) * c2d.canvas.width,
+                (players.player1.y - players.semiHeight) * c2d.canvas.height,
+                ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
         };
 
         const onGameStart = (args) => {
             console.log('game-start');
-            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
-
             data.playerId = args.playerId;
             ball.semiSize = args.ballSemiSize;
             players.player0.x = args.player0.x;
             players.player1.x = args.player1.x;
             players.semiHeight = args.playerSemiHeight;
-            playing = true;
-            loop();
+            console.log('You are Player', data.playerId, '(', data.playerId === 0 ? 'left' : 'right', ')');
+            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
         };
 
         const onError = (args) => {
@@ -101,45 +106,43 @@ export default function GamePage() {
             console.log(args);
             socket.on('spectator', (args) => {
                 console.log('spectator');
-                ball.x = args.ball[0];
-                ball.y = args.ball[1];
-
-                players.player0.y = args.playerPosY[0];
-                players.player1.y = args.playerPosY[1];
+                getData(args);
             });
         };
 
         const onGameFinish = (args) => {
             console.log('game-finish');
-            playing = false;
-            ball.x = args.ball[0];
-            ball.y = args.ball[1];
-            players.player0.y = args.playerPosY[0];
+            getData(args);
             players.player0.score = args.score[0];
-
-
-            players.player1.y = args.playerPosY[1];
             players.player1.score = args.score[1];
 
             console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
-            console.log('Player', players.player0.score > players.player1.score ? 0 : 1, 'win!');
+            if (players.player0.score > players.player1.score ? data.playerId === 0 : data.playerId === 1)
+                console.log('You win!');
+            else
+                console.log('You lose!');
         };
 
         const keyDownHook  = (event) => {
-            if (event.key === 'w')
+            if (event.key === 'w' && !data.moveUp) {
                 data.moveUp = true;
-            if (event.key === 's')
+                socket.emit('update-input', data);
+            }
+            if (event.key === 's' && !data.moveDown) {
                 data.moveDown = true;
-            socket.emit('keep-alive', data);
+                socket.emit('update-input', data);
+            }
         }
 
         const keyUpHook = (event) => {
-            if (event.key === 'w')
+            if (event.key === 'w') {
                 data.moveUp = false;
-            if (event.key === 's')
+                socket.emit('update-input', data);
+            }
+            if (event.key === 's') {
                 data.moveDown = false;
-            socket.emit('keep-alive', data);
-
+                socket.emit('update-input', data);
+            }
         }
 
         socket.on('gameplay', onGamePlay);
@@ -161,7 +164,6 @@ export default function GamePage() {
             document.removeEventListener('keyup', keyUpHook);
         }
     },[]);
-
 
     useEffect(() => {
         if (canvas)

@@ -7,12 +7,11 @@ export default class Game {
 	public engine : GameEngine;
 	players : GamePlayer[] = [];
 
-
 	constructor(
 				private server,
 				private matchId: number,
 	) {
-		this.engine = new GameEngine(this, 0.05, 0.005);
+		this.engine = new GameEngine(this);
 		console.log('New gane ', this.matchId);
 	}
 
@@ -29,7 +28,7 @@ export default class Game {
 			// socket?.emit('spectator');
 			return ;
 		}
-		const player = new GamePlayer(user.id, socket, this, !Boolean(this.players.length));
+		const player = new GamePlayer(user.id, socket, !Boolean(this.players.length), this.engine.ball.BALL_SEMI_SIZE);
 		this.players.push(player);
 		console.log('New connection, total :', this.players.length, ' matchId:', this.MATCH_ROOM);
 		socket?.join(this.MATCH_ROOM);
@@ -48,7 +47,7 @@ export default class Game {
 		if (this.players.length != 2) this.engine.playing = false;
 	}
 
-	keepAlive(user, data) {
+	updateInput(user, data) {
 		if (this.isWhitelisted(user) && this.engine.playing) {
 			const index = this.players.findIndex(c => c.userId == user.id);
 			this.players[index].moveUp = data.moveUp;

@@ -3,8 +3,7 @@ import Game from "./Game.class";
 export default class GamePlayer {
 
 	PLAYER_SPEED = 0.01;
-
-
+	PLAYER_SEMI_HEIGHT = 0.05;
 	position: { x: number, y: number };
 	moveUp: boolean;
 	moveDown: boolean;
@@ -12,24 +11,23 @@ export default class GamePlayer {
 	constructor(
 		public userId: number,
 		public socket,
-		private game: Game,
-		public playerOne: boolean,
+		public playerLeft: boolean,
+		private ballSemiSize: number
 	) {
 		this.moveDown = false;
 		this.moveUp = false;
 		this.position = {
-			x: this.playerOne ? 0.015 : 0.985,
+			x: this.playerLeft ? 3 * ballSemiSize : 1 - 3 * ballSemiSize,
 			y: 0.5,
 		}
 	}
-
 
 	update(){
 		if (
 			this.moveUp &&
 			!this.moveDown &&
 			this.position.y -
-			this.game.engine.playerSemiHeight -
+			this.PLAYER_SEMI_HEIGHT -
 			this.PLAYER_SPEED >=
 			0
 		)
@@ -38,7 +36,7 @@ export default class GamePlayer {
 			this.moveDown &&
 			!this.moveUp &&
 			this.position.y +
-			this.game.engine.playerSemiHeight +
+			this.PLAYER_SEMI_HEIGHT +
 			this.PLAYER_SPEED <=
 			1
 		)
