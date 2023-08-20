@@ -55,7 +55,7 @@ jobs:
 
       - name: Build docker-compose.build.yml --no-cache
         run: |
-          docker-compose -f docker-compose.build.yml build
+          docker-compose -f docker-compose.build.yml build --no-cache
 
       - name: Build docker-compose.prod.yml --no-cache
         run: |
