@@ -9,7 +9,6 @@ services:
       - .env
     volumes:
       - ./back:/usr/src/app
-    command: sh -c "npx prisma generate && npx tsc && (date | npm run migrate) && npm run start:migrate:prod"
     ports:
       - 3000:3000
       - 8001:8001
@@ -28,7 +27,6 @@ services:
       - ./front:/usr/src/app
     env_file:
       - .env
-    command: npm run dev
     ports:
       - 5173:5173
     depends_on:
