@@ -64,7 +64,7 @@ model Channel {
   creatorId  Int?
   creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[] @default([])
-  messages   Message[]     @default([])
+  messages   Message[]   
   created_at DateTime
 }
 
