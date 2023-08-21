@@ -10,6 +10,7 @@ export default class GamePlayer {
 
 	constructor(
 		public userId: number,
+		public name: string,
 		public socket,
 		public playerLeft: boolean,
 		private ballSemiSize: number

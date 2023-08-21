@@ -19,17 +19,31 @@ export default function GamePage() {
         player0: {
             x: 0,
             y: 0.5,
-            score: 0
+            score: 0,
+            name: ''
         },
         player1: {
             x: 1,
             y: 0.5,
-            score: 0
+            score: 0,
+            name: ''
         },
         semiHeight: 0
     };
 
-    const draw = () => {
+    const getData = (args) => {
+        ball.x = args.ball.x;
+        ball.y = args.ball.y;
+        players.player0.y = args.player0.y;
+        players.player1.y = args.player1.y;
+        if (players.player0.score !== args.score[0] || players.player1.score !== args.score[1]) {
+            players.player0.score = args.score[0];
+            players.player1.score = args.score[1];
+            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
+        }
+    }
+
+    const draw = (args, last) => {
         if (!canvas?.current) return ;
         const c2d = canvas.current.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
@@ -48,18 +62,20 @@ export default function GamePage() {
         c2d.fillRect((players.player1.x - ball.semiSize) * c2d.canvas.width,
             (players.player1.y - players.semiHeight) * c2d.canvas.height,
             ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
-    }
-
-    const getData = (args) => {
-        ball.x = args.ball.x;
-        ball.y = args.ball.y;
-        players.player0.y = args.player0.y;
-        players.player1.y = args.player1.y;
-        if (players.player0.score !== args.score[0] || players.player1.score !== args.score[1]) {
-            players.player0.score = args.score[0];
-            players.player1.score = args.score[1];
-            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
-        }
+        const fontSize = Math.min(c2d.canvas.width, c2d.canvas.height) * 0.05;
+        const textPos = fontSize + 5;
+        c2d.font = fontSize + "px monospace";
+        c2d.textAlign = "left";
+        c2d.fillText(players.player0.name, c2d.canvas.width * 0.1, textPos);
+        c2d.fillText(args.score[0], c2d.canvas.width * 0.375, textPos);
+        c2d.textAlign = "right";
+        c2d.fillText(players.player1.name, c2d.canvas.width * 0.9, textPos);
+        c2d.fillText(args.score[1], c2d.canvas.width * 0.625, textPos);
+        c2d.textAlign = "center";
+        if (last && (players.player0.score > players.player1.score ? data.playerId === 0 : data.playerId === 1))
+            c2d.fillText('You win!', c2d.canvas.width / 2, c2d.canvas.height / 2);
+        else if (last)
+            c2d.fillText('You lose!', c2d.canvas.width / 2, c2d.canvas.height / 2);
     }
 
     useEffect(() => {
@@ -70,7 +86,7 @@ export default function GamePage() {
 
         const onGamePlay = (args) => {
             getData(args);
-            draw();
+            draw(args, false);
         };
 
         const onGameStart = (args) => {
@@ -80,8 +96,10 @@ export default function GamePage() {
             players.player0.x = args.player0.x;
             players.player1.x = args.player1.x;
             players.semiHeight = args.playerSemiHeight;
+            players.player0.name = args.player0Name;
+            players.player1.name = args.player1Name;
             console.log('You are Player', data.playerId, '(', data.playerId === 0 ? 'left' : 'right', ')');
-            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
+            console.log(players.player0.name, 'Player 0 :', players.player0.score, '-', players.player1.name, 'Player 1 :', players.player1.score);
         };
 
         const onError = (args) => {
@@ -96,6 +114,7 @@ export default function GamePage() {
         const onGameFinish = (args) => {
             console.log('game-finish');
             getData(args);
+            draw(args, true);
             if (players.player0.score > players.player1.score ? data.playerId === 0 : data.playerId === 1)
                 console.log('You win!');
             else

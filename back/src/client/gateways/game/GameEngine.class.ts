@@ -80,6 +80,8 @@ export default class GameEngine {
 				player0: this.game.players[0].position,
 				player1: this.game.players[1].position,
 				playerSemiHeight: this.game.players[0].PLAYER_SEMI_HEIGHT,
+				player0Name: this.game.players[0].name,
+				player1Name: this.game.players[1].name,
 			});
 			player.start();
 		});

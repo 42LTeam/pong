@@ -28,7 +28,7 @@ export default class Game {
 			// socket?.emit('spectator');
 			return ;
 		}
-		const player = new GamePlayer(user.id, socket, !Boolean(this.players.length), this.engine.ball.BALL_SEMI_SIZE);
+		const player = new GamePlayer(user.id, user.username, socket, !Boolean(this.players.length), this.engine.ball.BALL_SEMI_SIZE);
 		this.players.push(player);
 		console.log('New connection, total :', this.players.length, ' matchId:', this.MATCH_ROOM);
 		socket?.join(this.MATCH_ROOM);
