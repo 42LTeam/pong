@@ -16,14 +16,21 @@ import Game from "./game/Game.class";
 
 // TODO creer un systeme comme pour les roles pour que uniquement les personnes en state INGAME puisse interagir avec les endpoints
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
+
+    games : Game[] = [];
+
     constructor(private clientService: ClientService) {}
 
     @WebSocketServer()
     server;
-    games: any = {}
+    // games: any = {}
 
     async handleDisconnect(client: any) {
         //TODO handleLeave if client is in a game
+        const user = await this.clientService.getClientById(client.id);
+        this.games.forEach((game) => {
+            game.handleLeave(user);
+        })
     }
 
     async handleConnection(client: any, ...args): Promise<any> {
@@ -40,6 +47,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         game.handleJoin(user);
     }
 
+    //TODO used when?
     @SubscribeMessage('leave-game')
     @UseGuards(WSAuthenticatedGuard)
     async properLeaveGame(client, data): Promise<void> {

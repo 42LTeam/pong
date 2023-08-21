@@ -1,12 +1,18 @@
 import Game from "./Game.class";
 
+export enum playerStatus {
+	ONLINE,
+	OFFLINE
+}
+
 export default class GamePlayer {
 
 	PLAYER_SPEED = 0.01;
 	PLAYER_SEMI_HEIGHT = 0.05;
 	position: { x: number, y: number };
-	moveUp: boolean;
-	moveDown: boolean;
+	moveUp = false;
+	moveDown = false;
+	status = playerStatus.ONLINE;
 
 	constructor(
 		public userId: number,
@@ -15,8 +21,6 @@ export default class GamePlayer {
 		public playerLeft: boolean,
 		private ballSemiSize: number
 	) {
-		this.moveDown = false;
-		this.moveUp = false;
 		this.position = {
 			x: this.playerLeft ? 3 * ballSemiSize : 1 - 3 * ballSemiSize,
 			y: 0.5,
@@ -42,9 +46,9 @@ export default class GamePlayer {
 		return this.socket.emit(event, data);
 	}
 
-	start() {
-		this.moveDown = false;
-		this.moveUp = false;
-		this.position.y = 0.5;
-	}
+	// start() {
+	// 	this.moveDown = false;
+	// 	this.moveUp = false;
+	// 	this.position.y = 0.5;
+	// }
 }

@@ -6,7 +6,6 @@ import {useNavigate} from "react-router-dom";
 export const LaunchButton = (): JSX.Element => {
     const navigate = useNavigate();
     const searchGame = () => {
-        console.log("i wanna play");
         navigate('/game');
         //to code with back (ev some more front)
     };
