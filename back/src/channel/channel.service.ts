@@ -1,9 +1,12 @@
+
 import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Channel } from '@prisma/client';
 import { CreateChannelDto, SendInviteDto } from "./controllers/channel.controller";
 import { FriendService } from '../friend/friend.service';
-import {MessageService} from "../message/message.service";
+import { MessageService } from "../message/message.service";
+import { FriendService } from '../friend/friend.service';
+
 
 @Injectable()
 export class ChannelService {
@@ -83,7 +86,8 @@ export class ChannelService {
     };
   }
 
-  async getUserInChannel(channelId: number): Promise<any> {
+// rename with All attribute and not just s
+  async getAllUsersInChannel(channelId: number): Promise<any> {
     const channel = await this.prisma.userChannel.findMany({
       where: { channelId },
       select: {
@@ -102,7 +106,25 @@ export class ChannelService {
     return channel.map(current => current.user);
   }
 
-  async getChannelOfuser(id: number): Promise<Channel[]> {
+  async getChannelAllMembers(channelId: number): Promise<any> {
+    return this.prisma.userChannel.findMany({
+      where: {
+        channelId: channelId,
+      },
+      include: {
+        user: {
+          select: {
+            avatar: true,
+            username: true,
+            status: true,
+          },
+        },
+      }
+    });
+  }
+
+  //rename getChannelOfuser in getChannelOfUser
+  async getChannelOfUser(id: number): Promise<Channel[]> {
     const userChannel = await this.prisma.userChannel.findMany({
       where: {
         userId: id,

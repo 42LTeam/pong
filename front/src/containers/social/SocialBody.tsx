@@ -4,16 +4,34 @@ import {useState} from "react";
 import Friends from "./friend/Friends";
 import Chat from "./chat/Chat";
 import {useParams} from "react-router-dom";
+import ChannelMembersList from "./channel/ChannelMembersList";
+
+function isDef(obj: any): boolean {
+    return obj !== null && obj !== undefined;
+}
 
 export default function SocialBody(){
 
     const {channelId} = useParams();
-    const [state, setState]=useState(Number.parseInt(channelId) || null);
+    const [state, setState]=useState(isDef(channelId) ? Number.parseInt(channelId) : null);
     return (
-            <div className="chatbody bubble">
-                <Conversations conversations={[]} state={state} setState={setState} ></Conversations>
-                <div className="vertical-separator"></div>
-                {state ? (<Chat channel={state}></Chat>): (<Friends></Friends>)}
-            </div>
-    )
+        <div className="chatbody bubble">
+            <Conversations
+                state={state}
+                setState={setState}
+            >
+            </Conversations>
+            <div className="vertical-separator"></div>
+            {state ? (<Chat channel={state}></Chat>) : (<Friends></Friends>)}
+            <div className="vertical-separator"></div>
+            {
+                isDef(state) &&
+                <ChannelMembersList
+                    channelId={state}
+                    setChannelId={setState}
+                />
+            }
+        </div>
+
+    );
 }
