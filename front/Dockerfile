@@ -15,23 +15,5 @@ COPY --chown=node:node ./front/package.json ./
 COPY --chown=node:node ./front/package-lock.json ./
 RUN npm ci
 COPY --chown=node:node ./front/ ./
-
 EXPOSE 5173
-ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["vite", "--host", "--port", "5173"]
-
-# Build
-FROM base AS build
-COPY --chown=node:node --from=development /usr/src/app/package.json ./
-COPY --chown=node:node --from=development /usr/src/app/package-lock.json ./
-COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules/
-COPY --chown=node:node --from=development /usr/src/app/ ./
-
-RUN npm run build
-
-# ---- Production ----
-FROM base AS production
-ENV NODE_ENV=production
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
-CMD ["npm", "run", "start"]

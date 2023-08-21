@@ -16,21 +16,4 @@ COPY --chown=node:node ./back/package-lock.json ./
 RUN npm ci
 COPY --chown=node:node ./back/ .
 EXPOSE 3000
-
-# ---- Build ----
-FROM base AS build
-COPY --chown=node:node --from=development /usr/src/app/package.json ./
-COPY --chown=node:node --from=development /usr/src/app/package-lock.json ./
-COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules/
-COPY --chown=node:node --from=development /usr/src/app/ ./
-ARG DATABASE_URL
-ENV DATABASE_URL=$DATABASE_URL
-
-RUN npx prisma generate && npx tsc && (date | npm run migrate)
-
-# ---- Production ----
-FROM base AS production
-ENV NODE_ENV=production
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
-CMD ["sh", "-c", "npm run start:migrate:prod"]
+CMD ["sh", "-c", "npx prisma generate && npx tsc && (date | npm run migrate) && npm run start:migrate:prod"]

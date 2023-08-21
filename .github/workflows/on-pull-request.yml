@@ -1,12 +1,13 @@
-name: Build Docker Images
+
+name: Test Deployment
 
 on:
   push:
     branches:
-      - main
+      - 57-workflow-ci-improvements*
 
 jobs:
-  build-on-push:
+  test-dev-on-pull-request:
     runs-on: self-hosted
 
     env:
@@ -18,14 +19,12 @@ jobs:
       DOCKER_SERVER: ${{ secrets.DOCKER_IP }}
 
     steps:
+
+
       - name: Cleaning
         run: |
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
           docker compose -f docker-compose.yml down
-          
-          if [[ $(docker volume ls -qf dangling=true) ]]; then
-            docker volume rm $(docker volume ls -qf dangling=true)
-          fi
           
           sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
           
@@ -37,16 +36,29 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-      #        Cloning the repository's source code from the default branch into the Actions runner environment.
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      #        Prepares the environment to use Docker Buildx for building Docker images.
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.2.0'
+
+      - name: Set up Docker
+        uses: docker-practice/actions-setup-docker@master
 
       - name: .env file deco
         run: |
           touch .env
 
-      - name: Build docker-compose.yml
+      - name: Build services
+        run: make build
+
+      - name: Start services
+        run: make up
+
+      - name: Check API service
         run: |
-          docker-compose -f docker-compose.yml up -d --build
+          curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:3000
+
+      - name: Check Frontend service
+        run: |
+          curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:5173

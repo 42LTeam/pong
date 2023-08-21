@@ -2,8 +2,8 @@ services:
   api:
     container_name: api
     build:
-      context: .
       dockerfile: ./back/Dockerfile
+      context: .
       target: development
     env_file:
       - .env
@@ -20,13 +20,12 @@ services:
   front:
     container_name: front
     build:
-      context: .
       dockerfile: ./front/Dockerfile
+      context: .
       target: development
     volumes:
       - ./front:/usr/src/app
-    env_file:
-      - .env
+    command: npm run dev
     ports:
       - 5173:5173
     depends_on:
