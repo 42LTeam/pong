@@ -7,6 +7,7 @@ RUN chmod +x /usr/local/bin/dumb-init
 # Set ownership of our app directory
 RUN chown -R node:node /usr/src/app
 # Set user to node for security
+ARG DATABASE_URL
 USER node
 
 
