@@ -25,7 +25,6 @@ jobs:
         run: |
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
           docker compose -f docker-compose.yml down
-          
           sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
           
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
