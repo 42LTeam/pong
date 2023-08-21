@@ -25,7 +25,7 @@ export default function LeaderboardPlaceBubble(props: Props) {
         statName = 'id';    //to change
     }
     else if (props.kind === "Average points per match"){
-        statName = 'role';  //to change
+        statName = 'pointAverage';  //to change
     }
 
     useEffect(() => {

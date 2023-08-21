@@ -11,6 +11,7 @@ export interface User {
     username: String,
     id: number,
     xp: number,
+    pointAverage: number,
 }
 
 export const AuthContext = createContext<User | undefined>(undefined);

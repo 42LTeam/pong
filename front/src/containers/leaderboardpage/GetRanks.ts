@@ -3,7 +3,7 @@ import { getUserMatches } from "../../api";
 
 export interface UserRank extends User {
     rank: number;
-    ratio: number;
+    //ratio: number;
 }
 
 export const getUsersRanks = (users : User[], StatKind: string): UserRank[] => {
@@ -40,16 +40,21 @@ export const getUsersRanks = (users : User[], StatKind: string): UserRank[] => {
 
         console.log("NOW "+users[2].id+" has score="+users[statName]);
         statName = 'pointAverage';
+        
+        // statName = 'role';
 
     }
 4
     return users.sort((a, b) => b[statName] - a[statName]).map((user) => {
+
             console.log("my statname serched is ="+statName //LOG
             +" and "+user.id+" has score="+user[statName]);
+
             if (user[statName] !== currentStat) {
                 currentStat = user[statName];
                 currentRank++;
             }
+
             return { ...user, rank: currentRank};
         })
 };
