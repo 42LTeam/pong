@@ -20,3 +20,4 @@ EXPOSE 5173
 # Handle Every Signal Correctly by Dumb Init to PID 1
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["vite", "--host", "--port", "5173"]
+

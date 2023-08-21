@@ -2,9 +2,9 @@
 name: Up and running on Pull Request
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - 57-workflow-ci-improvements
 
 jobs:
   test-dev-on-pull-request:
@@ -46,7 +46,7 @@ jobs:
       - name: Start services
         run: make up
 
-      - name: Run health check
+      - name: Run health check 5173
         run: |
-          chmod +x health_script_5173.sh
-          ./health_script_5173.sh
+          chmod +x /.github/workflows/health_script_5173.sh
+          ./.github/workflows/health_script_5173.sh

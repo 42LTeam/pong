@@ -41,45 +41,48 @@ env:
 		echo $(CYAN) "$(ENV_FILE) is already in place" $(RESET_COLOR); \
 	fi
 
+logs:
+	@echo $(BOLD_GREEN) '🔮' - LOGS: logs of containers $(RESET_COLOR)
+	$(DOCKER_COMPOSE) logs
+
 build: env
-	@echo $(BOLD_GREEN) '🚧' BUILD: Build development containers$(RESET_COLOR)
+	@echo $(BOLD_GREEN) '🚧' - BUILD: Build development containers $(RESET_COLOR)
 	$(DOCKER_COMPOSE) build
 
-
 up: env
-	@echo $(GREEN) '🚀' UP: Start development containers$(RESET_COLOR)
+	@echo $(GREEN) '🚀' - UP: Start development containers$(RESET_COLOR)
 	$(DOCKER_COMPOSE) up -d
 
 stop:
-	@echo $(RED) '✋' STOP: Stop development containers$(RESET_COLOR)
+	@echo $(RED) '✋' - STOP: Stop development containers$(RESET_COLOR)
 	$(DOCKER_COMPOSE) stop
 
 down:
-	@echo $(BOLD_RED) '🔻' DOWN: Remove development containers$(RESET_COLOR)
+	@echo $(BOLD_RED) '🔻' - DOWN: Remove development containers$(RESET_COLOR)
 	$(DOCKER_COMPOSE) down
 
 clean: stop down
-	@echo $(BOLD_CYAN) '🧹' CLEAN: Stop and remove development containers$(RESET_COLOR)
+	@echo $(BOLD_CYAN) '🧹' - CLEAN: Stop and remove development containers$(RESET_COLOR)
 
 prune: clean
-	@echo $(BOLD_YELLOW)  '🧼' PRUNE: Remove all unused Docker resources with confirmation$(RESET_COLOR)
+	@echo $(BOLD_YELLOW)  '🧼' - PRUNE: Remove all unused Docker resources with confirmation$(RESET_COLOR)
 	docker system prune -a
 
 rmvol: clean
-	@echo $(BOLD_YELLOW) '🛀' RMVOL: Remove specific volumes with confirmation$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) '🛀' - RMVOL: Remove specific volumes with confirmation$(RESET_COLOR)
 	docker volume rm $(VOLUMES)
 
 fprune: prune rmvol
-	@echo $(BOLD_YELLOW) '🧼' PRUNE + '🛀' RMVOL - FPRUNE: Execute prune and rmvol commands$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) '🧼' - PRUNE + '🛀' RMVOL - FPRUNE: Execute prune and rmvol commands$(RESET_COLOR)
 
 re: stop up
-	@echo $(BOLD_YELLOW) '✋'STOP + '🚀'UP - RE: Restart development containers $(RESET_COLOR)
+	@echo $(BOLD_YELLOW) '✋' - STOP + '🚀'UP - RE: Restart development containers $(RESET_COLOR)
 
 rebuild: clean all
 	@echo $(BOLD_YELLOW) '🧹' CLEAN + '🚧' BUILD + '🚀' UP - REBUILD: Clean and rebuild development containers$(RESET_COLOR)
 
 reboot: fprune all
-	@echo $(BOLD_YELLOW) REBOOT: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) '♻️' - REBOOT: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
 
 help:
 	@echo "Available commands:"
