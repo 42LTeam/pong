@@ -29,25 +29,26 @@ export default function GamePage() {
         semiHeight: 0
     };
 
-    // const draw = () => {
-    //     if (!canvas?.current) return ;
-    //     const c2d = canvas.current.getContext('2d');
-    //     c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
-    //     //c2d.canvas.width = window.innerWidth * 0.97;
-    //     //c2d.canvas.height = window.innerHeight * 0.97;
-    //     c2d.fillStyle='black';
-    //     c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
-    //     c2d.fillStyle='white';
-    //     c2d.fillRect((ball.x - ball.semiSize) * c2d.canvas.width,
-    //         (ball.y - ball.semiSize) * c2d.canvas.height,
-    //         ball.semiSize * 2 * c2d.canvas.width, ball.semiSize * 2 * c2d.canvas.height);
-    //     c2d.fillRect((players.player0.x - ball.semiSize) * c2d.canvas.width,
-    //         (players.player0.y - players.semiHeight) * c2d.canvas.height,
-    //         ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
-    //     c2d.fillRect((players.player1.x - ball.semiSize) * c2d.canvas.width,
-    //         (players.player1.y - players.semiHeight) * c2d.canvas.height,
-    //         ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
-    // }
+    const draw = () => {
+        if (!canvas?.current) return ;
+        const c2d = canvas.current.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
+        c2d.canvas.width = window.innerWidth * dpr;
+        c2d.canvas.height = window.innerHeight * 0.8 * dpr;
+        c2d.fillStyle='black';
+        c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
+        c2d.fillStyle='white';
+        c2d.fillRect((ball.x - ball.semiSize) * c2d.canvas.width,
+            (ball.y - ball.semiSize) * c2d.canvas.height,
+            ball.semiSize * 2 * c2d.canvas.width, ball.semiSize * 2 * c2d.canvas.height);
+        c2d.fillRect((players.player0.x - ball.semiSize) * c2d.canvas.width,
+            (players.player0.y - players.semiHeight) * c2d.canvas.height,
+            ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
+        c2d.fillRect((players.player1.x - ball.semiSize) * c2d.canvas.width,
+            (players.player1.y - players.semiHeight) * c2d.canvas.height,
+            ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
+    }
 
     const getData = (args) => {
         ball.x = args.ball.x;
@@ -69,25 +70,7 @@ export default function GamePage() {
 
         const onGamePlay = (args) => {
             getData(args);
-            // draw();
-            if (!canvas?.current) return ;
-            const c2d = canvas.current.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
-            c2d.canvas.width = window.outerWidth * dpr;
-            c2d.canvas.height = window.outerHeight * dpr;
-            c2d.fillStyle='black';
-            c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
-            c2d.fillStyle='white';
-            c2d.fillRect((ball.x - ball.semiSize) * c2d.canvas.width,
-                (ball.y - ball.semiSize) * c2d.canvas.height,
-                ball.semiSize * 2 * c2d.canvas.width, ball.semiSize * 2 * c2d.canvas.height);
-            c2d.fillRect((players.player0.x - ball.semiSize) * c2d.canvas.width,
-                (players.player0.y - players.semiHeight) * c2d.canvas.height,
-                ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
-            c2d.fillRect((players.player1.x - ball.semiSize) * c2d.canvas.width,
-                (players.player1.y - players.semiHeight) * c2d.canvas.height,
-                ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
+            draw();
         };
 
         const onGameStart = (args) => {
