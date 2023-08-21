@@ -11,13 +11,13 @@ jobs:
     runs-on: self-hosted
 
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
       PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
       DOCKER_SERVER: ${{ secrets.DOCKER_IP }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
 
@@ -41,9 +41,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Echo secrets (Temp Debugging)
-        run: |
-          echo "DATABASE_URL: ${{ secrets.DATABASE_URL }}"
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: .env file deco
         run: |
