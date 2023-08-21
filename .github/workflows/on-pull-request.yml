@@ -37,14 +37,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20.2.0'
-
-      - name: Set up Docker
-        uses: docker-practice/actions-setup-docker@master
-
       - name: .env file deco
         run: |
           touch .env
