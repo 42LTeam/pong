@@ -48,4 +48,6 @@ jobs:
         run: make up
 
       - name: Run health check
-        run: ./health_script_5173.sh
+        run: |
+          chmod +x health_script_5173.sh
+          ./health_script_5173.sh
