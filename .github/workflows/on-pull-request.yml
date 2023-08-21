@@ -48,5 +48,5 @@ jobs:
 
       - name: Run health check 5173
         run: |
-          chmod +x /.github/workflows/health_script_5173.sh
-          ./.github/workflows/health_script_5173.sh
+          chmod +x health_script_5173.sh
+          ./health_script_5173.sh
