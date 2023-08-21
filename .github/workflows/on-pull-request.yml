@@ -1,5 +1,5 @@
 
-name: Test Deployment
+name: Up and running on Pull Request
 
 on:
   push:
