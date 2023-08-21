@@ -56,7 +56,7 @@ build:			env
 				$(DOCKER_COMPOSE) build
 
 up:				env
-				$(DOCKER_COMPOSE) up -d
+				$(DOCKER_COMPOSE) up
 
 stop:
 				$(DOCKER_COMPOSE) stop

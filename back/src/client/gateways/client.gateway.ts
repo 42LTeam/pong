@@ -4,12 +4,12 @@ import {
   WebSocketGateway,
   WebSocketServer
 } from '@nestjs/websockets';
-import {ClientService} from "./client.service";
+import {ClientService} from "../client.service";
 import {Injectable, UseGuards} from "@nestjs/common";
-import {WSAuthenticatedGuard} from "../auth/guards/wsauthenticated.guard";
+import {WSAuthenticatedGuard} from "../../auth/guards/wsauthenticated.guard";
 import {User} from "@prisma/client";
-import {ChannelService} from "../channel/channel.service";
-import {MessageService} from "../message/message.service";
+import {ChannelService} from "../../channel/channel.service";
+import {MessageService} from "../../message/message.service";
 
 @WebSocketGateway(8001, {cors: '*'})
 @Injectable()
@@ -35,26 +35,12 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect{
       return ;
     }
   }
+
+
   @SubscribeMessage('register')
   @UseGuards(WSAuthenticatedGuard)
   async handleRegister(client,data): Promise<void> {
     if(data.target) this.server.sockets.sockets.get(data.target)?.disconnect()
-  }
-
-
-  @SubscribeMessage('channel-invite')
-  @UseGuards(WSAuthenticatedGuard)
-  async newChannelInvite(client, data): Promise<void> {
-    const user = await this.clientService.getClientById(client.id);
-    await this.channelService.sendInvite(user.id, data);
-    const users: User[] = await this.channelService.getUserInChannel(data.channelId);
-    for (const u of users) {
-      this.server.sockets.sockets.get(u.session)?.emit('new-channel', {
-        creator: {id: user.id, username: user.username, avatar: user.avatar},
-        users,
-        channelId: data.channelId,
-      });
-    }
   }
 
   @SubscribeMessage('new-message')
