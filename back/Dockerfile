@@ -9,6 +9,7 @@ RUN chown -R node:node /usr/src/app
 # Set user to node for security
 USER node
 
+
 # ---- Development ----
 FROM base AS development
 COPY --chown=node:node ./back/package.json ./
@@ -16,4 +17,6 @@ COPY --chown=node:node ./back/package-lock.json ./
 RUN npm ci
 COPY --chown=node:node ./back/ .
 EXPOSE 3000
+# Handle Every Signal Correctly by Dumb Init to PID 1
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["sh", "-c", "npx prisma generate && npx tsc && (date | npm run migrate) && npm run start:migrate:prod"]
