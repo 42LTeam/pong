@@ -5,6 +5,7 @@ import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../Auth";
 import {getChannels} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
+import SidePanel from "../../../components/utils/SidePanel";
 import {ApplicationContext} from "../../Application";
 import {useNavigate} from "react-router-dom";
 
@@ -46,35 +47,44 @@ export default function Conversations({ state }: Props){
     }
 
     return (
-        <div className="conversations">
-            <FriendButton style={{cursor: 'pointer'}} handleClick={() => setState(null)} state={state}></FriendButton>
-            <div className="conversations-separator">
-                <div className="conversations-separator-text">Messages privés</div>
-                <img onClick={(event) => handlePopUp(event)} alt="plus logo" className="conversations-separator-icon" src="/svg/add.svg"/>
-            </div>
-                {popUpPosition ?
-                    <NewMessagePopup key={"newMessagePopup"} position={popUpPosition} clear={clear}></NewMessagePopup>
-                : null}
 
-                {
-                    conversations.sort((a, b) => {
-                        const a_value = a.lastMessage ? a.lastMessage.created_at : a.created_at;
-                        const b_value = b.lastMessage ? b.lastMessage.created_at : b.created_at;
-                        return a_value < b_value ? 1 : -1;
-                    }).map((conversation) => {
-                        return (
-                            <Conversation
-                                handleClick={() => setState(conversation.id)}
-                                key={'conversation_id '+ conversation.id}
-                                username={conversation.conv ? conversation.users[0].user.username : conversation.name}
-                                lastMessage={conversation.lastMessage?.content}
-                                state={state === conversation.id}
-                                lastRead={conversation.lastRead}
-                                id={conversation.id}
-                            />
-                        )
-                    })
+        <>
+            <SidePanel
+                header={<FriendButton style={{cursor: 'pointer'}} handleClick={() => setState(null)}
+                                      state={state}></FriendButton>}
+                subheader="Messages privés"
+                subheaderIcon={<img onClick={(event) => handlePopUp(event)} alt="plus logo"
+                                    className="conversations-separator-icon" src="/svg/add.svg"/>}
+                body={
+                    <>
+                        {popUpPosition &&
+                            <NewMessagePopup
+                                key={"newMessagePopup"}
+                                position={popUpPosition}
+                                clear={clear}>
+                            </NewMessagePopup>}
+                        {
+                            conversations.sort((a, b) => {
+                                const a_value = a.lastMessage ? a.lastMessage.created_at : a.created_at;
+                                const b_value = b.lastMessage ? b.lastMessage.created_at : b.created_at;
+                                return a_value < b_value ? 1 : -1;
+                            }).map((conversation) => {
+                                return (
+                                    <Conversation
+                                        handleClick={() => setState(conversation.id)}
+                                        key={'conversation_id '+ conversation.id}
+                                        username={conversation.name}
+                                        lastMessage={conversation.lastMessage?.content}
+                                        state={state === conversation.id}
+                                        lastRead={conversation.lastRead}
+                                        id={conversation.id}
+                                    />
+                                )
+                            })
+                        }
+                    </>
                 }
-        </div>
+            />
+        </>
     )
 }

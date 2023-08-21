@@ -4,6 +4,11 @@ import {useEffect, useState} from "react";
 import Friends from "./friend/Friends";
 import Chat from "./chat/Chat";
 import {useParams} from "react-router-dom";
+import ChannelMembersList from "./channel/ChannelMembersList";
+
+function isDef(obj: any): boolean {
+    return obj !== null && obj !== undefined;
+}
 
 export default function SocialBody(){
 
@@ -20,6 +25,16 @@ export default function SocialBody(){
                 <Conversations conversations={[]} state={state} ></Conversations>
                 <div className="vertical-separator"></div>
                 {state ? (<Chat channel={state}></Chat>): (<Friends></Friends>)}
+                {
+                  isDef(state) &&
+                    <>
+                        <div className="vertical-separator"></div>
+                        <ChannelMembersList
+                            channelId={state}
+                            setChannelId={setState}
+                        />
+                    </>
+                }
             </div>
     )
 }
