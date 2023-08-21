@@ -22,10 +22,10 @@ export default function LeaderboardPlaceBubble(props: Props) {
         statName = 'xp';
     }
     else if (props.kind === "Victories/defeat ratio"){
-        statName = 'id';    //to change
+        statName = 'ratio';
     }
     else if (props.kind === "Average points per match"){
-        statName = 'pointAverage';  //to change
+        statName = 'pointAverage';
     }
 
     useEffect(() => {
@@ -51,9 +51,11 @@ export default function LeaderboardPlaceBubble(props: Props) {
                 <div className="leaderboard-username"> {props.user.username} </div>
             </div>
 
-            <div className="leaderboard-data"> {props.user[statName]} {description} </div>
+            <div className="leaderboard-data">
+            {props.user.playedMatch ? `${props.user[statName]} ${description}` : "This player did not play any match"}
+            </div>
 
-            <TextIcon style="placement-icon" text={props.rank}/>
+            <TextIcon style="placement-icon" text={ props.user.playedMatch ? `${props.rank}` : "-" }/>
         </div>
     )
 }

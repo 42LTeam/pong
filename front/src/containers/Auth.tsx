@@ -12,6 +12,9 @@ export interface User {
     id: number,
     xp: number,
     pointAverage: number,
+    ratio: number,
+    playedMatch: boolean,
+    leaderboard : boolean,
 }
 
 export const AuthContext = createContext<User | undefined>(undefined);

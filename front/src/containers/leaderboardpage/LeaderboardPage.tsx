@@ -17,6 +17,7 @@ export default function LeaderboardPage(){
   const [placement, setPlacement] = useState(0);
   const [users, setUsers] = useState([]);
   const [state, setState] = useState("Total xp");
+  const [usersWithRank, setUsersRanks] = useState(undefined);
 
   const handleClick = (text) => {
     setState(text);
@@ -33,14 +34,31 @@ export default function LeaderboardPage(){
       });
   }, [user]);
 
-  const usersWithRank = getUsersRanks(users, state);
+  useEffect(() => {
+    let isFetching = true;
+
+    const fetch = async () => {
+      const usersUpdatedRanks = await getUsersRanks(users, state);
+      if (isFetching)
+        setUsersRanks(usersUpdatedRanks);
+    }
+    fetch();
+
+    return () => {
+      isFetching = false;
+    }
+  }, [users, state])
 
   useEffect(() => {
-    if (user?.id === undefined )
+    if (user?.id === undefined || usersWithRank === undefined )
       return ;
     setPlacement(getUserRank(user.id, usersWithRank) ?? 0)
   }, [usersWithRank])
 
+  if (usersWithRank === undefined) 
+  {
+    return <div>LOADING</div>
+  }
   return (
     <div className='leaderboard-body'>
         <div className='leaderboard-main-frame'>
