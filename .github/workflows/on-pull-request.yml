@@ -2,9 +2,9 @@
 name: Up and running on Pull Request
 
 on:
-  push:
+  pull_request:
     branches:
-      - 57-workflow-ci-improvements*
+      - main
 
 jobs:
   test-dev-on-pull-request:
