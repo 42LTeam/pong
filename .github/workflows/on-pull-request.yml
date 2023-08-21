@@ -26,8 +26,13 @@ jobs:
         run: |
           sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
           docker compose -f docker-compose.yml down
+
+          if [[ $(docker volume ls -qf dangling=true) ]]; then
+            docker volume rm $(docker volume ls -qf dangling=true)
+          fi
+
           sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
-          
+
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
 
         shell: bash -e {0}
