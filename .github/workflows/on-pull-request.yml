@@ -47,10 +47,7 @@ jobs:
       - name: Start services
         run: make up
 
-      - name: Check API service
+      - name: Run health check
         run: |
-          curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:3000
-
-      - name: Check Frontend service
-        run: |
-          curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:5173
+          chmod +x ./.github/workflows/health_script_5173.sh
+          ./.github/workflows/health_script_5173.sh
