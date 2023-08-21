@@ -43,7 +43,7 @@ env:
 
 logs:
 	@echo $(BOLD_GREEN) '🔮' - LOGS: logs of containers $(RESET_COLOR)
-	$(DOCKER_COMPOSE) logs
+	$(DOCKER_COMPOSE) logs -f
 
 build: env
 	@echo $(BOLD_GREEN) '🚧' - BUILD: Build development containers $(RESET_COLOR)

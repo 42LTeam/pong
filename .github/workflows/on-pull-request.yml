@@ -30,7 +30,7 @@ jobs:
           if [[ $(docker volume ls -qf dangling=true) ]]; then
             docker volume rm $(docker volume ls -qf dangling=true)
           fi
-
+          docker system prune -af
           sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
 
           sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
@@ -47,11 +47,8 @@ jobs:
           touch .env
           echo ${{ secrets.POSTGRES_DB }} > .env
 
-      - name: Build services
-        run: make build
-
-      - name: Start services
-        run: make up
+      - name: Build Up
+        run: make all
 
       - name: Run health check 5173
         run: |
