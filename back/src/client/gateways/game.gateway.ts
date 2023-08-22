@@ -59,7 +59,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async properLeaveGame(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        const game = this.games[data.matchId];
+        const game = this.games.find(g => g.matchId == data.matchId);
         if (game)
             game.handleLeave(user);
     }
@@ -68,7 +68,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async updateInput(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        const game : Game = this.games[data.matchId];
-        game.updateInput(user, data);
+        const game = this.games.find(g => g.matchId == data.matchId);
+        if (game)
+            game.updateInput(user, data);
     }
 }
