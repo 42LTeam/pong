@@ -54,8 +54,11 @@ export const getUsersRanks = async (users: User[], StatKind: string): Promise<Us
 
 export const getUserRank = (targetUser: User, users: UserRank[]): number | null => {
     if (targetUser.playedMatch === false) {
+        console.log("no match for " + targetUser.username);
         return null;
     }
+
+    console.log("asd " + targetUser.playedMatch);
     
     const foundUser = users.find(user => user.id === targetUser.id);
     return foundUser ? foundUser.rank : null;
