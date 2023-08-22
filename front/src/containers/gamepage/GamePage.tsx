@@ -1,6 +1,14 @@
 import React, {useEffect, useRef} from 'react';
 import {socket} from "../../api";
 
+export enum gameState {
+    CREATING,
+    STARTING,
+    PLAYING,
+    PAUSE,
+    FINISH
+}
+
 export default function GamePage() {
     const canvas = useRef(null);
 
@@ -19,17 +27,30 @@ export default function GamePage() {
         player0: {
             x: 0,
             y: 0.5,
-            score: 0
+            score: 0,
+            name: ''
         },
         player1: {
             x: 1,
             y: 0.5,
-            score: 0
+            score: 0,
+            name: ''
         },
         semiHeight: 0
     };
 
-    const draw = () => {
+    const getData = (args) => {
+        ball.x = args.ball.x;
+        ball.y = args.ball.y;
+        players.player0.y = args.player0.y;
+        players.player1.y = args.player1.y;
+        if (players.player0.score !== args.score[0] || players.player1.score !== args.score[1]) {
+            players.player0.score = args.score[0];
+            players.player1.score = args.score[1];
+        }
+    }
+
+    const draw = (status, countdown) => {
         if (!canvas?.current) return ;
         const c2d = canvas.current.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
@@ -48,41 +69,56 @@ export default function GamePage() {
         c2d.fillRect((players.player1.x - ball.semiSize) * c2d.canvas.width,
             (players.player1.y - players.semiHeight) * c2d.canvas.height,
             ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
-    }
-
-    const getData = (args) => {
-        ball.x = args.ball.x;
-        ball.y = args.ball.y;
-        players.player0.y = args.player0.y;
-        players.player1.y = args.player1.y;
-        if (players.player0.score !== args.score[0] || players.player1.score !== args.score[1]) {
-            players.player0.score = args.score[0];
-            players.player1.score = args.score[1];
-            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
-        }
+        const fontSize = Math.min(c2d.canvas.width, c2d.canvas.height) * 0.05;
+        const textPos = fontSize + 5;
+        c2d.font = fontSize + "px monospace";
+        c2d.textAlign = "left";
+        c2d.fillText(players.player0.name, c2d.canvas.width * 0.1, textPos);
+        c2d.fillText(players.player0.score.toString(), c2d.canvas.width * 0.375, textPos);
+        c2d.textAlign = "right";
+        c2d.fillText(players.player1.name, c2d.canvas.width * 0.9, textPos);
+        c2d.fillText(players.player1.score.toString(), c2d.canvas.width * 0.625, textPos);
+        c2d.textAlign = "center";
+        if (status === gameState.FINISH && (players.player0.score > players.player1.score ? data.playerId === 0 : data.playerId === 1))
+            c2d.fillText('You win!', c2d.canvas.width / 2, c2d.canvas.height / 2);
+        else if (status === gameState.FINISH)
+            c2d.fillText('You lose!', c2d.canvas.width / 2, c2d.canvas.height / 2);
+        else if (status === gameState.PAUSE)
+            c2d.fillText('Pause', c2d.canvas.width / 2, c2d.canvas.height / 2);
+        else if (status === gameState.STARTING)
+            c2d.fillText(countdown, c2d.canvas.width / 2, c2d.canvas.height / 2);
+        else if (status === gameState.CREATING)
+            c2d.fillText('Waiting for player', c2d.canvas.width / 2, c2d.canvas.height / 2);
     }
 
     useEffect(() => {
-        const onGameWait = (args) => {
-            console.log('game-wait');
-            console.log(args);
+        const onGameWait = () => {
+            // console.log('game-wait');
+            // console.log(args);
+            draw(gameState.CREATING, 0);
         }
 
         const onGamePlay = (args) => {
             getData(args);
-            draw();
+            draw(gameState.PLAYING, 0);
         };
 
         const onGameStart = (args) => {
-            console.log('game-start');
+            getData(args);
             data.playerId = args.playerId;
             ball.semiSize = args.ballSemiSize;
             players.player0.x = args.player0.x;
             players.player1.x = args.player1.x;
             players.semiHeight = args.playerSemiHeight;
-            console.log('You are Player', data.playerId, '(', data.playerId === 0 ? 'left' : 'right', ')');
-            console.log('Player 0 :', players.player0.score, '- Player 1 :', players.player1.score);
+            players.player0.name = args.player0Name;
+            players.player1.name = args.player1Name;
+            draw(gameState.STARTING, args.countdown);
         };
+
+        const onGamePause = (args) => {
+            getData(args);
+            draw(gameState.PAUSE, 0);
+        }
 
         const onError = (args) => {
             console.log('error');
@@ -94,12 +130,8 @@ export default function GamePage() {
         };
 
         const onGameFinish = (args) => {
-            console.log('game-finish');
             getData(args);
-            if (players.player0.score > players.player1.score ? data.playerId === 0 : data.playerId === 1)
-                console.log('You win!');
-            else
-                console.log('You lose!');
+            draw(gameState.FINISH, 0);
         };
 
         const keyDownHook  = (event) => {
@@ -127,6 +159,7 @@ export default function GamePage() {
         socket.on('gameplay', onGamePlay);
         socket.on('game-wait', onGameWait);
         socket.on('game-start', onGameStart);
+        socket.on('game-pause', onGamePause);
         socket.on('error', onError);
         socket.on('game-finish', onGameFinish);
         document.addEventListener('keydown', keyDownHook);
@@ -137,6 +170,7 @@ export default function GamePage() {
             socket.off('gameplay', onGamePlay);
             socket.off('game-wait', onGameWait);
             socket.off('game-start', onGameStart);
+            socket.off('game-pause', onGamePause);
             socket.off('error', onError);
             socket.off('game-finish', onGameFinish);
             document.removeEventListener('keydown', keyDownHook);

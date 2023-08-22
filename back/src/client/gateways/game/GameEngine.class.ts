@@ -1,4 +1,4 @@
-import Game from "./Game.class";
+import Game, {gameState} from "./Game.class";
 import GameBall from "./GameBall.class";
 
 export default class GameEngine {
@@ -7,7 +7,6 @@ export default class GameEngine {
 	WIN_SCORE = 5;
 	ball: GameBall;
 	score = [0, 0];
-	playing = false;
 
 	constructor(
 		public game : Game,
@@ -39,6 +38,7 @@ export default class GameEngine {
 				this.score[0] === this.WIN_SCORE ? 0 : 1,
 				'win!',
 			);
+			this.game.state = gameState.FINISH;
 			return true;
 		}
 		this.ball.newBall();
@@ -55,38 +55,56 @@ export default class GameEngine {
 	}
 
 	loop() {
-		this.game.players.forEach(p => p.update())
-		this.ball.update();
-		if (this.checkScores())
-			this.game.players.forEach((player) => {
-				player.send('game-finish', this.getData());
-			});
+		if (this.game.state === gameState.PLAYING) {
+			this.game.players.forEach(p => p.update())
+			this.ball.update();
+			if (this.checkScores())
+				this.game.players.forEach((player) => {
+					player.send('game-finish', this.getData());
+				});
+			else {
+				this.game.players.forEach((player) => {
+					player.send('gameplay', this.getData());
+					// player.send('spectator', this.getData());
+				});
+				setTimeout(() => {
+					this.loop();
+				}, this.TIME_REFRESH);
+			}
+		}
 		else {
 			this.game.players.forEach((player) => {
-				player.send('gameplay', this.getData());
-				// player.send('spectator', this.getData());
+				player.send('game-pause', this.getData());
 			});
-			setTimeout(() => {
-				this.loop();
-			}, this.TIME_REFRESH);
 		}
 	}
 
-	startGame() {
-		this.game.players.forEach((player) => {
-			player.send('game-start', {
-				playerId: Number(!player.playerLeft),
-				ballSemiSize: this.ball.BALL_SEMI_SIZE,
-				player0: this.game.players[0].position,
-				player1: this.game.players[1].position,
-				playerSemiHeight: this.game.players[0].PLAYER_SEMI_HEIGHT,
-			});
-			player.start();
-		});
-		this.playing = true;
-		this.score = [0, 0];
-		this.ball.newBall();
+	sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+	async startGame(newGame: boolean) {
+		this.game.state = gameState.STARTING;
+		if (newGame)
+			this.ball.newBall();
 		this.printScores();
+		for (var i = 4; i--; i > 0) {
+			console.log('game-start', i);
+			this.game.players.forEach((player) => {
+				player.send('game-start', {
+					ball: this.ball.position,
+					player0: this.game.players[0].position,
+					player1: this.game.players[1].position,
+					score: this.score,
+					playerId: Number(!player.playerLeft),
+					ballSemiSize: this.ball.BALL_SEMI_SIZE,
+					playerSemiHeight: this.game.players[0].PLAYER_SEMI_HEIGHT,
+					player0Name: this.game.players[0].name,
+					player1Name: this.game.players[1].name,
+					countdown: i
+				});
+			});
+			await this.sleep(1000);
+		}
+		this.game.state = gameState.PLAYING;
 		this.loop();
 	}
 }
