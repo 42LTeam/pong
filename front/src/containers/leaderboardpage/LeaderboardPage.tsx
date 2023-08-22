@@ -52,11 +52,10 @@ export default function LeaderboardPage(){
   useEffect(() => {
     if (user?.id === undefined || usersWithRank === undefined )
       return ;
-    setPlacement(getUserRank(user.id, usersWithRank) ?? 0)
+    setPlacement(getUserRank(user, usersWithRank) ?? 0)
   }, [usersWithRank])
 
-  if (usersWithRank === undefined) 
-  {
+  if (usersWithRank === undefined) {
     return <div>LOADING</div>
   }
   return (

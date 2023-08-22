@@ -72,10 +72,12 @@ async function main() {
                     {
                         user: { connect: { id: user1.id } },
                         score: 10,
+                        isWin: false,
                     },
                     {
                         user: { connect: { id: user2.id } },
                         score: 15,
+                        isWin: true,
                     },
                 ],
             },

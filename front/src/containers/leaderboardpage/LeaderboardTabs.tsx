@@ -1,6 +1,4 @@
 import React, { useContext, useState } from "react";
-
-import LeaderboardTab from "./LeaderboardTab";
 import { AuthContext } from "../Auth";
 
 import "../../css/leaderboard.css"
@@ -39,26 +37,6 @@ type Props = {
 export default function LeaderboardTabs(props: Props) {
 
     const user = useContext(AuthContext);
-    const [state, setState] = useState("Total xp");
-    var placement: number = 1;
-
-    function getPlacement() {
-        if (state === "Total xp"){
-            placement = 1;  //a chopper en back
-        }
-        else if (state === "Victories / defeat ratio"){
-            placement = 2;  //a chopper en back
-        }
-        else if (state === "Average points per match"){
-            placement = 3;  //a chopper en back
-        }
-    }
-
-    const handleClick = (text) => {
-        setState(text);
-    }
-
-    getPlacement();
 
     return (
         <div className="leaderboard-tabs">
