@@ -16,7 +16,9 @@ export default class GameEngine {
 
 	printScores() {
 		console.log(
-			'Player 0 :',
+			'Game',
+			this.game.matchId,
+			'# Player 0 :',
 			this.score[0],
 			'- Player 1 :',
 			this.score[1],
@@ -34,7 +36,9 @@ export default class GameEngine {
 			this.score[1] === this.WIN_SCORE
 		) {
 			console.log(
-				'Player',
+				'Game',
+				this.game.matchId,
+				'# Player',
 				this.score[0] === this.WIN_SCORE ? 0 : 1,
 				'win!',
 			);
@@ -90,6 +94,7 @@ export default class GameEngine {
 			console.log('game-start', i);
 			this.game.players.forEach((player) => {
 				player.send('game-start', {
+					matchId: this.game.matchId,
 					ball: this.ball.position,
 					player0: this.game.players[0].position,
 					player1: this.game.players[1].position,

@@ -13,7 +13,7 @@ export default function GamePage() {
     const canvas = useRef(null);
 
     const data={
-        matchId: 1,
+        matchId: 0,
         playerId: 0,
         moveUp: false,
         moveDown: false
@@ -105,6 +105,7 @@ export default function GamePage() {
 
         const onGameStart = (args) => {
             getData(args);
+            data.matchId = args.matchId;
             data.playerId = args.playerId;
             ball.semiSize = args.ballSemiSize;
             players.player0.x = args.player0.x;
@@ -166,7 +167,7 @@ export default function GamePage() {
         document.addEventListener('keyup', keyUpHook);
 
         return () => {
-            socket.emit('leave-game', {matchId: 1});
+            socket.emit('leave-game', {matchId: data.matchId});
             socket.off('gameplay', onGamePlay);
             socket.off('game-wait', onGameWait);
             socket.off('game-start', onGameStart);
@@ -180,7 +181,7 @@ export default function GamePage() {
 
     useEffect(() => {
         if (canvas)
-            socket.emit('join-game', {matchId: 1})
+            socket.emit('join-game');
     }, [canvas])
     return (
         <>

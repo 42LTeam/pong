@@ -3,7 +3,7 @@ import GameEngine from "./GameEngine.class";
 
 export enum gameState {
 	CREATING,
-STARTING,
+	STARTING,
 	PLAYING,
 	PAUSE,
 	FINISH
@@ -17,7 +17,7 @@ export default class Game {
 
 	constructor(
 				private server,
-				private matchId: number,
+				public matchId: number,
 	) {
 		this.engine = new GameEngine(this);
 		console.log('New game ', this.matchId);
@@ -28,21 +28,26 @@ export default class Game {
 		return true;
 	}
 
+	canJoin(user) {
+		return !(this.state == gameState.FINISH || (this.players.length >= 2 && this.players[0].userId != user.id && this.players[1].userId != user.id));
+	}
+
 	//TODO matchService
 	handleJoin(user) {
 		console.log('handleJoin');
 		const socket = this.server.sockets.sockets.get(user.session);
-		if (!this.isWhitelisted(user) || this.state == gameState.FINISH)
-			socket?.emit('error', 'Forbidden');
-		else if (this.players.length >= 2 && this.players[0].userId != user.id && this.players[1].userId != user.id)
-			socket?.emit('spectator');
-		else {
+// 		if (!this.isWhitelisted(user) || this.state == gameState.FINISH)
+// 			socket?.emit('error', 'Forbidden');
+// 		else if (this.players.length >= 2 && this.players[0].userId != user.id && this.players[1].userId != user.id)
+// //			socket?.emit('spectator');
+// 			socket?.emit('error', 'Forbidden');
+// 		else {
 			const index = this.players.findIndex(p => p.userId == user.id);
 			if (index < 0) {
 				const player = new GamePlayer(user.id, user.username, socket, !Boolean(this.players.length), this.engine.ball.BALL_SEMI_SIZE);
 				this.players.push(player);
-				console.log('Player', this.players[this.players.length - 1].name, 'join');
-				console.log('New connection, total :', this.players.length, ' matchId:', this.MATCH_ROOM);
+				console.log('Player', this.players[this.players.length - 1].name, 'join game', this.matchId);
+				console.log('New connection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
 				socket?.join(this.MATCH_ROOM);
 				if (this.players.length == 1)
 					player.send('game-wait', null);
@@ -54,7 +59,7 @@ export default class Game {
 				if (this.players[0].status == this.players[1].status)
 					this.engine.startGame(false);
 			}
-		}
+		// }
 	}
 
 	//TODO check state and pause if needed
@@ -65,13 +70,13 @@ export default class Game {
 			console.log('Player', this.players[index].name, 'left');
 			if (this.state == gameState.FINISH) {
 				this.players.splice(index, 1);
-				console.log('New deconnection, total :', this.players.length);
+				console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
 			} else {
 				this.players[index].status = playerStatus.OFFLINE;
-				console.log('New deconnection, total :', this.players.length);
+				console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
 				if (this.state != gameState.PAUSE) {
 					this.state = gameState.PAUSE;
-					console.log('The game is on pause');
+					console.log('The game', this.matchId, 'is on pause');
 				}
 			}
 		}

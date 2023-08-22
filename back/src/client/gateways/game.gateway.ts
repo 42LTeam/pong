@@ -18,19 +18,20 @@ import Game from "./game/Game.class";
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     games : Game[] = [];
+    nbOfGames = 0;
 
     constructor(private clientService: ClientService) {}
 
     @WebSocketServer()
     server;
-    // games: any = {}
 
     async handleDisconnect(client: any) {
         //TODO handleLeave if client is in a game
         const user = await this.clientService.getClientById(client.id);
-        this.games.forEach((game) => {
-            game.handleLeave(user);
-        })
+        if (user)
+            this.games.forEach((game) => {
+                game.handleLeave(user);
+            })
     }
 
     async handleConnection(client: any, ...args): Promise<any> {
@@ -39,12 +40,18 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @SubscribeMessage('join-game')
     @UseGuards(WSAuthenticatedGuard)
-    async joinGame(client, data): Promise<void> {
+    async joinGame(client): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        const {matchId} = data;
-        const game = this.games[matchId] ? this.games[matchId] : new Game(this.server, matchId);
-        if (!this.games[matchId]) this.games[matchId] = game;
-        game.handleJoin(user);
+        for (let game of this.games) {
+            if (game.canJoin(user)) {
+                game.handleJoin(user);
+                return;
+            }
+        }
+        const newGame = new Game(this.server, this.nbOfGames++);
+        this.games.push(newGame);
+        if (newGame.canJoin(user))
+            newGame.handleJoin(user);
     }
 
     //TODO used when?
