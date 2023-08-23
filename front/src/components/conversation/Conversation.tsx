@@ -1,7 +1,6 @@
 
 interface Props {
     username: string,
-    message : string,
     handleClick: any,
     state?: boolean,
     lastMessage?: string,

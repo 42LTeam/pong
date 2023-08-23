@@ -2,7 +2,6 @@ import "../../../css/chat.css"
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
 import {useContext, useEffect, useState} from "react";
-import {AuthContext} from "../../Auth";
 import {getChannels} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 import SidePanel from "../../../components/utils/SidePanel";
@@ -15,9 +14,8 @@ type Props = {
 
 export default function Conversations({ state }: Props){
     const [conversations, setConversations] = useState([]);
-    const [popUpPosition, setPopUpPosition] = useState(null);
+    const [popUpPosition, setPopUpPosition] = useState<{left: number, top: number}>(null);
     const application = useContext(ApplicationContext);
-    const user = useContext(AuthContext)
     const navigate = useNavigate();
 
     const handlePopUp = (event) => {
