@@ -158,7 +158,13 @@ export class ChannelService {
             }
           },
           select: {
-            user: true,
+            user: {
+              select: {
+                avatar: true,
+                id: true,
+                username: true,
+              }
+            },
           }
         },
         messages: {
