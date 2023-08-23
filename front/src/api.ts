@@ -126,12 +126,28 @@ export async function sendChannelInvite(data:
     return axios(config);*/
 }
 
-
+export async function getConversation(userId: number) {
+    const config = {
+        method: 'get',
+        url: URL + '/conversation/' + userId,
+        withCredentials: true,
+    };
+    return axios(config);
+}
 
 export async function acceptFriendship(id: number){
     const config = {
         method: 'put',
         url: URL + '/friend/friend-request/accept/' + id,
+        withCredentials: true,
+    };
+    return axios(config)
+}
+
+export async function removeFriendship(friendId: number){
+    const config = {
+        method: 'delete',
+        url: URL + '/friend/friendship/' + friendId,
         withCredentials: true,
     };
     return axios(config)

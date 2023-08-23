@@ -1,4 +1,4 @@
-import {Controller, Get, Param, Post, Put, Body, Req, UseGuards} from '@nestjs/common';
+import {Controller, Param, Post, Put, Body, Req, UseGuards, Delete, ParseIntPipe} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { FriendService } from './friend.service';
 import { UserFriendship } from '@prisma/client';
@@ -57,6 +57,18 @@ export class FriendController {
   ) {
     const user = await req.user;
     return this.friendService.declineFriendRequest(user.id, Number(friendshipId));
+  }
+
+
+
+  @Delete('/friendship/:friendId')
+  @ApiOperation({ summary: 'remove a friendship' })
+  async removeFriendship(
+      @Param('friendId', ParseIntPipe) friendId: number,
+      @Req() req: any
+  ) {
+    const user = await req.user;
+    return this.friendService.removeFriendship(user.id, Number(friendId));
   }
 
 }

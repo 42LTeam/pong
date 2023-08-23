@@ -78,7 +78,7 @@ export class MessageService {
         lastRead: true,
       }
     });
-    const lastRead = userChanel.lastRead;
+    const lastRead = userChanel?.lastRead || 0;
 
     if (messages.length == 0) return {messages: [], lastRead}
 

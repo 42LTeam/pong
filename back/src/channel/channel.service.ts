@@ -29,7 +29,7 @@ export class ChannelService {
     });
 
     const updatedChannelUsers = [...channel.users, newUser];
-    await this.prisma.channel.update({
+    return this.prisma.channel.update({
       where: { id: id },
       data: { users: { set: updatedChannelUsers } },
     });
@@ -58,12 +58,17 @@ export class ChannelService {
       select: {
         id: true,
         creatorId: true,
-        users: true,
+        users: {
+          where: {
+            id: {
+              not: creatorId,
+            }
+          }
+        },
         messages: true,
       }
     });
-    await this.addInvite(channel.id, creatorId);
-    return channel;
+    return this.addInvite(channel.id, creatorId);
   }
 
 
@@ -140,6 +145,25 @@ export class ChannelService {
         id: {
           in: ids,
         },
+      },
+      select: {
+        id: true,
+        conv: true,
+        name: true,
+        users: {
+          take: 10,
+          where: {
+            userId: {
+              not: id,
+            }
+          },
+          select: {
+            user: true,
+          }
+        },
+        messages: {
+          take: 100,
+        },
       }
     });
 
@@ -166,29 +190,32 @@ export class ChannelService {
         select: {
           id: true,
           creatorId: true,
-          users: true,
+          users: {
+            where:{
+              id: {
+                not: userId,
+              }
+            }
+          },
           messages: true,
         }
       });
 
-      for (const conversationElement of conversation) {
-        const other = conversationElement.creatorId == userId ? friendId : userId;
-        const ret = await this.prisma.userChannel.findFirst({
-          where: {
-            channelId: conversationElement.id,
-            AND: [{
-              userId: other,
-            }]
-          },
-          select: {
-            channel: true,
-          }
-        });
-        if (ret) return conversationElement;
-      }
+      if (conversation.length) return conversation[0];
 
-      const newConv = await this.createChannel({conv: true, creatorId: userId});
-      await this.sendInvite(userId, {channelId: newConv.id, ids: [friendId]});
-      return newConv;
+
+      const newConv = await this.prisma.channel.create({
+        data: {
+          conv: true,
+          creator: {
+            connect: {
+              id: userId,
+            }
+          },
+          created_at: new Date(),
+        }
+      });
+      await this.addInvite(newConv.id, userId);
+      return this.addInvite(newConv.id, friendId);
     }
 }
