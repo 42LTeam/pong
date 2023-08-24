@@ -2,9 +2,9 @@
 name: Up and running on Pull Request
 
 on:
-  push:
+  pull_request:
     branches:
-      - 57-workflow-ci-improvements
+      - main
 
 jobs:
   test-dev-on-pull-request:
@@ -72,11 +72,11 @@ jobs:
           
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
           
-          echo "FORTYTWO_CALLBACK: ${{ secrets.FORTYTWO_CALLBACK }}" >> .env
-          echo "FORTYTWO_UID: ${{ secrets.FORTYTWO_UID }}" >> .env
-          echo "FORTYTWO_SECRET: ${{ secrets.FORTYTWO_SECRET }}" >> .env
+          echo "FORTYTWO_CALLBACK= ${{ secrets.FORTYTWO_CALLBACK }}" >> .env
+          echo "FORTYTWO_UID= ${{ secrets.FORTYTWO_UID }}" >> .env
+          echo "FORTYTWO_SECRET= ${{ secrets.FORTYTWO_SECRET }}" >> .env
           
-          echo "DOCKER_IP: ${{ secrets.DOCKER_IP }}" >> .env
+          echo "DOCKER_IP= ${{ secrets.DOCKER_IP }}" >> .env
          
 
       - name: Build Up
