@@ -85,10 +85,10 @@ export default class GameEngine {
 
 	sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-	async startGame(newGame: boolean) {
-		this.game.state = gameState.STARTING;
-		if (newGame)
+	async startGame() {
+		if (this.ball.speed == 0)
 			this.ball.newBall();
+		this.game.state = gameState.STARTING;
 		this.printScores();
 		for (var i = 4; i--; i > 0) {
 			console.log('game-start', i);

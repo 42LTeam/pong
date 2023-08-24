@@ -99,31 +99,36 @@ export default function GamePage() {
         }
 
         const onGamePlay = (args) => {
-            getData(args);
+            if (args)
+                getData(args);
             draw(gameState.PLAYING, 0);
         };
 
         const onGameStart = (args) => {
-            getData(args);
-            data.matchId = args.matchId;
-            data.playerId = args.playerId;
-            ball.semiSize = args.ballSemiSize;
-            players.player0.x = args.player0.x;
-            players.player1.x = args.player1.x;
-            players.semiHeight = args.playerSemiHeight;
-            players.player0.name = args.player0Name;
-            players.player1.name = args.player1Name;
+            if (args) {
+                getData(args);
+                data.matchId = args.matchId;
+                data.playerId = args.playerId;
+                ball.semiSize = args.ballSemiSize;
+                players.player0.x = args.player0.x;
+                players.player1.x = args.player1.x;
+                players.semiHeight = args.playerSemiHeight;
+                players.player0.name = args.player0Name;
+                players.player1.name = args.player1Name;
+            }
             draw(gameState.STARTING, args.countdown);
         };
 
         const onGamePause = (args) => {
-            getData(args);
+            if (args)
+                getData(args);
             draw(gameState.PAUSE, 0);
         }
 
         const onError = (args) => {
             console.log('error');
-            console.log(args);
+            if (args)
+                console.log(args);
             // socket.on('spectator', (args) => {
             //     console.log('spectator');
             //     getData(args);
@@ -131,7 +136,8 @@ export default function GamePage() {
         };
 
         const onGameFinish = (args) => {
-            getData(args);
+            if (args)
+                getData(args);
             draw(gameState.FINISH, 0);
         };
 

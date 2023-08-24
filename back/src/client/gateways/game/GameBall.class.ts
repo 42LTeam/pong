@@ -23,7 +23,7 @@ export default class GameBall {
 			y: 0,
 		}
 		this.angle = 0;
-		this.speed = this.BALL_START_SPEED;
+		this.speed = 0;
 	}
 
 	updateSpeed(newBall) {
