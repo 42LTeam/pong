@@ -1,22 +1,20 @@
-import {Children} from "react";
+import {Children, useState} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
+import {getConversation, removeFriendship} from "../../api";
 
 type Props = {
     friend: any,
     onClick?: any,
     children?: any,
+    unremovable?: boolean,
 }
-
-
-
-
 
 export default function Friend(props: Props){
 
     const navigate = useNavigate();
-
+    const [display, setDisplay] = useState(null);
     const buttons = [
         {
             text: 'Profile',
@@ -24,22 +22,26 @@ export default function Friend(props: Props){
         },
         {
             text: 'Envoyer un message',
-            handleClick: () => alert('TODO'),
+            handleClick: () => getConversation(props.friend.id).then((response) => navigate('/social/' + response.data.id)),
         },
         {separator: true},
         {
             text: 'Match amical',
             handleClick: () => alert('TODO'),
         },
-        {
+
+    ];
+    if (!props.unremovable)
+        buttons.push({
             text: 'Retirer l\'ami',
-            handleClick: () => alert('TODO'),
-        },
-        {
-            text: 'Bloquer',
-            handleClick: () => alert('TODO'),
-        },
-    ]
+            handleClick: () => {
+                removeFriendship(props.friend.id).then(() => setDisplay('none'));
+            },
+        })
+    buttons.push({
+        text: 'Bloquer',
+        handleClick: () => alert('TODO'),
+    });
 
     const buttonProps = {
         buttonProps: {
@@ -55,9 +57,14 @@ export default function Friend(props: Props){
         },
     };
 
+    const navigateToConversation = async (friend) => {
+        const response = await getConversation(friend.id);
+        navigate('/social/' + response.data.id);
+    }
+
     return (
         <ContextMenu  buttons={buttons} buttonProps={buttonProps}>
-            <div onClick={() => {props.onClick ? props.onClick(props.friend) : null}} className="friend">
+            <div onClick={() => {props.onClick ? props.onClick(props.friend) : navigateToConversation(props.friend)}} className="friend" style={display ? {display: 'none'} : null}>
                 <Avatar width="48px" height="48px" url={props.friend?.avatar}></Avatar>
 
                 <div className="conversation-content">
