@@ -9,6 +9,7 @@ import {UseGuards} from '@nestjs/common';
 import {WSAuthenticatedGuard} from "../../auth/guards/wsauthenticated.guard";
 import {ClientService} from "../client.service";
 import Game from "./game/Game.class";
+import {MatchService} from "../../match/match.service";
 
 @WebSocketGateway(8001, {
     cors: true,
@@ -18,19 +19,24 @@ import Game from "./game/Game.class";
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     games : Game[] = [];
+    nbOfGames = 0;
 
-    constructor(private clientService: ClientService) {}
+    constructor(private clientService: ClientService, private matchService: MatchService) {}
 
     @WebSocketServer()
     server;
-    // games: any = {}
 
     async handleDisconnect(client: any) {
         //TODO handleLeave if client is in a game
         const user = await this.clientService.getClientById(client.id);
-        this.games.forEach((game) => {
-            game.handleLeave(user);
-        })
+        if (user)
+            this.games.forEach((game) => {
+                game.handleLeave(user);
+            })
+        const index = this.games.findIndex(game => game.canDelete())
+        if (index >= 0) {
+            this.games.splice(index, 1);
+        }
     }
 
     async handleConnection(client: any, ...args): Promise<any> {
@@ -39,12 +45,18 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @SubscribeMessage('join-game')
     @UseGuards(WSAuthenticatedGuard)
-    async joinGame(client, data): Promise<void> {
+    async joinGame(client): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        const {matchId} = data;
-        const game = this.games[matchId] ? this.games[matchId] : new Game(this.server, matchId);
-        if (!this.games[matchId]) this.games[matchId] = game;
-        game.handleJoin(user);
+        for (let game of this.games) {
+            if (game.canJoin(user)) {
+                game.handleJoin(user);
+                return;
+            }
+        }
+        const newGame = new Game(this.server, ++this.nbOfGames, this.matchService);
+        this.games.push(newGame);
+        if (newGame.canJoin(user))
+            newGame.handleJoin(user);
     }
 
     //TODO used when?
@@ -52,7 +64,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async properLeaveGame(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        const game = this.games[data.matchId];
+        const game = this.games.find(g => g.matchId == data.matchId);
         if (game)
             game.handleLeave(user);
     }
@@ -61,7 +73,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async updateInput(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        const game : Game = this.games[data.matchId];
-        game.updateInput(user, data);
+        const game = this.games.find(g => g.matchId == data.matchId);
+        if (game)
+            game.updateInput(user, data);
     }
 }

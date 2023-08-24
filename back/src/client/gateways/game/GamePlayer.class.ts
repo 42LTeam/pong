@@ -45,10 +45,4 @@ export default class GamePlayer {
 	send(event, data) {
 		return this.socket.emit(event, data);
 	}
-
-	// start() {
-	// 	this.moveDown = false;
-	// 	this.moveUp = false;
-	// 	this.position.y = 0.5;
-	// }
 }
