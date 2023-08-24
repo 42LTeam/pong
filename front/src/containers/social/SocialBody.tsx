@@ -6,10 +6,6 @@ import Chat from "./chat/Chat";
 import {useParams} from "react-router-dom";
 import ChannelMembersList from "./channel/ChannelMembersList";
 
-function isDef(obj: any): boolean {
-    return obj !== null && obj !== undefined;
-}
-
 export default function SocialBody(){
 
     const {channelId} = useParams();
@@ -26,7 +22,7 @@ export default function SocialBody(){
                 <div className="vertical-separator"></div>
                 {state ? (<Chat channel={state}></Chat>): (<Friends></Friends>)}
                 {
-                  isDef(state) &&
+                  state ?
                     <>
                         <div className="vertical-separator"></div>
                         <ChannelMembersList
@@ -34,6 +30,8 @@ export default function SocialBody(){
                             setChannelId={setState}
                         />
                     </>
+                      :
+                      null
                 }
             </div>
     )
