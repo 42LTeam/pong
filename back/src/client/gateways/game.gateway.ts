@@ -33,6 +33,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             this.games.forEach((game) => {
                 game.handleLeave(user);
             })
+        const index = this.games.findIndex(game => game.canDelete())
+        if (index >= 0) {
+            this.games.splice(index, 1);
+        }
     }
 
     async handleConnection(client: any, ...args): Promise<any> {

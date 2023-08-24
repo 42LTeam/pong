@@ -59,6 +59,10 @@ export default class Game {
 			this.engine.startGame();
 	}
 
+	canDelete() {
+		return (this.state == gameState.FINISH && this.players.length >= 2 && this.players[0].status == playerStatus.OFFLINE && this.players[1].status == playerStatus.OFFLINE)
+	}
+
 	//TODO check state and pause if needed
 	handleLeave(user) {
 		const index = this.players.findIndex(p => p.userId == user.id);
@@ -68,6 +72,7 @@ export default class Game {
 			if (this.state == gameState.FINISH) {
 				this.players.splice(index, 1);
 				console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
+
 			} else {
 				this.players[index].status = playerStatus.OFFLINE;
 				console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
