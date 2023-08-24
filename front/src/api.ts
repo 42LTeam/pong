@@ -262,3 +262,12 @@ export async function getUsers(){
     };
     return axios(config);
 }
+
+export async function getUserMatches(ID){
+    var config = {
+        method: 'get',
+        url: URL + '/users/' + ID + '/matches',
+        withCredentials: true,
+    };
+    return axios(config);
+}

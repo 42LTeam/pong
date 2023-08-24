@@ -41,5 +41,3 @@ export default function Friends(){
         </div>
     );
 }
-
-//a checker : voir comment linker le state avec ce qu'on affiche

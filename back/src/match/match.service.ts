@@ -6,7 +6,7 @@ import { User, Match, UserMatch } from '@prisma/client';
 export class MatchService {
   constructor(private prisma: PrismaService) {}
 
-  async createMatch(userIds: number[], scores: number[]): Promise<Match> {
+  async createMatch(userIds: number[], scores: number[], isWins: boolean[]): Promise<Match> {
     if (!userIds || !scores || userIds.length !== scores.length) {
       throw new Error('Invalid input');
     }
@@ -18,7 +18,8 @@ export class MatchService {
         data: {
           userId: userId,
           matchId: createdMatch.id,
-          score: scores[index]
+          score: scores[index],
+          isWin: isWins[index],
         }
       }));
 
