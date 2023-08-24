@@ -3,7 +3,7 @@ import "../../css/homepage.css"
 import React from "react";
 import TextInput from "../../components/utils/TextInput";
 import {useContext, useState} from "react";
-import {getAllUsers, searchUser} from "../../api";
+import {searchFriend, getFriendOfUser} from "../../api";
 import {AuthContext} from "../Auth";
 import FriendQuickInviteBubble from "./FriendQuickInviteBubble";
 
@@ -13,29 +13,27 @@ export default function FriendQuickInvite() {
 
     const mapData =  (current) => {
         return (
+            <>
             <FriendQuickInviteBubble user={current} /> 
+            </>
         )
     }
 
     const handlePopupSearch = async (event) => {
         const search = event.target.value || '';
-        const {data} = await searchUser(search, {friendOnly: true});
+        const {data} = await searchFriend(search);
         setSuggestions(data);
     }
 
-    const handleClick = async () => {
-        // un bouton pour clear la recherche ?
-    };
-
     if (!suggestions.length)
-        getAllUsers().then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
+        getFriendOfUser(user.id).then(response => setSuggestions(response.data.filter(current => current.id != user?.id)));
 
     return (
     <>
     <h1>Quick Invite</h1>
     <TextInput
         key={"quick-invite-input"}
-        text="Trouve taon ami.e tape sa on nom..."
+        text="Pseudo"
         bgColor="#FFF"
         color="#7F8C8D"
         onChange={handlePopupSearch}

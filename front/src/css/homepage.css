@@ -31,9 +31,7 @@
     align-self: stretch;
     border-radius: 10px;
     max-height: 80vh; /*a voir*/
-    overflow-y: scroll;
-    overflow: auto;
-    scrollbar-color: #2C3E50 #ECF0F1;
+    justify-content: center;
 }
 
 /* .frame-right::-webkit-scrollbar{
@@ -141,6 +139,7 @@
     align-items: center;
     gap: 8px;
     align-self: stretch;
+    min-width: 130px;   /**to see with max username length*/
 }
 
 .quick-invite-profile-picture{
@@ -157,7 +156,7 @@
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
-    line-height: normal; 
+    line-height: normal;
 }
 
 .quick-invite-ratio{
@@ -264,7 +263,7 @@
 }
 
 .quick-invite-suggestions {
-    overflow-y: scroll;
+    overflow-y: auto;
     display: flex;
     height: 250px;
     flex-direction: column;

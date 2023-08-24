@@ -262,3 +262,12 @@ export async function getUsers(){
     };
     return axios(config);
 }
+
+export async function searchFriend(name: string){
+    const config = {
+        method: 'get',
+        url: URL + '/users/search/friend/'  +name,
+        withCredentials: true,
+    };
+    return axios(config);
+}
