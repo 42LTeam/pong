@@ -20,11 +20,11 @@ export default function NewMessagePopup({position, clear}: Props) {
 
     const mapData =  (current) => {
         return (
-            <Friend key={"popupfriend-" + current.username} friend={current} notFriend={true}
+            <Friend key={"popupfriend-" + current.username} friend={current} unremovable={true}
                     onClick={() => toggleCheck(current.username, !checked.includes(current.username))}>
                 <div className="align-left">
                     <input
-                        {...(checked.filter(c => c == current.username).length ? {checked:true}:{checked:false})} onChange={(event) => toggleCheck(current.username, event.target.checked)} type="checkbox"/>
+                        {...(checked.filter(c => c == current.username).length ? {checked:true}:{checked:false})}  type="checkbox"/>
                 </div>
             </Friend>
         )
@@ -57,7 +57,7 @@ export default function NewMessagePopup({position, clear}: Props) {
             setChecked(checked.filter(c => c != current));
     }
     if (!suggestions.length)
-        getAllUsers().then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
+        getAllUsers({notFriend: false, friendOnly: false}).then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
 
     return (
         <PopUp key={"newmessage-root"} position={position} clear={clear}>

@@ -3,6 +3,7 @@ import { ApiBody, ApiProperty, ApiTags, ApiResponse, ApiOperation } from '@nestj
 import { Block, User } from '@prisma/client';
 import { BlockService } from './block.service';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
+import {FriendService} from "../friend/friend.service";
 
 class CreateBlockDto {
   @ApiProperty()
@@ -16,14 +17,19 @@ class CreateBlockDto {
 @Controller('block')
 @UseGuards(AuthenticatedGuard)
 export class BlockController {
-  constructor(private blockService: BlockService) {}
+  constructor(
+      private blockService: BlockService,
+      private friendService: FriendService,
+      ) {}
 
   @Post('/create')
   @ApiOperation({ summary: 'Create a block request' })
   @ApiResponse({ status: 201, description: 'The block request has been successfully created.'})
   @ApiBody({ type: CreateBlockDto })
-  createBlockRequest(@Body() createBlockDto: CreateBlockDto): Promise<Block> {
-    return this.blockService.createBlockRequest(createBlockDto.blockerId, createBlockDto.blockedId);
+  async createBlockRequest(@Body() createBlockDto: CreateBlockDto): Promise<Block> {
+    const ret = await this.blockService.createBlockRequest(createBlockDto.blockerId, createBlockDto.blockedId);
+    await this.friendService.removeFriendship(createBlockDto.blockerId, createBlockDto.blockedId);
+    return ret;
   }
 
   @Get('/blocked/:blockerId')

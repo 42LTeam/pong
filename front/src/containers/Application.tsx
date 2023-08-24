@@ -10,6 +10,7 @@ import ProfilePage from "./profilepage/ProfilePage";
 import LeaderboardPage from "./leaderboardpage/LeaderboardPage";
 import HomePage from "./HomePage/HomePage";
 import Notification from "../components/utils/Notification";
+import GamePage from "./gamepage/GamePage"
 import {socket} from "../api";
 
 type ApplicationEngine = {
@@ -29,7 +30,8 @@ const PATHS = {
     social: '/social',
     settings: 'settings',
     profile: 'profile',
-    leaderboard: 'leaderboard'
+    leaderboard: 'leaderboard',
+    game: '/game'
 };
 
 const Application = function (){
@@ -140,6 +142,7 @@ const Application = function (){
                         <Route path={PATHS.settings} element={<Setting />} />
                         <Route path={`${PATHS.profile}/:userID`} element={<ProfilePage />} />
                         <Route path={PATHS.leaderboard} element={<LeaderboardPage />} />
+                        <Route path={PATHS.game} element={<GamePage />} />
                     </Routes>
                     <div className="notifications">
                         {notifications.reverse().map(current => {

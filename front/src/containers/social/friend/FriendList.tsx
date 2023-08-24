@@ -1,7 +1,5 @@
 
 import Friend from "../../../components/friend/Friend";
-import {useContext} from "react";
-import {AuthContext} from "../../Auth";
 import Approve from "../../../components/svg/Approve";
 import Decline from "../../../components/svg/Decline";
 import {acceptFriendship, declineFriendship} from "../../../api";
@@ -12,7 +10,6 @@ type Props = {
     reset: any
 }
 export default function FriendList({friends, pending, reset} : Props){
-    const user = useContext(AuthContext)
     const handleAccept = async (current) => {
         await acceptFriendship(current.friendShipId);
         reset();
@@ -29,7 +26,7 @@ export default function FriendList({friends, pending, reset} : Props){
     return (<>
         {friends?.map((current) => {
             return (
-              <Friend key={current.username +'friendlist'} friend={current}>
+              <Friend key={current.username +'friendlist'} friend={current} onClick={pending ? () => {} : null}>
                   {pending ?
                       <div className="align-left">
                           <Approve handleClick={() => handleAccept(current)}></Approve>

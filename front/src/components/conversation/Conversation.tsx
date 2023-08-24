@@ -1,12 +1,15 @@
+
 interface Props {
     username: string,
     handleClick: any,
     state?: boolean,
     lastMessage?: string,
     id?: number,
+    lastRead: null
 }
 
 export default function Conversation(props: Props){
+
     return (
         <div onClick={props.handleClick} className={"conversation " + (props.state ? 'conversation-focus ' : '')}
         >

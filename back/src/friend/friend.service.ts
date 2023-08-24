@@ -76,7 +76,27 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
 
     return friendShips.map(current => current.senderId);
   }
-  
+
+
+  async removeFriendship(removerId: number, friendId: number) {
+    await this.prisma.userFriendship.deleteMany({
+      where: {
+        senderId: friendId,
+        AND: [{
+          targetId: removerId,
+        }]
+      }
+    });
+    return this.prisma.userFriendship.deleteMany({
+      where: {
+        senderId: removerId,
+        AND: [{
+          targetId: friendId,
+        }]
+      }
+    });
+  }
+
   async processInvitations(sender: number, ids: number[]): Promise<{ forbidden: number[], sent: number[] }> {
     const forbidden = [];
     const sent = [];
@@ -111,5 +131,8 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
 
     return { forbidden, sent };
   }
+
+
+
 
 }

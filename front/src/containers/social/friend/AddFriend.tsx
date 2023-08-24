@@ -34,7 +34,7 @@ export default function AddFriend(){
                 <div className="align-left">
                     <input
                         checked={checked.includes(current)}
-                        onChange={(event) => toggleCheck(current, event.target.checked)} type="checkbox"/>
+                        type="checkbox"/>
                 </div>
             </Friend>
         )
@@ -66,8 +66,6 @@ export default function AddFriend(){
                 }} icon={<Cancel tiny />} key={"removable="+current.id}/>)}
             </TextInput>
             {suggestions?.map(mapData)}
-
-            {/*{suggestions?.map((current) => {return (<Friend onClick={handleSuggestionClick} key={current.username + "suggestion-key"} friend={current}></Friend>)})}*/}
         </>
     )
 }

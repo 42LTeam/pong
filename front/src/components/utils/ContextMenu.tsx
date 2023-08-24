@@ -32,7 +32,12 @@ export default function ContextMenu(props: Props){
                 {props.buttons?.map(current => {
                     if (current.separator) return <div style={{background: '#2c3e50'}} className="horizontal-separator"></div>
                     return (
-                        <Button key={props.buttons?.indexOf(current)} {...props.buttonProps} handleClick={current.handleClick} {...current} clickable={true}></Button>
+                        <Button key={props.buttons?.indexOf(current)} {...props.buttonProps} {...current} clickable={true}
+                                handleClick={() => {
+                                    setPopUpPosition(null);
+                                    current.handleClick();
+                                }}
+                        ></Button>
                     )
                 })}
             </PopUp>
