@@ -58,7 +58,7 @@ export const getUserRank = (targetUser: User, users: UserRank[]): number | null 
         return null;
     }
 
-    console.log("asd " + targetUser.playedMatch);
+    //console.log("did I play match ? : " + targetUser.playedMatch); //ICI targetUser.playedMatch est undefined
     
     const foundUser = users.find(user => user.id === targetUser.id);
     return foundUser ? foundUser.rank : null;

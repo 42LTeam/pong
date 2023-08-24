@@ -50,7 +50,7 @@ export default function LeaderboardPage(){
   }, [users, state])
 
   useEffect(() => {
-    if (user?.id === undefined || usersWithRank === undefined )
+    if (user === undefined || usersWithRank === undefined )
       return ;
     setPlacement(getUserRank(user, usersWithRank) ?? 0)
   }, [usersWithRank])
@@ -58,6 +58,9 @@ export default function LeaderboardPage(){
   if (usersWithRank === undefined) {
     return <div>LOADING</div>
   }
+  
+  //return <div>LOADING</div>
+
   return (
     <div className='leaderboard-body'>
         <div className='leaderboard-main-frame'>
@@ -68,7 +71,8 @@ export default function LeaderboardPage(){
             states={states}
             handleClick={handleClick}
             state={state}
-            placement={placement} />
+            placement={placement}
+            />
             
             <div className='horizontal-separator'></div>
             

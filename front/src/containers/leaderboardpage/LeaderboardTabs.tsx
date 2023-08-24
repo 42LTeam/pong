@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
-import { AuthContext } from "../Auth";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext, User } from "../Auth";
 
 import "../../css/leaderboard.css"
 import ToggleButton from "../../components/utils/ToggleButton";
+import { getUserMatches } from "../../api";
 
 const addStates = [
     {
@@ -37,6 +38,17 @@ type Props = {
 export default function LeaderboardTabs(props: Props) {
 
     const user = useContext(AuthContext);
+    const [matches, setMatches] = useState([]);
+
+    useEffect(() => {
+        getUserMatches(user?.id)
+            .then(function (response) {
+                setMatches(response.data);
+            })
+            .catch(function (error) {
+                console.error('Error fetching user matches:', error);
+            });
+    }, [user])
 
     return (
         <div className="leaderboard-tabs">
@@ -51,7 +63,9 @@ export default function LeaderboardTabs(props: Props) {
                 <div className="leaderboard-tabs-text"> {user.username} </div>
             )}
 
-            <div className="leaderboard-tabs-text-place"> #{props.placement}</div>
+            <div className="leaderboard-tabs-text-place">
+                {matches.length > 0 ? `#${props.placement}` : "-" }
+            </div>
 
             <div className="vertical-separator"></div>
 
