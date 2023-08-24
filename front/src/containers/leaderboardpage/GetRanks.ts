@@ -9,7 +9,7 @@ export const getUsersRanks = async (users: User[], StatKind: string): Promise<Us
     let currentRank = 0;
     let currentStat = 0;
 
-    let statName = ""; //name of the column in DB
+    let statName = ""; //nom precis de l'attribut
 
     const updUsers = await Promise.all(users.map((user) => getUserMatches(user.id)))
 

@@ -17,7 +17,7 @@ export default function LeaderboardPlaceBubble(props: Props) {
     var stat: any = 0;
     var [description, setDescription] = useState("");
 
-    let statName = ""; //name of the column in DB
+    let statName = ""; //nom precis de l'attribut
     if (props.kind === "Total xp") {
         statName = 'xp';
     }

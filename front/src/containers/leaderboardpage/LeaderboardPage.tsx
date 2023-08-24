@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import LeaderboardTabs from './LeaderboardTabs';
-import { AuthContext } from "../Auth";
+import { AuthContext, User } from "../Auth";
 import {getAllUsers} from "../../api";
 import LeaderboardContent from './LeaderboardContent';
 
 import "../../css/leaderboard.css"
-import { getUserRank, getUsersRanks } from './GetRanks';
+import { UserRank, getUserRank, getUsersRanks } from './GetRanks';
 
 const states = ["Total xp", "Victories/defeat ratio", "Average points per match"];
 
@@ -15,9 +15,9 @@ export default function LeaderboardPage(){
   const user = useContext(AuthContext);
   
   const [placement, setPlacement] = useState(0);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [state, setState] = useState("Total xp");
-  const [usersWithRank, setUsersRanks] = useState(undefined);
+  const [usersWithRank, setUsersRanks] = useState<UserRank[] | undefined>(undefined);
 
   const handleClick = (text) => {
     setState(text);
