@@ -1,5 +1,6 @@
 import Game, {gameState} from "./Game.class";
 import GameBall from "./GameBall.class";
+import {MatchService} from "../../../match/match.service";
 
 export default class GameEngine {
 
@@ -9,7 +10,7 @@ export default class GameEngine {
 	score = [0, 0];
 
 	constructor(
-		public game : Game,
+		public game : Game
 	) {
 		this.ball = new GameBall(this.game);
 	}
@@ -58,14 +59,16 @@ export default class GameEngine {
 		}
 	}
 
-	loop() {
+	async loop() {
 		if (this.game.state === gameState.PLAYING) {
 			this.game.players.forEach(p => p.update())
 			this.ball.update();
-			if (this.checkScores())
+			if (this.checkScores()) {
 				this.game.players.forEach((player) => {
 					player.send('game-finish', this.getData());
 				});
+				await this.game.matchService.createMatch([this.game.players[0].userId, this.game.players[1].userId], this.score);
+			}
 			else {
 				this.game.players.forEach((player) => {
 					player.send('gameplay', this.getData());

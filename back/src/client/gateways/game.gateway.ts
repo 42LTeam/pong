@@ -9,6 +9,7 @@ import {UseGuards} from '@nestjs/common';
 import {WSAuthenticatedGuard} from "../../auth/guards/wsauthenticated.guard";
 import {ClientService} from "../client.service";
 import Game from "./game/Game.class";
+import {MatchService} from "../../match/match.service";
 
 @WebSocketGateway(8001, {
     cors: true,
@@ -20,7 +21,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     games : Game[] = [];
     nbOfGames = 0;
 
-    constructor(private clientService: ClientService) {}
+    constructor(private clientService: ClientService, private matchService: MatchService) {}
 
     @WebSocketServer()
     server;
@@ -48,7 +49,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 return;
             }
         }
-        const newGame = new Game(this.server, this.nbOfGames++);
+        const newGame = new Game(this.server, ++this.nbOfGames, this.matchService);
         this.games.push(newGame);
         if (newGame.canJoin(user))
             newGame.handleJoin(user);

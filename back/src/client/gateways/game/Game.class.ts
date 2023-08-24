@@ -1,5 +1,6 @@
 import GamePlayer, {playerStatus} from "./GamePlayer.class";
 import GameEngine from "./GameEngine.class";
+import {MatchService} from "../../../match/match.service";
 
 export enum gameState {
 	CREATING,
@@ -18,6 +19,7 @@ export default class Game {
 	constructor(
 				private server,
 				public matchId: number,
+				public matchService: MatchService
 	) {
 		this.engine = new GameEngine(this);
 		console.log('New game ', this.matchId);
