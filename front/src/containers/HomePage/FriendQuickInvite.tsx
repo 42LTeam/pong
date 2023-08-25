@@ -4,18 +4,16 @@ import React from "react";
 import TextInput from "../../components/utils/TextInput";
 import {useContext, useState} from "react";
 import {searchFriend, getFriendOfUser} from "../../api";
-import {AuthContext} from "../Auth";
+import {AuthContext, User} from "../Auth";
 import FriendQuickInviteBubble from "./FriendQuickInviteBubble";
 
 export default function FriendQuickInvite() {
     const user = useContext(AuthContext);
     const [suggestions, setSuggestions] = useState([]);
 
-    const mapData =  (current) => {
+    const mapData =  (current: User) => {
         return (
-            <>
             <FriendQuickInviteBubble user={current} /> 
-            </>
         )
     }
 
