@@ -68,7 +68,8 @@ export default class GameEngine {
 				});
 				await this.game.matchService.createMatch(
 					[this.game.players[0].userId, this.game.players[1].userId],
-					this.score
+					this.score,
+					[(this.score[0] === 5), (this.score[1] === 5)]
 				);
 			}
 			else {
