@@ -142,7 +142,7 @@ const Application = function (){
                         <Route path={PATHS.settings} element={<Setting />} />
                         <Route path={`${PATHS.profile}/:userID`} element={<ProfilePage />} />
                         <Route path={PATHS.leaderboard} element={<LeaderboardPage />} />
-                        <Route path={PATHS.game} element={<GamePage user={user}/>} />
+                        <Route path={PATHS.game} element={<GamePage />} />
                     </Routes>
                     <div className="notifications">
                         {notifications.reverse().map(current => {

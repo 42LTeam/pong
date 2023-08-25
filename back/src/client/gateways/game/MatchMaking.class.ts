@@ -40,11 +40,12 @@ export default class MatchMaking {
         this.nbOfGames++;
         newGame.handleJoin(user, false);
         if (data)
-            newGame.handleJoin(data.user[1], true);
+            // newGame.handleJoin(data.user[1], true);
+            newGame.handleJoin(data, true);
     }
 
     handleJoin(user, data) {
-        if (data && data.user[0].id == user.id) {
+        if (data/* && data.user[0].id == user.id*/) {
             for (let game of this.games)
                 if (game.onGame(user))
                     // TODO message d'erreur
@@ -52,6 +53,11 @@ export default class MatchMaking {
             this.newGame(user, data);
         }
         else {
+            for (let game of this.games)
+                if (game.onGame(user)) {
+                    game.handleJoin(user, false);
+                    return;
+                }
             for (let game of this.games)
                 if (game.canJoin(user)) {
                     game.handleJoin(user, false);

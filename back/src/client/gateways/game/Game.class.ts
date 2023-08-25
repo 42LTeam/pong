@@ -31,7 +31,7 @@ export default class Game {
 	onGame(user) {
 		return (this.state != gameState.FINISH
 			&& (this.players[0].userId == user.id
-				|| this.players[1].userId == user.id
+				|| (this.players.length > 1 && this.players[1].userId == user.id)
 			)
 		);
 	}

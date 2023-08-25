@@ -43,6 +43,7 @@ export default class GamePlayer {
 	}
 
 	send(event, data) {
-		return this.socket.emit(event, data);
+		if (this.socket)
+			return this.socket.emit(event, data);
 	}
 }

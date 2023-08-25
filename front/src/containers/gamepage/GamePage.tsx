@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useRef} from 'react';
 import {socket} from "../../api";
 import {AuthContext} from "../Auth";
+import { useSearchParams } from "react-router-dom";
 
 export enum gameState {
     CREATING,
@@ -10,8 +11,10 @@ export enum gameState {
     FINISH
 }
 
-export default function GamePage({data}) {
+export default function GamePage() {
     const canvas = useRef(null);
+//    const user = useContext(AuthContext);
+    const [searchParams] = useSearchParams();
 
     const dataGame={
         matchId: 0,
@@ -187,13 +190,14 @@ export default function GamePage({data}) {
     },[]);
 
     useEffect(() => {
-//        const user = useContext(AuthContext);
         if (canvas) {
-            if (data)
-                console.log(data);
+            if (searchParams.size != 0) {
+                let user = Object.fromEntries([...searchParams]);
+                user.id = Number(user.id);
+                socket.emit('join-game', user);
+            }
             else
-                console.log("No data");
-            socket.emit('join-game', null);
+                socket.emit('join-game', null);
         }
     }, [canvas])
     return (
