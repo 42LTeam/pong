@@ -52,6 +52,7 @@ export async function updateUserUsername(id, username){
     };
     return await axios(config);
 }
+
 export async function getAllUsers(options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
 
     const queryParams = Object.entries(options).map((key) => key[0]+'='+key[1]).join('&');
@@ -65,6 +66,7 @@ export async function getAllUsers(options: {friendOnly?: boolean, notFriend?: bo
 
     return axios(config);
 }
+
 export async function getFriendOfUser(id: number){
     const config = {
         method: 'get',
@@ -153,7 +155,6 @@ export async function removeFriendship(friendId: number){
     return axios(config)
 }
 
-
 export async function declineFriendship(id: number){
     const config = {
         method: 'put',
@@ -206,7 +207,6 @@ export async function getChannelMessages(channelId: number){
     return axios(config);
 }
 
-
 export async function readMessage(channelId: number, messageId: number) {
     const config = {
         method: 'post',
@@ -234,7 +234,6 @@ export async function sendMessageToChannel(channelId: number, content: string){
     };
     return axios(config);*/
 }
-
 
 export async function getPath(path: string){
     const config = {
@@ -271,3 +270,4 @@ export async function getUserMatches(ID){
     };
     return axios(config);
 }
+

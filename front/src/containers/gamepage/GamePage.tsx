@@ -1,5 +1,7 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 import {socket} from "../../api";
+import {AuthContext} from "../Auth";
+import { useSearchParams } from "react-router-dom";
 
 export enum gameState {
     CREATING,
@@ -11,8 +13,10 @@ export enum gameState {
 
 export default function GamePage() {
     const canvas = useRef(null);
+//    const user = useContext(AuthContext);
+    const [searchParams] = useSearchParams();
 
-    const data={
+    const dataGame={
         matchId: 0,
         playerId: 0,
         moveUp: false,
@@ -79,7 +83,7 @@ export default function GamePage() {
         c2d.fillText(players.player1.name, c2d.canvas.width * 0.9, textPos);
         c2d.fillText(players.player1.score.toString(), c2d.canvas.width * 0.625, textPos);
         c2d.textAlign = "center";
-        if (status === gameState.FINISH && (players.player0.score > players.player1.score ? data.playerId === 0 : data.playerId === 1))
+        if (status === gameState.FINISH && (players.player0.score > players.player1.score ? dataGame.playerId === 0 : dataGame.playerId === 1))
             c2d.fillText('You win!', c2d.canvas.width / 2, c2d.canvas.height / 2);
         else if (status === gameState.FINISH)
             c2d.fillText('You lose!', c2d.canvas.width / 2, c2d.canvas.height / 2);
@@ -107,8 +111,8 @@ export default function GamePage() {
         const onGameStart = (args) => {
             if (args) {
                 getData(args);
-                data.matchId = args.matchId;
-                data.playerId = args.playerId;
+                dataGame.matchId = args.matchId;
+                dataGame.playerId = args.playerId;
                 ball.semiSize = args.ballSemiSize;
                 players.player0.x = args.player0.x;
                 players.player1.x = args.player1.x;
@@ -142,24 +146,24 @@ export default function GamePage() {
         };
 
         const keyDownHook  = (event) => {
-            if (event.key === 'w' && !data.moveUp) {
-                data.moveUp = true;
-                socket.emit('update-input', data);
+            if (event.key === 'w' && !dataGame.moveUp) {
+                dataGame.moveUp = true;
+                socket.emit('update-input', dataGame);
             }
-            if (event.key === 's' && !data.moveDown) {
-                data.moveDown = true;
-                socket.emit('update-input', data);
+            if (event.key === 's' && !dataGame.moveDown) {
+                dataGame.moveDown = true;
+                socket.emit('update-input', dataGame);
             }
         }
 
         const keyUpHook = (event) => {
             if (event.key === 'w') {
-                data.moveUp = false;
-                socket.emit('update-input', data);
+                dataGame.moveUp = false;
+                socket.emit('update-input', dataGame);
             }
             if (event.key === 's') {
-                data.moveDown = false;
-                socket.emit('update-input', data);
+                dataGame.moveDown = false;
+                socket.emit('update-input', dataGame);
             }
         }
 
@@ -173,7 +177,7 @@ export default function GamePage() {
         document.addEventListener('keyup', keyUpHook);
 
         return () => {
-            socket.emit('leave-game', {matchId: data.matchId});
+            socket.emit('leave-game', {matchId: dataGame.matchId});
             socket.off('gameplay', onGamePlay);
             socket.off('game-wait', onGameWait);
             socket.off('game-start', onGameStart);
@@ -186,8 +190,15 @@ export default function GamePage() {
     },[]);
 
     useEffect(() => {
-        if (canvas)
-            socket.emit('join-game');
+        if (canvas) {
+            if (searchParams.size != 0) {
+                let user = Object.fromEntries([...searchParams]);
+                user.id = Number(user.id);
+                socket.emit('join-game', user);
+            }
+            else
+                socket.emit('join-game', null);
+        }
     }, [canvas])
     return (
         <>

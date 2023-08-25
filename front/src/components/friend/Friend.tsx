@@ -2,7 +2,7 @@ import {Children, useState} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
-import {getConversation, removeFriendship} from "../../api";
+import {getConversation, removeFriendship, getCustomGame, getUserByID} from "../../api";
 
 type Props = {
     friend: any,
@@ -27,8 +27,10 @@ export default function Friend(props: Props){
         {separator: true},
         {
             text: 'Match amical',
-            handleClick: () => alert('TODO'),
+            handleClick: () => getUserByID(props.friend.id).then((response) =>
+                navigate('/game?id=' + props.friend.id + '&username=' + response.data.username + '&session=' + response.data.session)),
         },
+
 
     ];
     if (!props.unremovable)
