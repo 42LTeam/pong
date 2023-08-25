@@ -245,6 +245,15 @@ export async function getPath(path: string){
     return axios(config);
 }
 
+export async function getCustomGame(userId: number) {
+    const config = {
+        method: 'get',
+        url: URL + '/users/id/' + userId,
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
 export async function getUserByID(ID){
     var config = {
         method: 'get',
@@ -259,6 +268,18 @@ export async function getUsers(){
         method: 'get',
         url: URL + '/users',
         withCredentials: true,
+    };
+    return axios(config);
+}
+
+export async function createCustomGame() {
+    var config = {
+        method: 'get',
+        url: URL + '/game',
+        withCredentials: true,
+        data : {
+
+        }
     };
     return axios(config);
 }

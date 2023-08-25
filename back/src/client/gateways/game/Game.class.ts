@@ -10,6 +10,7 @@ export enum gameState {
 	FINISH
 }
 
+
 export default class Game {
 
 	public engine : GameEngine;
