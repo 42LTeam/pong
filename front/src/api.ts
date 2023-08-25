@@ -271,3 +271,12 @@ export async function searchFriend(name: string){
     };
     return axios(config);
 }
+
+export async function getRatioAgainst(id1: number, id2: number){
+    const config = {
+        method: 'get',
+        url: URL + '/match/stats/' + id1 + "/" + id2,
+        withCredentials: true,
+    };
+    return axios(config);
+}

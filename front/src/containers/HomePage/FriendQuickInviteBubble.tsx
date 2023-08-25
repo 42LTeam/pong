@@ -1,30 +1,35 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import QuickInviteButton from "./QuickInviteButton"
 
 import "../../css/homepage.css"
-import { User } from "../Auth";
+import { AuthContext, User } from "../Auth";
+import { getRatioAgainst } from "../../api";
 
 type Props = {
     user: User;
 }
 
+type ratio = {
+    wins : number;
+    losses: number;
+}
 
 export default function FriendQuickInviteBubble(props: Props) {
     
-    var Victory: number = 0;
-    var Defeat: number = 0;
+    const me = useContext(AuthContext);
 
-    function getVictory() {
-        Victory = 5; // a chopper avec back
-    };
+    const [ratio, setRatio] = useState<ratio>();
+    useEffect(() => {
+        getRatioAgainst(me?.id, props.user.id)
+          .then(function (response) {
+            setRatio(response.data);
 
-    function getDefeat() {
-        Defeat = 2; // a chopper avec back
-    };
-    
-    getVictory();
-    getDefeat();
+          })
+          .catch(function (error) {
+            console.error('Error fetching user data:', error);
+          });
+      }, []);
     
     return (
         <div className="quick-invite-bubble">
@@ -34,7 +39,7 @@ export default function FriendQuickInviteBubble(props: Props) {
                 </div>
                 <div className="quick-invite-pseudo"> {props.user.username} </div>
             </div>
-            <div className="quick-invite-ratio"> {Victory} W/{Defeat} L </div>
+            <div className="quick-invite-ratio"> {ratio?.wins} W/{ratio?.losses} L </div>
             <QuickInviteButton userID={props.user.id} />
         </div>
     )
