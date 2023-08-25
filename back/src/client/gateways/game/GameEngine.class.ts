@@ -1,6 +1,5 @@
 import Game, {gameState} from "./Game.class";
 import GameBall from "./GameBall.class";
-import {MatchService} from "../../../match/match.service";
 
 export default class GameEngine {
 
@@ -67,12 +66,14 @@ export default class GameEngine {
 				this.game.players.forEach((player) => {
 					player.send('game-finish', this.getData());
 				});
-				await this.game.matchService.createMatch([this.game.players[0].userId, this.game.players[1].userId], this.score);
+				await this.game.matchService.createMatch(
+					[this.game.players[0].userId, this.game.players[1].userId],
+					this.score
+				);
 			}
 			else {
 				this.game.players.forEach((player) => {
 					player.send('gameplay', this.getData());
-					// player.send('spectator', this.getData());
 				});
 				setTimeout(() => {
 					this.loop();

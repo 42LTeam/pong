@@ -187,7 +187,7 @@ export default function GamePage() {
 
     useEffect(() => {
         if (canvas)
-            socket.emit('join-game');
+            socket.emit('join-game', null);
     }, [canvas])
     return (
         <>

@@ -26,9 +26,6 @@ export default class Game {
 	}
 
 	MATCH_ROOM = "Match-" + this.matchId;
-	private isWhitelisted(user) {
-		return true;
-	}
 
 	canJoin(user) {
 		return !(this.state == gameState.FINISH || (this.players.length >= 2 && this.players[0].userId != user.id && this.players[1].userId != user.id));
@@ -85,7 +82,7 @@ export default class Game {
 	}
 
 	updateInput(user, data) {
-		if (this.isWhitelisted(user) && this.state == gameState.PLAYING) {
+		if (this.state == gameState.PLAYING) {
 			const index = this.players.findIndex(c => c.userId == user.id);
 			this.players[index].moveUp = data.moveUp;
 			this.players[index].moveDown = data.moveDown;
