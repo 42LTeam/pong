@@ -42,6 +42,7 @@ model UserMatch {
   userId  Int
   matchId Int
   score   Int
+  isWin   Boolean
   user    User  @relation(fields: [userId], references: [id])
   match   Match @relation(fields: [matchId], references: [id])
 }

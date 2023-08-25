@@ -52,32 +52,62 @@ env:
 					echo $(CYAN) "$(ENV_FILE) is already in place" $(RESET_COLOR); \
 				fi
 
-build:			env
-				$(DOCKER_COMPOSE) build
+logs:
+	@echo $(BOLD_GREEN) '🔮' - LOGS: logs of containers $(RESET_COLOR)
+	$(DOCKER_COMPOSE) logs -f
 
-up:				env
-				$(DOCKER_COMPOSE) up
+build: env
+	@echo $(BOLD_GREEN) '🚧' - BUILD: Build development containers $(RESET_COLOR)
+	$(DOCKER_COMPOSE) build
+
+up: env
+	@echo $(GREEN) '🚀' - UP: Start development containers$(RESET_COLOR)
+	$(DOCKER_COMPOSE) up -d
 
 stop:
-				$(DOCKER_COMPOSE) stop
+	@echo $(RED) '✋' - STOP: Stop development containers$(RESET_COLOR)
+	$(DOCKER_COMPOSE) stop
 
 down:
-				$(DOCKER_COMPOSE) down
+	@echo $(BOLD_RED) '🔻' - DOWN: Remove development containers$(RESET_COLOR)
+	$(DOCKER_COMPOSE) down
 
-clean:			stop down
+clean: stop down
+	@echo $(BOLD_CYAN) '🧹' - CLEAN: Stop and remove development containers$(RESET_COLOR)
 
-prune:          clean
-				@docker system prune -a
+prune: clean
+	@echo $(BOLD_YELLOW)  '🧼' - PRUNE: Remove all unused Docker resources with confirmation$(RESET_COLOR)
+	docker system prune -a
 
-rmvol:			clean
-				docker volume rm $(VOLUMES)
+rmvol: clean
+	@echo $(BOLD_YELLOW) '🛀' - RMVOL: Remove specific volumes with confirmation$(RESET_COLOR)
+	docker volume rm $(VOLUMES)
 
-fprune:         prune rmvol
+fprune: prune rmvol
+	@echo $(BOLD_YELLOW) '🧼' - PRUNE + '🛀' RMVOL - FPRUNE: Execute prune and rmvol commands$(RESET_COLOR)
 
-re:				stop up
+re: stop up
+	@echo $(BOLD_YELLOW) '✋' - STOP + '🚀'UP - RE: Restart development containers $(RESET_COLOR)
 
-rebuild:        clean all
+rebuild: clean all
+	@echo $(BOLD_YELLOW) '🧹' CLEAN + '🚧' BUILD + '🚀' UP - REBUILD: Clean and rebuild development containers$(RESET_COLOR)
 
-reboot:         fprune all
-	
-.PHONY: all ls env build up stop down clean prune rmvol fprune re rebuild reboot
+reboot: fprune all
+	@echo $(BOLD_YELLOW) '♻️' - REBOOT: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
+
+help:
+	@echo "Available commands:"
+	@echo "  make build       - Build development containers"
+	@echo "  make up          - Start development containers"
+	@echo "  make stop        - Stop development containers"
+	@echo "  make down        - Remove development containers"
+	@echo "  make clean       - Stop and remove development containers"
+	@echo "  make prune       - Remove all unused Docker resources with confirmation"
+	@echo "  make rmvol       - Remove specific volumes with confirmation"
+	@echo "  make fprune      - Execute prune and rmvol commands"
+	@echo "  make re          - Restart development containers"
+	@echo "  make rebuild     - Clean and rebuild development containers"
+	@echo "  make reboot      - Fully prune Docker and then rebuild all containers"
+	@echo "  make help        - Show this help message"
+
+.PHONY: all ls env build up stop down clean prune rmvol fprune re rebuild reboot help
