@@ -13,7 +13,7 @@ export enum gameState {
 export default class Game {
 
 	public engine : GameEngine;
-	players : GamePlayer[] = [];
+	public players : GamePlayer[] = [];
 	public state : gameState = gameState.CREATING;
 
 	constructor(
@@ -27,21 +27,33 @@ export default class Game {
 
 	MATCH_ROOM = "Match-" + this.matchId;
 
+	onGame(user) {
+		return (this.state != gameState.FINISH
+			&& (this.players[0].userId == user.id
+				|| this.players[1].userId == user.id
+			)
+		);
+	}
+
 	canJoin(user) {
-		return !(this.state == gameState.FINISH || (this.players.length >= 2 && this.players[0].userId != user.id && this.players[1].userId != user.id));
+		return (this.players.length < 2 || this.onGame(user));
 	}
 
 	//TODO matchService
-	handleJoin(user) {
+	handleJoin(user, invite: Boolean) {
 		console.log('handleJoin');
 		const socket = this.server.sockets.sockets.get(user.session);
 		let player = this.players.find(p => p.userId == user.id);
 		if (!player) {
 			player = new GamePlayer(user.id, user.username, socket, !Boolean(this.players.length), this.engine.ball.BALL_SEMI_SIZE);
 			this.players.push(player);
-			console.log('Player', player.name, 'join game', this.matchId);
-			console.log('New connection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
 			socket?.join(this.MATCH_ROOM);
+			if (invite)
+				player.status = playerStatus.OFFLINE;
+			else {
+				console.log('Player', player.name, 'join game', this.matchId);
+				console.log('New connection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
+			}
 		} else {
 			player.status = playerStatus.ONLINE;
 			player.socket = socket;
@@ -57,7 +69,13 @@ export default class Game {
 	}
 
 	canDelete() {
-		return (this.state == gameState.FINISH && this.players.length >= 2 && this.players[0].status == playerStatus.OFFLINE && this.players[1].status == playerStatus.OFFLINE)
+		return (this.state == gameState.FINISH);
+	}
+
+	playersLeave() {
+		this.players.forEach((player) => {
+			player.socket.leave(this.MATCH_ROOM);
+		})
 	}
 
 	//TODO check state and pause if needed

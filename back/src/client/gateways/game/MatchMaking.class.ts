@@ -25,6 +25,7 @@ export default class MatchMaking {
         let index = 0;
         while (index < this.nbOfGames) {
             if (this.games[index].canDelete()) {
+                this.games[index].playersLeave();
                 this.games.splice(index, 1);
                 this.nbOfGames--;
             }
@@ -33,22 +34,30 @@ export default class MatchMaking {
         }
     }
 
-    handleJoin(user, data) {
-        if (data) {
+    newGame(user, data) {
+        const newGame = new Game(this.server, ++this.newGameId, this.matchService);
+        this.games.push(newGame);
+        this.nbOfGames++;
+        newGame.handleJoin(user, false);
+        if (data)
+            newGame.handleJoin(data.user[1], true);
+    }
 
+    handleJoin(user, data) {
+        if (data && data.user[0].id == user.id) {
+            for (let game of this.games)
+                if (game.onGame(user))
+                    // TODO message d'erreur
+                    return;
+            this.newGame(user, data);
         }
         else {
-            for (let game of this.games) {
+            for (let game of this.games)
                 if (game.canJoin(user)) {
-                    game.handleJoin(user);
+                    game.handleJoin(user, false);
                     return;
                 }
-            }
-            const newGame = new Game(this.server, ++this.newGameId, this.matchService);
-            this.games.push(newGame);
-            this.nbOfGames++;
-            if (newGame.canJoin(user))
-                newGame.handleJoin(user);
+            this.newGame(user, null);
         }
     }
 

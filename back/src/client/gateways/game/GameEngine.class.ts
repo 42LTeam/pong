@@ -32,14 +32,14 @@ export default class GameEngine {
 		else return false;
 		this.printScores();
 		if (
-			this.score[0] === this.WIN_SCORE ||
-			this.score[1] === this.WIN_SCORE
+			this.score[0] == this.WIN_SCORE ||
+			this.score[1] == this.WIN_SCORE
 		) {
 			console.log(
 				'Game',
 				this.game.matchId,
 				'# Player',
-				this.score[0] === this.WIN_SCORE ? 0 : 1,
+				this.score[0] == this.WIN_SCORE ? 0 : 1,
 				'win!',
 			);
 			this.game.state = gameState.FINISH;
@@ -59,7 +59,7 @@ export default class GameEngine {
 	}
 
 	async loop() {
-		if (this.game.state === gameState.PLAYING) {
+		if (this.game.state == gameState.PLAYING) {
 			this.game.players.forEach(p => p.update())
 			this.ball.update();
 			if (this.checkScores()) {
