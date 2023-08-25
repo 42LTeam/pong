@@ -1,9 +1,9 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { Status, User} from '@prisma/client';
-import { FriendService } from '../friend/friend.service';
-import {SearchDTO} from "./user.controller";
-import { MatchService } from 'src/match/match.service';
+import { Inject, Injectable, forwardRef } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { Status, User } from "@prisma/client";
+import { FriendService } from "../friend/friend.service";
+import { SearchDTO } from "./user.controller";
+import { MatchService } from "src/match/match.service";
 
 @Injectable()
 export class UserService {
@@ -13,9 +13,15 @@ export class UserService {
     private friendService: FriendService,
     @Inject(forwardRef(() => MatchService))
     private matchService: MatchService
-    ) {}
+  ) {}
 
-  async createUser(id: number, username: string, secretO2FA: string, avatar: string, xp: number): Promise<User> {
+  async createUser(
+    id: number,
+    username: string,
+    secretO2FA: string,
+    avatar: string,
+    xp: number
+  ): Promise<User> {
     return this.prisma.user.create({
       data: {
         id: id,
@@ -23,23 +29,22 @@ export class UserService {
         secretO2FA: secretO2FA,
         avatar: avatar,
         xp: xp,
-      }
+      },
     });
   }
 
   async getAllUsers(id: number, options: SearchDTO): Promise<User[]> {
-    const forbiddenIds = [id]
+    const forbiddenIds = [id];
     if (options.notFriend)
-      forbiddenIds.push(...(await this.getFriendsOfUser(id)).map(c => c.id));
+      forbiddenIds.push(...(await this.getFriendsOfUser(id)).map((c) => c.id));
 
-    if (options.friendOnly)
-      return this.getFriendsOfUser(id);
+    if (options.friendOnly) return this.getFriendsOfUser(id);
     return this.prisma.user.findMany({
       where: {
         id: {
           notIn: forbiddenIds,
-        }
-      }
+        },
+      },
     });
   }
 
@@ -53,7 +58,7 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: {
-        avatar: avatar
+        avatar: avatar,
       },
     });
   }
@@ -62,7 +67,7 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: {
-        username: username
+        username: username,
       },
     });
   }
@@ -71,7 +76,7 @@ export class UserService {
     return this.prisma.user.delete({ where: { id } });
   }
 
-  async addFriendship(id, friendship){
+  async addFriendship(id, friendship) {
     const user = await this.prisma.user.findUnique({
       where: { id: id },
       include: { userFriendships: true },
@@ -93,63 +98,78 @@ export class UserService {
         userFriendships: {
           where: {
             acceptedAt: null,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
-    const pending = await user.userFriendships.map(current => current.senderId);
-    return (await this.prisma.user.findMany({
-      where: {
-        id: {
-          in: pending,
-        }
-      }
-    })).map(current => {
-          return {
-            ...current,
-            friendShipId: user.userFriendships.filter(c => c.senderId == current.id)[0].id
-          }
-        }
+    const pending = await user.userFriendships.map(
+      (current) => current.senderId
     );
+    return (
+      await this.prisma.user.findMany({
+        where: {
+          id: {
+            in: pending,
+          },
+        },
+      })
+    ).map((current) => {
+      return {
+        ...current,
+        friendShipId: user.userFriendships.filter(
+          (c) => c.senderId == current.id
+        )[0].id,
+      };
+    });
   }
 
-  async getFriendsOfUser(id: number, options: { startWith?: string, online?: boolean } = {}): Promise<User[]> {
+  async getFriendsOfUser(
+    id: number,
+    options: { startWith?: string; online?: boolean } = {}
+  ): Promise<User[]> {
     const ids = await this.friendService.getUserFriendships(id);
 
     return this.prisma.user.findMany({
       where: {
         id: { in: ids },
         AND: [
-            (options.online ? { status: "ONLINE" } : {}), 
-            (options.startWith ? { username: { startsWith: options.startWith } } : {})
-        ]
-      }
+          options.online ? { status: "ONLINE" } : {},
+          options.startWith
+            ? { username: { startsWith: options.startWith } }
+            : {},
+        ],
+      },
     });
   }
 
-  async search(id, query: string, options: SearchDTO): Promise<User[]>{
-    const forbiddenIds = [id]
+  async search(id, query: string, options: SearchDTO): Promise<User[]> {
+    const forbiddenIds = [id];
     if (options.notFriend)
-      forbiddenIds.push(...(await this.getFriendsOfUser(id, {startWith: query})).map(c => c.id));
+      forbiddenIds.push(
+        ...(await this.getFriendsOfUser(id, { startWith: query })).map(
+          (c) => c.id
+        )
+      );
 
     if (options.friendOnly)
-      return this.getFriendsOfUser(id, {startWith: query});
+      return this.getFriendsOfUser(id, { startWith: query });
 
     return this.prisma.user.findMany({
-      where : {
+      where: {
         username: {
           startsWith: query,
         },
-        AND: [{
-          id: {
-            not: {
-              in: forbiddenIds
+        AND: [
+          {
+            id: {
+              not: {
+                in: forbiddenIds,
+              },
             },
-          }
-        }]
-
-      }
+          },
+        ],
+      },
     });
   }
 
@@ -174,6 +194,4 @@ export class UserService {
 
     return user.status;
   }
-
 }
-

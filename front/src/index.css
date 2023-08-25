@@ -3,13 +3,12 @@
 @tailwind utilities;
 
 :root {
-    /*--header-height: 72px;*/
+  /*--header-height: 72px;*/
 }
 
 body {
-
 }
 
 #header {
-    /* height: var(--header-height); */
+  /* height: var(--header-height); */
 }

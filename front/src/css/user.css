@@ -1,27 +1,27 @@
 .user {
-    display: flex;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    align-self: stretch;
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
 }
 
-.user-title{
-    color: #ECF0F1;
-    text-align: center;
-    font-family: KoHo, serif;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+.user-title {
+  color: #ecf0f1;
+  text-align: center;
+  font-family: KoHo, serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .user-picture {
-    width: 30px;
-    height: 30px;
-    border-radius: 90px;
-    background: #7F8C8D;
-    background-size: contain;
-    background-position: 50% 50%;
+  width: 30px;
+  height: 30px;
+  border-radius: 90px;
+  background: #7f8c8d;
+  background-size: contain;
+  background-position: 50% 50%;
 }

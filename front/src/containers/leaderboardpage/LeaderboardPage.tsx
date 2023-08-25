@@ -1,36 +1,41 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import LeaderboardTabs from './LeaderboardTabs';
+import LeaderboardTabs from "./LeaderboardTabs";
 import { AuthContext, User } from "../Auth";
-import {getAllUsers} from "../../api";
-import LeaderboardContent from './LeaderboardContent';
+import { getAllUsers } from "../../api";
+import LeaderboardContent from "./LeaderboardContent";
 
-import "../../css/leaderboard.css"
-import { UserRank, getUserRank, getUsersRanks } from './GetRanks';
+import "../../css/leaderboard.css";
+import { UserRank, getUserRank, getUsersRanks } from "./GetRanks";
 
-const states = ["Total xp", "Victories/defeat ratio", "Average points per match"];
+const states = [
+  "Total xp",
+  "Victories/defeat ratio",
+  "Average points per match",
+];
 
-export default function LeaderboardPage(){
-
+export default function LeaderboardPage() {
   const user = useContext(AuthContext);
-  
+
   const [placement, setPlacement] = useState(0);
   const [users, setUsers] = useState<User[]>([]);
   const [state, setState] = useState("Total xp");
-  const [usersWithRank, setUsersRanks] = useState<UserRank[] | undefined>(undefined);
+  const [usersWithRank, setUsersRanks] = useState<UserRank[] | undefined>(
+    undefined,
+  );
 
   const handleClick = (text) => {
     setState(text);
-  }
+  };
 
   useEffect(() => {
-    getAllUsers({friendOnly: false, notFriend: false})
+    getAllUsers({ friendOnly: false, notFriend: false })
       .then(function (response) {
         const updatedUsers = [...response.data, user];
         setUsers(updatedUsers);
       })
       .catch(function (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       });
   }, [user]);
 
@@ -39,46 +44,43 @@ export default function LeaderboardPage(){
 
     const fetch = async () => {
       const usersUpdatedRanks = await getUsersRanks(users, state);
-      if (isFetching)
-        setUsersRanks(usersUpdatedRanks);
-    }
+      if (isFetching) setUsersRanks(usersUpdatedRanks);
+    };
     fetch();
 
     return () => {
       isFetching = false;
-    }
-  }, [users, state])
+    };
+  }, [users, state]);
 
   useEffect(() => {
-    if (user === undefined || usersWithRank === undefined )
-      return ;
-    setPlacement(getUserRank(user, usersWithRank) ?? 0)
-  }, [usersWithRank])
+    if (user === undefined || usersWithRank === undefined) return;
+    setPlacement(getUserRank(user, usersWithRank) ?? 0);
+  }, [usersWithRank]);
 
   if (usersWithRank === undefined) {
-    return <div>LOADING</div>
+    return <div>LOADING</div>;
   }
-  
+
   //return <div>LOADING</div>
 
   return (
-    <div className='leaderboard-body'>
-        <div className='leaderboard-main-frame'>
-            <div className="leaderboard-places"> Leaderboard </div>
+    <div className="leaderboard-body">
+      <div className="leaderboard-main-frame">
+        <div className="leaderboard-places"> Leaderboard </div>
 
-            <LeaderboardTabs
-            key="tabs"
-            states={states}
-            handleClick={handleClick}
-            state={state}
-            placement={placement}
-            />
-            
-            <div className='horizontal-separator'></div>
-            
-            <LeaderboardContent users={usersWithRank} state={state} />
+        <LeaderboardTabs
+          key="tabs"
+          states={states}
+          handleClick={handleClick}
+          state={state}
+          placement={placement}
+        />
 
-        </div>
+        <div className="horizontal-separator"></div>
+
+        <LeaderboardContent users={usersWithRank} state={state} />
+      </div>
     </div>
-  )
+  );
 }

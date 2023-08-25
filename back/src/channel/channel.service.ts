@@ -1,11 +1,12 @@
-
-import { forwardRef, Injectable, Inject } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { Channel } from '@prisma/client';
-import { CreateChannelDto, SendInviteDto } from "./controllers/channel.controller";
-import { FriendService } from '../friend/friend.service';
+import { forwardRef, Injectable, Inject } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { Channel } from "@prisma/client";
+import {
+  CreateChannelDto,
+  SendInviteDto,
+} from "./controllers/channel.controller";
+import { FriendService } from "../friend/friend.service";
 import { MessageService } from "../message/message.service";
-
 
 @Injectable()
 export class ChannelService {
@@ -16,12 +17,12 @@ export class ChannelService {
     private messageService: MessageService
   ) {}
 
-  async addInvite(id, userId){
+  async addInvite(id, userId) {
     const newUser = await this.prisma.userChannel.create({
       data: {
         userId: userId,
         channelId: id,
-      }
+      },
     });
     const channel = await this.prisma.channel.findUnique({
       where: { id: id },
@@ -35,15 +36,8 @@ export class ChannelService {
     });
   }
 
-  async createChannel(body : CreateChannelDto): Promise<any> {
-    const {
-      name,
-      password,
-      conv,
-      creatorId,
-    } = body;
-
-
+  async createChannel(body: CreateChannelDto): Promise<any> {
+    const { name, password, conv, creatorId } = body;
 
     const channel = await this.prisma.channel.create({
       data: {
@@ -62,21 +56,23 @@ export class ChannelService {
           where: {
             id: {
               not: creatorId,
-            }
-          }
+            },
+          },
         },
         messages: true,
-      }
+      },
     });
     return this.addInvite(channel.id, creatorId);
   }
 
-
   async sendInvite(sender: number, body: SendInviteDto) {
     const { ids, channelId } = body;
 
-    const { forbidden, sent } = await this.friendService.processInvitations(sender, ids);
-    
+    const { forbidden, sent } = await this.friendService.processInvitations(
+      sender,
+      ids
+    );
+
     const success = [];
     for (const i of sent) {
       await this.addInvite(channelId, i);
@@ -86,11 +82,11 @@ export class ChannelService {
     return {
       forbidden,
       sent,
-      success
+      success,
     };
   }
 
-// rename with All attribute and not just s
+  // rename with All attribute and not just s
   async getAllUsersInChannel(channelId: number): Promise<any> {
     const channel = await this.prisma.userChannel.findMany({
       where: { channelId },
@@ -103,11 +99,11 @@ export class ChannelService {
             xp: true,
             status: true,
             session: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
-    return channel.map(current => current.user);
+    return channel.map((current) => current.user);
   }
 
   async getChannelAllMembers(channelId: number): Promise<any> {
@@ -123,7 +119,7 @@ export class ChannelService {
             status: true,
           },
         },
-      }
+      },
     });
   }
 
@@ -136,10 +132,10 @@ export class ChannelService {
       select: {
         channelId: true,
         lastRead: true,
-      }
+      },
     });
-    const ids = userChannel.map(current => current.channelId);
-    const lastRead = userChannel.map(current => current.lastRead);
+    const ids = userChannel.map((current) => current.channelId);
+    const lastRead = userChannel.map((current) => current.lastRead);
     const channels = await this.prisma.channel.findMany({
       where: {
         id: {
@@ -155,7 +151,7 @@ export class ChannelService {
           where: {
             userId: {
               not: id,
-            }
+            },
           },
           select: {
             user: {
@@ -163,65 +159,69 @@ export class ChannelService {
                 avatar: true,
                 id: true,
                 username: true,
-              }
+              },
             },
-          }
+          },
         },
         messages: {
           take: 100,
         },
-      }
+      },
     });
 
     const mapFunc = async (current) => {
       return {
         ...current,
         lastRead: lastRead[ids.indexOf(current.id)],
-        lastMessage: (await this.messageService.getLastMessageInChannel(current.id))}
-    }
+        lastMessage: await this.messageService.getLastMessageInChannel(
+          current.id
+        ),
+      };
+    };
 
     return Promise.all(channels.map(mapFunc));
   }
 
-    async getConversation(userId: number, friendId: number): Promise<any> {
-      const conversation = await this.prisma.channel.findMany({
-        where: {
-          conv: true,
-          AND: [{
+  async getConversation(userId: number, friendId: number): Promise<any> {
+    const conversation = await this.prisma.channel.findMany({
+      where: {
+        conv: true,
+        AND: [
+          {
             creatorId: {
-              in: [userId, friendId]
-            }
-          }]
+              in: [userId, friendId],
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        creatorId: true,
+        users: {
+          where: {
+            id: {
+              not: userId,
+            },
+          },
         },
-        select: {
-          id: true,
-          creatorId: true,
-          users: {
-            where:{
-              id: {
-                not: userId,
-              }
-            }
+        messages: true,
+      },
+    });
+
+    if (conversation.length) return conversation[0];
+
+    const newConv = await this.prisma.channel.create({
+      data: {
+        conv: true,
+        creator: {
+          connect: {
+            id: userId,
           },
-          messages: true,
-        }
-      });
-
-      if (conversation.length) return conversation[0];
-
-
-      const newConv = await this.prisma.channel.create({
-        data: {
-          conv: true,
-          creator: {
-            connect: {
-              id: userId,
-            }
-          },
-          created_at: new Date(),
-        }
-      });
-      await this.addInvite(newConv.id, userId);
-      return this.addInvite(newConv.id, friendId);
-    }
+        },
+        created_at: new Date(),
+      },
+    });
+    await this.addInvite(newConv.id, userId);
+    return this.addInvite(newConv.id, friendId);
+  }
 }

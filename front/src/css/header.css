@@ -1,58 +1,63 @@
-.header{
-    display: flex;
-    height: 5%;
-    padding: 0 10px;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
-    align-self: stretch;
-    border-radius: 10px;
+.header {
+  display: flex;
+  height: 5%;
+  padding: 0 10px;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: stretch;
+  border-radius: 10px;
 }
 
 .header-title {
-    color: #ECF0F1;
-    text-align: center;
-    font-family: Keania One, serif;
-    font-size: 19px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  color: #ecf0f1;
+  text-align: center;
+  font-family:
+    Keania One,
+    serif;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .header-tabs {
-    display: flex;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    align-self: stretch;
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
 }
 
 .header-tab {
-    transition: 100ms;
-    transition-timing-function: ease-out;
+  transition: 100ms;
+  transition-timing-function: ease-out;
 }
 
 .header-tab:hover {
-    transform: scale(1.4);
-    filter: invert(98%) sepia(2%) saturate(260%) hue-rotate(144deg) brightness(95%) contrast(100%);
+  transform: scale(1.4);
+  filter: invert(98%) sepia(2%) saturate(260%) hue-rotate(144deg)
+    brightness(95%) contrast(100%);
 }
 
-.navigation{
-    display: flex;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    align-self: stretch;
+.navigation {
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
 }
 
-.header-navigation-icon{
-    filter: invert(57%) sepia(10%) saturate(300%) hue-rotate(136deg) brightness(94%) contrast(88%);
-    cursor: pointer;
+.header-navigation-icon {
+  filter: invert(57%) sepia(10%) saturate(300%) hue-rotate(136deg)
+    brightness(94%) contrast(88%);
+  cursor: pointer;
 }
 
-.header-navigation-icon-current{
-    filter: invert(95%) sepia(3%) saturate(148%) hue-rotate(145deg) brightness(100%) contrast(96%);
-    transform: scale(1.5);
+.header-navigation-icon-current {
+  filter: invert(95%) sepia(3%) saturate(148%) hue-rotate(145deg)
+    brightness(100%) contrast(96%);
+  transform: scale(1.5);
 }

@@ -1,27 +1,30 @@
 import "../../../css/chat.css";
-import React, {useEffect, useState} from "react";
-import {getChannelAllMembers} from "../../../api";
+import React, { useEffect, useState } from "react";
+import { getChannelAllMembers } from "../../../api";
 import SidePanel from "../../../components/utils/SidePanel";
 import Friend from "../../../components/friend/Friend";
 
 type ChannelMembersListProps = {
-  setChannelId: any,
-  channelId: number
-}
+  setChannelId: any;
+  channelId: number;
+};
 
-export default function ChannelMembersList({ channelId }: ChannelMembersListProps) {
+export default function ChannelMembersList({
+  channelId,
+}: ChannelMembersListProps) {
   const [ChannelAllMembers, setChannelAllMembers] = useState([]);
 
   const fetchChannelAllMembers = () => {
-    getChannelAllMembers(channelId).then((response) => {
-      setChannelAllMembers(response.data);
-      console.log(response);
-    })
-        .catch((err) => console.log(err));
+    getChannelAllMembers(channelId)
+      .then((response) => {
+        setChannelAllMembers(response.data);
+        console.log(response);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-      fetchChannelAllMembers();
+    fetchChannelAllMembers();
   }, [channelId]);
 
   return (
@@ -29,8 +32,8 @@ export default function ChannelMembersList({ channelId }: ChannelMembersListProp
       subheader="Members"
       body={
         <>
-          {ChannelAllMembers.map( (current) => {
-              return (<Friend friend={current.user} ></Friend>);
+          {ChannelAllMembers.map((current) => {
+            return <Friend friend={current.user}></Friend>;
           })}
         </>
       }
