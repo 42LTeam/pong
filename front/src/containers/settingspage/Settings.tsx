@@ -29,7 +29,7 @@ export default function Settings(props: Props) {
             setErrorMsg('Failed to update user avatar.');
         }
     };
-    
+
     const handleEditClick = () => {
         const newAvatarUrl = prompt("Please enter the new avatar URL:");
         if (newAvatarUrl) {
@@ -37,21 +37,26 @@ export default function Settings(props: Props) {
             handleChangeImage(newAvatarUrl);
         }
     };
-    
 
-    const handleChangeUsername = async () => {
-        try {
-            const response = await updateUserUsername(user.id, username);
-            console.log(response.status)
-            if (response.status === 200) {
-                console.log("Username updated successfully.");
-                setErrorMsg('')
-                user.username = username;
-            }
-        } catch (error) {
-            console.error("Failed to update username.");
-            setErrorMsg('Failed to update username.');
-            console.error(error.response.data);
+
+    const handleChangeUsername = async (newUsername) => {
+        const response = await updateUserAvatar(user.id, newUsername);
+        if (response.status === 200) {
+            console.log("User avatar updated successfully.");
+            user.username = newUsername;
+        } else {
+            console.error("Failed to update user avatar.");
+            setErrorMsg('Failed to update user avatar.');
+        }
+    };
+
+
+    const handleEditUsername = () => {
+        console.log("handleEditUsername called");
+        const newUsername = prompt("Please enter the new username:");
+        if (newUsername) {
+            setUsername(newUsername);
+            handleChangeUsername(newUsername);
         }
     };
 
@@ -67,16 +72,11 @@ export default function Settings(props: Props) {
             </div>
             <div className="username-section">
                 <div className="username-button">
-                    <div className="input-container">
-                        {errorMsg && <div className="error-message">{errorMsg}</div>}
-                        <TextInput button={<ButtonSetting
-                            handleClick={handleChangeUsername}
-                            text='Change' state={undefined} clickable="true" />}
-                            type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <div className="username-container">
+                        <div className="username-overlay" onClick={handleEditUsername}>Edit</div>
+                        <div className="user-username">{username}</div>
                     </div>
-                    {/* <ButtonSetting
-                        handleClick={handleChangeUsername}
-                        text='Change' state={undefined} clickable="true"/> */}
+                    {errorMsg && <div className="error-message">{errorMsg}</div>}
                 </div>
             </div>
         </div>
