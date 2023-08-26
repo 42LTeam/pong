@@ -8,6 +8,13 @@
     border-radius: 10px;
     background: #2C3E50;
     height: 100vh;
+
+    text-align: center;
+    font-family: KoHo, serif;
+    font-size: 18px;
+    font-style:normal;
+    font-weight: 700;
+    line-height: normal;
 }
 
 .avatar-section, .username-section {
