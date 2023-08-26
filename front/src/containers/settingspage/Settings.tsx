@@ -48,25 +48,28 @@ export default function Settings(props: Props) {
 
 
     return (
-        <div className="container">
-            <div className="user-avatar">
-                <div className="avatar" style={{ backgroundImage: `url(${user?.avatar})` }}></div>
-                <ButtonSetting
-                    handleClick={handleChangeImage}
-                    text='Change' state={undefined} />
-            </div>
-            <div className="username-button">
-                <div className="input-container">
-                    {errorMsg && <div className="error-message">{errorMsg}</div>}
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <div className='main-frame'>
+            <div className="avatar-section">
+                <div className="user-avatar">
+                    <div className="avatar" style={{ backgroundImage: `url(${user?.avatar})` }}></div>
+                    <ButtonSetting
+                        handleClick={handleChangeImage}
+                        text='Change' state={undefined} />
                 </div>
-                <ButtonSetting
-                    handleClick={handleChangeUsername}
-                    text='Change' state={undefined} />
             </div>
-
+            <div className="username-section">
+                <div className="username-button">
+                    <div className="input-container">
+                        {errorMsg && <div className="error-message">{errorMsg}</div>}
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    </div>
+                    <ButtonSetting
+                        handleClick={handleChangeUsername}
+                        text='Change' state={undefined} />
+                </div>
+            </div>
         </div>
     );
-}
+}    
 
 
