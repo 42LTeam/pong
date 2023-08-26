@@ -3,7 +3,7 @@ import "../../css/settings.css";
 import { AuthContext } from "../Auth";
 import { updateUserAvatar, updateUserUsername } from "../../api";
 import ButtonSetting from "../../components/utils/Button";
-
+import TextInput from "../../components/utils/TextInput";
 
 type Props = {
 
@@ -17,18 +17,27 @@ export default function Settings(props: Props) {
     const [errorMsg, setErrorMsg] = useState('');
 
     useEffect(() => {
-    }, [username]); 
+    }, [username]);
 
-    const handleChangeImage = async () => {
-        const response = await updateUserAvatar(user.id, avatarUrl);
+    const handleChangeImage = async (newAvatarUrl) => {
+        const response = await updateUserAvatar(user.id, newAvatarUrl);
         if (response.status === 200) {
             console.log("User avatar updated successfully.");
-            user.avatar = avatarUrl;
+            user.avatar = newAvatarUrl;
         } else {
             console.error("Failed to update user avatar.");
             setErrorMsg('Failed to update user avatar.');
         }
     };
+    
+    const handleEditClick = () => {
+        const newAvatarUrl = prompt("Please enter the new avatar URL:");
+        if (newAvatarUrl) {
+            setAvatarUrl(newAvatarUrl);
+            handleChangeImage(newAvatarUrl);
+        }
+    };
+    
 
     const handleChangeUsername = async () => {
         try {
@@ -46,30 +55,32 @@ export default function Settings(props: Props) {
         }
     };
 
-
     return (
         <div className='main-frame'>
             <div className="avatar-section">
                 <div className="user-avatar">
-                    <div className="avatar" style={{ backgroundImage: `url(${user?.avatar})` }}></div>
-                    <ButtonSetting
-                        handleClick={handleChangeImage}
-                        text='Change' state={undefined} />
+                    <div className="avatar-container">
+                        <div className="avatar" style={{ backgroundImage: `url(${avatarUrl})` }}></div>
+                        <div className="avatar-overlay" onClick={handleEditClick}>Edit</div>
+                    </div>
                 </div>
             </div>
             <div className="username-section">
                 <div className="username-button">
                     <div className="input-container">
                         {errorMsg && <div className="error-message">{errorMsg}</div>}
-                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <TextInput button={<ButtonSetting
+                            handleClick={handleChangeUsername}
+                            text='Change' state={undefined} clickable="true" />}
+                            type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
                     </div>
-                    <ButtonSetting
+                    {/* <ButtonSetting
                         handleClick={handleChangeUsername}
-                        text='Change' state={undefined} />
+                        text='Change' state={undefined} clickable="true"/> */}
                 </div>
             </div>
         </div>
     );
-}    
+}
 
 
