@@ -40,13 +40,13 @@ export default class MatchMaking {
     }
 
     handleJoin(user, player) {
-        if (player/* && data.user[0].id == user.id*/) {
+        if (player) {
             for (let game of this.games)
                 if (game.canJoinInvite(user)) {
                     game.handleJoin(user, false);
                     return;
                 }
-            this.newGame(user, player);
+            this.server.sockets.sockets.get(user.session)?.emit('game-not-found');
         }
         else {
             for (let game of this.games)
@@ -76,12 +76,10 @@ export default class MatchMaking {
     handleInvite(user, player) {
         if (this.canInvite(user, player)) {
             this.server.sockets.sockets.get(player.session)?.emit('invite-game', [user, player]);
-            this.handleJoin(user, player);
+            this.newGame(user, player);
         }
-        else {
-            // TODO Go back to previous page
-            console.log("Forbidden");
-        }
+        else
+            this.server.sockets.sockets.get(user.session)?.emit('game-not-found');
     }
 
     updateInput(user, data) {

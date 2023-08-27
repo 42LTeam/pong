@@ -103,14 +103,21 @@ const Application = function (){
                 sendNotification(args[1].id, args[0].username + " invites " + args[1].username, "to play a Pong game", args[0].avatar, "/game?invite=true");
         }
 
+        const onGameNotFound = (args) => {
+            // TODO
+            // navigate(PATHS.home);
+        }
+
         socket.on('new-message', onNewMessage);
         socket.on('new-channel', onNewChannel);
         socket.on('invite-game', onInviteGame);
+        socket.on('game-not-found', onGameNotFound);
 
         return () => {
             socket.off('new-channel', onNewChannel);
             socket.off('new-message', onNewMessage);
             socket.off('invite-game', onInviteGame);
+            socket.off('game-not-found', onGameNotFound);
         };
 
     }, [notifications]);
