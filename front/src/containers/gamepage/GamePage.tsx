@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useRef} from 'react';
 import {socket} from "../../api";
 import {AuthContext} from "../Auth";
 import { useSearchParams } from "react-router-dom";
-//import {ApplicationContext} from "../Application";
 
 export enum gameState {
     CREATING,
@@ -14,7 +13,6 @@ export enum gameState {
 
 export default function GamePage() {
     const canvas = useRef(null);
-//    const application = useContext(ApplicationContext);
     const user = useContext(AuthContext);
     const [searchParams] = useSearchParams();
 
@@ -193,15 +191,13 @@ export default function GamePage() {
 
     useEffect(() => {
         if (canvas) {
-            if (searchParams.size != 0) {
+            if (searchParams.size > 1) {
                 let player = Object.fromEntries([...searchParams]);
                 player.id = Number(player.id);
-                // application.sendNotification(0, "Game invite", user.username + " challenges " + player.username, user.avatar, "/game");
                 socket.emit('invite-game', [user, player]);
-//                socket.emit('join-game', player);
             }
             else
-                socket.emit('join-game'/*, null*/);
+                socket.emit('join-game', searchParams.size != 0);
         }
     }, [canvas])
     return (

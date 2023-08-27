@@ -91,6 +91,7 @@ export default class GameEngine {
 	sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 	async startGame() {
+		this.game.started = true;
 		if (this.ball.speed == 0)
 			this.ball.newBall();
 		this.game.state = gameState.STARTING;

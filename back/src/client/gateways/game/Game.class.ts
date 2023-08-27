@@ -10,16 +10,17 @@ export enum gameState {
 	FINISH
 }
 
-
 export default class Game {
 
 	public engine : GameEngine;
 	public players : GamePlayer[] = [];
 	public state : gameState = gameState.CREATING;
+	public started = false;
 
 	constructor(
 				private server,
 				public matchId: number,
+				public random: boolean,
 				public matchService: MatchService
 	) {
 		this.engine = new GameEngine(this);
@@ -36,11 +37,14 @@ export default class Game {
 		);
 	}
 
-	canJoin(user) {
-		return (this.players.length < 2 || this.onGame(user));
+	canJoinInvite(user) {
+		return (!this.random && this.onGame(user));
 	}
 
-	//TODO matchService
+	canJoinRandom() {
+		return (this.random && this.players.length < 2);
+	}
+
 	handleJoin(user, invite: Boolean) {
 		console.log('handleJoin');
 		const socket = this.server.sockets.sockets.get(user.session);
@@ -49,12 +53,11 @@ export default class Game {
 			player = new GamePlayer(user.id, user.username, socket, !Boolean(this.players.length), this.engine.ball.BALL_SEMI_SIZE);
 			this.players.push(player);
 			socket?.join(this.MATCH_ROOM);
+			console.log('Player', player.name, 'join game', this.matchId);
 			if (invite)
 				player.status = playerStatus.OFFLINE;
-			else {
-				console.log('Player', player.name, 'join game', this.matchId);
+			else
 				console.log('New connection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
-			}
 		} else {
 			player.status = playerStatus.ONLINE;
 			player.socket = socket;
@@ -70,7 +73,11 @@ export default class Game {
 	}
 
 	canDelete() {
-		return (this.state == gameState.FINISH);
+		return (this.state == gameState.FINISH
+			|| (!this.started
+				&& this.players[0].status == playerStatus.OFFLINE
+				&& this.players[1]
+				&& this.players[1].status == playerStatus.OFFLINE));
 	}
 
 	playersLeave() {
@@ -79,7 +86,6 @@ export default class Game {
 		})
 	}
 
-	//TODO check state and pause if needed
 	handleLeave(user) {
 		const index = this.players.findIndex(p => p.userId == user.id);
 		console.log('handleLeave of index', index);
