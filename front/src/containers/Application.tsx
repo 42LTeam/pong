@@ -99,12 +99,20 @@ const Application = function (){
                 sendNotification(args.channelId+'channel', args.creator.username + ' vous a ajouter a un channel', args.users.map(u => u.username).join(', '), args.creator.avatar, "/social/" + args.channelId);
         }
 
+        const onInviteGame = (args) => {
+            console.log(args[1].id, args[0].username + " invite " + args[1].username, "to play a Pong game", args[0].avatar, "/game");
+            if (!window.location.pathname.includes("/game"))
+                sendNotification(args[1].id, args[0].username + " invite " + args[1].username, "to play a Pong game", args[0].avatar, "/game");
+        }
+
         socket.on('new-message', onNewMessage);
         socket.on('new-channel', onNewChannel);
+        socket.on('invite-game', onInviteGame);
 
         return () => {
             socket.off('new-channel', onNewChannel);
             socket.off('new-message', onNewMessage);
+            socket.off('invite-game', onInviteGame);
         };
 
     }, [notifications]);

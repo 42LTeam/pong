@@ -12,13 +12,8 @@ export default class MatchMaking {
         private matchService: MatchService
     ) {}
 
-    handleLeave(user, data) {
-        if (user && data) {
-            const game = this.games.find(g => g.matchId == data.matchId);
-            if (game)
-                game.handleLeave(user);
-        }
-        else if (user)
+    handleLeave(user) {
+        if (user)
             this.games.forEach((game) => {
                 game.handleLeave(user);
             })
@@ -40,7 +35,6 @@ export default class MatchMaking {
         this.nbOfGames++;
         newGame.handleJoin(user, false);
         if (data)
-            // newGame.handleJoin(data.user[1], true);
             newGame.handleJoin(data, true);
     }
 

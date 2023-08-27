@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useRef} from 'react';
 import {socket} from "../../api";
 import {AuthContext} from "../Auth";
 import { useSearchParams } from "react-router-dom";
+//import {ApplicationContext} from "../Application";
 
 export enum gameState {
     CREATING,
@@ -13,7 +14,8 @@ export enum gameState {
 
 export default function GamePage() {
     const canvas = useRef(null);
-//    const user = useContext(AuthContext);
+//    const application = useContext(ApplicationContext);
+    const user = useContext(AuthContext);
     const [searchParams] = useSearchParams();
 
     const dataGame={
@@ -177,7 +179,7 @@ export default function GamePage() {
         document.addEventListener('keyup', keyUpHook);
 
         return () => {
-            socket.emit('leave-game', {matchId: dataGame.matchId});
+            socket.emit('leave-game');
             socket.off('gameplay', onGamePlay);
             socket.off('game-wait', onGameWait);
             socket.off('game-start', onGameStart);
@@ -192,12 +194,14 @@ export default function GamePage() {
     useEffect(() => {
         if (canvas) {
             if (searchParams.size != 0) {
-                let user = Object.fromEntries([...searchParams]);
-                user.id = Number(user.id);
-                socket.emit('join-game', user);
+                let player = Object.fromEntries([...searchParams]);
+                player.id = Number(player.id);
+                // application.sendNotification(0, "Game invite", user.username + " challenges " + player.username, user.avatar, "/game");
+                socket.emit('invite-game', [user, player]);
+//                socket.emit('join-game', player);
             }
             else
-                socket.emit('join-game', null);
+                socket.emit('join-game'/*, null*/);
         }
     }, [canvas])
     return (
