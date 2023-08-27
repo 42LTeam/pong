@@ -2,7 +2,7 @@ import {Children, useState} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
-import {getConversation, removeFriendship, getCustomGame, getUserByID} from "../../api";
+import {getConversation, removeFriendship, getUserByID} from "../../api";
 
 type Props = {
     friend: any,
