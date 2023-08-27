@@ -66,7 +66,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async inviteGame(client, data) : Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        if (user && data && data.length >= 2)
-            this.matchMaking.handleInvite(user, data[1]);
+        if (user && data)
+            this.matchMaking.handleInvite(user, data);
     }
 }
