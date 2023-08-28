@@ -14,34 +14,34 @@ export default class GameEngine {
 		this.ball = new GameBall(this.game);
 	}
 
-	printScores() {
-		console.log(
-			'Game',
-			this.game.matchId,
-			'# Player 0 :',
-			this.score[0],
-			'- Player 1 :',
-			this.score[1],
-		);
-	}
+	// printScores() {
+	// 	console.log(
+	// 		'Game',
+	// 		this.game.matchId,
+	// 		'# Player 0 :',
+	// 		this.score[0],
+	// 		'- Player 1 :',
+	// 		this.score[1],
+	// 	);
+	// }
 
 	checkScores() {
 		if (this.ball.position.x < this.ball.BALL_SEMI_SIZE * 3) this.score[1]++;
 		else if (this.ball.position.x > 1 - this.ball.BALL_SEMI_SIZE * 3)
 			this.score[0]++;
 		else return false;
-		this.printScores();
+		// this.printScores();
 		if (
 			this.score[0] == this.WIN_SCORE ||
 			this.score[1] == this.WIN_SCORE
 		) {
-			console.log(
-				'Game',
-				this.game.matchId,
-				'# Player',
-				this.score[0] == this.WIN_SCORE ? 0 : 1,
-				'win!',
-			);
+			// console.log(
+			// 	'Game',
+			// 	this.game.matchId,
+			// 	'# Player',
+			// 	this.score[0] == this.WIN_SCORE ? 0 : 1,
+			// 	'win!',
+			// );
 			this.game.state = gameState.FINISH;
 			return true;
 		}
@@ -95,9 +95,9 @@ export default class GameEngine {
 		if (this.ball.speed == 0)
 			this.ball.newBall();
 		this.game.state = gameState.STARTING;
-		this.printScores();
+		// this.printScores();
 		for (var i = 4; i--; i > 0) {
-			console.log('game-start', i);
+			// console.log('game-start', i);
 			this.game.players.forEach((player) => {
 				player.send('game-start', {
 					matchId: this.game.matchId,

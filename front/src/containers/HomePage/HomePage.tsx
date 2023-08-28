@@ -3,6 +3,7 @@ import React from 'react';
 import {PlayerSkin} from "./PlayerSkin";
 import {BallSkin} from "./BallSkin"
 import {LaunchButton} from "./LaunchButton"
+import {LaunchCustomButton} from "./LaunchCustomButton"
 import SearchBar from "./SearchBar";
 import FriendQuickInviteBubble from './FriendQuickInviteBubble';
 
@@ -18,6 +19,7 @@ export default function HomePage({user}){
                         <PlayerSkin />
                         <BallSkin />
                         <LaunchButton />
+                        <LaunchCustomButton />
                     </div>
 
                 </div>

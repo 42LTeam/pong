@@ -95,8 +95,6 @@ export default function GamePage() {
 
     useEffect(() => {
         const onGameWait = () => {
-            // console.log('game-wait');
-            // console.log(args);
             draw(gameState.CREATING, 0);
         }
 
@@ -131,10 +129,6 @@ export default function GamePage() {
             console.log('error');
             if (args)
                 console.log(args);
-            // socket.on('spectator', (args) => {
-            //     console.log('spectator');
-            //     getData(args);
-            // });
         };
 
         const onGameFinish = (args) => {
@@ -192,10 +186,14 @@ export default function GamePage() {
             if (searchParams.size > 1) {
                 let player = Object.fromEntries([...searchParams]);
                 player.id = Number(player.id);
-                socket.emit('invite-game', player);
+                socket.emit('invite-game', [player, searchParams.size > 3]);
+            }
+            else if (searchParams.size == 1) {
+                let option = Object.fromEntries([...searchParams]);
+                socket.emit('join-game', [option.invite, option.custom]);
             }
             else
-                socket.emit('join-game', searchParams.size != 0);
+                socket.emit('join-game', [false, false]);
         }
     }, [canvas])
     return (

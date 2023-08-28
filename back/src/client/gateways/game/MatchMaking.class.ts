@@ -13,7 +13,7 @@ export default class MatchMaking {
     ) {}
 
     handleLeave(user) {
-        console.log('MatchMaking : handleLeave of', user?.username);
+        // console.log('MatchMaking : handleLeave of', user?.username);
         if (user)
             this.games.forEach((game) => {
                 game.handleLeave(user);
@@ -22,7 +22,7 @@ export default class MatchMaking {
         while (index < this.nbOfGames) {
             if (this.games[index].canDelete()) {
                 this.games[index].playersLeave();
-                console.log("Game", this.games[index].matchId, "deleted");
+                // console.log("Game", this.games[index].matchId, "deleted");
                 this.games.splice(index, 1);
                 this.nbOfGames--;
             }
@@ -31,18 +31,18 @@ export default class MatchMaking {
         }
     }
 
-    newGame(user, player) {
-        const newGame = new Game(this.server, ++this.newGameId, player == null, this.matchService);
+    newGame(user, player, custom) {
+        const newGame = new Game(++this.newGameId, player == null, custom, this.server, this.matchService);
         this.games.push(newGame);
         this.nbOfGames++;
-        console.log('MatchMaking : New game', this.newGameId);
+        // console.log('MatchMaking : New game', this.newGameId);
         newGame.handleJoin(user, false);
         if (player)
             newGame.handleJoin(player, true);
     }
 
-    handleJoin(user, player) {
-        console.log('MatchMaking : handleJoin of', user.username);
+    handleJoin(user, player, custom) {
+        // console.log('MatchMaking : handleJoin of', user.username);
         if (player) {
             for (let game of this.games)
                 if (game.canJoinInvite(user)) {
@@ -58,11 +58,11 @@ export default class MatchMaking {
                     return;
                 }
             for (let game of this.games)
-                if (game.canJoinRandom()) {
+                if (game.canJoinRandom(custom)) {
                     game.handleJoin(user, false);
                     return;
                 }
-            this.newGame(user, null);
+            this.newGame(user, null, custom);
         }
     }
 
@@ -76,11 +76,11 @@ export default class MatchMaking {
         return true;
     }
 
-    handleInvite(user, player) {
+    handleInvite(user, player, custom) {
         console.log('MatchMaking : handleInvite');
         if (this.canInvite(user, player)) {
-            this.server.sockets.sockets.get(player.session)?.emit('invite-game', [user, player]);
-            this.newGame(user, player);
+            this.server.sockets.sockets.get(player.session)?.emit('invite-game', [user, player, custom]);
+            this.newGame(user, player, custom);
         }
         else
             this.server.sockets.sockets.get(user.session)?.emit('game-not-found');
