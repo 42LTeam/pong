@@ -1,28 +1,25 @@
-// import { Injectable, PipeTransform, ArgumentMetadata, ForbiddenException } from '@nestjs/common';
-// import { PrismaService } from '../../prisma/prisma.service';
+import { Injectable, PipeTransform, ArgumentMetadata, ForbiddenException } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
 
-// @Injectable()
-// export class IsAdminPipe implements PipeTransform {
-//   constructor(private prisma: PrismaService) {}
+@Injectable()
+export class IsAdminPipe implements PipeTransform {
+  constructor(private prisma: PrismaService) {}
 
-//   async transform(value: any, metadata: ArgumentMetadata) {
-//     const { channelId, userId } = value;
+  async transform(value: any, metadata: ArgumentMetadata) {
+    const { channelId, userId } = value;
 
-//     const channel = await this.prisma.channel.findUnique({
-//       where: { id: channelId },
-//       include: { admins: true },
-//     });
+    const userChannel = await this.prisma.userChannel.findFirst({
+      where: { channelId: channelId, userId: userId },
+    });
 
-//     if (!channel) {
-//       throw new ForbiddenException('Channel does not exist.');
-//     }
+    if (!userChannel) {
+      throw new ForbiddenException('Channel does not exist or user is not part of the channel.');
+    }
 
-//     const isAdmin = channel.admins.some(admin => admin.id === userId);
+    if (!userChannel.isAdmin) {
+      throw new ForbiddenException('User is not an admin of this channel.');
+    }
 
-//     if (!isAdmin) {
-//       throw new ForbiddenException('User is not an admin of this channel.');
-//     }
-
-//     return value;
-//   }
-// }
+    return value;
+  }
+}
