@@ -43,6 +43,21 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect{
     if(data.target) this.server.sockets.sockets.get(data.target)?.disconnect()
   }
 
+  @SubscribeMessage('channel-invite')
+  @UseGuards(WSAuthenticatedGuard)
+  async newChannelInvite(client, data): Promise<void> {
+    const user = await this.clientService.getClientById(client.id);
+    await this.channelService.sendInvite(user.id, data);
+    const users: User[] = await this.channelService.getAllUsersInChannel(data.channelId);
+    for (const u of users) {
+      this.server.sockets.sockets.get(u.session)?.emit('new-channel', {
+        creator: {id: user.id, username: user.username, avatar: user.avatar},
+        users,
+        channelId: data.channelId,
+      });
+    }
+  }
+
   @SubscribeMessage('new-message')
   @UseGuards(WSAuthenticatedGuard)
   async newMessage(client,data): Promise<void> {
