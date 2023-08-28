@@ -1,19 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import MatchHistoryBubble from './MatchHistoryBubble';
 import ProfileLeaderboardPlaceBubble from './ProfileLeaderboardPlaceBubble';
-import {getUserByID} from "../../api";
-import { User } from '../Auth';
+import {getAllUsers, getUserByID} from "../../api";
+import { AuthContext, User } from '../Auth';
 
 import "../../css/profile.css"
-
-//Il faudrait appeler la page avec le user correspondant (?)
+import React from 'react';
+import { UserRank, getUserRank, getUsersRanks } from '../leaderboardpage/GetRanks';
 
 export default function ProfilePage(){
-
-    const { userID } = useParams();
-
+        const { userID } = useParams();
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
@@ -51,9 +49,9 @@ export default function ProfilePage(){
             <div className='right-frame-profile'>
 
                 <div className="leaderboard-places"> Leaderboard places</div>
-                <ProfileLeaderboardPlaceBubble user={user} type="Total Victories"/>
-                <ProfileLeaderboardPlaceBubble user={user} type="Ratio"/>
-                <ProfileLeaderboardPlaceBubble user={user} type="Average Points"/>
+                <ProfileLeaderboardPlaceBubble user={user} type="Total xp"/>
+                <ProfileLeaderboardPlaceBubble user={user} type="Average points per match"/>
+                <ProfileLeaderboardPlaceBubble user={user} type="Victories/defeat ratio"/>
 
             </div>
         </div>
