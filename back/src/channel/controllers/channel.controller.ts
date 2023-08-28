@@ -80,7 +80,7 @@ export class ChannelController {
   @Get("/:channelId/members")
   @ApiOperation({ summary: 'Get All users in channel by channel Id' })
   async getChannelAllMembers(@Param('channelId', ParseIntPipe) channelId: number): Promise<any> {
-    return await this.channelService.getChannelAllMembers(Number(channelId)); // Assuming the 'users' field contains UserChannel[] data
+    return await this.channelService.getChannelAllMembers(Number(channelId)); 
   }
 
   @Post('/:channelId/ban/:userId')
