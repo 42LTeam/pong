@@ -1,7 +1,6 @@
 
 import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Channel } from '@prisma/client';
 import { CreateChannelDto, SendInviteDto } from "./controllers/channel.controller";
 import { FriendService } from '../friend/friend.service';
 import { MessageService } from "../message/message.service";
@@ -112,6 +111,7 @@ export class ChannelService {
             avatar: true,
             username: true,
             status: true,
+            id: true,
           },
         },
       }
@@ -218,7 +218,7 @@ export class ChannelService {
   }
 
   async removeUserFromChannel(channelId: number, userId: number): Promise<any> {
-    const deleteUserChannel = await this.prisma.userChannel.deleteMany({
+    await this.prisma.userChannel.deleteMany({
       where: {
         channelId: channelId,
         userId: userId,
