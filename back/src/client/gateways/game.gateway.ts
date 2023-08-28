@@ -15,7 +15,6 @@ import {MatchService} from "../../match/match.service";
     cors: true,
 })
 
-// TODO creer un systeme comme pour les roles pour que uniquement les personnes en state INGAME puisse interagir avec les endpoints
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     private matchMaking = null;
@@ -34,7 +33,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     async handleDisconnect(client: any) {
-        //TODO handleLeave if client is in a game
         const user = await this.clientService.getClientById(client.id);
         console.log('Gateway : handleDisconnect from', user?.username);
         this.matchMaking.handleLeave(user);
