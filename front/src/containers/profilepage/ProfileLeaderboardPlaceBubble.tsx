@@ -58,18 +58,18 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
         return <h1>LOADING</h1>
     }//
     
-    var data: number = 0;
+    var data: string = "";
     var placementcc: number = 0;
 
     function getData() {
         if (props.type === "Total xp"){
-            data =  5;  // a chopper avec back
+            data =  "xp";  // a chopper avec back
         }
         else if (props.type === "Average points per match"){
-            data = 0.5;    // a chopper avec back
+            data = "pointAverage";    // a chopper avec back
         }
         else if (props.type === "Victories/defeat ratio"){
-            data = 4;    // a chopper avec back
+            data = "ratio";    // a chopper avec back
         }
     };
 
@@ -85,9 +85,9 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
 
             <div className="leaderboard-title-stat"> {props.type} </div>            
 
-            <div className="leaderboard-data"> {data} </div>
+            <div className="leaderboard-data"> {props.user[data]} </div>
 
-            <TextIcon style="placement-icon" text={placementcc} />
+            <TextIcon style="placement-icon" text={placement} />
 
         </div>
     )

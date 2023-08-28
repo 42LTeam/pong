@@ -1,14 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import MatchHistoryBubble from './MatchHistoryBubble';
 import ProfileLeaderboardPlaceBubble from './ProfileLeaderboardPlaceBubble';
-import {getAllUsers, getUserByID} from "../../api";
-import { AuthContext, User } from '../Auth';
+import {getUserByID} from "../../api";
 
 import "../../css/profile.css"
 import React from 'react';
-import { UserRank, getUserRank, getUsersRanks } from '../leaderboardpage/GetRanks';
+import { User } from '../Auth';
 
 export default function ProfilePage(){
         const { userID } = useParams();
@@ -40,7 +39,7 @@ export default function ProfilePage(){
                 
                 <div className='match-history'>
                     {Array.from({ length: 10 }, (_, index) => (
-                            <MatchHistoryBubble key={index} user={user} matchID={index} />
+                            <MatchHistoryBubble user={user} matchID={index} />
                     ))} {/* A voir comment on fait pour boucler avec le back */}
                 </div>
 
