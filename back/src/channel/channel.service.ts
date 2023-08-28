@@ -72,22 +72,13 @@ export class ChannelService {
   }
 
 
-  async sendInvite(sender: number, body: SendInviteDto) {
+  async sendInvite(body: SendInviteDto) {
     const { ids, channelId } = body;
 
-    const { forbidden, sent } = await this.friendService.processInvitations(sender, ids);
 
-    const success = [];
-    for (const i of sent) {
+    for (const i of ids) {
       await this.addInvite(channelId, i);
-      success.push(i);
     }
-
-    return {
-      forbidden,
-      sent,
-      success
-    };
   }
 
   // rename with All attribute and not just s
