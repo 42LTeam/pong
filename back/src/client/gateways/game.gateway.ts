@@ -36,7 +36,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     async handleDisconnect(client: any) {
         //TODO handleLeave if client is in a game
         const user = await this.clientService.getClientById(client.id);
-        this.matchMaking.handleLeave(user, null);
+        console.log('Gateway : handleDisconnect from', user?.username);
+        this.matchMaking.handleLeave(user);
     }
 
     @SubscribeMessage('join-game')
@@ -47,12 +48,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             this.matchMaking.handleJoin(user, data);
     }
 
-    //TODO used when?
     @SubscribeMessage('leave-game')
     @UseGuards(WSAuthenticatedGuard)
-    async properLeaveGame(client, data): Promise<void> {
+    async properLeaveGame(client): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        this.matchMaking.handleLeave(user, data);
+        console.log('Gateway : properLeaveGame from', user?.username);
+        this.matchMaking.handleLeave(user);
     }
 
     @SubscribeMessage('update-input')
@@ -61,5 +62,14 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const user = await this.clientService.getClientById(client.id);
         if (user)
             this.matchMaking.updateInput(user, data);
+    }
+
+    @SubscribeMessage('invite-game')
+    @UseGuards(WSAuthenticatedGuard)
+    async inviteGame(client, data) : Promise<void> {
+        const user = await this.clientService.getClientById(client.id);
+        console.log('Gateway : invite-game from', user?.username, 'to', data.username);
+        if (user && data)
+            this.matchMaking.handleInvite(user, data);
     }
 }

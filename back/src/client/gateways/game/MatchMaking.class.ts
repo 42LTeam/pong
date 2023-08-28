@@ -12,13 +12,9 @@ export default class MatchMaking {
         private matchService: MatchService
     ) {}
 
-    handleLeave(user, data) {
-        if (user && data) {
-            const game = this.games.find(g => g.matchId == data.matchId);
-            if (game)
-                game.handleLeave(user);
-        }
-        else if (user)
+    handleLeave(user) {
+        console.log('MatchMaking : handleLeave of', user?.username);
+        if (user)
             this.games.forEach((game) => {
                 game.handleLeave(user);
             })
@@ -26,6 +22,7 @@ export default class MatchMaking {
         while (index < this.nbOfGames) {
             if (this.games[index].canDelete()) {
                 this.games[index].playersLeave();
+                console.log("Game", this.games[index].matchId, "deleted");
                 this.games.splice(index, 1);
                 this.nbOfGames--;
             }
@@ -34,37 +31,59 @@ export default class MatchMaking {
         }
     }
 
-    newGame(user, data) {
-        const newGame = new Game(this.server, ++this.newGameId, this.matchService);
+    newGame(user, player) {
+        const newGame = new Game(this.server, ++this.newGameId, player == null, this.matchService);
         this.games.push(newGame);
         this.nbOfGames++;
+        console.log('MatchMaking : New game', this.newGameId);
         newGame.handleJoin(user, false);
-        if (data)
-            // newGame.handleJoin(data.user[1], true);
-            newGame.handleJoin(data, true);
+        if (player)
+            newGame.handleJoin(player, true);
     }
 
-    handleJoin(user, data) {
-        if (data/* && data.user[0].id == user.id*/) {
+    handleJoin(user, player) {
+        console.log('MatchMaking : handleJoin of', user.username);
+        if (player) {
             for (let game of this.games)
-                if (game.onGame(user))
-                    // TODO message d'erreur
+                if (game.canJoinInvite(user)) {
+                    game.handleJoin(user, false);
                     return;
-            this.newGame(user, data);
+                }
+            this.server.sockets.sockets.get(user.session)?.emit('game-not-found');
         }
         else {
             for (let game of this.games)
-                if (game.onGame(user)) {
+                if (game.onGame(user) && game.started) {
                     game.handleJoin(user, false);
                     return;
                 }
             for (let game of this.games)
-                if (game.canJoin(user)) {
+                if (game.canJoinRandom()) {
                     game.handleJoin(user, false);
                     return;
                 }
             this.newGame(user, null);
         }
+    }
+
+    canInvite(user, player) {
+        for (let game of this.games)
+            if (game.canJoinInvite(user)
+                || game.canJoinInvite(player)
+                || (game.onGame(player)
+                    && game.random))
+                return false;
+        return true;
+    }
+
+    handleInvite(user, player) {
+        console.log('MatchMaking : handleInvite');
+        if (this.canInvite(user, player)) {
+            this.server.sockets.sockets.get(player.session)?.emit('invite-game', [user, player]);
+            this.newGame(user, player);
+        }
+        else
+            this.server.sockets.sockets.get(user.session)?.emit('game-not-found');
     }
 
     updateInput(user, data) {
