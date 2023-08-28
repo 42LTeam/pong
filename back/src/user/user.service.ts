@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Status, User} from '@prisma/client';
 import { FriendService } from '../friend/friend.service';
 import {SearchDTO} from "./user.controller";
-import { MatchService } from 'src/match/match.service';
+import { MatchService } from '../match/match.service';
 
 @Injectable()
 export class UserService {
