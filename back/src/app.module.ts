@@ -6,7 +6,7 @@ import {PassportModule} from "@nestjs/passport";
 import { UserModule } from './user/user.module';
 import {MessageModule} from "./message/message.module";
 import {FriendModule} from "./friend/friend.module";
-import { BlockModule } from './block/block.module';
+import { BlockModule } from './auth/block/block.module';
 import { ChannelModule } from './channel/channel.module';
 import {ClientModule} from "./client/client.module";
 import { MatchModule } from './match/match.module';
