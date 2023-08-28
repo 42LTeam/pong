@@ -2,7 +2,7 @@ import { Injectable, PipeTransform, ArgumentMetadata, ForbiddenException } from 
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
-export class IsAdminPipe implements PipeTransform {
+export class IsBannedPipe implements PipeTransform {
   constructor(private prisma: PrismaService) {}
 
   async transform(value: any, _metadata: ArgumentMetadata) {
@@ -11,14 +11,11 @@ export class IsAdminPipe implements PipeTransform {
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
     });
-    
-    if (!userChannel) {
-      throw new ForbiddenException('User is not a member of this channel.');
+
+    if (userChannel.isBanned && new Date(userChannel.isBanned) > new Date()) {
+      throw new ForbiddenException('User is banned from this channel.');
     }
-    if (!userChannel.isAdmin) {
-      throw new ForbiddenException('User is not an admin of this channel.');
-    }
-    
+
     return value;
   }
 }
