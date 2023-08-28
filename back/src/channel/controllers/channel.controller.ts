@@ -1,9 +1,10 @@
-import {Body, Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards} from '@nestjs/common';
-import {ApiBody, ApiOperation, ApiProperty, ApiTags} from '@nestjs/swagger';
-import {Channel} from '@prisma/client';
-import {ChannelService} from '../channel.service';
-import {ArrayMinSize, IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString} from '@nestjs/class-validator';
-import {AuthenticatedGuard} from "../../auth/guards/authenticated.guard";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards, UsePipes } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { Channel } from '@prisma/client';
+import { ChannelService } from '../channel.service';
+import { ArrayMinSize, IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from '@nestjs/class-validator';
+import { AuthenticatedGuard } from "../../auth/guards/authenticated.guard";
+import { IsAdminPipe } from '../pipes/isAdmin.pipe';
 
 export class CreateChannelDto {
   @ApiProperty()
@@ -45,20 +46,20 @@ export class SendInviteDto {
 @ApiTags('channels')
 @Controller('channels')
 export class ChannelController {
-  constructor(private channelService: ChannelService) {}
+  constructor(private channelService: ChannelService) { }
 
 
   @Post()
-  @ApiOperation({summary: 'Create a channel'})
-  @ApiBody({type: CreateChannelDto})
-  async createChannel(@Body() body: CreateChannelDto): Promise<Channel>{
+  @ApiOperation({ summary: 'Create a channel' })
+  @ApiBody({ type: CreateChannelDto })
+  async createChannel(@Body() body: CreateChannelDto): Promise<Channel> {
     return this.channelService.createChannel(body);
   }
 
   @Post('invite')
   @ApiOperation({ summary: 'Invite a list of user on a channel' })
-  @ApiBody({type: SendInviteDto})
-  async sendInvites(@Body() body: SendInviteDto, @Req() req){
+  @ApiBody({ type: SendInviteDto })
+  async sendInvites(@Body() body: SendInviteDto, @Req() req) {
     return this.channelService.sendInvite(await req.user.id, body);
   }
 
@@ -81,6 +82,14 @@ export class ChannelController {
   async getChannelAllMembers(@Param('channelId', ParseIntPipe) channelId: number): Promise<any> {
     return await this.channelService.getChannelAllMembers(Number(channelId)); // Assuming the 'users' field contains UserChannel[] data
   }
+
+  @Post('/:channelId/ban/:userId')
+  @UsePipes(IsAdminPipe)
+  @ApiOperation({ summary: 'Ban a user from a channel' })
+  async banUserFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<any> {
+    return this.channelService.banUserFromChannel(channelId, userId);
+  }
+
 
 
 }

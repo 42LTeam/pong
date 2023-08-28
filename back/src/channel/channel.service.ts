@@ -224,4 +224,17 @@ export class ChannelService {
       await this.addInvite(newConv.id, userId);
       return this.addInvite(newConv.id, friendId);
     }
+
+    async banUserFromChannel(channelId: number, userId: number): Promise<any> {
+      const banUntil = new Date();
+      banUntil.setMinutes(banUntil.getMinutes() + 5);
+    
+      return this.prisma.userChannel.updateMany({
+        where: { channelId: channelId, userId: userId },
+        data: { isBanned: banUntil },
+      });
+    }
+    
+    
+  
 }
