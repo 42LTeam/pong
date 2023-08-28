@@ -24,7 +24,7 @@ export default class Game {
 				public matchService: MatchService
 	) {
 		this.engine = new GameEngine(this);
-		console.log('New game ', this.matchId);
+		console.log('Game : New game ', this.matchId);
 	}
 
 	MATCH_ROOM = "Match-" + this.matchId;
@@ -46,7 +46,7 @@ export default class Game {
 	}
 
 	handleJoin(user, invite: Boolean) {
-		console.log('handleJoin');
+		console.log('Game : handleJoin');
 		const socket = this.server.sockets.sockets.get(user.session);
 		let player = this.players.find(p => p.userId == user.id);
 		if (!player) {
@@ -58,7 +58,8 @@ export default class Game {
 				player.status = playerStatus.OFFLINE;
 			else
 				console.log('New connection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
-		} else {
+		}
+		else {
 			player.status = playerStatus.ONLINE;
 			player.socket = socket;
 			console.log('Player', player.name, 're-join game', this.matchId);
@@ -76,8 +77,8 @@ export default class Game {
 		return (this.state == gameState.FINISH
 			|| (!this.started
 				&& this.players[0].status == playerStatus.OFFLINE
-				&& this.players[1]
-				&& this.players[1].status == playerStatus.OFFLINE));
+				&& (this.players.length < 2
+					|| this.players[1].status == playerStatus.OFFLINE)));
 	}
 
 	playersLeave() {
@@ -88,14 +89,14 @@ export default class Game {
 
 	handleLeave(user) {
 		const index = this.players.findIndex(p => p.userId == user.id);
-		console.log('handleLeave of index', index);
+		console.log('Game : handleLeave of index', index);
 		if (index >= 0) {
 			console.log('Player', this.players[index].name, 'left');
 			if (this.state == gameState.FINISH) {
 				this.players.splice(index, 1);
 				console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
-
-			} else {
+			}
+			else {
 				this.players[index].status = playerStatus.OFFLINE;
 				console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
 				if (this.state != gameState.PAUSE) {

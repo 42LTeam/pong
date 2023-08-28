@@ -106,6 +106,7 @@ const Application = function (){
         const onGameNotFound = (args) => {
             // TODO
             // navigate(PATHS.home);
+            console.log(404, "- Game Not Found");
         }
 
         socket.on('new-message', onNewMessage);

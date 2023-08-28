@@ -36,6 +36,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     async handleDisconnect(client: any) {
         //TODO handleLeave if client is in a game
         const user = await this.clientService.getClientById(client.id);
+        console.log('Gateway : handleDisconnect from', user?.username);
         this.matchMaking.handleLeave(user);
     }
 
@@ -51,6 +52,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async properLeaveGame(client): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
+        console.log('Gateway : properLeaveGame from', user?.username);
         this.matchMaking.handleLeave(user);
     }
 
@@ -66,6 +68,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async inviteGame(client, data) : Promise<void> {
         const user = await this.clientService.getClientById(client.id);
+        console.log('Gateway : invite-game from', user?.username, 'to', data.username);
         if (user && data)
             this.matchMaking.handleInvite(user, data);
     }
