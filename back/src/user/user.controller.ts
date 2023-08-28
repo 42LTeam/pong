@@ -18,7 +18,7 @@ import {IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString} from "@ne
 import {StringPipe} from "./pipes/string.pipe";
 import { Roles } from '../auth/roles.decorator';
 import {Channel, Status, User, UserMatch} from "@prisma/client";
-import { MatchService } from 'src/match/match.service';
+import { MatchService } from '../match/match.service';
 
 class CreateUserDto {
   @ApiProperty()
