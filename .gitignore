@@ -3,5 +3,6 @@
 back/dist/
 front/dist/
 .idea
-
+/back/node_modules
+/front/node_modules
 back/prisma/migrations/
