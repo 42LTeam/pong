@@ -24,7 +24,6 @@ type ApplicationEngine = {
 
 export const ApplicationContext = createContext<ApplicationEngine | undefined>(undefined);
 
-
 const PATHS = {
     home: '/',
     social: '/social',
@@ -85,7 +84,6 @@ const Application = function (){
         )
     }
 
-
     useEffect(() => {
         const onNewMessage = (args) => {
             addMessage(args);
@@ -99,12 +97,28 @@ const Application = function (){
                 sendNotification(args.channelId+'channel', args.creator.username + ' vous a ajouter a un channel', args.users.map(u => u.username).join(', '), args.creator.avatar, "/social/" + args.channelId);
         }
 
+        const onInviteGame = (args) => {
+            console.log(args[1].id, args[0].username + " invites " + args[1].username, "to play a Pong game", args[0].avatar, "/game");
+            if (!window.location.pathname.includes("/game"))
+                sendNotification(args[1].id, args[0].username + " invites " + args[1].username, "to play a Pong game", args[0].avatar, "/game?invite=true");
+        }
+
+        const onGameNotFound = (args) => {
+            // TODO
+            // navigate(PATHS.home);
+            console.log(404, "- Game Not Found");
+        }
+
         socket.on('new-message', onNewMessage);
         socket.on('new-channel', onNewChannel);
+        socket.on('invite-game', onInviteGame);
+        socket.on('game-not-found', onGameNotFound);
 
         return () => {
             socket.off('new-channel', onNewChannel);
             socket.off('new-message', onNewMessage);
+            socket.off('invite-game', onInviteGame);
+            socket.off('game-not-found', onGameNotFound);
         };
 
     }, [notifications]);

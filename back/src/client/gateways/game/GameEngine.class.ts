@@ -1,6 +1,5 @@
 import Game, {gameState} from "./Game.class";
 import GameBall from "./GameBall.class";
-import {MatchService} from "../../../match/match.service";
 
 export default class GameEngine {
 
@@ -33,14 +32,14 @@ export default class GameEngine {
 		else return false;
 		this.printScores();
 		if (
-			this.score[0] === this.WIN_SCORE ||
-			this.score[1] === this.WIN_SCORE
+			this.score[0] == this.WIN_SCORE ||
+			this.score[1] == this.WIN_SCORE
 		) {
 			console.log(
 				'Game',
 				this.game.matchId,
 				'# Player',
-				this.score[0] === this.WIN_SCORE ? 0 : 1,
+				this.score[0] == this.WIN_SCORE ? 0 : 1,
 				'win!',
 			);
 			this.game.state = gameState.FINISH;
@@ -60,19 +59,22 @@ export default class GameEngine {
 	}
 
 	async loop() {
-		if (this.game.state === gameState.PLAYING) {
+		if (this.game.state == gameState.PLAYING) {
 			this.game.players.forEach(p => p.update())
 			this.ball.update();
 			if (this.checkScores()) {
 				this.game.players.forEach((player) => {
 					player.send('game-finish', this.getData());
 				});
-				await this.game.matchService.createMatch([this.game.players[0].userId, this.game.players[1].userId], this.score);
+				await this.game.matchService.createMatch(
+					[this.game.players[0].userId, this.game.players[1].userId],
+					this.score,
+					[(this.score[0] === 5), (this.score[1] === 5)]
+				);
 			}
 			else {
 				this.game.players.forEach((player) => {
 					player.send('gameplay', this.getData());
-					// player.send('spectator', this.getData());
 				});
 				setTimeout(() => {
 					this.loop();
@@ -89,6 +91,7 @@ export default class GameEngine {
 	sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 	async startGame() {
+		this.game.started = true;
 		if (this.ball.speed == 0)
 			this.ball.newBall();
 		this.game.state = gameState.STARTING;

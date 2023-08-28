@@ -11,15 +11,21 @@ type Props = {
     rank: number;
 }
 
-
 export default function LeaderboardPlaceBubble(props: Props) {
     
   const user = useContext(AuthContext);
     var stat: any = 0;
     var [description, setDescription] = useState("");
 
-    if (props.kind === "Total xp"){
-      stat = props.user.xp;
+    let statName = ""; //nom precis de l'attribut
+    if (props.kind === "Total xp") {
+        statName = 'xp';
+    }
+    else if (props.kind === "Victories/defeat ratio"){
+        statName = 'ratio';
+    }
+    else if (props.kind === "Average points per match"){
+        statName = 'pointAverage';
     }
 
     useEffect(() => {
@@ -27,7 +33,7 @@ export default function LeaderboardPlaceBubble(props: Props) {
       
       if (props.kind === "Total xp") {
         setDescription("XP");
-      } else if (props.kind === "Victories / defeat ratio") {
+      } else if (props.kind === "Victories/defeat ratio") {
         setDescription("victories / defeat ratio");
       } else if (props.kind === "Average points per match") {
         setDescription("points per match");
@@ -45,9 +51,11 @@ export default function LeaderboardPlaceBubble(props: Props) {
                 <div className="leaderboard-username"> {props.user.username} </div>
             </div>
 
-            <div className="leaderboard-data"> {props.user.xp} {description} </div>
+            <div className="leaderboard-data">
+            {props.user.playedMatch ? `${props.user[statName]} ${description}` : "Did not play any match"}
+            </div>
 
-            <TextIcon style="placement-icon" text={props.rank}/>
+            <TextIcon style="placement-icon" text={ props.user.playedMatch ? `${props.rank}` : "-" }/>
         </div>
     )
 }

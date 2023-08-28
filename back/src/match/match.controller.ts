@@ -14,6 +14,11 @@ class CreateMatchDto {
     @IsNotEmpty()
     @IsNumber()
     scores: number[];
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsBoolean()
+    isWins: boolean[];
   }
   
 @ApiTags('match')
@@ -28,7 +33,7 @@ async createMatch(
     @Body() createMatchDto: CreateMatchDto,
 ):
     Promise<Match> {
-    return this.matchService.createMatch(createMatchDto.usersIds, createMatchDto.scores);
+    return this.matchService.createMatch(createMatchDto.usersIds, createMatchDto.scores, createMatchDto.isWins);
     }
 
 @Get('common/:userId1/:userId2')
