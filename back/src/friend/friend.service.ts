@@ -1,7 +1,7 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {UserFriendship} from '@prisma/client';
 import { UserService } from '../user/user.service';
+import {UserFriendship} from "@prisma/client";
 
 @Injectable()
 export class FriendService {
@@ -14,6 +14,33 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
     if (initiatorId == acceptorId)
       throw new Error('Both initiatorId and acceptorId shouldn\'t be the same');
 
+    const oldFriendship = await this.prisma.userFriendship.findMany({
+      where: {
+        OR: [{
+          AND: [
+              {
+            senderId: initiatorId
+              },
+            {
+              targetId: acceptorId
+            }
+          ]
+        },
+          {
+            AND: [
+              {
+                targetId: initiatorId
+              },
+              {
+                senderId: acceptorId
+              }
+            ]
+          }
+
+        ]
+      }
+    });
+    if (oldFriendship.length > 0) return null;
     const userFriendship = await this.prisma.userFriendship.create({
       data: {
         senderId: initiatorId,

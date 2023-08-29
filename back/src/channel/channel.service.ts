@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateChannelDto, SendInviteDto } from "./controllers/channel.controller";
 import { FriendService } from '../friend/friend.service';
 import { MessageService } from "../message/message.service";
+import {Channel} from "@prisma/client";
 
 
 @Injectable()
