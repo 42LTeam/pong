@@ -32,7 +32,7 @@ export default function SearchBar(){
                 onChange={event => handleInputChange(event)}
                 onKeyPress={handleKeyPress}
             />
-            <div className="search-bar-text"> Search </div>
+            <div className="search-bar-text" > Search </div>
         </div>
     )
 }

@@ -3,10 +3,9 @@ import React from 'react';
 import {PlayerSkin} from "./PlayerSkin";
 import {BallSkin} from "./BallSkin"
 import {LaunchButton} from "./LaunchButton"
-import SearchBar from "./SearchBar";
-import FriendQuickInviteBubble from './FriendQuickInviteBubble';
 
 import "../../css/homepage.css"
+import FriendQuickInvite from './FriendQuickInvite';
 
 export default function HomePage({user}){
 
@@ -22,10 +21,9 @@ export default function HomePage({user}){
 
                 </div>
                 <div className="frame-right">
-                    <SearchBar />
-                    {Array.from({ length: 35 }, (_, index) => (
-                        <FriendQuickInviteBubble key={index} userID={index} />
-                    ))} {/* A voir comment on fait pour boucler avec le back */}
+
+                <FriendQuickInvite />
+
                 </div>
             </div>
         </>
