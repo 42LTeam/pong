@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import MatchHistoryBubble from './MatchHistoryBubble';
@@ -6,11 +6,11 @@ import ProfileLeaderboardPlaceBubble from './ProfileLeaderboardPlaceBubble';
 import {getUserByID} from "../../api";
 
 import "../../css/profile.css"
-import React from 'react';
 import { User } from '../Auth';
 
 export default function ProfilePage(){
-        const { userID } = useParams();
+    
+    const { userID } = useParams();
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
@@ -24,8 +24,12 @@ export default function ProfilePage(){
             });
     },[userID]);
 
+    if (user === null){
+        return(<h1>LOADING</h1>)
+    }
+
     return (
-        <div className='main-frame'>
+        <div className='main-frame-profile'>
             <div className="left-frame-profile">
                 
                 {user?.avatar && (
