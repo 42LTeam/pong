@@ -80,7 +80,7 @@ export class ChannelController {
   @Get("/:channelId/members")
   @ApiOperation({ summary: 'Get All users in channel by channel Id' })
   async getChannelAllMembers(@Param('channelId', ParseIntPipe) channelId: number): Promise<any> {
-    return await this.channelService.getChannelAllMembers(Number(channelId)); 
+    return await this.channelService.getChannelAllMembers(Number(channelId));
   }
 
   @Post('/:channelId/ban/:userId')
@@ -90,6 +90,11 @@ export class ChannelController {
     return this.channelService.banUserFromChannel(channelId, userId);
   }
 
+  @Get('/:channelId/is-banned/:userId')
+  @ApiOperation({ summary: 'Check if a user is banned from a channel' })
+  async isUserBannedFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<boolean> {
+    return this.channelService.isUserBannedFromChannel(channelId, userId);
+  }
 
 
 }

@@ -235,6 +235,15 @@ export class ChannelService {
       });
     }
     
+    async isUserBannedFromChannel(channelId: number, userId: number): Promise<boolean> {
+      const userChannel = await this.prisma.userChannel.findFirst({
+        where: { channelId: channelId, userId: userId },
+      });
+      
+      const currentDateTime = new Date();
+      const banUntil = userChannel.isBanned;
     
+      return banUntil !== null && banUntil > currentDateTime;
+    }
   
 }
