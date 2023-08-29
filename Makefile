@@ -62,7 +62,7 @@ build: env
 
 up: env
 	@echo $(GREEN) '🚀' - UP: Start development containers$(RESET_COLOR)
-	$(DOCKER_COMPOSE) up
+	$(DOCKER_COMPOSE) up -d
 
 stop:
 	@echo $(RED) '✋' - STOP: Stop development containers$(RESET_COLOR)
