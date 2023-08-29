@@ -18,8 +18,7 @@ export default function AddFriend(){
                 setSuggestions(response.data);
             });
         }else
-            setSuggestions(null);
-
+            getAllUsers({notFriend: true}).then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
     }
     const toggleCheck = (current, check) => {
         if (check)
