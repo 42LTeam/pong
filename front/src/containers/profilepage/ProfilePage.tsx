@@ -28,6 +28,7 @@ export default function ProfilePage(){
         return(<h1>LOADING</h1>)
     }
 
+    console.log("my user is :{"+user+"}");
     return (
         <div className='main-frame-profile'>
             <div className="left-frame-profile">
