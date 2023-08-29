@@ -43,8 +43,8 @@ export default function ProfilePage(){
                 
                 <div className='match-history'>
                     {Array.from({ length: 10 }, (_, index) => (
-                            <MatchHistoryBubble user={user} matchID={index} />
-                    ))} {/* A voir comment on fait pour boucler avec le back */}
+                            <MatchHistoryBubble key={index} user={user} matchID={index} />
+                    ))}
                 </div>
 
             </div>

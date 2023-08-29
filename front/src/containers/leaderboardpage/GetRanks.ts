@@ -64,20 +64,11 @@ export const getUserRank = (targetUser: User, users: UserRank[]): number | null 
     return foundUser ? foundUser.rank : null;
 };
 
-export const getRatio = (userID: number) => {
+export const getRatio = async (userID: number) => {
 
-    const [matches, setMatches] = useState<any>(undefined);
-    
-    useEffect(() => {
-        getUserMatches(userID)
-            .then(function (response) {
-                setMatches(matches);
-            })
-            .catch(function (error) {
-                console.error('Error fetching user data:', error);
-                setMatches(null);
-            });
-    }, []);
+    try {
+    const response = await getUserMatches(userID);
+    const matches = response.data;
 
     if (matches.length > 0 || !matches) {
         const winNumber = matches.reduce((sum: number, match: { isWin: boolean; }) => sum + (match.isWin ? 1 : 0), 0);
@@ -85,19 +76,28 @@ export const getRatio = (userID: number) => {
     } else {
         return 0;
     }
+    } catch (error){
+        console.error('Error fetching user matches:', error);
+        return 0;
+    }
+
 }
 
-export const getAveragePoint = (userID: number) => {
+export const getAveragePoint = async (userID: number) => {
 
-        getUserMatches(userID)
-            .then(function (response) {
-                const matches = response.data;
-            })
-
-    if (matches.length > 0 || !matches) {
-        const totalPoints = matches.reduce((sum: number, match: { score: number; }) => sum + match.score, 0);
-        return (totalPoints / matches.length);
-    } else {
+    try {
+        const response = await getUserMatches(userID);
+        const matches = response.data;
+        if (matches.length > 0) {
+            const totalPoints = matches.reduce((sum: number, match: { score: number; }) => sum + match.score, 0);
+            const pointAverage = totalPoints / matches.length
+            return (pointAverage);
+        } else {
+            return 0;
+        }
+    }
+    catch (error){
+        console.error('Error fetching user matches:', error);
         return 0;
     }
 }

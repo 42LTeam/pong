@@ -54,31 +54,46 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
         setPlacement(getUserRank(props.user, usersWithRank) ?? 0)
     }, [usersWithRank])
 
-    if (usersWithRank === undefined) {
-        return <h1>LOADING</h1>
-    }
     
-    var data: number = 0;
+    
+    const [data, setData] = useState<any>(null);
 
-    if (props.type === "Total xp"){
-        data =  props.user.xp;
-    }
-    else if (props.type === "Average points per match"){
-        data = getAveragePoint(props.user.id);
-    }
-    else if (props.type === "Victories/defeat ratio"){
-        // data = getRatio(props.user.id);
-        data = 666;
-    }
+    useEffect(() => {
+        if (props.type === "Total xp") {
+            setData(props.user.xp);
+        } else if (props.type === "Average points per match") {
+            getAveragePoint(props.user.id)
+                .then(average => {
+                    setData(average);
+                })
+                .catch(error => {
+                    console.error('Error fetching average point:', error);
+                    setData(0);
+                });
+        } else if (props.type === "Victories/defeat ratio") {
+            getRatio(props.user.id)
+                .then(ratio => {
+                    setData(ratio);
+                })
+                .catch(error => {
+                    console.error('Error fetching average point:', error);
+                    setData(0);
+                });
+        }
+    }, [props.type, props.user.id]);
     
+    if (usersWithRank === undefined) {
+        return <h2>LOADING</h2>
+    }
+
     return (
         <div className="leaderboard-place-bubble">
 
             <div className="leaderboard-title-stat"> {props.type} </div>            
 
-            <div className="leaderboard-data"> {data} </div>
+            <div className="leaderboard-data"> {(props.user.xp ? data : "N/A")} </div>
 
-            <TextIcon style="placement-icon" text={placement} />
+            <TextIcon style="placement-icon" text={(props.user.xp ? placement : "-")} />
 
         </div>
     )
