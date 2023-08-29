@@ -9,8 +9,8 @@ import { ApplicationContext } from "../../Application";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
-  state: any,
-  conversations: any[]
+  state: any;
+  conversations: any[];
 };
 
 export default function Conversations({ state, conversations }: Props) {
