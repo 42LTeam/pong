@@ -1,12 +1,16 @@
 
 name: Up and running on Pull Request
 
+#Test on push
 #on:
-#  pull_request:
-#    branches:
-#      - main
+#  push:
+
+# Launch on pull request to main
 on:
-  push:
+  pull_request:
+    branches:
+      - main
+
 
 jobs:
   test-dev-on-pull-request:
