@@ -98,7 +98,10 @@ reboot: fprune all
 prettier:
 	@echo $(BOLD_YELLOW) '🌸' - PRETTIER: https://prettier.io/docs/en/install $(RESET_COLOR)
 	cd ./back/ && npx prettier . --write
+	cd ./back/ && npx prettier . --check
+
 	cd ./front/ && npx prettier . --write
+	cd ./front/ && npx prettier . --check
 
 help:
 	@echo "Available commands:"

@@ -1,10 +1,12 @@
 
 name: Up and running on Pull Request
 
+#on:
+#  pull_request:
+#    branches:
+#      - main
 on:
-  pull_request:
-    branches:
-      - main
+  push:
 
 jobs:
   test-dev-on-pull-request:
@@ -86,3 +88,8 @@ jobs:
         run: |
           chmod +x health_script_5173.sh
           ./health_script_5173.sh
+
+      - name: Check Prettier
+        run: |
+          cd ./back/ && npx prettier . --check
+          cd ./front/ && npx prettier . --check
