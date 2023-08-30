@@ -27,7 +27,7 @@ export default function ProfilePage(){
                 setUser(response.data);
             })
             .catch(function (error) {
-                 console.error('Error fetching user data:', error);
+                 console.error('Error fetching user data (@getUserByID):', error);
                 setUser(null);
             });
     },[userID]);

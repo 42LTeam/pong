@@ -247,7 +247,7 @@ export async function getPath(path: string){
 export async function getUserByID(ID){
     var config = {
         method: 'get',
-        url: URL + '/users/id/' + ID,
+        url: URL + '/users/' + ID,
         withCredentials: true,
     };
     return axios(config);
