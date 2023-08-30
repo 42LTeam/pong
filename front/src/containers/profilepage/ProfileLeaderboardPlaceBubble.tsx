@@ -56,7 +56,7 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
 
     
     
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<number>(0);
 
     useEffect(() => {
         if (props.type === "Total xp") {
@@ -91,7 +91,7 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
 
             <div className="leaderboard-title-stat"> {props.type} </div>            
 
-            <div className="leaderboard-data"> {(props.user.xp ? data : "N/A")} </div>
+            <div className="leaderboard-data"> {(props.user.xp ? data.toFixed(2) : "N/A")} </div>
 
             <TextIcon style="placement-icon" text={(props.user.xp ? placement : "-")} />
 
