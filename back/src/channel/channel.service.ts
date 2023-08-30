@@ -246,4 +246,24 @@ export class ChannelService {
       return banUntil !== null && banUntil > currentDateTime;
     }
   
+    async muteUserFromChannel(channelId: number, userId: number): Promise<any> {
+      const muteUntil = new Date();
+      muteUntil.setMinutes(muteUntil.getMinutes() + 5);
+    
+      return this.prisma.userChannel.updateMany({
+        where: { channelId: channelId, userId: userId },
+        data: { isMuted: muteUntil },
+      });
+    }
+
+    async isUserMutedFromChannel(channelId: number, userId: number): Promise<boolean> {
+      const userChannel = await this.prisma.userChannel.findFirst({
+        where: { channelId: channelId, userId: userId },
+      });
+      
+      const currentDateTime = new Date();
+      const muteUntil = userChannel.isMuted;
+    
+      return muteUntil !== null && muteUntil > currentDateTime;
+    }
 }

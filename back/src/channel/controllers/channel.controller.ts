@@ -96,5 +96,16 @@ export class ChannelController {
     return this.channelService.isUserBannedFromChannel(channelId, userId);
   }
 
+  @Post('/:channelId/mute/:userId')
+  @ApiOperation({ summary: 'Mute a user from a channel' })
+  async muteUserFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<any> {
+    return this.channelService.muteUserFromChannel(channelId, userId);
+  }
+
+  @Get('/:channelId/is-banned/:userId')
+  @ApiOperation({ summary: 'Check if a user is muted from a channel' })
+  async isMutedBannedFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<boolean> {
+    return this.channelService.isUserMutedFromChannel(channelId, userId);
+  }
 
 }
