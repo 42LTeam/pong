@@ -52,7 +52,6 @@ export default function Settings(props: Props) {
 
 
     const handleEditUsername = () => {
-        console.log("handleEditUsername called");
         const newUsername = prompt("Please enter the new username:");
         if (newUsername) {
             setUsername(newUsername);
