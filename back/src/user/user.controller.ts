@@ -20,6 +20,7 @@ import { Roles } from '../auth/roles.decorator';
 import { Channel, Status, User, UserMatch } from "@prisma/client";
 import { MatchService } from 'src/match/match.service';
 import { UserIdValidationPipe } from './pipes/userIdValid.pipe';
+import { UsernameAlreadyExistsPipe } from './pipes/usernameExist.pipe';
 
 class CreateUserDto {
   @ApiProperty()
@@ -124,11 +125,14 @@ export class UserController {
   }
 
   @Put('username/:id')
-  @ApiOperation({ summary: 'Update user\'s username' })
-  @ApiBody({ type: UpdateUserNameDto })
-  async updateUserName(@Param('id', ParseIntPipe, UserIdValidationPipe) id: number, @Body() updateUserNameDto: UpdateUserNameDto): Promise<User> {
-    return this.userService.updateUserName(Number(id), updateUserNameDto.username);
-  }
+@ApiOperation({ summary: 'Update user\'s username' })
+@ApiBody({ type: UpdateUserNameDto })
+async updateUserName(
+  @Param('id', ParseIntPipe, UserIdValidationPipe) id: number,
+  @Body('username', UsernameAlreadyExistsPipe) username: string
+): Promise<User> {
+  return this.userService.updateUserName(Number(id), username);
+}
 
   @Get('friend/:id')
   @ApiOperation({ summary: 'Get friend of user' })
