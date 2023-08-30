@@ -112,7 +112,7 @@ export class UserController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get user by id' })
-  async getUserById(@Param('id', UserIdValidationPipe, ParseIntPipe) id: number): Promise<User | null> {
+  async getUserById(@Param('id', ParseIntPipe) id: number): Promise<User | null> {
     return this.userService.getUserById(Number(id));
   }
 
