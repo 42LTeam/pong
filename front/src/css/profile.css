@@ -94,13 +94,16 @@
 }
 
 .match-history-opponent-pseudo{
+    
     color: #FFF;
-    text-align: center;
+    text-align: left;
     font-family: 'KoHo', sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+
+    min-width: 100px;
 }
 
 .match-history-data{
@@ -114,7 +117,7 @@
 }
 
 .victory-icon{
-    min-width: 60px;
+    min-width: 80px;
     display: flex;
     padding: 0px 10px;
     justify-content: center;
@@ -132,7 +135,7 @@
 }
 
 .defeat-icon{
-    min-width: 60px;
+    min-width: 80px;
     display: flex;
     padding: 0px 10px;
     justify-content: center;

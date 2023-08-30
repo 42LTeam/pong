@@ -3,15 +3,23 @@ import { useParams } from 'react-router-dom';
 
 import MatchHistoryBubble from './MatchHistoryBubble';
 import ProfileLeaderboardPlaceBubble from './ProfileLeaderboardPlaceBubble';
-import {getUserByID} from "../../api";
+import {getUserByID, getUserMatchesResume} from "../../api";
 
 import "../../css/profile.css"
 import { User } from '../Auth';
+
+export interface MatchResume {
+        OpponentAvatar: string,
+        OpponentUsername: string,
+        OpponentScore: number,
+        UserScore: number
+}
 
 export default function ProfilePage(){
     
     const { userID } = useParams();
     const [user, setUser] = useState<User | null>(null);
+    const [matches, setMatches] = useState<MatchResume[]>([]);
 
     useEffect(() => {
         getUserByID(userID)
@@ -24,11 +32,20 @@ export default function ProfilePage(){
             });
     },[userID]);
 
-    if (user === null){
+    useEffect(() => {
+        getUserMatchesResume(userID)
+            .then(function (response) {
+                setMatches(response.data);
+            })
+            .catch(function (error) {
+                 console.error('Error fetching UserMatch resumes data:', error);
+            });
+    },[userID]);
+
+    if (user === null || !matches){
         return(<h1>LOADING</h1>)
     }
 
-    console.log("my user is :{"+user+"}");
     return (
         <div className='main-frame-profile'>
             <div className="left-frame-profile">
@@ -43,8 +60,8 @@ export default function ProfilePage(){
                 <div className="user-profile-title">{user?.username}</div>
                 
                 <div className='match-history'>
-                    {Array.from({ length: 10 }, (_, index) => (
-                            <MatchHistoryBubble key={index} user={user} matchID={index} />
+                    {matches.map(match => (
+                    <MatchHistoryBubble user={user} matchResume={match} />
                     ))}
                 </div>
 
