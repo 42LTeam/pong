@@ -271,3 +271,11 @@ export async function getUserMatches(ID){
     return axios(config);
 }
 
+export async function getUserMatchesResume(ID){
+    var config = {
+        method: 'get',
+        url: URL + '/users/' + ID + '/matches-resume',
+        withCredentials: true,
+    };
+    return axios(config);
+}

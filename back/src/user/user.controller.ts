@@ -187,4 +187,10 @@ export class UserController {
   async getUserMatches(@Param('id', ParseIntPipe) id: number): Promise<UserMatch[]> {
     return this.matchService.getUserMatches(id);
   }
+
+  @Get(':id/matches-resume')
+  @ApiOperation({ summary: 'Get all matches resume of user by ID' })
+  async getUserMatchesResume(@Param('id', ParseIntPipe) id: number): Promise<any[]> {
+    return this.userService.getUserMatchesResume(id);
+  }
 }
