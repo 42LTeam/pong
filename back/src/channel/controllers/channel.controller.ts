@@ -102,7 +102,7 @@ export class ChannelController {
     return this.channelService.muteUserFromChannel(channelId, userId);
   }
 
-  @Get('/:channelId/is-banned/:userId')
+  @Get('/:channelId/is-muted/:userId')
   @ApiOperation({ summary: 'Check if a user is muted from a channel' })
   async isMutedBannedFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<boolean> {
     return this.channelService.isUserMutedFromChannel(channelId, userId);
