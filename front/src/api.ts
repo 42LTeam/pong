@@ -262,6 +262,24 @@ export async function getUsers(){
     return axios(config);
 }
 
+export async function searchFriend(name: string){
+    const config = {
+        method: 'get',
+        url: URL + '/users/search/friend/'  +name,
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
+export async function getRatioAgainst(id1: number, id2: number){
+    const config = {
+        method: 'get',
+        url: URL + '/match/stats/' + id1 + "/" + id2,
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
 export async function getUserMatches(ID){
     var config = {
         method: 'get',
