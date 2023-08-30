@@ -40,18 +40,26 @@ export default function Settings(props: Props) {
 
 
     const handleChangeUsername = async (newUsername) => {
-        const response = await updateUserAvatar(user.id, newUsername);
-        if (response.status === 200) {
-            console.log("User avatar updated successfully.");
-            user.username = newUsername;
-        } else {
-            console.error("Failed to update user avatar.");
-            setErrorMsg('Failed to update user avatar.');
+        try {
+            const response = await updateUserUsername(user.id, newUsername);
+            if (response.status === 200) {
+                console.log("User username updated successfully.");
+                user.username = newUsername;
+                setErrorMsg('');
+            } else {
+                console.error("Failed to update user username.");
+                setErrorMsg('Error');
+            }
+        } catch (error) {
+            console.error("Errorrrr updating user username:", error);
+            setUsername("Username already taken");
         }
     };
+    
 
 
     const handleEditUsername = () => {
+        console.log("handleEditUsername called");
         const newUsername = prompt("Please enter the new username:");
         if (newUsername) {
             setUsername(newUsername);
@@ -70,14 +78,15 @@ export default function Settings(props: Props) {
                 </div>
             </div>
             <div className="username-section">
-                <div className="username-button">
-                    <div className="username-container">
-                        <div className="username-overlay" onClick={handleEditUsername}>Edit</div>
-                        <div className="user-username">{username}</div>
+            <div className="username-button">
+                <div className="username-container">
+                    <div className="username-overlay" onClick={handleEditUsername}>Edit</div>
+                    <div className="user-username" style={{ fontSize: username === 'Error' ? 'smaller' : 'inherit' }}>
+                        {username}
                     </div>
-                    {errorMsg && <div className="error-message">{errorMsg}</div>}
                 </div>
             </div>
+        </div>
         </div>
     );
 }
