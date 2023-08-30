@@ -42,9 +42,7 @@ export class ChannelService {
       conv,
       creatorId,
     } = body;
-
-
-
+  
     const channel = await this.prisma.channel.create({
       data: {
         name,
@@ -54,13 +52,19 @@ export class ChannelService {
           connect: { id: creatorId },
         },
         created_at: new Date(),
+        users: {
+          create: {
+            userId: creatorId,
+            isAdmin: true,
+          }
+        }
       },
       select: {
         id: true,
         creatorId: true,
         users: {
           where: {
-            id: {
+            userId: {
               not: creatorId,
             }
           }
@@ -70,6 +74,7 @@ export class ChannelService {
     });
     return this.addInvite(channel.id, creatorId);
   }
+  
 
 
   async sendInvite(sender: number, body: SendInviteDto) {
