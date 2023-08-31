@@ -42,7 +42,11 @@ export default function ProfilePage(){
             });
     },[userID]);
 
-    if (user === null || !matches){
+    if (user===null){
+        return(<h1>User with ID={userID} does not exists</h1>)
+    }
+
+    if (!matches){
         return(<h1>LOADING</h1>)
     }
 
