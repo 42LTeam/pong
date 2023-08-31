@@ -27,16 +27,24 @@ export default class Game {
 
 	MATCH_ROOM = "Match-" + this.matchId;
 
-	onGame(user) {
+	onGame(userId) {
 		return (this.state != gameState.FINISH
-			&& (this.players[0].userId == user.id
-				|| (this.players.length > 1 && this.players[1].userId == user.id)
+			&& (this.players[0].userId == userId
+				|| (this.players.length > 1 && this.players[1].userId == userId)
 			)
 		);
 	}
 
-	canJoinInvite(user) {
-		return (!this.random && this.onGame(user));
+	goodGame(userId, playerId) {
+		return (!this.random && this.onGame(userId) && this.onGame(playerId));
+	}
+
+	canJoinInvite(userId, playerId, custom) {
+		return (this.goodGame(userId, playerId) && this.custom == custom);
+	}
+
+	wrongCustom(userId, playerId, custom) {
+		return (this.goodGame(userId, playerId) && this.custom != custom)
 	}
 
 	canJoinRandom(custom) {

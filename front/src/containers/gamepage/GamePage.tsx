@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useRef} from 'react';
 import {socket} from "../../api";
 import { useSearchParams } from "react-router-dom";
 import {Simulate} from "react-dom/test-utils";
-import play = Simulate.play;
 
 export enum gameState {
     CREATING,
@@ -206,15 +205,15 @@ export default function GamePage() {
 
     useEffect(() => {
         if (canvas) {
-            if (searchParams.size > 1) {
+            if (searchParams.size > 3) {
                 let player = Object.fromEntries([...searchParams]);
                 player.id = Number(player.id);
-                socket.emit('invite-game', [player, searchParams.size > 3]);
+                socket.emit('invite-game', [player, player.custom]);
             }
-            else if (searchParams.size == 1) {
+            else if (searchParams.size > 0) {
                 let option = Object.fromEntries([...searchParams]);
-                console.log('Game Page :', option.invite, option.custom);
-                socket.emit('join-game', [option.invite, option.custom]);
+                console.log('Game Page :', option.invite, option.custom, option.id);
+                socket.emit('join-game', [option.invite, option.custom, option.id]);
             }
             else
                 socket.emit('join-game', [false, false]);

@@ -15,6 +15,7 @@ import {MatchService} from "../../match/match.service";
     cors: true,
 })
 
+
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     private matchMaking = null;
@@ -39,9 +40,9 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async joinGame(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        console.log('Gateway : joinGame from', user?.username, 'invite =', data[0], 'custom =', data[1]);
+        console.log('Gateway : joinGame from', user?.username, 'invite =', data[0], 'custom =', data[1], 'id =', data[2]);
         if (user)
-            this.matchMaking.handleJoin(user, data[0], data[1]);
+            this.matchMaking.handleJoin(user, data[0], data[1], data[2]);
     }
 
     @SubscribeMessage('leave-game')
