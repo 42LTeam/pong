@@ -24,7 +24,7 @@ export default function FriendQuickInvite() {
 
     return (
         <>
-            <h1>Quick Invite</h1>
+            <h1>Friends Quick Invite</h1>
             <TextInput
                 key={"quick-invite-input"}
                 text="Pseudo"

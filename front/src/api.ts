@@ -247,7 +247,7 @@ export async function getPath(path: string){
 export async function getUserByID(ID){
     var config = {
         method: 'get',
-        url: URL + '/users/id/' + ID,
+        url: URL + '/users/' + ID,
         withCredentials: true,
     };
     return axios(config);
@@ -284,6 +284,15 @@ export async function getUserMatches(ID){
     var config = {
         method: 'get',
         url: URL + '/users/' + ID + '/matches',
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
+export async function getUserMatchesResume(ID){
+    var config = {
+        method: 'get',
+        url: URL + '/users/' + ID + '/matches-resume',
         withCredentials: true,
     };
     return axios(config);

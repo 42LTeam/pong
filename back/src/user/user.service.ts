@@ -175,5 +175,33 @@ export class UserService {
     return user.status;
   }
 
-}
+  async getUserMatchesResume(userId: number): Promise<any[]> {
+    const userMatches = await this.matchService.getUserMatches(userId);
+  
+    const matchInfo = [];
+  
+    for (const userMatch of userMatches) {
+      const userMatchOpponent = await this.prisma.userMatch.findFirst({
+        where: {
+          matchId: userMatch.matchId,
+          userId: { not: userId },
+        },
+      });
+  
+      const [user, opponent] = await Promise.all([
+        this.prisma.user.findUnique({ where: { id: userId } }),
+        this.prisma.user.findUnique({ where: { id: userMatchOpponent.userId } }),
+      ]);
+  
+      matchInfo.push({
+        OpponentAvatar: opponent.avatar,
+        OpponentUsername: opponent.username,
+        OpponentScore: userMatchOpponent.score,
+        UserScore: userMatch.score,
+      });
+    }
+  
+    return matchInfo;
+  }  
 
+}
