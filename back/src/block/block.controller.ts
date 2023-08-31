@@ -1,15 +1,20 @@
-import { Controller, Get, Post, Body, Delete, Param, HttpCode, ParseIntPipe, UseGuards } from '@nestjs/common';
+ import { Controller, Get, Post, Body, Delete, Param, HttpCode, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { Block, User } from '@prisma/client';
 import { BlockService } from './block.service';
-import { AuthenticatedGuard } from '../../auth/guards/authenticated.guard';
-import {FriendService} from "../../friend/friend.service";
+import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
+import {FriendService} from "../friend/friend.service";
+ import {IsNotEmpty, IsNumber} from "@nestjs/class-validator";
 
 class CreateBlockDto {
   @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
   blockerId: number;
 
   @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
   blockedId: number;
 }
 
