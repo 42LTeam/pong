@@ -77,7 +77,7 @@ model UserChannel {
   isAdmin   Boolean @default(false)
   isBlocked Boolean @default(false)
   isMuted   DateTime?
-  isBanned  DateTime?
+  isBanned  Boolean @default(false)
   user      User    @relation(fields: [userId], references: [id])
   channel   Channel @relation(fields: [channelId], references: [id])
 }

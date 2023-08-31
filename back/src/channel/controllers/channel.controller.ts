@@ -90,6 +90,13 @@ export class ChannelController {
     return this.channelService.banUserFromChannel(channelId, userId);
   }
 
+  @Post('/:channelId/unban/:userId')
+  @UsePipes(IsAdminPipe)
+  @ApiOperation({ summary: 'Un-Ban a user from a channel' })
+  async unbanUserFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<any> {
+    return this.channelService.unbanUserFromChannel(channelId, userId);
+  }
+
   @Get('/:channelId/is-banned/:userId')
   @ApiOperation({ summary: 'Check if a user is banned from a channel' })
   async isUserBannedFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<boolean> {
