@@ -1,4 +1,4 @@
- import { Controller, Get, Post, Body, Delete, Param, HttpCode, ParseIntPipe, UseGuards } from '@nestjs/common';
+ import {Controller, Get, Post, Body, Delete, Param, HttpCode, ParseIntPipe, UseGuards, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { Block, User } from '@prisma/client';
 import { BlockService } from './block.service';
@@ -7,10 +7,6 @@ import {FriendService} from "../friend/friend.service";
  import {IsNotEmpty, IsNumber} from "@nestjs/class-validator";
 
 class CreateBlockDto {
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  blockerId: number;
 
   @ApiProperty()
   @IsNumber()
@@ -31,8 +27,9 @@ export class BlockController {
   @ApiOperation({ summary: 'Create a block request' })
   @ApiResponse({ status: 201, description: 'The block request has been successfully created.'})
   @ApiBody({ type: CreateBlockDto })
-  async createBlockRequest(@Body() createBlockDto: CreateBlockDto): Promise<Block> {
-    const ret = await this.blockService.createBlockRequest(createBlockDto.blockerId, createBlockDto.blockedId);
+  async createBlockRequest(@Body() createBlockDto: CreateBlockDto, @Req() req): Promise<Block> {
+    const user = await req.user;
+    const ret = await this.blockService.createBlockRequest(user.id, createBlockDto.blockedId);
     await this.friendService.removeFriendship(createBlockDto.blockerId, createBlockDto.blockedId);
     return ret;
   }
