@@ -87,7 +87,7 @@ const Application = function (){
     useEffect(() => {
         const onNewMessage = (args) => {
             addMessage(args);
-            if (!window.location.pathname.includes("/social"))
+            if (!window.location.pathname.includes("/social") && !user.blockList.includes(args.user.id))
                 sendNotification(args.id+'message', args.user.username, args.content, args.user.avatar, "/social/" + args.channelId);
         }
 
