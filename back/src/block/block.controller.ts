@@ -1,6 +1,5 @@
  import {Controller, Get, Post, Body, Delete, Param, HttpCode, ParseIntPipe, UseGuards, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
-import { Block, User } from '@prisma/client';
 import { BlockService } from './block.service';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import {FriendService} from "../friend/friend.service";
