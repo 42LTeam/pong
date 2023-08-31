@@ -16,6 +16,7 @@ export default function Friend(props: Props){
     const navigate = useNavigate();
     const [display, setDisplay] = useState(null);
     const buttons = [
+      // ---------- Basic options
         {
             text: 'Profile',
             handleClick: () => navigate("/profile/" + props.friend.id),
@@ -25,12 +26,12 @@ export default function Friend(props: Props){
             handleClick: () => getConversation(props.friend.id).then((response) => navigate('/social/' + response.data.id)),
         },
         {separator: true},
-      // si c'est moi et que c'est channel
+        // ---------- Channel options pour l'user MOI
         {
             text: 'Quitter le channel',
-            handleClick: () => getConversation(props.friend.id).then((response) => navigate('/social/' + response.data.id)),
+            // Leave
         },
-      // si c'est pas moi et que je suis admin et que c'est channel
+        // ---------- Channel options pour l'user admin
         {
             text: 'Kick',
             // kick l'user selectionné
@@ -44,6 +45,7 @@ export default function Friend(props: Props){
             // Mute l'user selectionné
         },
         {separator: true},
+        // ---------- Match options everywhere
         {
             text: 'Match amical',
             handleClick: () => getUserByID(props.friend.id).then((response) =>
@@ -52,6 +54,7 @@ export default function Friend(props: Props){
 
 
     ];
+    // ---------- Friends options
     if (!props.unremovable)
         buttons.push({
             text: 'Retirer l\'ami',
