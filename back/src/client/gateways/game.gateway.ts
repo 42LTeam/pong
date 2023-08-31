@@ -34,7 +34,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     async handleDisconnect(client: any) {
         const user = await this.clientService.getClientById(client.id);
-        // console.log('Gateway : handleDisconnect from', user?.username);
+        console.log('Gateway : handleDisconnect from', user?.username);
         this.matchMaking.handleLeave(user);
     }
 
@@ -42,7 +42,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async joinGame(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        // console.log('Gateway : joinGame from', user?.username, 'invite =', data[0], 'custom =', data[1]);
+        console.log('Gateway : joinGame from', user?.username, 'invite =', data[0], 'custom =', data[1]);
         if (user)
             this.matchMaking.handleJoin(user, data[0], data[1]);
     }
@@ -51,7 +51,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async properLeaveGame(client): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        // console.log('Gateway : properLeaveGame from', user?.username);
+        console.log('Gateway : properLeaveGame from', user?.username);
         this.matchMaking.handleLeave(user);
     }
 
@@ -67,7 +67,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async inviteGame(client, data) : Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        // console.log('Gateway : invite-game from', user?.username, 'to', data[0].username, 'for custom =', data[1]);
+        console.log('Gateway : invite-game from', user?.username, 'to', data[0].username, 'for custom =', data[1]);
         if (user && data)
             this.matchMaking.handleInvite(user, data[0], data[1]);
     }

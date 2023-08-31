@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useRef} from 'react';
 import {socket} from "../../api";
 import { useSearchParams } from "react-router-dom";
+import {Simulate} from "react-dom/test-utils";
+import play = Simulate.play;
 
 export enum gameState {
     CREATING,
@@ -52,45 +54,66 @@ export default function GamePage() {
         }
     }
 
-    const draw = (status, countdown) => {
-        if (!canvas?.current) return ;
-        const c2d = canvas.current.getContext('2d');
+    const drawBackground = (c2d) => {
         const dpr = window.devicePixelRatio || 1;
         c2d.clearRect(0, 0, c2d.canvas.width, c2d.canvas.height);
         c2d.canvas.width = window.innerWidth * dpr;
         c2d.canvas.height = window.innerHeight * 0.8 * dpr;
         c2d.fillStyle='black';
         c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
+    }
+
+    const drawPlayer = (c2d, player, fontSize) => {
+        const textPos = fontSize + 5;
+        const left = player.x < 0.5
+        c2d.textAlign = (left ? "left" : "right");
+        c2d.fillText(player.name, c2d.canvas.width * (left ? 0.1 : 0.9), textPos);
+        c2d.fillText(player.score.toString(), c2d.canvas.width * (left ? 0.375 : 0.625), textPos);
+        c2d.fillRect((player.x - ball.semiSize) * c2d.canvas.width,
+            (player.y - players.semiHeight) * c2d.canvas.height,
+            ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
+    }
+
+    const drawText = (c2d, status, countdown) => {
+        c2d.textAlign = "center";
+        const width = c2d.canvas.width / 2;
+        const height = c2d.canvas.height / 2;
+        switch (status) {
+            case gameState.CREATING : {
+                c2d.fillText('Waiting for player', width, height);
+                break;
+            }
+            case gameState.STARTING : {
+                c2d.fillText(countdown, width, height);
+                break;
+            }
+            case gameState.PAUSE : {
+                c2d.fillText('Pause', width, height);
+                break;
+            }
+            case gameState.FINISH : {
+                if (players.player0.score > players.player1.score ? dataGame.playerId == 0 : dataGame.playerId == 1)
+                    c2d.fillText('You win!', width, height);
+                else
+                    c2d.fillText('You lose!', width, height);
+                break;
+            }
+        }
+    }
+
+    const draw = (status, countdown) => {
+        if (!canvas?.current) return ;
+        const c2d = canvas.current.getContext('2d');
+        drawBackground(c2d);
         c2d.fillStyle='white';
+        const fontSize = Math.min(c2d.canvas.width, c2d.canvas.height) * 0.05;
+        c2d.font = fontSize + "px monospace";
+        drawPlayer(c2d, players.player0, fontSize);
+        drawPlayer(c2d, players.player1, fontSize);
+        drawText(c2d, status, countdown);
         c2d.fillRect((ball.x - ball.semiSize) * c2d.canvas.width,
             (ball.y - ball.semiSize) * c2d.canvas.height,
             ball.semiSize * 2 * c2d.canvas.width, ball.semiSize * 2 * c2d.canvas.height);
-        c2d.fillRect((players.player0.x - ball.semiSize) * c2d.canvas.width,
-            (players.player0.y - players.semiHeight) * c2d.canvas.height,
-            ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
-        c2d.fillRect((players.player1.x - ball.semiSize) * c2d.canvas.width,
-            (players.player1.y - players.semiHeight) * c2d.canvas.height,
-            ball.semiSize * 2 * c2d.canvas.width, players.semiHeight * 2 * c2d.canvas.height);
-        const fontSize = Math.min(c2d.canvas.width, c2d.canvas.height) * 0.05;
-        const textPos = fontSize + 5;
-        c2d.font = fontSize + "px monospace";
-        c2d.textAlign = "left";
-        c2d.fillText(players.player0.name, c2d.canvas.width * 0.1, textPos);
-        c2d.fillText(players.player0.score.toString(), c2d.canvas.width * 0.375, textPos);
-        c2d.textAlign = "right";
-        c2d.fillText(players.player1.name, c2d.canvas.width * 0.9, textPos);
-        c2d.fillText(players.player1.score.toString(), c2d.canvas.width * 0.625, textPos);
-        c2d.textAlign = "center";
-        if (status === gameState.FINISH && (players.player0.score > players.player1.score ? dataGame.playerId === 0 : dataGame.playerId === 1))
-            c2d.fillText('You win!', c2d.canvas.width / 2, c2d.canvas.height / 2);
-        else if (status === gameState.FINISH)
-            c2d.fillText('You lose!', c2d.canvas.width / 2, c2d.canvas.height / 2);
-        else if (status === gameState.PAUSE)
-            c2d.fillText('Pause', c2d.canvas.width / 2, c2d.canvas.height / 2);
-        else if (status === gameState.STARTING)
-            c2d.fillText(countdown, c2d.canvas.width / 2, c2d.canvas.height / 2);
-        else if (status === gameState.CREATING)
-            c2d.fillText('Waiting for player', c2d.canvas.width / 2, c2d.canvas.height / 2);
     }
 
     useEffect(() => {
@@ -190,6 +213,7 @@ export default function GamePage() {
             }
             else if (searchParams.size == 1) {
                 let option = Object.fromEntries([...searchParams]);
+                console.log('Game Page :', option.invite, option.custom);
                 socket.emit('join-game', [option.invite, option.custom]);
             }
             else

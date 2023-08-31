@@ -13,7 +13,7 @@ export default class MatchMaking {
     ) {}
 
     handleLeave(user) {
-        // console.log('MatchMaking : handleLeave of', user?.username);
+        console.log('MatchMaking : handleLeave of', user?.username);
         if (user)
             this.games.forEach((game) => {
                 game.handleLeave(user);
@@ -22,7 +22,7 @@ export default class MatchMaking {
         while (index < this.nbOfGames) {
             if (this.games[index].canDelete()) {
                 this.games[index].playersLeave();
-                // console.log("Game", this.games[index].matchId, "deleted");
+                console.log("Game", this.games[index].matchId, "deleted");
                 this.games.splice(index, 1);
                 this.nbOfGames--;
             }
@@ -35,14 +35,14 @@ export default class MatchMaking {
         const newGame = new Game(++this.newGameId, player == null, custom, this.server, this.matchService);
         this.games.push(newGame);
         this.nbOfGames++;
-        // console.log('MatchMaking : New game', this.newGameId);
+        console.log('MatchMaking : New game', this.newGameId);
         newGame.handleJoin(user, false);
         if (player)
             newGame.handleJoin(player, true);
     }
 
     handleJoin(user, player, custom) {
-        // console.log('MatchMaking : handleJoin of', user.username);
+        console.log('MatchMaking : handleJoin of', user.username);
         if (player) {
             for (let game of this.games)
                 if (game.canJoinInvite(user)) {
