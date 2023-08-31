@@ -247,7 +247,7 @@ export async function getPath(path: string){
 export async function getUserByID(ID){
     var config = {
         method: 'get',
-        url: URL + '/users/id/' + ID,
+        url: URL + '/users/' + ID,
         withCredentials: true,
     };
     return axios(config);
@@ -262,6 +262,24 @@ export async function getUsers(){
     return axios(config);
 }
 
+export async function searchFriend(name: string){
+    const config = {
+        method: 'get',
+        url: URL + '/users/search/friend/'  +name,
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
+export async function getRatioAgainst(id1: number, id2: number){
+    const config = {
+        method: 'get',
+        url: URL + '/match/stats/' + id1 + "/" + id2,
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
 export async function getUserMatches(ID){
     var config = {
         method: 'get',
@@ -271,3 +289,11 @@ export async function getUserMatches(ID){
     return axios(config);
 }
 
+export async function getUserMatchesResume(ID){
+    var config = {
+        method: 'get',
+        url: URL + '/users/' + ID + '/matches-resume',
+        withCredentials: true,
+    };
+    return axios(config);
+}

@@ -1,7 +1,7 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {UserFriendship} from '@prisma/client';
 import { UserService } from '../user/user.service';
+import {UserFriendship} from "@prisma/client";
 
 @Injectable()
 export class FriendService {
@@ -14,6 +14,33 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
     if (initiatorId == acceptorId)
       throw new Error('Both initiatorId and acceptorId shouldn\'t be the same');
 
+    const oldFriendship = await this.prisma.userFriendship.findMany({
+      where: {
+        OR: [{
+          AND: [
+              {
+            senderId: initiatorId
+              },
+            {
+              targetId: acceptorId
+            }
+          ]
+        },
+          {
+            AND: [
+              {
+                targetId: initiatorId
+              },
+              {
+                senderId: acceptorId
+              }
+            ]
+          }
+
+        ]
+      }
+    });
+    if (oldFriendship.length > 0) return null;
     const userFriendship = await this.prisma.userFriendship.create({
       data: {
         senderId: initiatorId,
@@ -97,40 +124,6 @@ async createFriendRequest(initiatorId: number, acceptorId: number): Promise<User
     });
   }
 
-  async processInvitations(sender: number, ids: number[]): Promise<{ forbidden: number[], sent: number[] }> {
-    const forbidden = [];
-    const sent = [];
-
-    const friendships = await this.prisma.userFriendship.findMany({
-      where: {
-        senderId: sender,
-        AND: [{
-          targetId: {
-            in: ids,
-          },
-        }]
-      },
-      include: {
-        target: true,
-      }
-    });
-
-    for (const friendship of friendships) {
-      if (!friendship.acceptedAt) {
-        forbidden.push(friendship.target.id);
-      } else if (!forbidden.includes(friendship.target.id)) {
-        sent.push(friendship.target.id);
-      }
-    }
-    
-    for (const id of ids) {
-      if (!forbidden.includes(id) && !sent.includes(id)) {
-        forbidden.push(id);
-      }
-    }
-
-    return { forbidden, sent };
-  }
 
 
 

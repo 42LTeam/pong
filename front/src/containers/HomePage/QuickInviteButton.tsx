@@ -1,4 +1,7 @@
 import React from "react";
+import { useNavigate } from "react-router";
+import { getUserByID } from "../../api";
+import { listSubheaderClasses } from "@mui/material";
 
 type Props = {
     userID: number;
@@ -6,9 +9,12 @@ type Props = {
 
 export const QuickInviteButton = (props: Props): JSX.Element => {
     
+    const navigate = useNavigate();
+
     const inviteFriend = () => {
-        console.log("i wanna play with " + props.userID );
-        //to code with back (ev some more front)
+
+        const user = getUserByID(props.userID).then((response) =>
+        navigate('/game?id=' + props.userID + '&username=' + response.data.username + '&session=' + response.data.session));
     };
 
     return (

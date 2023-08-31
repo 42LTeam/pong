@@ -31,8 +31,9 @@ export default function NewMessagePopup({position, clear}: Props) {
     }
 
     const handlePopupSearch = async (event) => {
-        const search = event.target.value || '';
-        const {data} = await searchUser(search, {friendOnly: true});
+        const search = event.target.value;
+        if (!search) return         getAllUsers({notFriend: false, friendOnly: false}).then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
+        const {data} = await searchUser(search, {friendOnly: false});
         setSuggestions(data);
     }
 

@@ -34,10 +34,9 @@ export default function HomePage(){
 
                 </div>
                 <div className="frame-right">
-                    <SearchBar />
-                    {Array.from({ length: 35 }, (_, index) => (
-                        <FriendQuickInviteBubble key={index} userID={index} />
-                    ))} {/* A voir comment on fait pour boucler avec le back */}
+
+                <FriendQuickInvite />
+
                 </div>
             </div>
         </>

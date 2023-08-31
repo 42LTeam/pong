@@ -12,8 +12,6 @@
 .frame-left
 {
     display: flex;
-    width: 700px;
-    height: 533px;
     padding: 20px;
     flex-direction: column;
     align-items: center;
@@ -31,24 +29,8 @@
     align-self: stretch;
     border-radius: 10px;
     max-height: 80vh; /*a voir*/
-    overflow-y: scroll;
-    overflow: auto;
-    scrollbar-color: #2C3E50 #ECF0F1;
+    justify-content: center;
 }
-
-/* .frame-right::-webkit-scrollbar{
-    visibility: none;
-    width: 30px;
-}
-
-.frame-right::-webkit-scrollbar-thumb{
-    background-color :#2C3E50;
-}
-
-.frame-right::-webkit-scrollbar-thumb:hover{
-    background-color: #2C3E50;
-} */
-/* ^^^ apparemment pas sur firefox mais valable pour chrome ^^^*/
 
 .skin-selection
 {
@@ -127,7 +109,7 @@
 
 .quick-invite-bubble{
     display: flex;
-    padding: 5px 10px;
+    padding: 5px;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
@@ -141,13 +123,16 @@
     align-items: center;
     gap: 8px;
     align-self: stretch;
+    min-width: 130px;   /**to see with max username length*/
 }
 
 .quick-invite-profile-picture{
     width: 30px;
     height: 30px;
-    border-radius: 90px;
+    border-radius: 50%;
     background: #7F8C8D;
+    background-size: 100%;
+    background-position: 50% 50%;
 }
 
 .quick-invite-pseudo{
@@ -157,7 +142,7 @@
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
-    line-height: normal; 
+    line-height: normal;
 }
 
 .quick-invite-ratio{
@@ -261,4 +246,15 @@
     width: 57px;
     height: 49px;
     cursor: pointer;
+}
+
+.quick-invite-suggestions {
+    overflow-y: auto;
+    display: flex;
+    height: 250px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    flex: 1 0 0;
 }

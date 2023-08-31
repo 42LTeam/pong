@@ -52,7 +52,7 @@ export default function LeaderboardPlaceBubble(props: Props) {
             </div>
 
             <div className="leaderboard-data">
-            {props.user.playedMatch ? `${props.user[statName]} ${description}` : "Did not play any match"}
+            {props.user.playedMatch ? `${props.user[statName].toFixed(2)} ${description}` : "Did not play any match"}
             </div>
 
             <TextIcon style="placement-icon" text={ props.user.playedMatch ? `${props.rank}` : "-" }/>

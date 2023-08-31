@@ -4,6 +4,7 @@ SRCS_DIR		:=	./
 
 YML_FILE		:=	$(SRCS_DIR)docker-compose.yml
 ENV_FILE		:=	$(SRCS_DIR).env
+DIST_FOLDER		:=	$(SRCS_DIR)back/dist
 
 DOCKER_COMPOSE	:=	@docker compose -f $(YML_FILE) --env-file $(ENV_FILE) -p $(NAME)
 
@@ -52,17 +53,29 @@ env:
 					echo $(CYAN) "$(ENV_FILE) is already in place" $(RESET_COLOR); \
 				fi
 
+dist:
+				@if [ ! -e $(DIST_FOLDER) ]; then \
+					echo $(RED) "$(DIST_FOLDER) does not exist." $(RESET_COLOR); \
+				else \
+					echo $(CYAN) "$(DIST_FOLDER) is already in place => erase it" $(RESET_COLOR) && rm -rf $(DIST_FOLDER); \
+				fi
+
+
 logs:
 	@echo $(BOLD_GREEN) '🔮' - LOGS: logs of containers $(RESET_COLOR)
 	$(DOCKER_COMPOSE) logs -f
 
-build: env
-	@echo $(BOLD_GREEN) '🚧' - BUILD: Build development containers $(RESET_COLOR)
+build: env dist
+	@echo $(BOLD_GREEN) '🚧' - BUILD: Build development containers + erase dist folder$(RESET_COLOR)
 	$(DOCKER_COMPOSE) build
 
 up: env
 	@echo $(GREEN) '🚀' - UP: Start development containers$(RESET_COLOR)
-	$(DOCKER_COMPOSE) up
+	$(DOCKER_COMPOSE) up -d
+
+action: build
+	@echo $(GREEN) '🚀' - UP: Start development containers$(RESET_COLOR)
+	$(DOCKER_COMPOSE) up -d
 
 stop:
 	@echo $(RED) '✋' - STOP: Stop development containers$(RESET_COLOR)
