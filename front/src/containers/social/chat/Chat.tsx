@@ -76,7 +76,7 @@ export default function Chat (props:ChatProps){
                         <>
                             <Message
                                 key={current.id}
-                                sender={current.user?.avatar}
+                                sender={current.user}
                                 content={current.content}
                                 date={new Date(current.created_at).toTimeString().slice(0,5)}
                                 sent={current.userId == user.id}
@@ -106,7 +106,7 @@ export default function Chat (props:ChatProps){
                         <>
                             <Message
                                 key={current.id}
-                                sender={current.user?.avatar}
+                                sender={current.user}
                                 content={current.content}
                                 date={new Date(current.created_at).toTimeString().slice(0,5)}
                                 sent={current.userId == user.id}
