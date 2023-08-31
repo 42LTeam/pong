@@ -1,8 +1,8 @@
-import {Children, useContext, useState} from "react";
+import {Children, useContext, useEffect, useState} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
-import {getConversation, removeFriendship, getUserByID, blockUser} from "../../api";
+import {getConversation, removeFriendship, getUserByID, blockUser, unblockUser} from "../../api";
 import {AuthContext} from "../../containers/Auth";
 
 type Props = {
@@ -10,12 +10,13 @@ type Props = {
     onClick?: any,
     children?: any,
     unremovable?: boolean,
+    blocked?: boolean,
 }
 
 export default function Friend(props: Props){
     const user = useContext(AuthContext);
     const navigate = useNavigate();
-    const [display, setDisplay] = useState(null);
+    const [display, setDisplay] = useState(user.blockList.includes(props.friend.id) && !props.blocked ? 'none' : null);
     const buttons = [
         {
             text: 'Profile',
@@ -38,20 +39,35 @@ export default function Friend(props: Props){
         },
         {separator: true},
     ];
-    if (!props.unremovable)
+
+    useEffect(() => {
+        if (props.blocked) {
+            buttons.push({
+                text: 'Debloquer',
+                handleClick: () => {
+                    unblockUser(props.friend?.id);
+                    user.blockList.splice(user.blockList.indexOf(props.friend?.id), 1);
+                    setDisplay('none');
+                }
+            });
+        } else if (!props.unremovable )
+            buttons.push({
+                text: 'Retirer l\'ami',
+                handleClick: () => {
+                    removeFriendship(props.friend.id).then(() => setDisplay('none'));
+                },
+            })
+
+    })
+
+    if (!props.blocked)
         buttons.push({
-            text: 'Retirer l\'ami',
+            text: 'Bloquer',
             handleClick: () => {
-                removeFriendship(props.friend.id).then(() => setDisplay('none'));
+                blockUser(props.friend?.id);
+                user.blockList.push(props.friend?.id);
             },
-        })
-    buttons.push({
-        text: 'Bloquer',
-        handleClick: () => {
-            blockUser(props.friend?.id);
-            user.blockList.push(props.friend?.id);
-        },
-    });
+        });
 
     const buttonProps = {
         buttonProps: {

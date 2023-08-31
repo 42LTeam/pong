@@ -11,13 +11,13 @@ const states = ["En ligne","Tous","En attente","Bloqué","Ajouter"];
 const paths = ["/users/friend/online/","/users/friend/","/users/friend-request/pending/","/block/blocked/"]
 
 export default function Friends(){
+    const user = useContext(AuthContext);
     const [state, setState] = useState("En ligne");
 
     const handleClick = (text) => {
         setState(text);
         setFriends(null);
     }
-    const user = useContext(AuthContext)
 
     const [friends, setFriends] = useState(null);
 
@@ -34,10 +34,10 @@ export default function Friends(){
 
     return (
 
-        <div className="friends">
+        <div className="friends" >
             <FriendTabs key="friendtabs" states={states} handleClick={handleClick} state={state}></FriendTabs>
             <div className="horizontal-separator"></div>
-            {state == states[states.length - 1] ? (<AddFriend ></AddFriend>) : (<Friendlist reset={resetFriend} friends={friends} pending={state == states[2]}></Friendlist>)}
+            {state == states[states.length - 1] ? (<AddFriend ></AddFriend>) : (<Friendlist reset={resetFriend} friends={friends} pending={state == states[2]} blocked={state === states[3]}></Friendlist>)}
         </div>
     );
 }
