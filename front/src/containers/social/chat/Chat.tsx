@@ -28,7 +28,8 @@ export default function Chat (props:ChatProps){
         const tmp_messages = [...data.messages].reverse();
         setMessages(tmp_messages);
         setLastRead(data.lastRead);
-        readMessage(props.channel, tmp_messages[0].id);
+        if( tmp_messages.length)
+            readMessage(props.channel, tmp_messages[0].id);
     }
 
     useEffect(() => {
