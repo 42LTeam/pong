@@ -10,6 +10,7 @@ type Props = {
     onClick?: any,
     children?: any,
     unremovable?: boolean,
+    unblockable?: boolean,
     blocked?: boolean,
 }
 
@@ -41,7 +42,7 @@ export default function Friend(props: Props){
     ];
 
     useEffect(() => {
-        if (props.blocked) {
+        if (props.blocked ) {
             buttons.push({
                 text: 'Debloquer',
                 handleClick: () => {
@@ -58,16 +59,18 @@ export default function Friend(props: Props){
                 },
             })
 
+        if (!props.unblockable || props.blocked)
+            buttons.push({
+                text: 'Bloquer',
+                handleClick: () => {
+                    blockUser(props.friend?.id);
+                    user.blockList.push(props.friend?.id);
+                },
+            });
+
     })
 
-    if (!props.blocked)
-        buttons.push({
-            text: 'Bloquer',
-            handleClick: () => {
-                blockUser(props.friend?.id);
-                user.blockList.push(props.friend?.id);
-            },
-        });
+
 
     const buttonProps = {
         buttonProps: {
