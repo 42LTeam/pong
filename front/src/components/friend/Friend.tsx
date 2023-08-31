@@ -1,8 +1,9 @@
-import {Children, useState} from "react";
+import {Children, useContext, useState} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
-import {getConversation, removeFriendship, getUserByID} from "../../api";
+import {getConversation, removeFriendship, getUserByID, blockUser} from "../../api";
+import {AuthContext} from "../../containers/Auth";
 
 type Props = {
     friend: any,
@@ -12,7 +13,7 @@ type Props = {
 }
 
 export default function Friend(props: Props){
-
+    const user = useContext(AuthContext);
     const navigate = useNavigate();
     const [display, setDisplay] = useState(null);
     const buttons = [
@@ -46,7 +47,10 @@ export default function Friend(props: Props){
         })
     buttons.push({
         text: 'Bloquer',
-        handleClick: () => alert('TODO'),
+        handleClick: () => {
+            blockUser(props.friend?.id);
+            user.blockList.push(props.friend?.id);
+        },
     });
 
     const buttonProps = {

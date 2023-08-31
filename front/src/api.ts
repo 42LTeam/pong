@@ -29,6 +29,18 @@ export async function getStatus(){
     return axios(config);
 }
 
+export async function blockUser(blockedId: number){
+    var config = {
+        method: 'post',
+        url: URL + '/block/create',
+        withCredentials: true,
+        data: {
+            blockedId
+        }
+    };
+    return axios(config);
+}
+
 export async function updateUserAvatar(id, avatarUrl){
     const config = {
         method: 'put',
