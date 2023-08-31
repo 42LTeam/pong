@@ -41,6 +41,20 @@ export async function blockUser(blockedId: number){
     return axios(config);
 }
 
+
+export async function unblockUser(blockedId: number){
+    var config = {
+        method: 'delete',
+        url: URL + '/block/remove',
+        withCredentials: true,
+        data: {
+            blockedId
+        }
+    };
+    return axios(config);
+}
+
+
 export async function updateUserAvatar(id, avatarUrl){
     const config = {
         method: 'put',
