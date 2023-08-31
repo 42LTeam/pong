@@ -1,5 +1,5 @@
 import TextInput from "../../../components/utils/TextInput";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Friend from "../../../components/friend/Friend";
 import {getAllUsers, searchUser, sendFriendRequest} from "../../../api";
 import Button from "../../../components/utils/Button";
@@ -43,9 +43,9 @@ export default function AddFriend(){
         checked.forEach(current => sendFriendRequest(current.id));
         setChecked([]);
     }
-
-    if (!suggestions.length)
+    useEffect(() => {
         getAllUsers({notFriend: true}).then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
+    }, []);
 
     return (
         <>
