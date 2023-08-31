@@ -112,7 +112,7 @@ export class UserController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get user by id' })
-  async getUserById(@Param('id', UserIdValidationPipe, ParseIntPipe) id: number): Promise<User | null> {
+  async getUserById(@Param('id', ParseIntPipe, UserIdValidationPipe,) id: number): Promise<User | null> {
     return this.userService.getUserById(Number(id));
   }
 
@@ -174,7 +174,7 @@ async updateUserName(
   }
 
   @Get(':id/status')
-  async getUserStatus(@Param('id', UserIdValidationPipe) id: string): Promise<Status> {
+  async getUserStatus(@Param('id', ParseIntPipe, UserIdValidationPipe) id: string): Promise<Status> {
     return this.userService.getUserStatusById(Number(id));
   }
 
