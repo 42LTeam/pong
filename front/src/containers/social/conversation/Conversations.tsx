@@ -7,6 +7,7 @@ import NewMessagePopup from "./NewMessagePopup";
 import SidePanel from "../../../components/utils/SidePanel";
 import {ApplicationContext} from "../../Application";
 import {useNavigate} from "react-router-dom";
+import {AuthContext} from "../../Auth";
 
 type Props = {
     state: any,
@@ -16,6 +17,7 @@ export default function Conversations({ state }: Props){
     const [conversations, setConversations] = useState([]);
     const [popUpPosition, setPopUpPosition] = useState<{left: number, top: number}>(null);
     const application = useContext(ApplicationContext);
+    const user = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handlePopUp = (event) => {
@@ -62,11 +64,14 @@ export default function Conversations({ state }: Props){
                                 clear={clear}>
                             </NewMessagePopup>}
                         {
-                            conversations.sort((a, b) => {
+                            conversations.filter(c => !c.conv || !user.blockList.includes(c.users[0].user.id))
+                                .sort((a, b) => {
                                 const a_value = a.lastMessage ? a.lastMessage.created_at : a.created_at;
                                 const b_value = b.lastMessage ? b.lastMessage.created_at : b.created_at;
                                 return a_value < b_value ? 1 : -1;
-                            }).map((conversation) => {
+                            })
+                                .map((conversation) => {
+                                console.log(conversation);
                                 return (
                                     <Conversation
                                         handleClick={() => setState(conversation.id)}
