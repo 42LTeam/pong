@@ -98,9 +98,11 @@ const Application = function (){
         }
 
         const onInviteGame = (args) => {
-            console.log(args[1].id, args[0].username + " invites " + args[1].username, "to play a Pong game", args[0].avatar, "/game");
+            console.log(args[1].id, args[0].username + " invites " + args[1].username, "to play a " + (args[2] ? "custom" : "standard") + " Pong game", args[0].avatar, "/game");
             if (!window.location.pathname.includes("/game"))
-                sendNotification(args[1].id, args[0].username + " invites " + args[1].username, "to play a Pong game", args[0].avatar, "/game?invite=true");
+                sendNotification(args[1].id, args[0].username + " invites " + args[1].username,
+                    "to play a " + (args[2] ? "custom" : "standard") + " Pong game",
+                    args[0].avatar, "/game?invite=true&id=" + args[0].id + "&custom=" + args[2]);
         }
 
         const onGameNotFound = (args) => {

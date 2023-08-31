@@ -26,12 +26,16 @@ export default function Friend(props: Props){
         },
         {separator: true},
         {
-            text: 'Match amical',
+            text: 'Match standard',
             handleClick: () => getUserByID(props.friend.id).then((response) =>
-                navigate('/game?id=' + props.friend.id + '&username=' + response.data.username + '&session=' + response.data.session)),
+                navigate('/game?id=' + props.friend.id + '&username=' + response.data.username + '&session=' + response.data.session + '&custom=false')),
         },
-
-
+        {
+            text: 'Match custom',
+            handleClick: () => getUserByID(props.friend.id).then((response) =>
+                navigate('/game?id=' + props.friend.id + '&username=' + response.data.username + '&session=' + response.data.session + '&custom=true')),
+        },
+        {separator: true},
     ];
     if (!props.unremovable)
         buttons.push({
