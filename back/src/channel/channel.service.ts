@@ -239,8 +239,11 @@ export class ChannelService {
 
 
   async banUserFromChannel(channelId: number, userId: number): Promise<any> {
-    return this.prisma.userChannel.update({
-      where: { id: userId },
+    return this.prisma.userChannel.updateMany({
+      where: { 
+        userId: userId,
+        id: channelId
+       },
       data: {
         isBanned: true
       },
@@ -248,8 +251,11 @@ export class ChannelService {
   }
 
   async unbanUserFromChannel(channelId: number, userId: number): Promise<any> {
-    return this.prisma.userChannel.update({
-      where: { id: userId },
+    return this.prisma.userChannel.updateMany({
+      where: {
+        channelId: userId,
+        userId: userId
+       },
       data: {
         isBanned: false
       },
