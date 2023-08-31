@@ -4,6 +4,7 @@ import { BlockService } from './block.service';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import {FriendService} from "../friend/friend.service";
  import {IsNotEmpty, IsNumber} from "@nestjs/class-validator";
+ import {Block, User} from "@prisma/client";
 
 class CreateBlockDto {
 
@@ -29,7 +30,7 @@ export class BlockController {
   async createBlockRequest(@Body() createBlockDto: CreateBlockDto, @Req() req): Promise<Block> {
     const user = await req.user;
     const ret = await this.blockService.createBlockRequest(user.id, createBlockDto.blockedId);
-    await this.friendService.removeFriendship(createBlockDto.blockerId, createBlockDto.blockedId);
+    await this.friendService.removeFriendship(user.id, createBlockDto.blockedId);
     return ret;
   }
 
@@ -43,11 +44,12 @@ export class BlockController {
 
   @Delete('/remove')
   @HttpCode(204)
-  @ApiOperation({ summary: 'Remove a block request' })
-  @ApiResponse({ status: 204, description: 'The block request has been successfully removed.'})
-  @ApiBody({ type: CreateBlockDto })
-  removeBlockRequest(@Body() removeBlockDto: CreateBlockDto): Promise<Block> {
-    return this.blockService.removeBlockRequest(removeBlockDto.blockerId, removeBlockDto.blockedId);
+  @ApiOperation({summary: 'Remove a block request'})
+  @ApiResponse({status: 204, description: 'The block request has been successfully removed.'})
+  @ApiBody({type: CreateBlockDto})
+  async removeBlockRequest(@Body() removeBlockDto: CreateBlockDto, @Req() req): Promise<Block> {
+    const user = await req.user;
+    return this.blockService.removeBlockRequest(user.id, removeBlockDto.blockedId);
   }
 
   @Get('blocks/:id')
