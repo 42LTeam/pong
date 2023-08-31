@@ -32,7 +32,7 @@ export default function AddFriend(){
             onClick={() => toggleCheck(current, !checked.includes(current))}>
                 <div className="align-left">
                     <input
-                        checked={checked.includes(current)}
+                        defaultChecked={checked.includes(current)}
                         type="checkbox"/>
                 </div>
             </Friend>
