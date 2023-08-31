@@ -146,7 +146,7 @@ const Application = function (){
                 newConversations: [],
             }
         })
-
+    else
     return (
         <>
             <BrowserRouter>
