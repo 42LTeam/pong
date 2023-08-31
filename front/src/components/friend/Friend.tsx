@@ -25,6 +25,25 @@ export default function Friend(props: Props){
             handleClick: () => getConversation(props.friend.id).then((response) => navigate('/social/' + response.data.id)),
         },
         {separator: true},
+      // si c'est moi et que c'est channel
+        {
+            text: 'Quitter le channel',
+            handleClick: () => getConversation(props.friend.id).then((response) => navigate('/social/' + response.data.id)),
+        },
+      // si c'est pas moi et que je suis admin et que c'est channel
+        {
+            text: 'Kick',
+            // kick l'user selectionné
+        },
+        {
+            text: 'Ban',
+            // ban l'user selectionné
+        },
+        {
+            text: 'Mute',
+            // Mute l'user selectionné
+        },
+        {separator: true},
         {
             text: 'Match amical',
             handleClick: () => getUserByID(props.friend.id).then((response) =>
