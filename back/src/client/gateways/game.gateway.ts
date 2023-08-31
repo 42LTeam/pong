@@ -22,10 +22,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     server;
 
-    constructor(
-        private clientService: ClientService,
-        private matchService: MatchService
-    ) {}
+    constructor(private clientService: ClientService, private matchService: MatchService) {}
 
     async handleConnection(client: any, ...args): Promise<any> {
         if (!this.matchMaking)

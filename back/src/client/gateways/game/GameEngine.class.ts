@@ -8,11 +8,7 @@ export default class GameEngine {
 	ball: GameBall;
 	score = [0, 0];
 
-	constructor(
-		public game : Game
-	) {
-		this.ball = new GameBall(this.game);
-	}
+	constructor(public game : Game) {this.ball = new GameBall(this.game);}
 
 	// printScores() {
 	// 	console.log(
@@ -26,15 +22,14 @@ export default class GameEngine {
 	// }
 
 	checkScores() {
-		if (this.ball.position.x < this.ball.BALL_SEMI_SIZE * 3) this.score[1]++;
+		if (this.ball.position.x < this.ball.BALL_SEMI_SIZE * 3)
+			this.score[1]++;
 		else if (this.ball.position.x > 1 - this.ball.BALL_SEMI_SIZE * 3)
 			this.score[0]++;
-		else return false;
+		else
+			return false;
 		// this.printScores();
-		if (
-			this.score[0] == this.WIN_SCORE ||
-			this.score[1] == this.WIN_SCORE
-		) {
+		if (this.score[0] == this.WIN_SCORE || this.score[1] == this.WIN_SCORE) {
 			// console.log(
 			// 	'Game',
 			// 	this.game.matchId,

@@ -7,10 +7,7 @@ export default class MatchMaking {
     newGameId = 0;
     nbOfGames = 0;
 
-    constructor(
-        private server,
-        private matchService: MatchService
-    ) {}
+    constructor(private server, private matchService: MatchService) {}
 
     handleLeave(user) {
         console.log('MatchMaking : handleLeave of', user?.username);

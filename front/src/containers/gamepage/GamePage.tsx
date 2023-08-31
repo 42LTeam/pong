@@ -16,7 +16,7 @@ export default function GamePage() {
     const canvas = useRef(null);
     const [searchParams] = useSearchParams();
 
-    const dataGame={
+    const dataGame= {
         matchId: 0,
         playerId: 0,
         moveUp: false,
@@ -27,7 +27,7 @@ export default function GamePage() {
         y: 0.5,
         semiSize: 0
     };
-    const players={
+    const players= {
         player0: {
             x: 0,
             y: 0.5,
