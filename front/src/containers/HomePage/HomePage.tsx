@@ -2,15 +2,15 @@ import React from 'react';
 
 import {PlayerSkin} from "./PlayerSkin";
 import {BallSkin} from "./BallSkin"
-import {LaunchButton} from "./LaunchButton"
-import {LaunchCustomButton} from "./LaunchCustomButton"
 import SearchBar from "./SearchBar";
 import FriendQuickInviteBubble from './FriendQuickInviteBubble';
 
 import "../../css/homepage.css"
+import Button from "../../components/utils/Button";
+import {useNavigate} from "react-router-dom";
 
-export default function HomePage({user}){
-
+export default function HomePage(){
+    const navigate = useNavigate();
     return (
         <>
             <div className="frame">
@@ -18,8 +18,18 @@ export default function HomePage({user}){
                     <div className="skin-selection">
                         <PlayerSkin />
                         <BallSkin />
-                        <LaunchButton />
-                        <LaunchCustomButton />
+                        <Button handleClick={() => navigate('/game')} text={"PLAY"} clickable buttonProps={{style: {
+                                width: '220px',
+                                height: '60px',
+                                fontSize: '37px'
+                            }
+                        }}></Button>
+                        <Button handleClick={() => navigate('/game?custom=true')} text={"CUSTOM"} clickable buttonProps={{style: {
+                                width: '220px',
+                                height: '60px',
+                                fontSize: '37px'
+                            }
+                        }}></Button>
                     </div>
 
                 </div>
