@@ -60,9 +60,11 @@ export default function ProfilePage(){
                 <div className="user-profile-title">{user?.username}</div>
                 
                 <div className='match-history'>
-                    {matches.map(match => (
+                    {matches.length > 0 ?
+                    (matches.map(match => (
                     <MatchHistoryBubble user={user} matchResume={match} />
-                    ))}
+                    ))) :
+                    <h2>No match played for the moment</h2>}
                 </div>
 
             </div>
