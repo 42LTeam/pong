@@ -31,8 +31,8 @@ export default function AddFriend(){
             <Friend key={"popupfriend-" + current.id} friend={current}
             onClick={() => toggleCheck(current, !checked.includes(current))}>
                 <div className="align-left">
-                    <input
-                        defaultChecked={checked.includes(current)}
+                    <input readOnly
+                        checked={checked.includes(current)}
                         type="checkbox"/>
                 </div>
             </Friend>

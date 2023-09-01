@@ -23,8 +23,8 @@ export default function NewMessagePopup({position, clear}: Props) {
             <Friend key={"popupfriend-" + current.id} friend={current}
                     onClick={() => toggleCheck(current.username, !checked.includes(current.username))}>
                 <div className="align-left">
-                    <input
-                        {...(checked.filter(c => c == current.username).length ? {defaultChecked:true}:{checked:false})}  type="checkbox"/>
+                    <input readOnly
+                        {...(checked.filter(c => c == current.username).length ? {checked:true}:{checked:false})}  type="checkbox"/>
                 </div>
             </Friend>
         )
