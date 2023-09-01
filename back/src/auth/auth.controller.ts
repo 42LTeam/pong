@@ -4,13 +4,16 @@ import {FortyTwoAuthGuard} from "./guards/fortytwo.guard";
 import {AuthenticatedGuard} from "./guards/authenticated.guard";
 import {ClientService} from "../client/client.service";
 import {BlockService} from "../block/block.service";
+import {FriendService} from "../friend/friend.service";
 
 @Controller('auth')
 export class AuthController {
 
 
     constructor(private clientService:ClientService,
-                private blockService:BlockService) {
+                private blockService:BlockService,
+                private friendService:FriendService
+                ) {
     }
     @Get('login')
     @UseGuards(FortyTwoAuthGuard)
@@ -29,10 +32,9 @@ export class AuthController {
         const ret = await request.user;
         const blocked = await this.blockService.getBlockedUsers(ret.id);
         ret.blockList = blocked.map(c => {
-            console.log('auth/status', JSON.stringify(c));
             return c.id;
         });
-        console.log('aut/status',blocked.length, ret.id);
+        ret.friendList = await this.friendService.getUserFriendships(ret.id);
         return await request.user;
     }
 

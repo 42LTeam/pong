@@ -16,6 +16,8 @@ export interface User {
     playedMatch: boolean,
     leaderboard : boolean,
     blockList?: number[],
+    friendList?: number[],
+
 }
 
 export const AuthContext = createContext<User | undefined>(undefined);
