@@ -8,9 +8,8 @@ type Props = {
     friends: any,
     pending: boolean,
     reset: any,
-    blocked: boolean
 }
-export default function FriendList({friends, pending, reset, blocked} : Props){
+export default function FriendList({friends, pending, reset} : Props){
     const handleAccept = async (current) => {
         await acceptFriendship(current.friendShipId);
         reset();
@@ -27,7 +26,7 @@ export default function FriendList({friends, pending, reset, blocked} : Props){
     return (<>
         {friends?.map((current) => {
             return (
-              <Friend key={current.username +'friendlist'} friend={current} blocked={blocked} onClick={pending ? () => {} : null}>
+              <Friend friendlist key={current.username +'friendlist'} friend={current} onClick={pending ? () => {} : null}>
                   {pending ?
                       <div className="align-left">
                           <Approve handleClick={() => handleAccept(current)}></Approve>

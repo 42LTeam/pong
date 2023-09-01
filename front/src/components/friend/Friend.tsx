@@ -9,15 +9,15 @@ type Props = {
     friend: any,
     onClick?: any,
     children?: any,
-    unremovable?: boolean,
-    unblockable?: boolean,
-    blocked?: boolean,
+    friendlist? :boolean,
 }
 
 export default function Friend(props: Props){
     const user = useContext(AuthContext);
     const navigate = useNavigate();
-    const [display, setDisplay] = useState(user.blockList.includes(props.friend.id) && !props.blocked ? 'none' : null);
+    const blocked = user.blockList.includes(props.friend.id);
+    const isFriend = user.friendList.includes(props.friend.id);
+    const [display, setDisplay] = useState(null);
     const buttons = [
         {
             text: 'Profile',
@@ -42,7 +42,7 @@ export default function Friend(props: Props){
     ];
 
     useEffect(() => {
-        if (props.blocked ) {
+        if (blocked) {
             buttons.push({
                 text: 'Debloquer',
                 handleClick: () => {
@@ -51,15 +51,8 @@ export default function Friend(props: Props){
                     setDisplay('none');
                 }
             });
-        } else if (!props.unremovable )
-            buttons.push({
-                text: 'Retirer l\'ami',
-                handleClick: () => {
-                    removeFriendship(props.friend.id).then(() => setDisplay('none'));
-                },
-            })
-
-        if (!props.unblockable || props.blocked)
+        }
+        else
             buttons.push({
                 text: 'Bloquer',
                 handleClick: () => {
@@ -67,6 +60,16 @@ export default function Friend(props: Props){
                     user.blockList.push(props.friend?.id);
                 },
             });
+        console.log(user.friendList)
+        if (isFriend) {
+            buttons.push({
+                text: 'Retirer l\'ami',
+                handleClick: () => {
+                    removeFriendship(props.friend.id).then(() => setDisplay('none'));
+                },
+            })
+
+        }
 
     })
 
@@ -94,10 +97,10 @@ export default function Friend(props: Props){
     return (
         <ContextMenu  buttons={buttons} buttonProps={buttonProps}>
             <div onClick={() => {props.onClick ? props.onClick(props.friend) : navigateToConversation(props.friend)}} className="friend" style={display ? {display: 'none'} : null}>
-                <Avatar width="48px" height="48px" url={props.friend?.avatar}></Avatar>
+                <Avatar width="48px" height="48px" url={ !props.friendlist && blocked ? null :  props.friend?.avatar}></Avatar>
 
                 <div className="conversation-content">
-                    <div className="conversation-username">{props.friend?.username}</div>
+                    <div className="conversation-username">{!props.friendlist && blocked ? 'Utilisateur bloqué' : props.friend?.username}</div>
                     <div className="conversation-preview">{props.friend?.status}</div>
                 </div>
                 {Children.map(props.children, child => <>{child}</>)}
