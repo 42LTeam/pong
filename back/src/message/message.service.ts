@@ -65,6 +65,7 @@ export class MessageService {
         user: {
           select: {
             avatar: true,
+            id: true,
           },
         },
       }
