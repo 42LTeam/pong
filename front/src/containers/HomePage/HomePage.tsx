@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {PlayerSkin} from "./PlayerSkin";
-import {BallSkin} from "./BallSkin"
+import {BallSkin} from "./BallSkin";
 
 import "../../css/homepage.css"
 import Button from "../../components/utils/Button";
@@ -33,9 +33,7 @@ export default function HomePage(){
 
                 </div>
                 <div className="frame-right">
-
-                <FriendQuickInvite />
-
+                    <FriendQuickInvite></FriendQuickInvite>
                 </div>
             </div>
         </>
