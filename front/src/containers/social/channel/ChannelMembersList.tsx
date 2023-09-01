@@ -29,7 +29,7 @@ export default function ChannelMembersList({ channelId }: ChannelMembersListProp
       body={
         <>
           {ChannelAllMembers.map( (current) => {
-              return (<Friend friend={current.user} ></Friend>);
+              return (<Friend key={'channelmemeberlist' + current.id} friend={current.user} ></Friend>);
           })}
         </>
       }
