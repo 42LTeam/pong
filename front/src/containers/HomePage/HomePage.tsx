@@ -1,13 +1,12 @@
 import React from 'react';
 
 import {PlayerSkin} from "./PlayerSkin";
-import {BallSkin} from "./BallSkin"
-import SearchBar from "./SearchBar";
-import FriendQuickInviteBubble from './FriendQuickInviteBubble';
+import {BallSkin} from "./BallSkin";
 
 import "../../css/homepage.css"
 import Button from "../../components/utils/Button";
 import {useNavigate} from "react-router-dom";
+import FriendQuickInvite from "./FriendQuickInvite";
 
 export default function HomePage(){
     const navigate = useNavigate();
@@ -34,9 +33,7 @@ export default function HomePage(){
 
                 </div>
                 <div className="frame-right">
-
-                <FriendQuickInvite />
-
+                    <FriendQuickInvite></FriendQuickInvite>
                 </div>
             </div>
         </>

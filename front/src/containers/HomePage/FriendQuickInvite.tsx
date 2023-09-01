@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import TextInput from "../../components/utils/TextInput";
 import { searchFriend, getFriendOfUser } from "../../api";
-import { AuthContext, User } from "../Auth";
+import { AuthContext } from "../Auth";
 import FriendQuickInviteBubble from "./FriendQuickInviteBubble";
 
 export default function FriendQuickInvite() {
