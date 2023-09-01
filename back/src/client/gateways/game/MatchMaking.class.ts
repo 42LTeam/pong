@@ -50,7 +50,7 @@ export default class MatchMaking {
         }
         else {
             for (let game of this.games)
-                if (game.onGame(user.id) && game.started) {
+                if (game.onGame(user.id)/* && game.started*/) {
                     game.handleJoin(user, false);
                     return;
                 }
