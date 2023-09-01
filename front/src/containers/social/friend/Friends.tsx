@@ -37,7 +37,7 @@ export default function Friends(){
         <div className="friends" >
             <FriendTabs key="friendtabs" states={states} handleClick={handleClick} state={state}></FriendTabs>
             <div className="horizontal-separator"></div>
-            {state == states[states.length - 1] ? (<AddFriend ></AddFriend>) : (<Friendlist reset={resetFriend} friends={friends} pending={state == states[2]} blocked={state === states[3]}></Friendlist>)}
+            {state == states[states.length - 1] ? (<AddFriend ></AddFriend>) : (<Friendlist reset={resetFriend} friends={friends} pending={state == states[2]}></Friendlist>)}
         </div>
     );
 }
