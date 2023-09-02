@@ -1,7 +1,7 @@
 import {Controller, Get, Req, Res, UseGuards} from '@nestjs/common';
 import {Response} from "express";
 import {FortyTwoAuthGuard} from "./guards/fortytwo.guard";
-import {AuthenticatedGuard} from "./guards/authenticated.guard";
+import {AuthenticatedGuard, TotpGuard} from "./guards/authenticated.guard";
 import {ClientService} from "../client/client.service";
 import {BlockService} from "../block/block.service";
 import {FriendService} from "../friend/friend.service";
@@ -26,8 +26,12 @@ export class AuthController {
         res.redirect(localhostfront);
 
     }
+
+
+
+
     @Get('status')
-    @UseGuards(AuthenticatedGuard)
+    @UseGuards(TotpGuard)
     async status(@Req() request) {
         const ret = await request.user;
         const blocked = await this.blockService.getBlockedUsers(ret.id);
@@ -35,7 +39,7 @@ export class AuthController {
             return c.id;
         });
         ret.friendList = await this.friendService.getUserFriendships(ret.id);
-        return await request.user;
+        return {user :await request.user, destination: !request.session.totp ? '2fa' : ''};
     }
 
     @Get('socketId')

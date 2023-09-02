@@ -104,7 +104,6 @@ export class UserController {
   @Get()
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Get all users' })
-  @ApiBody({ type: SearchDTO })
   async getAllUsers(@Req() req, @Query('notFriend', ParseBoolPipe) notFriend: boolean): Promise<User[]> {
     const user = await req.user;
     return this.userService.getAllUsers(user.id, { notFriend });
