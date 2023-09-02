@@ -4,6 +4,7 @@ import {createContext, useEffect, useState} from 'react';
 import {authSocketId, getStatus, socket} from "../api";
 import Application from "./Application";
 import "../css/main.css";
+import DoubleAuth from "./DoubleAuth";
 
 
 export interface User {
@@ -24,15 +25,16 @@ export const AuthContext = createContext<User | undefined>(undefined);
 
 function Auth() {
     const [wsConnected, setConnected] = useState(false);
-
+    const [destination, setDestination] = useState(null);
     const [user, setUser] = useState<User>(null);
     const localhostback = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':3000/auth/login' : 'http://localhost:3000/auth/login';
     useEffect(() => {
         if (!user)
         getStatus()
             .then(function (response) {
-                setUser(response.data)
-
+                setUser(response.data.user);
+                setDestination(response.data.destination);
+                console.log(response.data);
             })
             .catch(function () {
                 window.location.replace(localhostback);
@@ -67,7 +69,9 @@ function Auth() {
 
     return (
         <AuthContext.Provider value={user}>
-            <Application></Application>
+            {destination == '2fa' ?
+                <DoubleAuth></DoubleAuth>
+                : <Application></Application>}
         </AuthContext.Provider>
     );
 }
