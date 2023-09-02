@@ -153,7 +153,7 @@ const Application = function (){
                 <ApplicationContext.Provider value={application}>
                     <Header></Header>
                     <Routes>
-                        <Route index path={PATHS.home} element={<HomePage user={user}/>} />
+                        <Route index path={PATHS.home} element={<HomePage />} />
                         <Route path={PATHS.social+'/:channelId?'} element={<SocialBody key="chatbody"/>} />
                         <Route path={PATHS.settings} element={<Setting />} />
                         <Route path={`${PATHS.profile}/:userID`} element={<ProfilePage />} />
