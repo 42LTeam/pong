@@ -127,6 +127,7 @@ export async function createChannel(
             password?: string,
             creatorId: number,
             privated?: boolean,
+            conv?:boolean,
         }, ){
     const config = {
         method: 'post',

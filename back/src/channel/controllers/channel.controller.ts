@@ -56,12 +56,12 @@ export class ChannelController {
     return this.channelService.createChannel(body);
   }
 
-  @Post('invite')
-  @ApiOperation({ summary: 'Invite a list of user on a channel' })
-  @ApiBody({ type: SendInviteDto })
-  async sendInvites(@Body() body: SendInviteDto, @Req() req) {
-    return this.channelService.sendInvite(await req.user.id, body);
-  }
+  // @Post('invite')
+  // @ApiOperation({ summary: 'Invite a list of user on a channel' })
+  // @ApiBody({ type: SendInviteDto })
+  // async sendInvites(@Body() body: SendInviteDto, @Req() req) {
+  //   return this.channelService.sendInvite(await req.user.id, body);
+  // }
 
   @Get('channels')
   @ApiOperation({ summary: 'Get channels of user' })
