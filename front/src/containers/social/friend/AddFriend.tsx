@@ -1,5 +1,5 @@
 import TextInput from "../../../components/utils/TextInput";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Friend from "../../../components/friend/Friend";
 import {getAllUsers, searchUser, sendFriendRequest} from "../../../api";
 import Button from "../../../components/utils/Button";
@@ -18,8 +18,7 @@ export default function AddFriend(){
                 setSuggestions(response.data);
             });
         }else
-            setSuggestions(null);
-
+            getAllUsers({notFriend: true}).then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
     }
     const toggleCheck = (current, check) => {
         if (check)
@@ -29,10 +28,10 @@ export default function AddFriend(){
     }
     const mapData =  (current) => {
         return (
-            <Friend key={"popupfriend-" + current.username} friend={current} notFriend={true}
+            <Friend key={"popupfriend-" + current.id} friend={current}
             onClick={() => toggleCheck(current, !checked.includes(current))}>
                 <div className="align-left">
-                    <input
+                    <input readOnly
                         checked={checked.includes(current)}
                         type="checkbox"/>
                 </div>
@@ -44,9 +43,9 @@ export default function AddFriend(){
         checked.forEach(current => sendFriendRequest(current.id));
         setChecked([]);
     }
-
-    if (!suggestions.length)
+    useEffect(() => {
         getAllUsers({notFriend: true}).then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
+    }, []);
 
     return (
         <>

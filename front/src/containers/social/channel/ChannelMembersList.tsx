@@ -1,5 +1,5 @@
 import "../../../css/chat.css";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import {getChannelAllMembers} from "../../../api";
 import SidePanel from "../../../components/utils/SidePanel";
 import Friend from "../../../components/friend/Friend";
@@ -11,7 +11,6 @@ type ChannelMembersListProps = {
 
 export default function ChannelMembersList({ channelId }: ChannelMembersListProps) {
   const [ChannelAllMembers, setChannelAllMembers] = useState([]);
-
   const fetchChannelAllMembers = () => {
     getChannelAllMembers(channelId).then((response) => {
       setChannelAllMembers(response.data);
@@ -30,7 +29,7 @@ export default function ChannelMembersList({ channelId }: ChannelMembersListProp
       body={
         <>
           {ChannelAllMembers.map( (current) => {
-              return (<Friend friend={current.user} ></Friend>);
+              return (<Friend key={'channelmemeberlist' + current.id} friend={current.user} ></Friend>);
           })}
         </>
       }

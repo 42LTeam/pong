@@ -56,10 +56,10 @@ export default function LeaderboardPage(){
   }, [usersWithRank])
 
   if (usersWithRank === undefined) {
-    return <div>LOADING</div>
+    return <h1>LOADING</h1>
   }
   
-  //return <div>LOADING</div>
+//  return <h1>LOADING</h1>
 
   return (
     <div className='leaderboard-body'>

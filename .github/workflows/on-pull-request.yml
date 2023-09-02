@@ -80,9 +80,9 @@ jobs:
          
 
       - name: Build Up
-        run: make all
+        run: make action
 
-      - name: Run health check 5173
+      - name: Run health check port :5173 and port :3000/api
         run: |
-          chmod +x health_script_5173.sh
-          ./health_script_5173.sh
+          chmod +x health_script.sh
+          ./health_script.sh

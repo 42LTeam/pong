@@ -28,17 +28,11 @@ export default class GamePlayer {
 	}
 
 	update(){
-		if (
-			this.moveUp &&
-			!this.moveDown &&
-			this.position.y - this.PLAYER_SEMI_HEIGHT - this.PLAYER_SPEED >= 0
-		)
+		if (this.moveUp && !this.moveDown
+			&& this.position.y - this.PLAYER_SEMI_HEIGHT - this.PLAYER_SPEED >= 0)
 			this.position.y -= this.PLAYER_SPEED;
-		else if (
-			this.moveDown &&
-			!this.moveUp &&
-			this.position.y + this.PLAYER_SEMI_HEIGHT + this.PLAYER_SPEED <= 1
-		)
+		else if (this.moveDown && !this.moveUp
+			&& this.position.y + this.PLAYER_SEMI_HEIGHT + this.PLAYER_SPEED <= 1)
 			this.position.y += this.PLAYER_SPEED;
 	}
 

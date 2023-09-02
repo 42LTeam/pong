@@ -9,7 +9,7 @@ import ChannelMembersList from "./channel/ChannelMembersList";
 export default function SocialBody(){
 
     const {channelId} = useParams();
-    const [state, setState]=useState(Number.parseInt(channelId) || null);
+    const [state, setState] = useState(Number.parseInt(channelId) || null);
 
 
     useEffect(() => {

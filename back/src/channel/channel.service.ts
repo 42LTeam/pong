@@ -1,10 +1,10 @@
 
 import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Channel } from '@prisma/client';
 import { CreateChannelDto, SendInviteDto } from "./controllers/channel.controller";
 import { FriendService } from '../friend/friend.service';
 import { MessageService } from "../message/message.service";
+import {Channel} from "@prisma/client";
 
 
 @Injectable()
@@ -76,23 +76,13 @@ export class ChannelService {
   }
 
 
-
-  async sendInvite(sender: number, body: SendInviteDto) {
+  async sendInvite(body: SendInviteDto) {
     const { ids, channelId } = body;
 
-    const { forbidden, sent } = await this.friendService.processInvitations(sender, ids);
 
-    const success = [];
-    for (const i of sent) {
+    for (const i of ids) {
       await this.addInvite(channelId, i);
-      success.push(i);
     }
-
-    return {
-      forbidden,
-      sent,
-      success
-    };
   }
 
   // rename with All attribute and not just s
@@ -126,6 +116,7 @@ export class ChannelService {
             avatar: true,
             username: true,
             status: true,
+            id: true,
           },
         },
       }
@@ -232,54 +223,12 @@ export class ChannelService {
   }
 
   async removeUserFromChannel(channelId: number, userId: number): Promise<any> {
-    const userIdremoved = await this.prisma.userChannel.deleteMany({
-      where: { channelId: channelId, userId: userId }
-    });
-  }
-
-
-  async banUserFromChannel(channelId: number, userId: number): Promise<any> {
-    return this.prisma.userChannel.updateMany({
-      where: { 
-        userId: userId,
-        id: channelId
-       },
-      data: {
-        isBanned: true
-      },
-    });
-  }
-
-  async unbanUserFromChannel(channelId: number, userId: number): Promise<any> {
-    return this.prisma.userChannel.updateMany({
+    await this.prisma.userChannel.deleteMany({
       where: {
-        channelId: userId,
-        userId: userId
-       },
-      data: {
-        isBanned: false
+        channelId: channelId,
+        userId: userId,
       },
     });
-  }
 
-  async muteUserFromChannel(channelId: number, userId: number): Promise<any> {
-    const muteUntil = new Date();
-    muteUntil.setMinutes(muteUntil.getMinutes() + 5);
-
-    return this.prisma.userChannel.updateMany({
-      where: { channelId: channelId, userId: userId },
-      data: { isMuted: muteUntil },
-    });
-  }
-
-  async isUserMutedFromChannel(channelId: number, userId: number): Promise<boolean> {
-    const userChannel = await this.prisma.userChannel.findFirst({
-      where: { channelId: channelId, userId: userId },
-    });
-
-    const currentDateTime = new Date();
-    const muteUntil = userChannel.isMuted;
-
-    return muteUntil !== null && muteUntil > currentDateTime;
   }
 }

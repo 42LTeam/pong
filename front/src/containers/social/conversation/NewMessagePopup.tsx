@@ -20,10 +20,10 @@ export default function NewMessagePopup({position, clear}: Props) {
 
     const mapData =  (current) => {
         return (
-            <Friend key={"popupfriend-" + current.username} friend={current} unremovable={true}
+            <Friend key={"popupfriend-" + current.id} friend={current}
                     onClick={() => toggleCheck(current.username, !checked.includes(current.username))}>
                 <div className="align-left">
-                    <input
+                    <input readOnly
                         {...(checked.filter(c => c == current.username).length ? {checked:true}:{checked:false})}  type="checkbox"/>
                 </div>
             </Friend>
@@ -31,8 +31,9 @@ export default function NewMessagePopup({position, clear}: Props) {
     }
 
     const handlePopupSearch = async (event) => {
-        const search = event.target.value || '';
-        const {data} = await searchUser(search, {friendOnly: true});
+        const search = event.target.value;
+        if (!search) return         getAllUsers({notFriend: false, friendOnly: false}).then(response => setSuggestions(response.data.filter(current => current.id != user.id)));
+        const {data} = await searchUser(search, {friendOnly: false});
         setSuggestions(data);
     }
 
