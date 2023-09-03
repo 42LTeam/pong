@@ -2,7 +2,7 @@ import {Children, useState} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
-import { getConversation, removeFriendship, getUserByID, removeUserFromChannel } from "../../api";
+import { getConversation, removeFriendship, getUserByID, removeUserFromChannel, muteUserFromChannel, banUserFromChannel, removeUserAdminFromChannel } from "../../api";
 
 type Props = {
     channelId: number;
@@ -36,15 +36,15 @@ export default function Friend(props: Props){
         })
         buttons.push({
             text: 'Mute',
-            handleClick: () => removeUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Mute")),
+            handleClick: () => muteUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Mute")),
         })
         buttons.push({
             text: 'Kick',
-            handleClick: () => removeUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Kick")),
+            handleClick: () => removeUserAdminFromChannel(props.channelId, props.friend.id).then((response) => console.log("Kick")),
         })
         buttons.push({
             text: 'Ban',
-            handleClick: () => removeUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Ban")),
+            handleClick: () => banUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Ban")),
         })
     }
     if (!props.unremovable)
