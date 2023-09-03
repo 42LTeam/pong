@@ -56,12 +56,12 @@ export class ChannelController {
     return this.channelService.createChannel(body);
   }
 
-  @Post('invite')
-  @ApiOperation({ summary: 'Invite a list of user on a channel' })
-  @ApiBody({ type: SendInviteDto })
-  async sendInvites(@Body() body: SendInviteDto, @Req() req) {
-    return this.channelService.sendInvite(await req.user.id, body);
-  }
+  // @Post('invite')
+  // @ApiOperation({ summary: 'Invite a list of user on a channel' })
+  // @ApiBody({ type: SendInviteDto })
+  // async sendInvites(@Body() body: SendInviteDto, @Req() req) {
+  //   return this.channelService.sendInvite(await req.user.id, body);
+  // }
 
   @Get('channels')
   @ApiOperation({ summary: 'Get channels of user' })
@@ -83,6 +83,19 @@ export class ChannelController {
     return await this.channelService.getChannelAllMembers(Number(channelId));
   }
 
+  @Post('/:channelId/quit/:userId')
+  @ApiOperation({ summary: 'Remove a user from a channel (User perspective)' })
+  async removeUserFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<any> {
+    return this.channelService.removeUserFromChannel(channelId, userId);
+  }
+
+  @Post('/:channelId/admin-quit/:userId')
+  @UsePipes(IsAdminPipe)
+  @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
+  async removeUserAdminFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<any> {
+    return this.channelService.removeUserFromChannel(channelId, userId);
+  }
+
   @Post('/:channelId/ban/:userId')
   @UsePipes(IsAdminPipe)
   @ApiOperation({ summary: 'Ban a user from a channel' })
@@ -90,10 +103,11 @@ export class ChannelController {
     return this.channelService.banUserFromChannel(channelId, userId);
   }
 
-  @Get('/:channelId/is-banned/:userId')
-  @ApiOperation({ summary: 'Check if a user is banned from a channel' })
-  async isUserBannedFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<boolean> {
-    return this.channelService.isUserBannedFromChannel(channelId, userId);
+  @Post('/:channelId/unban/:userId')
+  @UsePipes(IsAdminPipe)
+  @ApiOperation({ summary: 'Un-Ban a user from a channel' })
+  async unbanUserFromChannel(@Param('channelId', ParseIntPipe) channelId: number, @Param('userId', ParseIntPipe) userId: number): Promise<any> {
+    return this.channelService.unbanUserFromChannel(channelId, userId);
   }
 
   @Post('/:channelId/mute/:userId')
