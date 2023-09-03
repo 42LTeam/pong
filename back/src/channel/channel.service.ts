@@ -43,8 +43,6 @@ export class ChannelService {
       creatorId,
     } = body;
 
-
-
     const channel = await this.prisma.channel.create({
       data: {
         name,
@@ -54,13 +52,19 @@ export class ChannelService {
           connect: { id: creatorId },
         },
         created_at: new Date(),
+        users: {
+          create: {
+            userId: creatorId,
+            isAdmin: true,
+          }
+        }
       },
       select: {
         id: true,
         creatorId: true,
         users: {
           where: {
-            id: {
+            userId: {
               not: creatorId,
             }
           }
@@ -226,5 +230,50 @@ export class ChannelService {
       },
     });
 
+  }
+
+  async banUserFromChannel(channelId: number, userId: number): Promise<any> {
+    return this.prisma.userChannel.updateMany({
+      where: { 
+        userId: userId,
+        id: channelId
+       },
+      data: {
+        isBanned: true
+      },
+    });
+  }
+
+  async unbanUserFromChannel(channelId: number, userId: number): Promise<any> {
+    return this.prisma.userChannel.updateMany({
+      where: {
+        channelId: userId,
+        userId: userId
+       },
+      data: {
+        isBanned: false
+      },
+    });
+  }
+
+  async muteUserFromChannel(channelId: number, userId: number): Promise<any> {
+    const muteUntil = new Date();
+    muteUntil.setMinutes(muteUntil.getMinutes() + 5);
+
+    return this.prisma.userChannel.updateMany({
+      where: { channelId: channelId, userId: userId },
+      data: { isMuted: muteUntil },
+    });
+  }
+
+  async isUserMutedFromChannel(channelId: number, userId: number): Promise<boolean> {
+    const userChannel = await this.prisma.userChannel.findFirst({
+      where: { channelId: channelId, userId: userId },
+    });
+
+    const currentDateTime = new Date();
+    const muteUntil = userChannel.isMuted;
+
+    return muteUntil !== null && muteUntil > currentDateTime;
   }
 }

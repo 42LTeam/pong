@@ -2,7 +2,7 @@ import {Controller, Get, Param, Post, Body, UseGuards, ParseIntPipe, Req} from '
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Message } from '@prisma/client';
 import { MessageService } from './message.service';
-import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
+import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import { IsNotEmpty, IsNumber, IsString  } from '@nestjs/class-validator';
 
 class CreateMessageDto {
