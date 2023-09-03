@@ -1,6 +1,6 @@
 import "../../../css/chat.css";
-import React, {useEffect, useState} from "react";
-import {getChannelAllMembers} from "../../../api";
+import React, { useEffect, useState } from "react";
+import { getChannelAllMembers } from "../../../api";
 import SidePanel from "../../../components/utils/SidePanel";
 import Friend from "../../../components/friend/Friend";
 
@@ -17,11 +17,11 @@ export default function ChannelMembersList({ channelId }: ChannelMembersListProp
       setChannelAllMembers(response.data);
       console.log(response);
     })
-        .catch((err) => console.log(err));
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-      fetchChannelAllMembers();
+    fetchChannelAllMembers();
   }, [channelId]);
 
   return (
@@ -29,8 +29,8 @@ export default function ChannelMembersList({ channelId }: ChannelMembersListProp
       subheader="Members"
       body={
         <>
-          {ChannelAllMembers.map( (current) => {
-              return (<Friend unremovable={true} friend={current.user} channelId={channelId} ></Friend>);
+          {ChannelAllMembers.map((current) => {
+            return (<Friend key={current.user.id} unremovable={true} friend={current.user} channelId={channelId}></Friend>);
           })}
         </>
       }
