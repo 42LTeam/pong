@@ -2,9 +2,10 @@ import {Children, useState} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
-import {getConversation, removeFriendship, getUserByID} from "../../api";
+import { getConversation, removeFriendship, getUserByID, removeUserFromChannel } from "../../api";
 
 type Props = {
+    channelId: number;
     friend: any,
     onClick?: any,
     children?: any,
@@ -26,35 +27,26 @@ export default function Friend(props: Props){
             handleClick: () => getConversation(props.friend.id).then((response) => navigate('/social/' + response.data.id)),
         },
         {separator: true},
-        // ---------- Channel options pour l'user MOI
-        {
-            text: 'Quitter le channel',
-            // Leave
-        },
-        // ---------- Channel options pour l'user admin
-        {
-            text: 'Kick',
-            // kick l'user selectionné
-        },
-        {
-            text: 'Ban',
-            // ban l'user selectionné
-        },
-        {
-            text: 'Mute',
-            // Mute l'user selectionné
-        },
-        {separator: true},
-        // ---------- Match options everywhere
-        {
-            text: 'Match amical',
-            handleClick: () => getUserByID(props.friend.id).then((response) =>
-                navigate('/game?id=' + props.friend.id + '&username=' + response.data.username + '&session=' + response.data.session)),
-        },
-
 
     ];
-    // ---------- Friends options
+    if(props.unremovable) {
+        buttons.push({
+            text: 'Quitter le channel',
+            handleClick: () => removeUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Click out"))
+        })
+        buttons.push({
+            text: 'Mute',
+            handleClick: () => removeUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Mute")),
+        })
+        buttons.push({
+            text: 'Kick',
+            handleClick: () => removeUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Kick")),
+        })
+        buttons.push({
+            text: 'Ban',
+            handleClick: () => removeUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Ban")),
+        })
+    }
     if (!props.unremovable)
         buttons.push({
             text: 'Retirer l\'ami',

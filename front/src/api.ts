@@ -8,6 +8,103 @@ const localhostback = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_UR
 const URL = localhostback;
 export const socket = io(webSocketURL, { autoConnect: true});
 
+
+// File: /back/src/channel/controllers/channel.controller.ts
+// @Post('/:channelId/admin-quit/:userId')
+// @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
+export async function removeUserAdminFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/admin-quit/' + userId,
+        withCredentials: true,
+    }
+    console.log("removeUserAdminFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+// File: /back/src/channel/controllers/channel.controller.ts
+// @Post('/:channelId/quit/:userId')
+// @ApiOperation({ summary: 'Remove a user from a channel (User perspective)' })
+export async function removeUserFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/quit/' + userId,
+        withCredentials: true,
+    }
+    console.log("removeUserFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+// File: /back/src/channel/controllers/channel.controller.ts
+// @Post('/:channelId/ban/:userId')
+// @ApiOperation({ summary: 'Ban a user from a channel' })
+export async function banUserFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/ban/' + userId,
+        withCredentials: true,
+    }
+    console.log("banUserFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+// File: /back/src/channel/controllers/channel.controller.ts
+// @Post('/:channelId/unban/:userId')
+// @ApiOperation({ summary: 'Un-Ban a user from a channel' })
+export async function unbanUserFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/unban/' + userId,
+        withCredentials: true,
+    }
+    console.log("unbanUserFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+// File: /back/src/channel/controllers/channel.controller.ts
+//   @Post('/:channelId/mute/:userId')
+//   @ApiOperation({ summary: 'Mute a user from a channel' })
+export async function muteUserFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/mute/' + userId,
+        withCredentials: true,
+    }
+    console.log("muteUserFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+// File: /back/src/channel/controllers/channel.controller.ts
+//   @Get('/:channelId/is-muted/:userId')
+//   @ApiOperation({ summary: 'Mute a user from a channel' })
+export async function isMutedBannedFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'get',
+        url: URL + '/channels/' + channelId + '/is-muted/' + userId,
+        withCredentials: true,
+    }
+    console.log("isMutedBannedFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
 export async function searchUser(search, options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
     const config = {
         method: 'get',
