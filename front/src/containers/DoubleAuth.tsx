@@ -29,8 +29,12 @@ export default function DoubleAuth ({setDestination}){
                 ref={ref}
                 onChange={(event) => setClickable(event.target.value.length > 0)}
                 bgColor="#ECF0F1"
-                color="#BDC3C7"
+                color="black"
                 text={"Entrez votre code unique"}
+                onKeyDown={(event) => {
+                    if (event.key != null && event.key != 'Enter') return;
+                    handleClick();
+                }}
                 button={<Button
                     handleClick={handleClick} text={"Confirmer"}
                     clickable={clickable}
