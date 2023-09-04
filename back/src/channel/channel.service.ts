@@ -71,7 +71,7 @@ export class ChannelService {
         messages: true,
       }
     });
-    return this.addInvite(channel.id, creatorId);
+    return channel;
   }
 
 
