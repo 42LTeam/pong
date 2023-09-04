@@ -6,6 +6,7 @@ import {SearchDTO} from "./user.controller";
 import { MatchService } from 'src/match/match.service';
 import {authenticator} from "otplib";
 import * as qrcode from 'qrcode'
+
 @Injectable()
 export class UserService {
   constructor(

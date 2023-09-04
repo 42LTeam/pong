@@ -5,7 +5,7 @@ import {PrismaModule} from "../prisma/prisma.module";
 import {AdminController} from "./admin/admin.controller";
 import { UserService } from "../user/user.service";
 import { UserModule } from "../user/user.module";
-import { MatchModule } from "src/match/match.module";
+import { MatchModule } from "../match/match.module";
 
 @Module({
     controllers: [FriendController, AdminController],
