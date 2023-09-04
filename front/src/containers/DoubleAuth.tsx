@@ -7,7 +7,9 @@ export default function DoubleAuth ({setDestination}){
     const ref = useRef(null);
     const [clickable,setClickable]= useState(false);
     const handleClick = () => {
-        if (ref) set2fa(ref.current.value).then(() => setDestination(null))
+        if (ref) set2fa(ref.current.value).then((response) => {
+            if (response.data) setDestination(null)
+        })
     }
 
     return (

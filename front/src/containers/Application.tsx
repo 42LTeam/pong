@@ -33,7 +33,7 @@ const PATHS = {
     game: '/game'
 };
 
-const Application = function (){
+const Application = function ({children}: {children?: any}){
     const user = useContext(AuthContext);
     const [notifications, setNotifications] = useState<any[]>([]);
 
@@ -137,6 +137,7 @@ const Application = function (){
             </div>
         );
 
+    if (children) return children;
     if (!application)
         setApplication({
             sendNotification,

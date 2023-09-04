@@ -70,9 +70,9 @@ function Auth() {
 
     return (
         <AuthContext.Provider value={user}>
-            {destination == '2fa' ?
-                <DoubleAuth setDestination={setDestination}></DoubleAuth>
-                : <Application></Application>}
+                <Application>
+                    {destination == '2fa' ? <DoubleAuth setDestination={setDestination}></DoubleAuth> : null}
+                </Application>
         </AuthContext.Provider>
     );
 }
