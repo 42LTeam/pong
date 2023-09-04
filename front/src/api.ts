@@ -7,10 +7,12 @@ const localhostback = process.env.VITE_API_URL ? `${process.env.VITE_API_URL}:30
 const URL = localhostback;
 export const socket = io(webSocketURL, { autoConnect: true});
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* File: /back/src/channel/controllers/channel.controller.ts                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
-// File: /back/src/channel/controllers/channel.controller.ts
-// @Post('/:channelId/admin-quit/:userId')
-// @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
+//  @Post('/:channelId/admin-quit/:userId')
+//  @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
 export async function removeUserAdminFromChannel(channelId: number, userId: number)
 {
     const config = {
@@ -24,9 +26,8 @@ export async function removeUserAdminFromChannel(channelId: number, userId: numb
     return axios(config);
 }
 
-// File: /back/src/channel/controllers/channel.controller.ts
-// @Post('/:channelId/quit/:userId')
-// @ApiOperation({ summary: 'Remove a user from a channel (User perspective)' })
+//  @Post('/:channelId/quit/:userId')
+//  @ApiOperation({ summary: 'Remove a user from a channel (User perspective)' })
 export async function removeUserFromChannel(channelId: number, userId: number)
 {
     const config = {
@@ -40,9 +41,8 @@ export async function removeUserFromChannel(channelId: number, userId: number)
     return axios(config);
 }
 
-// File: /back/src/channel/controllers/channel.controller.ts
-// @Post('/:channelId/ban/:userId')
-// @ApiOperation({ summary: 'Ban a user from a channel' })
+//  @Post('/:channelId/ban/:userId')
+//  @ApiOperation({ summary: 'Ban a user from a channel' })
 export async function banUserFromChannel(channelId: number, userId: number)
 {
     const config = {
@@ -56,9 +56,8 @@ export async function banUserFromChannel(channelId: number, userId: number)
     return axios(config);
 }
 
-// File: /back/src/channel/controllers/channel.controller.ts
-// @Post('/:channelId/unban/:userId')
-// @ApiOperation({ summary: 'Un-Ban a user from a channel' })
+//  @Post('/:channelId/unban/:userId')
+//  @ApiOperation({ summary: 'Un-Ban a user from a channel' })
 export async function unbanUserFromChannel(channelId: number, userId: number)
 {
     const config = {
@@ -72,7 +71,6 @@ export async function unbanUserFromChannel(channelId: number, userId: number)
     return axios(config);
 }
 
-// File: /back/src/channel/controllers/channel.controller.ts
 //   @Post('/:channelId/mute/:userId')
 //   @ApiOperation({ summary: 'Mute a user from a channel' })
 export async function muteUserFromChannel(channelId: number, userId: number)
@@ -88,7 +86,6 @@ export async function muteUserFromChannel(channelId: number, userId: number)
     return axios(config);
 }
 
-// File: /back/src/channel/controllers/channel.controller.ts
 //   @Get('/:channelId/is-muted/:userId')
 //   @ApiOperation({ summary: 'Mute a user from a channel' })
 export async function isMutedBannedFromChannel(channelId: number, userId: number)
@@ -103,6 +100,8 @@ export async function isMutedBannedFromChannel(channelId: number, userId: number
     console.log("userId = ", userId)
     return axios(config);
 }
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 export async function searchUser(search, options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
     const config = {
@@ -126,7 +125,7 @@ export async function getStatus(){
 }
 
 export async function blockUser(blockedId: number){
-    var config = {
+    const config = {
         method: 'post',
         url: URL + '/block/create',
         withCredentials: true,
@@ -139,7 +138,7 @@ export async function blockUser(blockedId: number){
 
 
 export async function unblockUser(blockedId: number){
-    var config = {
+    const config = {
         method: 'delete',
         url: URL + '/block/remove',
         withCredentials: true,
@@ -160,7 +159,7 @@ export async function updateUserAvatar(id, avatarUrl){
             avatar: avatarUrl
         },
     };
-    return await axios(config);
+    return axios(config);
 }
 
 export async function updateUserUsername(id, username){
@@ -172,7 +171,7 @@ export async function updateUserUsername(id, username){
             username: username
         },
     };
-    return await axios(config);
+    return axios(config);
 }
 
 export async function getAllUsers(options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
@@ -241,14 +240,6 @@ export async function sendChannelInvite(data:
             channelId: number,
         }, ){
     socket.emit('channel-invite', data);
-/*
-    const config = {
-        method: 'post',
-        url: URL + '/channels/invite',
-        withCredentials: true,
-        data,
-    };
-    return axios(config);*/
 }
 
 export async function getConversation(userId: number) {
@@ -346,16 +337,6 @@ export async function readMessage(channelId: number, messageId: number) {
 
 export async function sendMessageToChannel(channelId: number, content: string){
     socket.emit('new-message', {channelId, content});
-   /* const config = {
-        method: 'post',
-        url: URL + '/message',
-        withCredentials: true,
-        data:{
-            channelId,
-            content,
-        }
-    };
-    return axios(config);*/
 }
 
 export async function getPath(path: string){
@@ -413,10 +394,10 @@ export async function getUserMatches(ID){
 }
 
 export async function getUserMatchesResume(ID){
-    var config = {
-        method: 'get',
-        url: URL + '/users/' + ID + '/matches-resume',
-        withCredentials: true,
+    const config = {
+        method: "get",
+        url: URL + "/users/" + ID + "/matches-resume",
+        withCredentials: true
     };
     return axios(config);
 }

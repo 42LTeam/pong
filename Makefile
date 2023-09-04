@@ -32,7 +32,7 @@ BOLD_CYAN		:=      "\033[1;36m"
 BOLD_WHITE		:=      "\033[1;37m"
 
 
-all:			build up
+all:			build up ls script
 
 ls:
 				@echo $(BOLD_BLUE)Images$(RESET_COLOR)
@@ -46,6 +46,7 @@ ls:
 				@echo
 
 env:
+				@echo $(BOLD_GREEN) make env: '✅' - : check .env $(RESET_COLOR)
 				@if [ ! -e $(ENV_FILE) ]; then \
 					echo $(RED) "$(ENV_FILE) does not exist. Abort" $(RESET_COLOR); \
 					exit 1; \
@@ -54,6 +55,7 @@ env:
 				fi
 
 dist:
+				@echo $(BOLD_GREEN) make dist: '🚽' - : erase .dist $(RESET_COLOR)
 				@if [ ! -e $(DIST_FOLDER) ]; then \
 					echo $(RED) "$(DIST_FOLDER) does not exist." $(RESET_COLOR); \
 				else \
@@ -62,70 +64,87 @@ dist:
 
 
 logs:
-	@echo $(BOLD_GREEN) '🔮' - LOGS: logs of containers $(RESET_COLOR)
+	@echo $(BOLD_GREEN) make logs: '🔮'  logs of containers $(RESET_COLOR)
 	$(DOCKER_COMPOSE) logs -f
 
 build: env dist
-	@echo $(BOLD_GREEN) '🚧' - BUILD: Build development containers + erase dist folder$(RESET_COLOR)
+	@echo $(BOLD_GREEN) make build: '🚧'  Build development containers + erase dist folder$(RESET_COLOR)
 	$(DOCKER_COMPOSE) build
 
 up: env
-	@echo $(GREEN) '🚀' - UP: Start development containers$(RESET_COLOR)
+	@echo $(GREEN) make up '🚀'  Start development containers$(RESET_COLOR)
 	$(DOCKER_COMPOSE) up -d
 
 action: build
-	@echo $(GREEN) '🚀' - UP: Start development containers$(RESET_COLOR)
+	@echo $(GREEN) make action: '🎬'  Start development containers on github action$(RESET_COLOR)
 	$(DOCKER_COMPOSE) up -d
 
 stop:
-	@echo $(RED) '✋' - STOP: Stop development containers$(RESET_COLOR)
+	@echo $(RED) make stop: '✋'  Stop development containers$(RESET_COLOR)
 	$(DOCKER_COMPOSE) stop
 
 down:
-	@echo $(BOLD_RED) '🔻' - DOWN: Remove development containers$(RESET_COLOR)
+	@echo $(BOLD_RED) make down: '🔻'  Remove development containers$(RESET_COLOR)
 	$(DOCKER_COMPOSE) down
 
 clean: stop down
-	@echo $(BOLD_CYAN) '🧹' - CLEAN: Stop and remove development containers$(RESET_COLOR)
+	@echo $(BOLD_CYAN) make clean: '✋'  STOP + '🔻' DOWN$(RESET_COLOR)
 
 prune: clean
-	@echo $(BOLD_YELLOW)  '🧼' - PRUNE: Remove all unused Docker resources with confirmation$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make prune:  - '✋'  STOP + '🔻'  DOWN + '🧼'  PRUNE: Remove all unused Docker resources with confirmation$(RESET_COLOR)
 	docker system prune -a
 
 rmvol: clean
-	@echo $(BOLD_YELLOW) '🛀' - RMVOL: Remove specific volumes with confirmation$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make rmvol: '✋'  STOP + '🔻'  DOWN + '🛀'  RMVOL: Remove specific volumes with confirmation$(RESET_COLOR)
 	docker volume rm $(VOLUMES)
 
 fprune: prune rmvol
-	@echo $(BOLD_YELLOW) '🧼' - PRUNE + '🛀' RMVOL - FPRUNE: Execute prune and rmvol commands$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make fprune: '✋'  STOP + '🔻'  DOWN + '🧼'  PRUNE  + '🛀'  RMVOL $(RESET_COLOR)
 
 re: stop up
-	@echo $(BOLD_YELLOW) '✋' - STOP + '🚀'UP - RE: Restart development containers $(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make re: '✋'  STOP + '🚀'  UP: Restart development containers $(RESET_COLOR)
 
 rebuild: clean all
-	@echo $(BOLD_YELLOW) '🧹' CLEAN + '🚧' BUILD + '🚀' UP - REBUILD: Clean and rebuild development containers$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make rebuild: '✋'  STOP + '🔻'  DOWN + '🚧'  BUILD + '🚀'  UP: Clean and rebuild development containers$(RESET_COLOR)
 
 reboot: fprune all
-	@echo $(BOLD_YELLOW) '♻️' - REBOOT: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make reboot '✋'  STOP + '🔻'  DOWN + '🧼'  PRUNE  + '🛀'  RMVOL + '🚧'  BUILD + '🚀'  UP: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
 
 prettier:
-	@echo $(BOLD_YELLOW) '🌸' - PRETTIER: https://prettier.io/docs/en/install $(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make prettier: '🌸' == https://prettier.io/docs/en/install $(RESET_COLOR)
 	cd ./back/ && npx prettier . --write
 	cd ./front/ && npx prettier . --write
 
+script:
+	@echo $(BOLD_YELLOW) make script: '🥋' == Run health_script and running_script on local $(RESET_COLOR)
+	@echo $(BOLD_YELLOW) "Health script 5173 and 3000/api"$(RESET_COLOR)
+	chmod 777 ./health_script_5173.sh
+	./health_script_5173.sh
+	chmod 777 ./health_script_3000.sh
+	./health_script_3000.sh
+	@echo $(BOLD_YELLOW) "Running check"$(RESET_COLOR)
+	chmod 777 ./running_check.sh
+	./running_check.sh
+
 help:
 	@echo "Available commands:"
-	@echo "  make build       - Build development containers"
-	@echo "  make up          - Start development containers"
-	@echo "  make stop        - Stop development containers"
-	@echo "  make down        - Remove development containers"
-	@echo "  make clean       - Stop and remove development containers"
-	@echo "  make prune       - Remove all unused Docker resources with confirmation"
-	@echo "  make rmvol       - Remove specific volumes with confirmation"
-	@echo "  make fprune      - Execute prune and rmvol commands"
-	@echo "  make re          - Restart development containers"
-	@echo "  make rebuild     - Clean and rebuild development containers"
-	@echo "  make reboot      - Fully prune Docker and then rebuild all containers"
-	@echo "  make help        - Show this help message"
+	@echo $(BOLD_GREEN) make env: '✅' - : check .env $(RESET_COLOR)
+	@echo $(BOLD_GREEN) make dist: '🚽' - : erase .dist $(RESET_COLOR)
+	@echo $(BOLD_GREEN) make logs: '🔮' - : logs of containers $(RESET_COLOR)
+	@echo $(BOLD_GREEN) make build: '🚧' - : Build development containers + erase dist folder$(RESET_COLOR)
+	@echo $(GREEN) make up '🚀': Start development containers$(RESET_COLOR)
+	@echo $(GREEN) make action: '🎬' Start development containers on github action$(RESET_COLOR)
+	@echo $(RED) make stop: '✋' Stop development containers$(RESET_COLOR)
+	@echo $(BOLD_RED) make down: '🔻' Remove development containers$(RESET_COLOR)
+	@echo $(BOLD_CYAN) make clean: '✋' STOP + '🔻' DOWN$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make prune:  - '✋' STOP + '🔻' DOWN + '🧼' PRUNE: Remove all unused Docker resources with confirmation$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make rmvol: '✋' STOP + '🔻' DOWN + '🛀' RMVOL: Remove specific volumes with confirmation$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make fprune: '✋' STOP + '🔻' DOWN + '🧼' PRUNE  + '🛀' RMVOL $(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make re: '✋' - STOP + '🚀'UP: Restart development containers $(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make rebuild: '✋' STOP + '🔻' DOWN + '🚧' BUILD + '🚀' UP: Clean and rebuild development containers$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make reboot '✋' STOP + '🔻' DOWN + '🧼' PRUNE  + '🛀' RMVOL + '🚧' BUILD + '🚀' UP: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make prettier: '🌸' == https://prettier.io/docs/en/install $(RESET_COLOR)
+	@echo $(BOLD_YELLOW) make script: '🥋' == Run health_script and running_script on local $(RESET_COLOR)
+
 
 .PHONY: all ls env build up stop down clean prune rmvol fprune re rebuild reboot help
