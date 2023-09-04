@@ -16,6 +16,7 @@ export interface User {
     ratio: number,
     playedMatch: boolean,
     leaderboard : boolean,
+    secretO2FA: boolean,
     blockList?: number[],
     friendList?: number[],
 
@@ -70,7 +71,7 @@ function Auth() {
     return (
         <AuthContext.Provider value={user}>
             {destination == '2fa' ?
-                <DoubleAuth></DoubleAuth>
+                <DoubleAuth setDestination={setDestination}></DoubleAuth>
                 : <Application></Application>}
         </AuthContext.Provider>
     );

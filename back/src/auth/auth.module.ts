@@ -14,3 +14,4 @@ import {FriendModule} from "../friend/friend.module";
   imports: [UserModule, ClientModule, BlockModule, FriendModule]
 })
 export class AuthModule {}
+

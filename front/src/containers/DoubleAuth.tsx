@@ -1,10 +1,13 @@
 import TextInput from "../components/utils/TextInput";
 import Button from "../components/utils/Button";
-import {useState} from "react";
+import {useRef, useState} from "react";
+import {set2fa} from "../api";
 
-export default function DoubleAuth (){
+export default function DoubleAuth ({setDestination}){
+    const ref = useRef(null);
     const [clickable,setClickable]= useState(false);
     const handleClick = () => {
+        if (ref) set2fa(ref.current.value).then(() => setDestination(null))
     }
 
     return (
@@ -21,6 +24,7 @@ export default function DoubleAuth (){
             <h1>Entrez votre code unique</h1>
             <h3>Votre code unique est fournis par l 'instance TOTP que vous avez choisis</h3>
             <TextInput
+                ref={ref}
                 onChange={(event) => setClickable(event.target.value.length > 0)}
                 bgColor="#ECF0F1"
                 color="#BDC3C7"

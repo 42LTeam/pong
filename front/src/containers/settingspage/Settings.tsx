@@ -1,23 +1,27 @@
-import React, { useContext, useState, useEffect } from "react";
+import  { useContext, useState, useEffect } from "react";
 import "../../css/settings.css";
 import { AuthContext } from "../Auth";
-import { updateUserAvatar, updateUserUsername } from "../../api";
-import ButtonSetting from "../../components/utils/Button";
-import TextInput from "../../components/utils/TextInput";
+import {get2fa, updateUserAvatar, updateUserUsername} from "../../api";
+import Button from "../../components/utils/Button";
 
-type Props = {
-
-}
-
-export default function Settings(props: Props) {
+export default function Settings() {
     const user = useContext(AuthContext);
 
+    const [qr, setQr] = useState(null);
     const [username, setUsername] = useState(user.username);
     const [avatarUrl, setAvatarUrl] = useState(user.avatar);
     const [errorMsg, setErrorMsg] = useState('');
 
+    const activate2fa = () => {
+        get2fa().then((response) => {
+            setQr(response.data);
+        })
+    }
+
     useEffect(() => {
-    }, [username]);
+        if (user.secretO2FA)
+            activate2fa()
+    }, []);
 
     const handleChangeImage = async (newAvatarUrl) => {
         const response = await updateUserAvatar(user.id, newAvatarUrl);
@@ -87,6 +91,11 @@ export default function Settings(props: Props) {
                 </div>
             </div>
         </div>
+            {Boolean(qr) ?
+                <img src={qr}/> :
+                <Button handleClick={activate2fa} text={"activer la 2fa"} clickable></Button>
+            }
+
         </div>
     );
 }
