@@ -1,10 +1,9 @@
-
 import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateChannelDto, SendInviteDto } from "./controllers/channel.controller";
 import { FriendService } from '../friend/friend.service';
 import { MessageService } from "../message/message.service";
-import {Channel} from "@prisma/client";
+import { Channel } from "@prisma/client";
 
 
 @Injectable()
@@ -72,7 +71,7 @@ export class ChannelService {
         messages: true,
       }
     });
-    return this.addInvite(channel.id, creatorId);
+    return channel;
   }
 
 
@@ -223,13 +222,87 @@ export class ChannelService {
   }
 
   async removeUserFromChannel(channelId: number, userId: number): Promise<any> {
-    await this.prisma.userChannel.deleteMany({
-      where: {
-        channelId: channelId,
-        userId: userId,
-      },
+    // Get the channel and its users
+    const channel = await this.prisma.channel.findUnique({
+      where: { id: channelId },
+      include: { users: true },
     });
 
+    // Check if it's a private conversation and there are only two users
+    // if (channel.conv && channel.users.length === 2)
+    console.log(channel.users.length)
+    if (channel.users.length === 2)
+     {
+      // Delete all references to the channel in the UserChannel table
+      await this.prisma.userChannel.deleteMany({
+        where: { channelId: channelId },
+      });
+
+      // Delete all messages associated with the channel
+      await this.prisma.message.deleteMany({
+        where: { channelId: channelId },
+      });
+
+      // Delete the channel
+      await this.prisma.channel.delete({
+        where: { id: channelId },
+      });
+    } else {
+      // Remove the user from the channel
+      await this.prisma.userChannel.deleteMany({
+        where: {
+          channelId: channelId,
+          userId: userId,
+        },
+      });
+    }
+  }
+
+
+
+
+  async banUserFromChannel(channelId: number, userId: number): Promise<any> {
+    return this.prisma.userChannel.updateMany({
+      where: {
+        userId: userId,
+        id: channelId
+      },
+      data: {
+        isBanned: true
+      },
+    });
+  }
+
+  async unbanUserFromChannel(channelId: number, userId: number): Promise<any> {
+    return this.prisma.userChannel.updateMany({
+      where: {
+        channelId: userId,
+        userId: userId
+      },
+      data: {
+        isBanned: false
+      },
+    });
+  }
+
+  async muteUserFromChannel(channelId: number, userId: number): Promise<any> {
+    const muteUntil = new Date();
+    muteUntil.setMinutes(muteUntil.getMinutes() + 5);
+    return this.prisma.userChannel.updateMany({
+      where: { channelId: channelId, userId: userId },
+      data: { isMuted: muteUntil },
+    });
+  }
+
+  async isUserMutedFromChannel(channelId: number, userId: number): Promise<boolean> {
+    const userChannel = await this.prisma.userChannel.findFirst({
+      where: { channelId: channelId, userId: userId },
+    });
+
+    const currentDateTime = new Date();
+    const muteUntil = userChannel.isMuted;
+
+    return muteUntil !== null && muteUntil > currentDateTime;
   }
 
   async banUserFromChannel(channelId: number, userId: number): Promise<any> {
