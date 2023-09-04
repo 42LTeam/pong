@@ -25,7 +25,11 @@ export class ConversationController {
     @Req() req
   ): Promise<Channel> {
     const user = await req.user;
-    if (Number(friendId) == user.id) throw new Error("wtf ?");
+    if (Number(friendId) == user.id) {
+      throw new BadRequestException(
+        "Invalid operation: Cannot create a conversation with oneself."
+      );
+    }
     return this.channelService.getConversation(user.id, Number(friendId));
   }
 }
