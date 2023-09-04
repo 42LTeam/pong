@@ -108,6 +108,11 @@ rebuild: clean all
 reboot: fprune all
 	@echo $(BOLD_YELLOW) '♻️' - REBOOT: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
 
+prettier:
+	@echo $(BOLD_YELLOW) '🌸' - PRETTIER: https://prettier.io/docs/en/install $(RESET_COLOR)
+	cd ./back/ && npx prettier . --write
+	cd ./front/ && npx prettier . --write
+
 help:
 	@echo "Available commands:"
 	@echo "  make build       - Build development containers"
