@@ -130,39 +130,20 @@
 }
 
 /*A CHECKER : le css de figma ressmeble a R*/
-.add-friend-button{
-    /* from figma */
-    /* display: flex;
-    padding: 5px 0px;
-    align-items: center;
-    border-radius: 10px;
-    background: #2ECC71;
 
+.add-friend-button-text{
+    display: flex;
+    width: 187px;
+    height: 17px;
+    flex-direction: column;
+    justify-content: center;
     color: #ECF0F1;
     text-align: center;
-    font-family: Kulim Park;
+    font-family: Kulim Park, serif;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    min-width: 250px;*/
-
-
-    /* from plus haut */
-    user-select: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #2ECC71;
-    padding: 5px;
-    
-    color: #ECF0F1;
-    text-align: center;
-    font-family: Kulim Park, serif;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    min-width: 250px;/*ajout perso parce cpt*/
 }
 
 .add-friend-button-text{

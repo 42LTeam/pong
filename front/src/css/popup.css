@@ -21,3 +21,16 @@
     height: 100vh;
     z-index: 999;
 }
+/* 
+.button-class {
+    margin: 0;
+    padding: 0;
+} */
+
+.newmessage-button-public {
+    margin-right: 10px;
+}
+
+.newmessage-button-private {
+    margin-left: 10px;
+}

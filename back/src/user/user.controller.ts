@@ -17,8 +17,10 @@ import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import {IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString} from "@nestjs/class-validator";
 import {StringPipe} from "./pipes/string.pipe";
 import { Roles } from '../auth/roles.decorator';
-import {Channel, Status, User, UserMatch} from "@prisma/client";
+import { Channel, Status, User, UserMatch } from "@prisma/client";
 import { MatchService } from '../match/match.service';
+import { UserIdValidationPipe } from './pipes/userIdValid.pipe';
+import { UsernameAlreadyExistsPipe } from './pipes/usernameExist.pipe';
 
 class CreateUserDto {
   @ApiProperty()
@@ -110,7 +112,7 @@ export class UserController {
 
   @Get('id/:id')
   @ApiOperation({ summary: 'Get user by id' })
-  async getUserById(@Param('id', ParseIntPipe) id: number): Promise<User | null> {
+  async getUserById(@Param('id', ParseIntPipe, UserIdValidationPipe,) id: number): Promise<User | null> {
     return this.userService.getUserById(Number(id));
   }
 
@@ -168,7 +170,7 @@ export class UserController {
   }
 
   @Get(':id/status')
-  async getUserStatus(@Param('id') id: string): Promise<Status> {
+  async getUserStatus(@Param('id', ParseIntPipe, UserIdValidationPipe) id: string): Promise<Status> {
     return this.userService.getUserStatusById(Number(id));
   }
 
@@ -186,5 +188,11 @@ export class UserController {
   @ApiOperation({ summary: 'Get all matches of user by Id' })
   async getUserMatches(@Param('id', ParseIntPipe) id: number): Promise<UserMatch[]> {
     return this.matchService.getUserMatches(id);
+  }
+
+  @Get(':id/matches-resume')
+  @ApiOperation({ summary: 'Get all matches resume of user by ID' })
+  async getUserMatchesResume(@Param('id', ParseIntPipe) id: number): Promise<any[]> {
+    return this.userService.getUserMatchesResume(id);
   }
 }

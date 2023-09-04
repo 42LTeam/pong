@@ -125,6 +125,32 @@ export async function getStatus(){
     return axios(config);
 }
 
+export async function blockUser(blockedId: number){
+    var config = {
+        method: 'post',
+        url: URL + '/block/create',
+        withCredentials: true,
+        data: {
+            blockedId
+        }
+    };
+    return axios(config);
+}
+
+
+export async function unblockUser(blockedId: number){
+    var config = {
+        method: 'delete',
+        url: URL + '/block/remove',
+        withCredentials: true,
+        data: {
+            blockedId
+        }
+    };
+    return axios(config);
+}
+
+
 export async function updateUserAvatar(id, avatarUrl){
     const config = {
         method: 'put',
@@ -197,6 +223,7 @@ export async function createChannel(
             password?: string,
             creatorId: number,
             privated?: boolean,
+            conv?:boolean,
         }, ){
     const config = {
         method: 'post',
@@ -343,7 +370,7 @@ export async function getPath(path: string){
 export async function getUserByID(ID){
     const config = {
         method: 'get',
-        url: URL + '/users/id/' + ID,
+        url: URL + '/users/' + ID,
         withCredentials: true,
     };
     return axios(config);
@@ -380,6 +407,15 @@ export async function getUserMatches(ID){
     const config = {
         method: 'get',
         url: URL + '/users/' + ID + '/matches',
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
+export async function getUserMatchesResume(ID){
+    var config = {
+        method: 'get',
+        url: URL + '/users/' + ID + '/matches-resume',
         withCredentials: true,
     };
     return axios(config);

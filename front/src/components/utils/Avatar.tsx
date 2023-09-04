@@ -11,8 +11,8 @@ export default function Avatar(props : AvatarProps){
         <div className="avatar-root user-picture" style={{
             backgroundImage: url,
             color: props.color || "#7F8C8D",
-            width: props.width,
-            height: props.height,
+            width: props.width || props.height || 30,
+            height: props.height || props.height || 30,
         }}>
 
         </div>
