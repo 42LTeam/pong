@@ -7,6 +7,7 @@ import {
 import { FriendService } from "../friend/friend.service";
 import { MessageService } from "../message/message.service";
 import { Channel } from "@prisma/client";
+import { hashPassword } from "../auth/password.utils";
 
 @Injectable()
 export class ChannelService {
@@ -15,7 +16,7 @@ export class ChannelService {
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   async addInvite(id, userId) {
     const newUser = await this.prisma.userChannel.create({
@@ -180,29 +181,29 @@ export class ChannelService {
     const conversation = await this.prisma.channel.findMany({
       where: {
         conv: true,
-        AND: [
-          {
-            creatorId: {
-              in: [userId, friendId],
-            },
-          },
-        ],
+        users: {
+          some: {
+            userId: userId
+          }
+        },
+        AND: {
+          users: {
+            some: {
+              userId: friendId
+            }
+          }
+        }
       },
       select: {
         id: true,
         creatorId: true,
-        users: {
-          where: {
-            id: {
-              not: userId,
-            },
-          },
-        },
+        users: true,
         messages: true,
       },
     });
+    const validConversation = conversation.filter(conv => conv.users.length === 2);
 
-    if (conversation.length) return conversation[0];
+    if (validConversation.length) return validConversation[0];
 
     const newConv = await this.prisma.channel.create({
       data: {
@@ -302,4 +303,14 @@ export class ChannelService {
 
     return muteUntil !== null && muteUntil > currentDateTime;
   }
+
+  async setChannelPassword(channelId: number, newPassword: string): Promise<Channel> {
+    const hashedPassword = await hashPassword(newPassword);
+    return this.prisma.channel.update({
+      where: { id: channelId },
+      data: { password: hashedPassword }
+    });
+  }
+  
+
 }
