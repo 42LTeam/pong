@@ -7,8 +7,8 @@ import "../css/main.css";
 
 
 export interface User {
-    avatar: String,
-    username: String,
+    avatar: string,
+    username: string,
     id: number,
     xp: number,
     pointAverage: number,
@@ -17,6 +17,7 @@ export interface User {
     leaderboard : boolean,
     blockList?: number[],
     friendList?: number[],
+    status: number
 
 }
 

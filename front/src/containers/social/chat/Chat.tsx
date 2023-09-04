@@ -9,7 +9,6 @@ import {ApplicationContext} from "../../Application";
 
 interface ChatProps {
     channel: any,
-    channelId: any
 }
 
 export default function Chat (props:ChatProps){

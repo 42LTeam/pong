@@ -2,77 +2,83 @@ import React, { Children, useContext, useState} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
-import { getConversation, removeFriendship, removeUserFromChannel, muteUserFromChannel, banUserFromChannel, removeUserAdminFromChannel } from "../../api";
-import { AuthContext } from "../../containers/Auth";
+import {
+    getConversation,
+    removeFriendship,
+    removeUserFromChannel,
+    muteUserFromChannel,
+    banUserFromChannel,
+    removeUserAdminFromChannel,
+    unbanUserFromChannel
+} from "../../api";
+import { AuthContext, User } from "../../containers/Auth";
 
 type Props = {
-    channelId: number;
-    // eslint-disable-next-line
+    channelId: number,
     children?: any,
-    // eslint-disable-next-line
-    friend: any,
+    friend: User,
     isAdmin: boolean,
-    // eslint-disable-next-line
     onClick?: any,
-    unmovable?: boolean,
+    unremovable: boolean,
+    isBanned: boolean
 }
 
 export default function Friend(props: Props){
 
+    const user = useContext(AuthContext);
     const navigate = useNavigate();
     const [display, setDisplay] = useState(null);
-    const user = useContext(AuthContext);
     const buttons = [
-      // User basics option everywhere
+      // ---------- Basic options
         {
             text: 'Profile',
-            handleClick: () => navigate("/profile/" + props.friend.userId),
+            handleClick: () => navigate("/profile/" + props.friend.id),
         },
         {
             text: 'Envoyer un message',
-            handleClick: () => getConversation(props.friend.userId).then((response) => navigate('/social/' + response.data.id)),
-
+            handleClick: () => getConversation(props.friend.id).then((response) => navigate('/social/' + response.data.id)),
         },
         {separator: true},
-
     ];
 
-    // Admin rights
-
-    console.log(props.isAdmin)
-
-    if(props.friend.isAdmin === false) {
-        buttons.push({
-            text: 'Mute',
-            handleClick: () => muteUserFromChannel(props.channelId, props.friend.userId).then(() => console.log("Mute")),
-        })
+    if (props.isAdmin)
+    {
         buttons.push({
             text: 'Kick',
-            handleClick: () => removeUserAdminFromChannel(props.channelId, props.friend.userId).then(() => navigate('/social/' + props.channelId)),
+            handleClick: () => removeUserAdminFromChannel(props.channelId, props.friend.id),
         })
         buttons.push({
-            text: 'Ban',
-            handleClick: () => banUserFromChannel(props.channelId, props.friend.userId).then(() => navigate('/social/' + props.channelId)),
+            text: 'Mute',
+            handleClick: () => muteUserFromChannel(props.channelId, props.friend.id),
         })
+        buttons.push({
+            text: 'Ban/Unban',
+            handleClick: () =>  !props.isBanned ? banUserFromChannel(props.channelId, props.friend.id) : unbanUserFromChannel(props.channelId, props.friend.id)
+        })
+        buttons.push({separator: true})
     }
 
-    // User option in Channel Member List
-    if(props.friend.id === user.id) {
-        
+    if(props.friend.id === user.id)  {
+
         buttons.push({
             text: 'Leave',
-            handleClick: () => removeUserFromChannel(props.channelId, props.friend.userId).then(() => navigate('/social/')),
+            handleClick: () => removeUserFromChannel(props.channelId, props.friend.id),
+
         })
+        buttons.push({separator: true})
     }
 
-    // User option in SocialBody
-    if (!props.unmovable)
+    if (!props.unremovable)
+    {
         buttons.push({
             text: 'Retirer l\'ami',
             handleClick: () => {
-                removeFriendship(props.friend.userId).then(() => setDisplay('none'));
+                removeFriendship(props.friend.id).then(() => setDisplay('none'));
             },
         })
+
+    }
+
     buttons.push({
         text: 'Bloquer',
         handleClick: () => alert('TODO'),
@@ -93,18 +99,24 @@ export default function Friend(props: Props){
     };
 
     const navigateToConversation = async (friend) => {
-        const response = await getConversation(friend.userId);
+        const response = await getConversation(friend.id);
         navigate('/social/' + response.data.id);
     }
-    console.log("props.friend Friends : " + props.friend.user.avatar)
+
     return (
         <ContextMenu  buttons={buttons} buttonProps={buttonProps}>
-            <div onClick={() => {props.onClick ? props.onClick(props.friend.user) : navigateToConversation(props.friend.user)}} className="friend" style={display ? {display: 'none'} : null}>
-                <Avatar width="48px" height="48px" url={props.friend.user?.avatar}></Avatar>
+            <div onClick={() => {props.onClick ? props.onClick(props.friend) : navigateToConversation(props.friend)}} className="friend" style={display ? {display: 'none'} : null}>
+                <Avatar width="48px" height="48px" url={props.friend?.avatar}></Avatar>
 
                 <div className="conversation-content">
-                    <div className="conversation-username">{props.friend.user?.username}</div>
-                    <div className="conversation-preview">{props.friend.user?.status}</div>
+
+
+                    { !props.isBanned ?
+                    <div className="conversation-username">{props.friend?.username}</div> :
+                    <div className="conversation-username-ban">{props.friend?.username}</div>}
+
+
+                    <div className="conversation-preview">{props.friend?.status}</div>
                 </div>
                 {Children.map(props.children, child => <>{child}</>)}
 
