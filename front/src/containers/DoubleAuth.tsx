@@ -34,6 +34,7 @@ export default function DoubleAuth ({setDestination}){
                 onKeyDown={(event) => {
                     if (event.key != null && event.key != 'Enter') return;
                     handleClick();
+                    ref.current.value = ''
                 }}
                 button={<Button
                     handleClick={handleClick} text={"Confirmer"}
