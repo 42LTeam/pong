@@ -30,8 +30,9 @@ export default function Friend(props: Props){
 
     ];
     if(props.unremovable) {
+        
         buttons.push({
-            text: 'Quitter le channel',
+            text: 'Leave',
             handleClick: () => removeUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Click out"))
         })
         buttons.push({
