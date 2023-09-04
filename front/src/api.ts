@@ -1,10 +1,9 @@
 import io from "socket.io-client";
 import axios from "axios";
 
-const localhostwebsocket = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':8001' : 'http://localhost:8001';
+const localhostwebsocket = process.env.VITE_API_URL ? `${process.env.VITE_API_URL}:8001` : 'http://localhost:8001';
 const webSocketURL = localhostwebsocket;
-
-const localhostback = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':3000' : 'http://localhost:3000';
+const localhostback = process.env.VITE_API_URL ? `${process.env.VITE_API_URL}:3000` : 'http://localhost:3000';
 const URL = localhostback;
 export const socket = io(webSocketURL, { autoConnect: true});
 
@@ -118,7 +117,7 @@ export async function searchUser(search, options: {friendOnly?: boolean, notFrie
 }
 
 export async function getStatus(){
-    var config = {
+    const config = {
         method: 'get',
         url: URL + '/auth/status',
         withCredentials: true,
@@ -342,7 +341,7 @@ export async function getPath(path: string){
 }
 
 export async function getUserByID(ID){
-    var config = {
+    const config = {
         method: 'get',
         url: URL + '/users/id/' + ID,
         withCredentials: true,
@@ -351,7 +350,7 @@ export async function getUserByID(ID){
 }
 
 export async function getUsers(){
-    var config = {
+    const config = {
         method: 'get',
         url: URL + '/users',
         withCredentials: true,
@@ -378,7 +377,7 @@ export async function getRatioAgainst(id1: number, id2: number){
 }
 
 export async function getUserMatches(ID){
-    var config = {
+    const config = {
         method: 'get',
         url: URL + '/users/' + ID + '/matches',
         withCredentials: true,

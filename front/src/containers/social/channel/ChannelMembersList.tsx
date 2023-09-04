@@ -5,7 +5,7 @@ import SidePanel from "../../../components/utils/SidePanel";
 import Friend from "../../../components/friend/Friend";
 
 type ChannelMembersListProps = {
-  setChannelId: any,
+  setChannelId: never,
   channelId: number
 }
 
