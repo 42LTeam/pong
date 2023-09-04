@@ -266,8 +266,14 @@ export async function getConversation(userId: number) {
     url: URL + "/conversation/" + userId,
     withCredentials: true,
   };
-  return axios(config);
+  console.log("id mygeue: " + userId)
+  try {
+    return await axios(config);
+  } catch (error) {
+    throw error;
+  }
 }
+
 
 export async function acceptFriendship(id: number) {
   const config = {
@@ -275,7 +281,18 @@ export async function acceptFriendship(id: number) {
     url: URL + "/friend/friend-request/accept/" + id,
     withCredentials: true,
   };
-  return axios(config);
+  try {
+    const response = await axios(config);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      console.error("Bad request:", error.response.data);
+      alert("There was an issue getting the conversation. Please try again.");
+    } else {
+      console.error("Unexpected error:", error.message);
+      alert("An error occurred. Please try again later.");
+    }
+  }
 }
 
 export async function removeFriendship(friendId: number) {
@@ -424,6 +441,18 @@ export async function getUserMatchesResume(ID) {
   var config = {
     method: "get",
     url: URL + "/users/" + ID + "/matches-resume",
+    withCredentials: true,
+  };
+  return axios(config);
+}
+
+export async function setChannelPassword(channelId: number, newPassword: string) {
+  const config = {
+    method: 'post',
+    url: URL + "/channels/" + channelId + "/set-password",
+    data: {
+      password: newPassword
+    },
     withCredentials: true,
   };
   return axios(config);

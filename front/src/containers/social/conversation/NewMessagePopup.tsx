@@ -8,6 +8,7 @@ import {
   getAllUsers,
   searchUser,
   sendChannelInvite,
+  setChannelPassword,
 } from "../../../api";
 import Removable from "../../../components/utils/Removable";
 import Cancel from "../../../components/svg/Cancel";
@@ -91,6 +92,28 @@ export default function NewMessagePopup({ position, clear }: Props) {
     });
   };
 
+  const handleClickPrivate = async (isPrivate) => {
+    const enteredPassword = prompt("Please enter the password for the private channel:");
+    if (enteredPassword === null) { 
+      return;
+    }
+    const response = await createChannel({
+      name: [...checked, user.username].sort().join("+"),
+      creatorId: user.id,
+      privated: isPrivate,
+    });
+    const channel = response.data;
+    sendChannelInvite({
+      channelId: channel.id,
+      ids: suggestions
+        .filter((f) => checked.includes(f.username))
+        .map((f) => f.id),
+    }).then(() => {
+      clear(true);
+    });
+    setChannelPassword(channel.id, enteredPassword)
+  };
+
   const toggleCheck = (current, check) => {
     if (check) setChecked((c) => [...c, current]);
     else setChecked(checked.filter((c) => c !== current));
@@ -155,7 +178,7 @@ export default function NewMessagePopup({ position, clear }: Props) {
           <Button
             key={"newmessage-button-private"}
             fill
-            handleClick={() => handleClick(true)}
+            handleClick={() => handleClickPrivate(true)}
             text="Creer un channel privé"
             clickable={true}
             style={{ flex: 1, marginLeft: "10px" }}
