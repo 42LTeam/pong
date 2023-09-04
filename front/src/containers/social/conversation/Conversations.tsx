@@ -1,7 +1,7 @@
 import "../../../css/chat.css"
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {getChannels} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 import SidePanel from "../../../components/utils/SidePanel";
@@ -64,7 +64,7 @@ export default function Conversations({ state }: Props){
                                 clear={clear}>
                             </NewMessagePopup>}
                         {
-                            conversations.filter(c => !c.conv || !user.blockList.includes(c.users[0].user.id))
+                            conversations.filter(c => !c.conv || c.users.length > 0 && !user.blockList.includes(c.users[0].id))
                                 .sort((a, b) => {
                                 const a_value = a.lastMessage ? a.lastMessage.created_at : a.created_at;
                                 const b_value = b.lastMessage ? b.lastMessage.created_at : b.created_at;

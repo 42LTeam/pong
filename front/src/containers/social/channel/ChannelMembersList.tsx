@@ -5,7 +5,7 @@ import SidePanel from "../../../components/utils/SidePanel";
 import Friend from "../../../components/friend/Friend";
 
 type ChannelMembersListProps = {
-  setChannelId: never,
+
   channelId: number
 }
 
@@ -20,6 +20,8 @@ export default function ChannelMembersList({ channelId }: ChannelMembersListProp
   };
 
   useEffect(() => {
+    if (!channelId)
+      return;
     fetchChannelAllMembers();
   }, [channelId]);
 
@@ -28,9 +30,12 @@ export default function ChannelMembersList({ channelId }: ChannelMembersListProp
       subheader="Members"
       body={
         <>
-          {ChannelAllMembers.map((current) => {
-            return (<Friend key={current.user.id} unremovable={true} friend={current.user} channelId={channelId}></Friend>);
-          })}
+          {
+            ChannelAllMembers.map((current) => {
+              console.log("curent", current)
+            return (<Friend key={current.id} unmovable={true} friend={current} channelId={channelId} isAdmin={current.isAdmin}></Friend>);
+          })
+          }
         </>
       }
     />

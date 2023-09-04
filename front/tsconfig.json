@@ -3,7 +3,8 @@
     "target": "ES6",
     "module": "esnext",
     "jsx": "React",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node"
   },
   "exclude": [
     "node_modules"

@@ -1,5 +1,5 @@
 import TextInput from "../../../components/utils/TextInput";
-import {useContext, useEffect,  useRef, useState} from "react";
+import React, {useContext, useEffect,  useRef, useState} from "react";
 import Message from "../../../components/chat/Message";
 import {AuthContext} from "../../Auth";
 import "../../../css/chatBody.css"
@@ -9,6 +9,7 @@ import {ApplicationContext} from "../../Application";
 
 interface ChatProps {
     channel: any,
+    channelId: any
 }
 
 export default function Chat (props:ChatProps){
@@ -29,7 +30,7 @@ export default function Chat (props:ChatProps){
         setMessages(tmp_messages);
         setLastRead(data.lastRead);
         if( tmp_messages.length)
-            readMessage(props.channel, tmp_messages[0].id);
+            await readMessage(props.channel, tmp_messages[0].id);
     }
 
     useEffect(() => {
@@ -71,20 +72,17 @@ export default function Chat (props:ChatProps){
     return (
         <div className="chat-root">
             <div className="chat-messages">
-
                 {unReadMessages.map((current) => {
                     return (
-                        <>
-                            <Message
-                                key={current.id}
-                                sender={current.user}
-                                content={current.content}
-                                date={new Date(current.created_at).toTimeString().slice(0,5)}
-                                sent={current.userId == user.id}
-                            ></Message>
-                        </>
-
-                    )
+                      <React.Fragment key={current.id}>
+                          <Message
+                            sender={current.user}
+                            content={current.content}
+                            date={new Date(current.created_at).toTimeString().slice(0,5)}
+                            sent={current.userId == user.id}
+                          ></Message>
+                      </React.Fragment>
+                    );
                 })}
                 {unReadMessages.length ? <div className="row">
                     <h2 style={{
@@ -104,16 +102,13 @@ export default function Chat (props:ChatProps){
                     return (current.id <= lastRead)
                 }).map((current) => {
                     return (
-                        <>
-                            <Message
-                                key={current.id}
-                                sender={current.user}
-                                content={current.content}
-                                date={new Date(current.created_at).toTimeString().slice(0,5)}
-                                sent={current.userId == user.id}
-                            ></Message>
-                        </>
-
+                      <Message
+                        key={current.id}
+                        sender={current.user}
+                        content={current.content}
+                        date={new Date(current.created_at).toTimeString().slice(0,5)}
+                        sent={current.userId == user.id}
+                      ></Message>
                     )
                 })}
 
@@ -123,7 +118,7 @@ export default function Chat (props:ChatProps){
             {props.channel.conv === false && (
                 <div className="conv-false-content">
                     {}
-                    This is the content when 'conv' is false.
+                    This is the content when conv is false.
                 </div>
                 )}
             <TextInput ref={ref} color="#7F8C8D" text="Votre message..." bgColor="#ECF0F1" onKeyDown={handleSendMessage} button={<Send handleClick={handleSendMessage}></Send>}></TextInput>

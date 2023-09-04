@@ -1,5 +1,5 @@
 import PopUp from "./PopUp";
-import {Children, useState} from "react";
+import React, {Children, useState} from "react";
 import Button from "./Button";
 
 type Props = {
@@ -21,27 +21,26 @@ export default function ContextMenu(props: Props){
             return false;
     }
 
-
-    return (
-        <div onContextMenu={handleContextMenu} style={{alignSelf: "stretch"}}>
-            {Children.map(props.children, child => <>{child}</>)}
-            {popUpPosition ?
-            <PopUp divStyle={{
-                padding: '5px'
-            }} height="min-content" position={popUpPosition} clear={() => setPopUpPosition(null)}>
-                {props.buttons?.map(current => {
-                    if (current.separator) return <div style={{background: '#2c3e50'}} className="horizontal-separator"></div>
-                    return (
-                        <Button key={props.buttons?.indexOf(current)} {...props.buttonProps} {...current} clickable={true}
-                                handleClick={() => {
-                                    setPopUpPosition(null);
-                                    current.handleClick();
-                                }}
-                        ></Button>
-                    )
-                })}
-            </PopUp>
-            : null}
-        </div>
-    )
+  return (
+    <div onContextMenu={handleContextMenu} style={{alignSelf: "stretch"}}>
+      {props.children}
+      {popUpPosition ?
+        <PopUp divStyle={{
+          padding: '5px'
+        }} height="min-content" position={popUpPosition} clear={() => setPopUpPosition(null)}>
+          {props.buttons?.map((current, index) => {
+            if (current.separator) return <div key={`separator-${index}`} style={{background: '#2c3e50'}} className="horizontal-separator"></div>
+            return (
+              <Button key={`button-${index}`} {...props.buttonProps} {...current} clickable={true}
+                      handleClick={() => {
+                        setPopUpPosition(null);
+                        current.handleClick();
+                      }}
+              ></Button>
+            )
+          })}
+        </PopUp>
+        : null}
+    </div>
+  )
 }
