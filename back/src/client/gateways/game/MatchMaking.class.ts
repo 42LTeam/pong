@@ -1,5 +1,6 @@
 import Game from "./Game.class";
 import {MatchService} from "../../../match/match.service";
+import { UserService } from "src/user/user.service";
 
 export default class MatchMaking {
 
@@ -9,7 +10,8 @@ export default class MatchMaking {
 
     constructor(
         private server,
-        private matchService: MatchService
+        private matchService: MatchService,
+        private userService: UserService
     ) {}
 
     handleLeave(user) {
@@ -32,7 +34,7 @@ export default class MatchMaking {
     }
 
     newGame(user, player) {
-        const newGame = new Game(this.server, ++this.newGameId, player == null, this.matchService);
+        const newGame = new Game(this.server, ++this.newGameId, player == null, this.matchService, this.userService);
         this.games.push(newGame);
         this.nbOfGames++;
         console.log('MatchMaking : New game', this.newGameId);
