@@ -1,24 +1,23 @@
-import {Children, useContext, useEffect, useState} from "react";
+import {Children, useState} from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import {useNavigate} from "react-router-dom";
-import {getConversation, removeFriendship, getUserByID, blockUser, unblockUser} from "../../api";
-import {AuthContext} from "../../containers/Auth";
+import { getConversation, removeFriendship, getUserByID, removeUserFromChannel, muteUserFromChannel, banUserFromChannel, removeUserAdminFromChannel } from "../../api";
 
 type Props = {
+    channelId: number;
     friend: any,
     onClick?: any,
     children?: any,
-    friendlist? :boolean,
+    unremovable?: boolean,
 }
 
 export default function Friend(props: Props){
-    const user = useContext(AuthContext);
+
     const navigate = useNavigate();
-    const blocked = user.blockList.includes(props.friend.id);
-    const isFriend = user.friendList.includes(props.friend.id);
     const [display, setDisplay] = useState(null);
     const buttons = [
+      // ---------- Basic options
         {
             text: 'Profile',
             handleClick: () => navigate("/profile/" + props.friend.id),
@@ -28,52 +27,38 @@ export default function Friend(props: Props){
             handleClick: () => getConversation(props.friend.id).then((response) => navigate('/social/' + response.data.id)),
         },
         {separator: true},
-        {
-            text: 'Match standard',
-            handleClick: () => getUserByID(props.friend.id).then((response) =>
-                navigate('/game?id=' + props.friend.id + '&username=' + response.data.username + '&session=' + response.data.session + '&custom=false')),
-        },
-        {
-            text: 'Match custom',
-            handleClick: () => getUserByID(props.friend.id).then((response) =>
-                navigate('/game?id=' + props.friend.id + '&username=' + response.data.username + '&session=' + response.data.session + '&custom=true')),
-        },
-        {separator: true},
+
     ];
-
-    useEffect(() => {
-        if (blocked) {
-            buttons.push({
-                text: 'Debloquer',
-                handleClick: () => {
-                    unblockUser(props.friend?.id);
-                    user.blockList.splice(user.blockList.indexOf(props.friend?.id), 1);
-                    setDisplay('none');
-                }
-            });
-        }
-        else
-            buttons.push({
-                text: 'Bloquer',
-                handleClick: () => {
-                    blockUser(props.friend?.id);
-                    user.blockList.push(props.friend?.id);
-                },
-            });
-        console.log(user.friendList)
-        if (isFriend) {
-            buttons.push({
-                text: 'Retirer l\'ami',
-                handleClick: () => {
-                    removeFriendship(props.friend.id).then(() => setDisplay('none'));
-                },
-            })
-
-        }
-
-    })
-
-
+    if(props.unremovable) {
+        
+        buttons.push({
+            text: 'Leave',
+            handleClick: () => removeUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Click out"))
+        })
+        buttons.push({
+            text: 'Mute',
+            handleClick: () => muteUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Mute")),
+        })
+        buttons.push({
+            text: 'Kick',
+            handleClick: () => removeUserAdminFromChannel(props.channelId, props.friend.id).then((response) => console.log("Kick")),
+        })
+        buttons.push({
+            text: 'Ban',
+            handleClick: () => banUserFromChannel(props.channelId, props.friend.id).then((response) => console.log("Ban")),
+        })
+    }
+    if (!props.unremovable)
+        buttons.push({
+            text: 'Retirer l\'ami',
+            handleClick: () => {
+                removeFriendship(props.friend.id).then(() => setDisplay('none'));
+            },
+        })
+    buttons.push({
+        text: 'Bloquer',
+        handleClick: () => alert('TODO'),
+    });
 
     const buttonProps = {
         buttonProps: {
@@ -97,10 +82,10 @@ export default function Friend(props: Props){
     return (
         <ContextMenu  buttons={buttons} buttonProps={buttonProps}>
             <div onClick={() => {props.onClick ? props.onClick(props.friend) : navigateToConversation(props.friend)}} className="friend" style={display ? {display: 'none'} : null}>
-                <Avatar width="48px" height="48px" url={ !props.friendlist && blocked ? null :  props.friend?.avatar}></Avatar>
+                <Avatar width="48px" height="48px" url={props.friend?.avatar}></Avatar>
 
                 <div className="conversation-content">
-                    <div className="conversation-username">{!props.friendlist && blocked ? 'Utilisateur bloqué' : props.friend?.username}</div>
+                    <div className="conversation-username">{props.friend?.username}</div>
                     <div className="conversation-preview">{props.friend?.status}</div>
                 </div>
                 {Children.map(props.children, child => <>{child}</>)}
