@@ -25,7 +25,7 @@ export class AuthenticatedGuard implements CanActivate {
         const req = context.switchToHttp().getRequest();
         const role = this.reflector.get<number>('roles', context.getHandler());
         if (!role) {
-          return req.isAuthenticated();
+          return req.isAuthenticated() && req.session.totp;
         }
         const user = await req.user;
         return req.isAuthenticated() && user.role >= role && req.session.totp;
