@@ -1,4 +1,4 @@
-import { Children, useState } from "react";
+import { Children, useContext, useState } from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,8 @@ import {
   banUserFromChannel,
   removeUserAdminFromChannel,
 } from "../../api";
+import React from "react";
+import { AuthContext } from "../../containers/Auth";
 
 type Props = {
   channelId: number;
@@ -22,22 +24,27 @@ type Props = {
 
 export default function Friend(props: Props) {
   const navigate = useNavigate();
+  const user = useContext(AuthContext);
   const [display, setDisplay] = useState(null);
   const buttons = [
-    // ---------- Basic options
+
     {
       text: "Profile",
       handleClick: () => navigate("/profile/" + props.friend.id),
     },
-    {
+    { separator: true },
+  ];
+
+  if (props.friend.id != user.id) {
+    buttons.push({
       text: "Envoyer un message",
       handleClick: () =>
         getConversation(props.friend.id).then((response) =>
           navigate("/social/" + response.data.id),
         ),
-    },
-    { separator: true },
-  ];
+    });
+  }
+
   if (props.unremovable) {
     buttons.push({
       text: "Leave",
@@ -95,18 +102,24 @@ export default function Friend(props: Props) {
   };
 
   const navigateToConversation = async (friend) => {
-    const response = await getConversation(friend.id);
-    navigate("/social/" + response.data.id);
+    try {
+      const response = await getConversation(friend.id);
+      navigate("/social/" + response.data.id);
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        console.error(`Error: ${error.response.data.message}`);
+      } else {
+        console.error("Error while fetching conversation.");
+      }
+    }
   };
+
+
 
   return (
     <ContextMenu buttons={buttons} buttonProps={buttonProps}>
       <div
-        onClick={() => {
-          props.onClick
-            ? props.onClick(props.friend)
-            : navigateToConversation(props.friend);
-        }}
+        onClick={props.onClick}
         className="friend"
         style={display ? { display: "none" } : null}
       >
