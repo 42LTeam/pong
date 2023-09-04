@@ -10,6 +10,7 @@ type Props = {
 
 export default function ContextMenu(props: Props) {
   const [popUpPosition, setPopUpPosition] = useState(null);
+
   const handleContextMenu = (event) => {
     setPopUpPosition({ left: event.clientX, top: event.clientY });
     event.preventDefault();
@@ -18,8 +19,8 @@ export default function ContextMenu(props: Props) {
 
   return (
     <div onContextMenu={handleContextMenu} style={{ alignSelf: "stretch" }}>
-      {Children.map(props.children, (child) => (
-        <>{child}</>
+      {Children.map(props.children, (child, index) => (
+        <div key={index}>{child}</div>
       ))}
       {popUpPosition ? (
         <PopUp
@@ -30,17 +31,18 @@ export default function ContextMenu(props: Props) {
           position={popUpPosition}
           clear={() => setPopUpPosition(null)}
         >
-          {props.buttons?.map((current) => {
+          {props.buttons?.map((current, index) => {
             if (current.separator)
               return (
                 <div
+                  key={"separator-" + index}
                   style={{ background: "#2c3e50" }}
                   className="horizontal-separator"
                 ></div>
               );
             return (
               <Button
-                key={props.buttons?.indexOf(current)}
+                key={"button-" + index}
                 {...props.buttonProps}
                 {...current}
                 clickable={true}
