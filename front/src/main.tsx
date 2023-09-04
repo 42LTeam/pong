@@ -1,13 +1,9 @@
-
 // @ts-ignore
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-import Auth from "./containers/Auth"
+import Auth from "./containers/Auth";
 
-import "./css/main.css"
+import "./css/main.css";
 
-
-ReactDOM.createRoot(document.querySelector('#root')).render(
-    <Auth/>
-);
+ReactDOM.createRoot(document.querySelector("#root")).render(<Auth />);

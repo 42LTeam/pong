@@ -1,100 +1,103 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import TextIcon from "../../components/TextIcon"
+import TextIcon from "../../components/TextIcon";
 
-import "../../css/profile.css"
-import "../../css/leaderboard.css"
-import { UserRank, getAveragePoint, getRatio, getUserRank, getUsersRanks } from "../leaderboardpage/GetRanks";
+import "../../css/profile.css";
+import "../../css/leaderboard.css";
+import {
+  UserRank,
+  getAveragePoint,
+  getRatio,
+  getUserRank,
+  getUsersRanks,
+} from "../leaderboardpage/GetRanks";
 import { getAllUsers } from "../../api";
 import { AuthContext, User } from "../Auth";
 
 type Props = {
-    user: any;
-    type: string;
-}
-
+  user: any;
+  type: string;
+};
 
 export default function ProfileLeaderboardPlaceBubble(props: Props) {
-    
-    const me = useContext(AuthContext);
-  
-    const [placement, setPlacement] = useState(0);
-    const [users, setUsers] = useState<User[]>([]);
-    const [usersWithRank, setUsersRanks] = useState<UserRank[] | undefined>(undefined);
+  const me = useContext(AuthContext);
 
-    useEffect(() => {
-        getAllUsers({friendOnly: false, notFriend: false})
-        .then(function (response) {
-            const updatedUsers = [...response.data, me];
-            setUsers(updatedUsers);
+  const [placement, setPlacement] = useState(0);
+  const [users, setUsers] = useState<User[]>([]);
+  const [usersWithRank, setUsersRanks] = useState<UserRank[] | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    getAllUsers({ friendOnly: false, notFriend: false })
+      .then(function (response) {
+        const updatedUsers = [...response.data, me];
+        setUsers(updatedUsers);
+      })
+      .catch(function (error) {
+        console.error("Error fetching user data:", error);
+      });
+  }, [me]);
+
+  useEffect(() => {
+    let isFetching = true;
+
+    const fetch = async () => {
+      const usersUpdatedRanks = await getUsersRanks(users, props.type);
+      if (isFetching) setUsersRanks(usersUpdatedRanks);
+    };
+    fetch();
+
+    return () => {
+      isFetching = false;
+    };
+  }, [users]);
+
+  useEffect(() => {
+    if (props.user === undefined || usersWithRank === undefined) return;
+    setPlacement(getUserRank(props.user, usersWithRank) ?? 0);
+  }, [usersWithRank]);
+
+  const [data, setData] = useState<number>(0);
+
+  useEffect(() => {
+    if (props.type === "Total xp") {
+      setData(props.user.xp);
+    } else if (props.type === "Average points per match") {
+      getAveragePoint(props.user.id)
+        .then((average) => {
+          setData(average);
         })
-        .catch(function (error) {
-            console.error('Error fetching user data:', error);
+        .catch((error) => {
+          console.error("Error fetching average point:", error);
+          setData(0);
         });
-    }, [me]);
-
-    useEffect(() => {
-        let isFetching = true;
-
-        const fetch = async () => {
-        const usersUpdatedRanks = await getUsersRanks(users, props.type);
-        if (isFetching)
-            setUsersRanks(usersUpdatedRanks);
-        }
-        fetch();
-
-        return () => {
-        isFetching = false;
-        }
-    }, [users])
-
-    useEffect(() => {
-        if (props.user === undefined || usersWithRank === undefined )
-        return ;
-        setPlacement(getUserRank(props.user, usersWithRank) ?? 0)
-    }, [usersWithRank])
-
-    
-    
-    const [data, setData] = useState<number>(0);
-
-    useEffect(() => {
-        if (props.type === "Total xp") {
-            setData(props.user.xp);
-        } else if (props.type === "Average points per match") {
-            getAveragePoint(props.user.id)
-                .then(average => {
-                    setData(average);
-                })
-                .catch(error => {
-                    console.error('Error fetching average point:', error);
-                    setData(0);
-                });
-        } else if (props.type === "Victories/defeat ratio") {
-            getRatio(props.user.id)
-                .then(ratio => {
-                    setData(ratio);
-                })
-                .catch(error => {
-                    console.error('Error fetching average point:', error);
-                    setData(0);
-                });
-        }
-    }, [props.type, props.user.id]);
-    
-    if (usersWithRank === undefined) {
-        return <h2>LOADING</h2>
+    } else if (props.type === "Victories/defeat ratio") {
+      getRatio(props.user.id)
+        .then((ratio) => {
+          setData(ratio);
+        })
+        .catch((error) => {
+          console.error("Error fetching average point:", error);
+          setData(0);
+        });
     }
+  }, [props.type, props.user.id]);
 
-    return (
-        <div className="leaderboard-place-bubble">
+  if (usersWithRank === undefined) {
+    return <h2>LOADING</h2>;
+  }
 
-            <div className="leaderboard-title-stat"> {props.type} </div>            
+  return (
+    <div className="leaderboard-place-bubble">
+      <div className="leaderboard-title-stat"> {props.type} </div>
 
-            <div className="leaderboard-data"> {(props.user.xp ? data.toFixed(2) : "N/A")} </div>
+      <div className="leaderboard-data">
+        {" "}
+        {props.user.xp ? data.toFixed(2) : "N/A"}{" "}
+      </div>
 
-            <TextIcon style="placement-icon" text={(props.user.xp ? placement : "-")} />
-
-        </div>
-    )
+      <TextIcon style="placement-icon" text={props.user.xp ? placement : "-"} />
+    </div>
+  );
 }
