@@ -1,55 +1,32 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Auth";
 
 import "../../css/utils/user.css";
+import "../../css/header.css";
 
 const UserBubble = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef(null);
-
   const user = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
-  const navigate = useNavigate();
-
   const handleOptionClick = (option: string) => {
-    if (option == "my_profile") {
-      setMenuOpen(!menuOpen);
+    if (option === "my_profile") {
+      setMenuOpen(false);
       navigate("profile/" + user?.id);
-    } else if (option == "settings") {
-      setMenuOpen(!menuOpen);
+    } else if (option === "settings") {
+      setMenuOpen(false);
       navigate("/settings");
     }
   };
 
-  const handleBubbleClick = (event) => {
-    event.stopPropagation();
-    toggleMenu();
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !(menuRef.current as HTMLElement).contains(event.target as Node)
-      ) {
-        setMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
   return (
     <div className="column">
-      <div className="user bubble" onClick={handleBubbleClick}>
+      <div className="user bubble" onClick={toggleMenu}>
         <div className="user-title">{user?.username}</div>
         {user?.avatar && (
           <div
@@ -58,27 +35,32 @@ const UserBubble = () => {
           />
         )}
       </div>
-      <div>
-        {menuOpen && (
-          <div ref={menuRef} className="bubble menu">
-            <ul className="list">
-              <li
-                className="user user-title element"
-                onClick={() => handleOptionClick("my_profile")}
-              >
-                My profile
-              </li>
+      {menuOpen && (
+        <div className="bubble menu">
+          <ul className="list">
+            <li
+              className="user user-title element"
+              onClick={() => handleOptionClick("my_profile")}
+            >
+              My profile
+            </li>
 
-              <li
-                className="user user-title"
-                onClick={() => handleOptionClick("settings")}
-              >
-                Settings
-              </li>
-            </ul>
-          </div>
-        )}
-      </div>
+            <li
+              className="user user-title"
+              onClick={() => handleOptionClick("settings")}
+            >
+              Settings
+            </li>
+
+            <li
+              className="user user-title"
+              onClick={() => handleOptionClick("disconnect")}
+            >
+              Disconnect
+            </li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
