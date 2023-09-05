@@ -252,7 +252,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor("avatar"))
   async uploadAvatar(
     @Param("id", ParseIntPipe) id: number,
-    @UploadedFile() file
+    @UploadedFile() file,
   ): Promise<any> {
     const fileName = file.path.split("/").pop();
     const formattedPath = `//localhost:3000/uploads/${fileName}`;
