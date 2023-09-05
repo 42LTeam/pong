@@ -18,7 +18,8 @@ export const QuickInviteButton = (props: Props): JSX.Element => {
           "&username=" +
           response.data.username +
           "&session=" +
-          response.data.session,
+          response.data.session +
+          "&custom=false",
       ),
     );
   };
