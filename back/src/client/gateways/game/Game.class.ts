@@ -1,6 +1,7 @@
 import GamePlayer, { playerStatus } from "./GamePlayer.class";
 import GameEngine from "./GameEngine.class";
-import { MatchService } from "../../../match/match.service";
+import {MatchService} from "../../../match/match.service";
+import { UserService } from "src/user/user.service";
 
 export enum gameState {
   CREATING,
@@ -26,7 +27,17 @@ export default class Game {
     this.engine = new GameEngine(this);
   }
 
-  MATCH_ROOM = "Match-" + this.matchId;
+	constructor(
+				public matchId: number,
+				public random: boolean,
+				public custom: boolean,
+				private server,
+				public matchService: MatchService,
+        public userService: UserService
+	) {
+    this.engine = new GameEngine(this);
+    console.log('Game : New game ', this.matchId);
+  }
 
   onGame(userId) {
     return (
