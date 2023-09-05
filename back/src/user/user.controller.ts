@@ -100,7 +100,7 @@ export class UserController {
   constructor(
     private userService: UserService,
     private matchService: MatchService
-  ) { }
+  ) {}
 
   @Post()
   @Roles(Role.ADMIN) // For admin restrictions
@@ -249,12 +249,14 @@ export class UserController {
   }
 
   @Post("avatar-upload/:id")
-@UseInterceptors(FileInterceptor("avatar"))
-async uploadAvatar(@Param('id', ParseIntPipe) id: number, @UploadedFile() file): Promise<any> {
-    const fileName = file.path.split('/').pop();
+  @UseInterceptors(FileInterceptor("avatar"))
+  async uploadAvatar(
+    @Param("id", ParseIntPipe) id: number,
+    @UploadedFile() file
+  ): Promise<any> {
+    const fileName = file.path.split("/").pop();
     const formattedPath = `//localhost:3000/uploads/${fileName}`;
     await this.userService.updateUserAvatar(id, formattedPath);
     return { path: formattedPath };
-}
-
+  }
 }

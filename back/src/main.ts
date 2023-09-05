@@ -33,9 +33,8 @@ async function bootstrap() {
   app.use(passport.session());
 
   // Serve static files from the public/uploads directory (users's avatar)
-  app.use('/uploads', express.static('public/uploads'));
+  app.use("/uploads", express.static("public/uploads"));
 
   await app.listen(3000);
 }
 bootstrap();
-

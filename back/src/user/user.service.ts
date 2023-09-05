@@ -13,7 +13,7 @@ export class UserService {
     private friendService: FriendService,
     @Inject(forwardRef(() => MatchService))
     private matchService: MatchService
-  ) { }
+  ) {}
 
   async createUser(
     id: number,
