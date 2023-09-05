@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Auth";
 
@@ -9,6 +9,7 @@ const UserBubble = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const user = useContext(AuthContext);
   const navigate = useNavigate();
+  const menuRef = useRef(null);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -21,11 +22,32 @@ const UserBubble = () => {
     } else if (option === "settings") {
       setMenuOpen(false);
       navigate("/settings");
+    } else if (option === "disconnect") {
+      setMenuOpen(false);
+      alert("TODO");
     }
   };
 
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
+
   return (
-    <div className="column">
+    <div className="menu-column">
       <div className="user bubble" onClick={toggleMenu}>
         <div className="user-title">{user?.username}</div>
         {user?.avatar && (
@@ -34,9 +56,8 @@ const UserBubble = () => {
             style={{ backgroundImage: `url(${user.avatar})` }}
           />
         )}
-      </div>
-      {menuOpen && (
-        <div className="bubble menu">
+        {menuOpen && (
+        <div ref={menuRef} className="menu">
           <ul className="list">
             <li
               className="user user-title element"
@@ -61,6 +82,8 @@ const UserBubble = () => {
           </ul>
         </div>
       )}
+      </div>
+      
     </div>
   );
 };
