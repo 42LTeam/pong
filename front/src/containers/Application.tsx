@@ -12,6 +12,8 @@ import HomePage from "./HomePage/HomePage";
 import Notification from "../components/utils/Notification";
 import GamePage from "./gamepage/GamePage";
 import { socket } from "../api";
+import React from "react";
+import LoginPage from "./LoginPage";
 
 type ApplicationEngine = {
   sendNotification: (
@@ -167,7 +169,10 @@ const Application = function ({ children }: { children?: any }) {
     ]);
   };
 
-  if (!user) return <div>Ah ouais chaud t'es pas log</div>;
+  return (
+    <LoginPage />
+  // <div>Ah ouais chaud t'es pas log</div>
+  );
 
   if (children) return children;
   if (!application)
