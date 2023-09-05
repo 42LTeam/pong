@@ -88,7 +88,6 @@ export default class GameEngine {
     this.game.state = gameState.STARTING;
     // this.printScores();
     for (var i = 4; i--; i > 0) {
-      // console.log('game-start', i);
       this.game.players.forEach((player) => {
         player.send("game-start", {
           matchId: this.game.matchId,
