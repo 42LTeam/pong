@@ -57,33 +57,32 @@ const UserBubble = () => {
           />
         )}
         {menuOpen && (
-        <div ref={menuRef} className="menu">
-          <ul className="list">
-            <li
-              className="user user-title element"
-              onClick={() => handleOptionClick("my_profile")}
-            >
-              My profile
-            </li>
+          <div ref={menuRef} className="menu">
+            <ul className="list">
+              <li
+                className="user user-title element"
+                onClick={() => handleOptionClick("my_profile")}
+              >
+                My profile
+              </li>
 
-            <li
-              className="user user-title"
-              onClick={() => handleOptionClick("settings")}
-            >
-              Settings
-            </li>
+              <li
+                className="user user-title"
+                onClick={() => handleOptionClick("settings")}
+              >
+                Settings
+              </li>
 
-            <li
-              className="user user-title"
-              onClick={() => handleOptionClick("disconnect")}
-            >
-              Disconnect
-            </li>
-          </ul>
-        </div>
-      )}
+              <li
+                className="user user-title"
+                onClick={() => handleOptionClick("disconnect")}
+              >
+                Disconnect
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
-      
     </div>
   );
 };

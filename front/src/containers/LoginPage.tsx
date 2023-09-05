@@ -3,24 +3,19 @@ import React from "react";
 import "../css/main.css";
 // @ts-ignore
 
-import { useNavigate } from "react-router-dom";
 import Button from "../components/utils/Button";
 
 const LoginPage = function () {
-
-    const handleLogin = () => {
-      alert("CONARD");
-      console.log("ASDASDS");
-        // alert(import.meta.env.VITE_API_URL + "3000:auth/login");
-        // window.location.href = import.meta.env.VITE_API_URL + "3000:auth/login";
-    }
-
-    console.log("JAI CHARGE");
+  const handleLogin = () => {
+    window.location.href = import.meta.env.VITE_API_URL + "3000:auth/login";
+  };
 
   return (
     <div className="login-page">
       <Button
-        handleClick={() => handleLogin}
+        handleClick={() =>
+          (window.location.href = "localhost" + ":3000/auth/login")
+        } //ATTONSION HARDCODE
         text={"Connection"}
         clickable
         buttonProps={{

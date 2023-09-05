@@ -169,10 +169,7 @@ const Application = function ({ children }: { children?: any }) {
     ]);
   };
 
-  return (
-    <LoginPage />
-  // <div>Ah ouais chaud t'es pas log</div>
-  );
+  if (!user) return <LoginPage />;
 
   if (children) return children;
   if (!application)

@@ -63,14 +63,14 @@
 }
 
 .menu-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
 }
 
-.menu{
+.menu {
   border-radius: 10px;
   background: #2c3e50;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
