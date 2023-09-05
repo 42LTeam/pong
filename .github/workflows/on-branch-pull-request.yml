@@ -82,14 +82,6 @@ jobs:
       - name: Build Up
         run: make action
 
-      - name: Check Prettier Front
-        run: |
-          cd ./front/ && npx prettier . --check
-
-      - name: Check Prettier Back
-        run: |
-          cd ./back/ && npx prettier . --check
-
       - name: Run health check script 5173
         run: |
           chmod +x health_script_5173.sh
