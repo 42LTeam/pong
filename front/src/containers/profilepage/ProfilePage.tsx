@@ -44,7 +44,7 @@ export default function ProfilePage() {
 
   if (user === null) {
     return (
-      <NotFound page="profile" id={userID}/>
+      <NotFound page="profile" id={userID} />
       // <h1>User with ID={userID} does not exist</h1>
     );
   }
