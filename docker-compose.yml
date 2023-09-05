@@ -9,6 +9,7 @@ services:
       - .env
     volumes:
       - ./back:/usr/src/app
+      - uploaded-images:/usr/src/app/public/uploads
     ports:
       - 3000:3000
       - 8001:8001
@@ -66,6 +67,7 @@ services:
 volumes:
   docker-nest-postgres:
   pgadmin:
+  uploaded-images:
 
 networks:
   net:
