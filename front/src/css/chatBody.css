@@ -1,71 +1,72 @@
-.chat-root{
-    display: flex;
-    padding: 10px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    flex: 85%;
-    align-self: stretch;
+.chat-root {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex: 85%;
+  align-self: stretch;
 }
 
-.chat-messages{
-    display: flex;
-    padding: 10px;
-    flex-direction: column-reverse;
-    align-items: flex-start;
-    gap: 10px;
-    align-self: stretch;
-    overflow-y: scroll;
+.chat-messages {
+  display: flex;
+  padding: 10px;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  overflow-y: scroll;
 }
 
 .chat-message {
-    display: flex;
-    gap: 10px;
-    align-self: stretch;
-    align-items: flex-end;
+  display: flex;
+  gap: 10px;
+  align-self: stretch;
+  align-items: flex-end;
 }
 
 .chat-message-sent {
-    flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }
 
 .chat-message-avatar {
-    width: 30px;
-    height: 30px;
-    background: #7F8C8D;
-    border-radius: 90px;;
+  width: 30px;
+  height: 30px;
+  background: #7f8c8d;
+  border-radius: 90px;
 }
 
 .chat-message-bubble {
-    display: flex;
-    padding: 10px 5px;
-    align-items: center;
-    gap: 10px;
-    border-radius: 10px 10px 10px 0;
-    background: #BDC3C7;
-    color: #34495E;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    max-width: 70%;
+  display: flex;
+  padding: 10px 5px;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px 10px 10px 0;
+  background: #bdc3c7;
+  color: #34495e;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  max-width: 70%;
 }
 
 .chat-message-bubble-sent {
-    border-radius: 10px 10px 0 10px;
-    background: #2980B9;
-    color: #ECF0F1;
+  border-radius: 10px 10px 0 10px;
+  background: #2980b9;
+  color: #ecf0f1;
 }
 
-
 .chat-message-time {
-    color: #7F8C8D;
-    font-family: Kulim Park, serif;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    align-self: center;
+  color: #7f8c8d;
+  font-family:
+    Kulim Park,
+    serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  align-self: center;
 }

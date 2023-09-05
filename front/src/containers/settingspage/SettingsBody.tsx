@@ -5,12 +5,11 @@ import React from "react";
 import UserSettings from "./UserSettings";
 
 export default function SettingsBody() {
+  const [state] = useState(null);
 
-    const [state] = useState(null);
-
-    return (
-        <div className="settingsbody bubble">
-            <UserSettings state={state} ></UserSettings>
-        </div>
-    )
+  return (
+    <div className="settingsbody bubble">
+      <UserSettings state={state}></UserSettings>
+    </div>
+  );
 }

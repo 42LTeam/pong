@@ -11,7 +11,7 @@ export class AuthController {
   constructor(
     private clientService: ClientService,
     private blockService: BlockService,
-    private friendService: FriendService
+    private friendService: FriendService,
   ) {}
   @Get("login")
   @UseGuards(FortyTwoAuthGuard)

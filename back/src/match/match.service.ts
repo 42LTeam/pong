@@ -9,7 +9,7 @@ export class MatchService {
   async createMatch(
     userIds: number[],
     scores: number[],
-    isWins: boolean[]
+    isWins: boolean[],
   ): Promise<Match> {
     if (!userIds || !scores || userIds.length !== scores.length) {
       throw new Error("Invalid input");
@@ -26,7 +26,7 @@ export class MatchService {
             score: scores[index],
             isWin: isWins[index],
           },
-        })
+        }),
       );
 
       await Promise.all(userMatches);
@@ -45,7 +45,7 @@ export class MatchService {
 
   async getCommonUserMatches(
     userId1: number,
-    userId2: number
+    userId2: number,
   ): Promise<UserMatch[]> {
     const userMatches1 = await this.prisma.userMatch.findMany({
       where: {
@@ -60,7 +60,7 @@ export class MatchService {
     });
 
     const commonUserMatches = userMatches1.filter((um1) =>
-      userMatches2.some((um2) => um2.matchId === um1.matchId)
+      userMatches2.some((um2) => um2.matchId === um1.matchId),
     );
 
     return commonUserMatches;
@@ -68,7 +68,7 @@ export class MatchService {
 
   async getUserMatchStats(
     userId1: number,
-    userId2: number
+    userId2: number,
   ): Promise<{ wins: number; losses: number }> {
     const userMatches1 = await this.prisma.userMatch.findMany({
       where: {
@@ -87,7 +87,7 @@ export class MatchService {
 
     for (const userMatch1 of userMatches1) {
       const matchingUserMatch2 = userMatches2.find(
-        (um) => um.matchId === userMatch1.matchId
+        (um) => um.matchId === userMatch1.matchId,
       );
 
       if (!matchingUserMatch2) {

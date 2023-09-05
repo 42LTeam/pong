@@ -21,7 +21,7 @@ export default class Game {
     public random: boolean,
     public custom: boolean,
     private server,
-    public matchService: MatchService
+    public matchService: MatchService,
   ) {
     this.engine = new GameEngine(this);
   }
@@ -62,7 +62,7 @@ export default class Game {
         user.username,
         socket,
         !Boolean(this.players.length),
-        this.engine.ball.BALL_SEMI_SIZE
+        this.engine.ball.BALL_SEMI_SIZE,
       );
       this.players.push(player);
       socket?.join(this.MATCH_ROOM);

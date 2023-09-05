@@ -22,7 +22,7 @@ export class ConversationController {
   @ApiOperation({ summary: "Create or return conversation between friend" })
   async getConversation(
     @Param("friendId") friendId: number,
-    @Req() req
+    @Req() req,
   ): Promise<Channel> {
     const user = await req.user;
     if (Number(friendId) == user.id) throw new Error("wtf ?");

@@ -12,7 +12,7 @@ export class UserService {
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
     @Inject(forwardRef(() => MatchService))
-    private matchService: MatchService
+    private matchService: MatchService,
   ) {}
 
   async createUser(
@@ -20,7 +20,7 @@ export class UserService {
     username: string,
     secretO2FA: string,
     avatar: string,
-    xp: number
+    xp: number,
   ): Promise<User> {
     return this.prisma.user.create({
       data: {
@@ -111,7 +111,7 @@ export class UserService {
     });
 
     const pending = await user.userFriendships.map(
-      (current) => current.senderId
+      (current) => current.senderId,
     );
     return (
       await this.prisma.user.findMany({
@@ -125,7 +125,7 @@ export class UserService {
       return {
         ...current,
         friendShipId: user.userFriendships.filter(
-          (c) => c.senderId == current.id
+          (c) => c.senderId == current.id,
         )[0].id,
       };
     });
@@ -133,7 +133,7 @@ export class UserService {
 
   async getFriendsOfUser(
     id: number,
-    options: { startWith?: string; online?: boolean } = {}
+    options: { startWith?: string; online?: boolean } = {},
   ): Promise<User[]> {
     const ids = await this.friendService.getUserFriendships(id);
 
@@ -155,8 +155,8 @@ export class UserService {
     if (options.notFriend)
       forbiddenIds.push(
         ...(await this.getFriendsOfUser(id, { startWith: query })).map(
-          (c) => c.id
-        )
+          (c) => c.id,
+        ),
       );
 
     if (options.friendOnly)
