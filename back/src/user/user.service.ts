@@ -64,10 +64,17 @@ export class UserService {
   // }
 
   async updateUserAvatar(userId: number, avatarPath: string) {
-    return this.prisma.user.update({
-      where: { id: userId },
-      data: { avatar: avatarPath },
-    });
+    try {
+      const updatedUser = await this.prisma.user.update({
+        where: { id: userId },
+        data: { avatar: avatarPath },
+      });
+      console.log(updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating user avatar in Prisma:", error);
+      throw new Error("Failed to update avatar in database");
+    }
   }
 
   async updateUserName(id: number, username: string): Promise<User> {
