@@ -7,6 +7,7 @@ import { getUserByID, getUserMatchesResume } from "../../api";
 
 import "../../css/profile.css";
 import { User } from "../Auth";
+import NotFound from "../NotFound";
 
 export interface MatchResume {
   OpponentAvatar: string;
@@ -42,7 +43,10 @@ export default function ProfilePage() {
   }, [userID]);
 
   if (user === null) {
-    return <h1>User with ID={userID} does not exist</h1>;
+    return (
+      <NotFound page="profile" id={userID} />
+      // <h1>User with ID={userID} does not exist</h1>
+    );
   }
 
   if (!matches) {
