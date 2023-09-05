@@ -1,0 +1,103 @@
+
+name: Up and running on Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-dev-on-pull-request:
+    runs-on: self-hosted
+
+    env:
+
+      LOCALHOST: ${{ secrets.LOCALHOST }}
+      VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
+      POSTGRES_DB_NAME: ${{ secrets.POSTGRES_DB_NAME }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+      POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+
+      PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
+      PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
+
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      FORTYTWO_CALLBACK: ${{ secrets.FORTYTWO_CALLBACK }}
+      FORTYTWO_UID: ${{ secrets.FORTYTWO_UID }}
+      FORTYTWO_SECRET: ${{ secrets.FORTYTWO_SECRET }}
+
+      DOCKER_IP: ${{ secrets.DOCKER_IP }}
+
+    steps:
+
+      - name: Cleaning
+        run: |
+          sudo chmod -R 777 /home/ubuntu/actions-runner/_work/pong/pong/*
+          docker compose -f docker-compose.yml down
+
+          if [[ $(docker volume ls -qf dangling=true) ]]; then
+            docker volume rm $(docker volume ls -qf dangling=true)
+          fi
+          docker system prune -af
+          sudo find /home/ubuntu/actions-runner/_work/pong/pong/* -delete
+
+          sudo rm -rf /home/ubuntu/actions-runner/_work/pong/pong/*
+
+        shell: bash -e {0}
+
+        continue-on-error: true
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: .env file deco
+        run: |
+          touch .env
+          
+          echo "LOCALHOST=${{ secrets.LOCALHOST }}" >> .env
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
+          
+          echo "POSTGRES_DB_NAME=${{ secrets.POSTGRES_DB_NAME }}" >> .env
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+          echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .env
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env
+          
+          echo "PGADMIN_DEFAULT_EMAIL=${{ secrets.PGADMIN_DEFAULT_EMAIL }}" >> .env
+          echo "PGADMIN_DEFAULT_PASSWORD=${{ secrets.PGADMIN_DEFAULT_PASSWORD }}" >> .env
+          
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          
+          echo "FORTYTWO_CALLBACK= ${{ secrets.FORTYTWO_CALLBACK }}" >> .env
+          echo "FORTYTWO_UID= ${{ secrets.FORTYTWO_UID }}" >> .env
+          echo "FORTYTWO_SECRET= ${{ secrets.FORTYTWO_SECRET }}" >> .env
+          
+          echo "DOCKER_IP= ${{ secrets.DOCKER_IP }}" >> .env
+
+
+      - name: Build Up
+        run: make action
+
+      - name: Check Prettier
+        run: |
+          cd ./back/ && npx prettier . --check
+          cd ./front/ && npx prettier . --check
+
+      - name: Run health check script 5173
+        run: |
+          chmod +x health_script_5173.sh
+          ./health_script_5173.sh
+
+      - name: Run health check script 3000
+        run: |
+          chmod +x health_script_3000.sh
+          ./health_script_3000.sh
+
+      - name: Run running check script
+        run: |
+          chmod +x running_check.sh
+          ./running_check.sh

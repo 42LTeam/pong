@@ -28,7 +28,8 @@ export default function Chat (props:ChatProps){
         const tmp_messages = [...data.messages].reverse();
         setMessages(tmp_messages);
         setLastRead(data.lastRead);
-        readMessage(props.channel, tmp_messages[0].id);
+        if( tmp_messages.length)
+            readMessage(props.channel, tmp_messages[0].id);
     }
 
     useEffect(() => {
@@ -76,7 +77,7 @@ export default function Chat (props:ChatProps){
                         <>
                             <Message
                                 key={current.id}
-                                sender={current.user?.avatar}
+                                sender={current.user}
                                 content={current.content}
                                 date={new Date(current.created_at).toTimeString().slice(0,5)}
                                 sent={current.userId == user.id}
@@ -106,7 +107,7 @@ export default function Chat (props:ChatProps){
                         <>
                             <Message
                                 key={current.id}
-                                sender={current.user?.avatar}
+                                sender={current.user}
                                 content={current.content}
                                 date={new Date(current.created_at).toTimeString().slice(0,5)}
                                 sent={current.userId == user.id}

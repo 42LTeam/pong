@@ -1,8 +1,8 @@
 
-name: Up and running on Pull Request
+name: Check Main on push
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -77,12 +77,27 @@ jobs:
           echo "FORTYTWO_SECRET= ${{ secrets.FORTYTWO_SECRET }}" >> .env
           
           echo "DOCKER_IP= ${{ secrets.DOCKER_IP }}" >> .env
-         
+
 
       - name: Build Up
         run: make action
 
-      - name: Run health check port :5173 and port :3000/api
+      - name: Check Prettier
         run: |
-          chmod +x health_script.sh
-          ./health_script.sh
+          cd ./back/ && npx prettier . --check
+          cd ./front/ && npx prettier . --check
+
+      - name: Run health check script 5173
+        run: |
+          chmod +x health_script_5173.sh
+          ./health_script_5173.sh
+
+      - name: Run health check script 3000
+        run: |
+          chmod +x health_script_3000.sh
+          ./health_script_3000.sh
+
+      - name: Run running check script
+        run: |
+          chmod +x running_check.sh
+          ./running_check.sh

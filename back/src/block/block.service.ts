@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Block } from '@prisma/client';
 import { User } from '@prisma/client';
 
@@ -8,6 +8,7 @@ export class BlockService {
   constructor(private prisma: PrismaService) {}
 
   async createBlockRequest(blockerId: number, blockedId: number): Promise<Block> {
+    console.log(blockerId,blockedId);
     if (blockerId == blockedId) {
       throw new Error('Both blockerId and blockedId shouldn\'t be the same');
     }
@@ -34,11 +35,11 @@ export class BlockService {
         blockerId: blockerId,
       },
       include: {
-        blockedBy: true,
+        receivedBy: true,
       },
     });
 
-    return blocks.map(block => block.blockedBy);
+    return blocks.map(block => block.receivedBy);
   }
 
   async removeBlockRequest(blockerId: number, blockedId: number): Promise<Block> {

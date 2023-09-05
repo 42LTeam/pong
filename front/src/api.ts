@@ -1,12 +1,107 @@
 import io from "socket.io-client";
 import axios from "axios";
 
-const localhostwebsocket = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':8001' : 'http://localhost:8001';
+const localhostwebsocket = process.env.VITE_API_URL ? `${process.env.VITE_API_URL}:8001` : 'http://localhost:8001';
 const webSocketURL = localhostwebsocket;
-
-const localhostback = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':3000' : 'http://localhost:3000';
+const localhostback = process.env.VITE_API_URL ? `${process.env.VITE_API_URL}:3000` : 'http://localhost:3000';
 const URL = localhostback;
 export const socket = io(webSocketURL, { autoConnect: true});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* File: /back/src/channel/controllers/channel.controller.ts                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+//  @Post('/:channelId/admin-quit/:userId')
+//  @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
+export async function removeUserAdminFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/admin-quit/' + userId,
+        withCredentials: true,
+    }
+    console.log("removeUserAdminFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+//  @Post('/:channelId/quit/:userId')
+//  @ApiOperation({ summary: 'Remove a user from a channel (User perspective)' })
+export async function removeUserFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/quit/' + userId,
+        withCredentials: true,
+    }
+    console.log("removeUserFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+//  @Post('/:channelId/ban/:userId')
+//  @ApiOperation({ summary: 'Ban a user from a channel' })
+export async function banUserFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/ban/' + userId,
+        withCredentials: true,
+    }
+    console.log("banUserFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+//  @Post('/:channelId/unban/:userId')
+//  @ApiOperation({ summary: 'Un-Ban a user from a channel' })
+export async function unbanUserFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/unban/' + userId,
+        withCredentials: true,
+    }
+    console.log("unbanUserFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+//   @Post('/:channelId/mute/:userId')
+//   @ApiOperation({ summary: 'Mute a user from a channel' })
+export async function muteUserFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'post',
+        url: URL + '/channels/' + channelId + '/mute/' + userId,
+        withCredentials: true,
+    }
+    console.log("muteUserFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+//   @Get('/:channelId/is-muted/:userId')
+//   @ApiOperation({ summary: 'Mute a user from a channel' })
+export async function isMutedBannedFromChannel(channelId: number, userId: number)
+{
+    const config = {
+        method: 'get',
+        url: URL + '/channels/' + channelId + '/is-muted/' + userId,
+        withCredentials: true,
+    }
+    console.log("isMutedBannedFromChannel(channelId: number, userId: number)")
+    console.log("channelId = ", channelId)
+    console.log("userId = ", userId)
+    return axios(config);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 export async function searchUser(search, options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
     const config = {
@@ -21,13 +116,39 @@ export async function searchUser(search, options: {friendOnly?: boolean, notFrie
 }
 
 export async function getStatus(){
-    var config = {
+    const config = {
         method: 'get',
         url: URL + '/auth/status',
         withCredentials: true,
     };
     return axios(config);
 }
+
+export async function blockUser(blockedId: number){
+    const config = {
+        method: 'post',
+        url: URL + '/block/create',
+        withCredentials: true,
+        data: {
+            blockedId
+        }
+    };
+    return axios(config);
+}
+
+
+export async function unblockUser(blockedId: number){
+    const config = {
+        method: 'delete',
+        url: URL + '/block/remove',
+        withCredentials: true,
+        data: {
+            blockedId
+        }
+    };
+    return axios(config);
+}
+
 
 export async function updateUserAvatar(id, avatarUrl){
     const config = {
@@ -38,7 +159,7 @@ export async function updateUserAvatar(id, avatarUrl){
             avatar: avatarUrl
         },
     };
-    return await axios(config);
+    return axios(config);
 }
 
 export async function updateUserUsername(id, username){
@@ -50,7 +171,7 @@ export async function updateUserUsername(id, username){
             username: username
         },
     };
-    return await axios(config);
+    return axios(config);
 }
 
 export async function getAllUsers(options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
@@ -101,6 +222,7 @@ export async function createChannel(
             password?: string,
             creatorId: number,
             privated?: boolean,
+            conv?:boolean,
         }, ){
     const config = {
         method: 'post',
@@ -118,14 +240,6 @@ export async function sendChannelInvite(data:
             channelId: number,
         }, ){
     socket.emit('channel-invite', data);
-/*
-    const config = {
-        method: 'post',
-        url: URL + '/channels/invite',
-        withCredentials: true,
-        data,
-    };
-    return axios(config);*/
 }
 
 export async function getConversation(userId: number) {
@@ -223,16 +337,6 @@ export async function readMessage(channelId: number, messageId: number) {
 
 export async function sendMessageToChannel(channelId: number, content: string){
     socket.emit('new-message', {channelId, content});
-   /* const config = {
-        method: 'post',
-        url: URL + '/message',
-        withCredentials: true,
-        data:{
-            channelId,
-            content,
-        }
-    };
-    return axios(config);*/
 }
 
 export async function getPath(path: string){
@@ -245,7 +349,7 @@ export async function getPath(path: string){
 }
 
 export async function getUserByID(ID){
-    var config = {
+    const config = {
         method: 'get',
         url: URL + '/users/' + ID,
         withCredentials: true,
@@ -254,7 +358,7 @@ export async function getUserByID(ID){
 }
 
 export async function getUsers(){
-    var config = {
+    const config = {
         method: 'get',
         url: URL + '/users',
         withCredentials: true,
@@ -281,7 +385,7 @@ export async function getRatioAgainst(id1: number, id2: number){
 }
 
 export async function getUserMatches(ID){
-    var config = {
+    const config = {
         method: 'get',
         url: URL + '/users/' + ID + '/matches',
         withCredentials: true,
@@ -290,10 +394,10 @@ export async function getUserMatches(ID){
 }
 
 export async function getUserMatchesResume(ID){
-    var config = {
-        method: 'get',
-        url: URL + '/users/' + ID + '/matches-resume',
-        withCredentials: true,
+    const config = {
+        method: "get",
+        url: URL + "/users/" + ID + "/matches-resume",
+        withCredentials: true
     };
     return axios(config);
 }

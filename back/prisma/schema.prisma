@@ -38,13 +38,13 @@ model Match {
 }
 
 model UserMatch {
-  id      Int   @id @default(autoincrement())
+  id      Int     @id @default(autoincrement())
   userId  Int
   matchId Int
   score   Int
   isWin   Boolean
-  user    User  @relation(fields: [userId], references: [id])
-  match   Match @relation(fields: [matchId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  match   Match   @relation(fields: [matchId], references: [id])
 }
 
 model Block {
@@ -65,18 +65,21 @@ model Channel {
   creatorId  Int?
   creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[]
-  messages   Message[]   
+  messages   Message[]
   created_at DateTime
 }
 
 model UserChannel {
-  id        Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   userId    Int
   channelId Int
-  lastRead  Int     @default(0)
-  isBlocked Boolean @default(false)
-  user      User    @relation(fields: [userId], references: [id])
-  channel   Channel @relation(fields: [channelId], references: [id])
+  lastRead  Int       @default(0)
+  isAdmin   Boolean   @default(false)
+  isBlocked Boolean   @default(false)
+  isMuted   DateTime?
+  isBanned  Boolean   @default(false)
+  user      User      @relation(fields: [userId], references: [id])
+  channel   Channel   @relation(fields: [channelId], references: [id])
 }
 
 model Message {

@@ -1,3 +1,4 @@
+import Avatar from "../utils/Avatar";
 
 interface Props {
     username: string,
@@ -5,7 +6,8 @@ interface Props {
     state?: boolean,
     lastMessage?: string,
     id?: number,
-    lastRead: null
+    lastRead: null,
+    avatar: string,
 }
 
 export default function Conversation(props: Props){
@@ -13,7 +15,7 @@ export default function Conversation(props: Props){
     return (
         <div onClick={props.handleClick} className={"conversation " + (props.state ? 'conversation-focus ' : '')}
         >
-            <div className="conversation-avatar"></div>
+            <Avatar url={props.avatar} height={'48px'}></Avatar>
             <div className="conversation-content">
                 <div className="conversation-username">{props.username}</div>
                 <h3>{props.lastMessage || 'Nouvelle conversation'}</h3>

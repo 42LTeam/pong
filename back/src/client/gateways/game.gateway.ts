@@ -16,6 +16,7 @@ import { UserService } from 'src/user/user.service';
     cors: true,
 })
 
+
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     private matchMaking = null;
@@ -44,8 +45,9 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async joinGame(client, data): Promise<void> {
         const user = await this.clientService.getClientById(client.id);
+        console.log('Gateway : joinGame from', user?.username, 'invite =', data[0], 'custom =', data[1], 'id =', data[2]);
         if (user)
-            this.matchMaking.handleJoin(user, data);
+            this.matchMaking.handleJoin(user, data[0], data[1], data[2]);
     }
 
     @SubscribeMessage('leave-game')
@@ -68,8 +70,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @UseGuards(WSAuthenticatedGuard)
     async inviteGame(client, data) : Promise<void> {
         const user = await this.clientService.getClientById(client.id);
-        console.log('Gateway : invite-game from', user?.username, 'to', data.username);
+        console.log('Gateway : invite-game from', user?.username, 'to', data[0].username, 'for custom =', data[1]);
         if (user && data)
-            this.matchMaking.handleInvite(user, data);
+            this.matchMaking.handleInvite(user, data[0], data[1]);
     }
 }

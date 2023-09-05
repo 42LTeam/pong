@@ -1,15 +1,16 @@
-import { Controller, Get, Post, Body, Delete, Param, HttpCode, ParseIntPipe, UseGuards } from '@nestjs/common';
+ import {Controller, Get, Post, Body, Delete, Param, HttpCode, ParseIntPipe, UseGuards, Req} from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
-import { Block, User } from '@prisma/client';
 import { BlockService } from './block.service';
-import { AuthenticatedGuard } from '../../auth/guards/authenticated.guard';
-import {FriendService} from "../../friend/friend.service";
+import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
+import {FriendService} from "../friend/friend.service";
+ import {IsNotEmpty, IsNumber} from "@nestjs/class-validator";
+ import {Block, User} from "@prisma/client";
 
 class CreateBlockDto {
-  @ApiProperty()
-  blockerId: number;
 
   @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
   blockedId: number;
 }
 
@@ -26,9 +27,10 @@ export class BlockController {
   @ApiOperation({ summary: 'Create a block request' })
   @ApiResponse({ status: 201, description: 'The block request has been successfully created.'})
   @ApiBody({ type: CreateBlockDto })
-  async createBlockRequest(@Body() createBlockDto: CreateBlockDto): Promise<Block> {
-    const ret = await this.blockService.createBlockRequest(createBlockDto.blockerId, createBlockDto.blockedId);
-    await this.friendService.removeFriendship(createBlockDto.blockerId, createBlockDto.blockedId);
+  async createBlockRequest(@Body() createBlockDto: CreateBlockDto, @Req() req): Promise<Block> {
+    const user = await req.user;
+    const ret = await this.blockService.createBlockRequest(user.id, createBlockDto.blockedId);
+    await this.friendService.removeFriendship(user.id, createBlockDto.blockedId);
     return ret;
   }
 
@@ -42,11 +44,12 @@ export class BlockController {
 
   @Delete('/remove')
   @HttpCode(204)
-  @ApiOperation({ summary: 'Remove a block request' })
-  @ApiResponse({ status: 204, description: 'The block request has been successfully removed.'})
-  @ApiBody({ type: CreateBlockDto })
-  removeBlockRequest(@Body() removeBlockDto: CreateBlockDto): Promise<Block> {
-    return this.blockService.removeBlockRequest(removeBlockDto.blockerId, removeBlockDto.blockedId);
+  @ApiOperation({summary: 'Remove a block request'})
+  @ApiResponse({status: 204, description: 'The block request has been successfully removed.'})
+  @ApiBody({type: CreateBlockDto})
+  async removeBlockRequest(@Body() removeBlockDto: CreateBlockDto, @Req() req): Promise<Block> {
+    const user = await req.user;
+    return this.blockService.removeBlockRequest(user.id, removeBlockDto.blockedId);
   }
 
   @Get('blocks/:id')
