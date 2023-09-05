@@ -122,9 +122,6 @@ script:
 	./health_script_5173.sh
 	chmod 777 ./health_script_3000.sh
 	./health_script_3000.sh
-	@echo $(BOLD_YELLOW) "Running check"$(RESET_COLOR)
-	chmod 777 ./running_check.sh
-	./running_check.sh
 
 help:
 	@echo "Available commands:"

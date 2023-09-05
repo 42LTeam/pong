@@ -10,6 +10,7 @@ import {
   banUserFromChannel,
   removeUserAdminFromChannel,
   unbanUserFromChannel,
+  getUserByID,
 } from "../../api";
 import { AuthContext, User } from "../../containers/Auth";
 
