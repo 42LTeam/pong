@@ -261,13 +261,35 @@ export async function getConversation(userId: number) {
   return axios(config);
 }
 
-export async function acceptFriendship(id: number) {
-  const config = {
-    method: "put",
-    url: URL + "/friend/friend-request/accept/" + id,
-    withCredentials: true,
-  };
-  return axios(config);
+export async function get2fa() {
+    const config = {
+        method: 'get',
+        url: URL + '/auth/doubleAuth',
+        withCredentials: true,
+    };
+    return axios(config);
+}
+
+export async function set2fa(token: string) {
+    console.log(token)
+    const config = {
+        method: 'post',
+        url: URL + '/auth/doubleAuth',
+        withCredentials: true,
+        data: {
+            token
+        }
+    };
+    return axios(config);
+}
+
+export async function acceptFriendship(id: number){
+    const config = {
+        method: 'put',
+        url: URL + '/friend/friend-request/accept/' + id,
+        withCredentials: true,
+    };
+    return axios(config)
 }
 
 export async function removeFriendship(friendId: number) {

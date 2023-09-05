@@ -1,7 +1,7 @@
 #!/bin/bash
 
 retries=20
-delay=5
+delay=10
 url="http://localhost:5173"
 
 for ((i=1; i<=retries; i++)); do
