@@ -42,7 +42,12 @@ export default function FriendQuickInviteBubble(props: Props) {
         {" "}
         {ratio?.wins} W/{ratio?.losses} L{" "}
       </div>
-      <QuickInviteButton userID={props.user.id} />
+      <QuickInviteButton
+        userID={props.user.id}
+        text={"Standard"}
+        custom={false}
+      />
+      <QuickInviteButton userID={props.user.id} text={"Custom"} custom={true} />
     </div>
   );
 }

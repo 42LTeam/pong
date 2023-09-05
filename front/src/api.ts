@@ -360,7 +360,7 @@ export async function getPath(path: string) {
 export async function getUserByID(ID) {
   const config = {
     method: "get",
-    url: URL + "/users/" + ID,
+    url: URL + "/users/id/" + ID,
     withCredentials: true,
   };
   return axios(config);
