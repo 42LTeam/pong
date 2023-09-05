@@ -15,7 +15,7 @@ export default class Game {
   public engine: GameEngine;
   public players: GamePlayer[] = [];
   public state: gameState = gameState.CREATING;
-  public started = false;
+  // public started = false;
 
   constructor(
     public matchId: number,
@@ -87,9 +87,8 @@ export default class Game {
 
   canDelete() {
     return (
-      this.state == gameState.FINISH ||
-      (!this.started &&
-        this.players[0].status == playerStatus.OFFLINE &&
+      this.state == gameState.FINISH /*!this.started &&*/ ||
+      (this.players[0].status == playerStatus.OFFLINE &&
         (this.players.length < 2 ||
           this.players[1].status == playerStatus.OFFLINE))
     );

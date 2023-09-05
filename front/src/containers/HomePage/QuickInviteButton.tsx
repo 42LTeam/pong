@@ -2,9 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { getUserByID } from "../../api";
 import { listSubheaderClasses } from "@mui/material";
+import { text } from "stream/consumers";
 
 type Props = {
   userID: number;
+  text: string;
+  custom: boolean;
 };
 
 export const QuickInviteButton = (props: Props): JSX.Element => {
@@ -18,14 +21,16 @@ export const QuickInviteButton = (props: Props): JSX.Element => {
           "&username=" +
           response.data.username +
           "&session=" +
-          response.data.session,
+          response.data.session +
+          "&custom=" +
+          props.custom,
       ),
     );
   };
 
   return (
     <button className="quick-invite-button" onClick={inviteFriend}>
-      Inviter{" "}
+      {props.text}
     </button>
   );
 };

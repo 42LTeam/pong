@@ -65,6 +65,16 @@ export default class GameEngine {
           this.score,
           [this.score[0] === 5, this.score[1] === 5]
         );
+        await this.game.userService.updateUserXP(
+          //Add of xp for player [0]
+          this.game.players[0].userId,
+          (this.score[0] === 5 ? 50 : 10) + this.score[0] * 10
+        );
+        await this.game.userService.updateUserXP(
+          //Add of xp for player [0]
+          this.game.players[1].userId,
+          (this.score[1] === 5 ? 50 : 10) + this.score[1] * 10
+        );
       } else {
         this.game.players.forEach((player) => {
           player.send("gameplay", this.getData());
@@ -83,7 +93,7 @@ export default class GameEngine {
   sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   async startGame() {
-    this.game.started = true;
+    // this.game.started = true;
     if (this.ball.speed == 0) this.ball.newBall();
     this.game.state = gameState.STARTING;
     // this.printScores();
