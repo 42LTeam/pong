@@ -3,7 +3,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { Status, User } from "@prisma/client";
 import { FriendService } from "../friend/friend.service";
 import { SearchDTO } from "./user.controller";
-import { MatchService } from "src/match/match.service";
+import { MatchService } from "../match/match.service";
 import { authenticator } from "otplib";
 import * as qrcode from "qrcode";
 
@@ -56,13 +56,27 @@ export class UserService {
     });
   }
 
-  async updateUserAvatar(id: number, avatar: string): Promise<User> {
-    return this.prisma.user.update({
-      where: { id },
-      data: {
-        avatar: avatar,
-      },
-    });
+  // async updateUserAvatar(id: number, avatar: string): Promise<User> {
+  //   return this.prisma.user.update({
+  //     where: { id },
+  //     data: {
+  //       avatar: avatar,
+  //     },
+  //   });
+  // }
+
+  async updateUserAvatar(userId: number, avatarPath: string) {
+    try {
+      const updatedUser = await this.prisma.user.update({
+        where: { id: userId },
+        data: { avatar: avatarPath },
+      });
+      console.log(updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating user avatar in Prisma:", error);
+      throw new Error("Failed to update avatar in database");
+    }
   }
 
   async updateUserName(id: number, username: string): Promise<User> {

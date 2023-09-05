@@ -10,6 +10,8 @@ import { BlockModule } from "./block/block.module";
 import { ChannelModule } from "./channel/channel.module";
 import { ClientModule } from "./client/client.module";
 import { MatchModule } from "./match/match.module";
+import { MulterModule } from "@nestjs/platform-express";
+import { FileUploadService } from "./file-upload/file-upload.service";
 
 @Module({
   imports: [
@@ -17,6 +19,9 @@ import { MatchModule } from "./match/match.module";
     ConfigModule.forRoot(),
     CacheModule.register({
       isGlobal: true,
+    }),
+    MulterModule.registerAsync({
+      useClass: FileUploadService,
     }),
 
     AuthModule,
@@ -28,5 +33,7 @@ import { MatchModule } from "./match/match.module";
     ClientModule,
     MatchModule,
   ],
+
+  providers: [FileUploadService],
 })
 export class AppModule {}

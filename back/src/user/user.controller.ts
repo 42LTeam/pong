@@ -11,6 +11,8 @@ import {
   Req,
   ParseBoolPipe,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { UserService } from "./user.service";
@@ -29,6 +31,7 @@ import { Channel, Status, User, UserMatch } from "@prisma/client";
 import { MatchService } from "../match/match.service";
 import { UserIdValidationPipe } from "./pipes/userIdValid.pipe";
 import { UsernameAlreadyExistsPipe } from "./pipes/usernameExist.pipe";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 class CreateUserDto {
   @ApiProperty()
@@ -242,5 +245,17 @@ export class UserController {
     @Param("id", ParseIntPipe) id: number
   ): Promise<any[]> {
     return this.userService.getUserMatchesResume(id);
+  }
+
+  @Post("avatar-upload/:id")
+  @UseInterceptors(FileInterceptor("avatar"))
+  async uploadAvatar(
+    @Param("id", ParseIntPipe) id: number,
+    @UploadedFile() file
+  ): Promise<any> {
+    const fileName = file.path.split("/").pop();
+    const formattedPath = `//localhost:3000/uploads/${fileName}`;
+    await this.userService.updateUserAvatar(id, formattedPath);
+    return { path: formattedPath };
   }
 }

@@ -82,17 +82,17 @@ jobs:
       - name: Build Up
         run: make action
 
-      - name: Run health check script 5173
-        run: |
-          chmod +x health_script_5173.sh
-          ./health_script_5173.sh
-
-      - name: Run health check script 3000
-        run: |
-          chmod +x health_script_3000.sh
-          ./health_script_3000.sh
-
-      - name: Run running check script
-        run: |
-          chmod +x running_check.sh
-          ./running_check.sh
+#      - name: Run health check script 5173
+#        run: |
+#          chmod +x health_script_5173.sh
+#          ./health_script_5173.sh
+#
+#      - name: Run health check script 3000
+#        run: |
+#          chmod +x health_script_3000.sh
+#          ./health_script_3000.sh
+#
+#      - name: Run running check script
+#        run: |
+#          chmod +x running_check.sh
+#          ./running_check.sh

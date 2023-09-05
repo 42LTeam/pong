@@ -432,3 +432,20 @@ export async function getUserMatchesResume(ID) {
   };
   return axios(config);
 }
+
+export async function uploadUserAvatar(id, file) {
+  const formData = new FormData();
+  formData.append("avatar", file);
+  console.log("file in api.ts : " + file);
+  const config = {
+    method: "post",
+    url: `${URL}/users/avatar-upload/${id}`,
+    withCredentials: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data: formData,
+  };
+  console.log(`post avatar request: ${config}`, config);
+  return axios(config);
+}

@@ -1,11 +1,17 @@
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import "../../css/settings.css";
 import { AuthContext } from "../Auth";
-import { get2fa, updateUserAvatar, updateUserUsername } from "../../api";
+import {
+  get2fa,
+  updateUserAvatar,
+  updateUserUsername,
+  uploadUserAvatar,
+} from "../../api";
 import Button from "../../components/utils/Button";
 
 export default function Settings() {
   const user = useContext(AuthContext);
+  const inputRef = useRef(null);
 
   const [qr, setQr] = useState(null);
   const [username, setUsername] = useState(user.username);
@@ -22,23 +28,46 @@ export default function Settings() {
     if (user.secretO2FA) activate2fa();
   }, []);
 
-  const handleChangeImage = async (newAvatarUrl) => {
-    const response = await updateUserAvatar(user.id, newAvatarUrl);
-    if (response.status === 200) {
-      console.log("User avatar updated successfully.");
-      user.avatar = newAvatarUrl;
-    } else {
-      console.error("Failed to update user avatar.");
-      setErrorMsg("Failed to update user avatar.");
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const response = await uploadUserAvatar(user.id, file);
+        if (response.status === 201) {
+          console.log(
+            `User avatar updated successfully. Path : ${response.data.path}`,
+            response.data.path,
+          );
+          setAvatarUrl(response.data.path);
+        } else {
+          console.error(
+            "Failed to update user avatar. Response status:",
+            response.status,
+          );
+          console.error("Response data:", response.data);
+          setErrorMsg("Failed to update user avatar.");
+        }
+      } catch (error) {
+        console.error("An error occurred during avatar upload:", error);
+
+        // Log the error message
+        console.error("Error message:", error.message);
+
+        // Log the response data if available
+        if (error.response) {
+          console.error("Server responded with status:", error.response.status);
+          console.error("Response data:", error.response.data);
+        }
+        // Log the request that was made
+        console.error("Request config:", error.config);
+
+        setErrorMsg("An unexpected error occurred.");
+      }
     }
   };
 
   const handleEditClick = () => {
-    const newAvatarUrl = prompt("Please enter the new avatar URL:");
-    if (newAvatarUrl) {
-      setAvatarUrl(newAvatarUrl);
-      handleChangeImage(newAvatarUrl);
-    }
+    inputRef.current.click();
   };
 
   const handleChangeUsername = async (newUsername) => {
@@ -46,23 +75,20 @@ export default function Settings() {
       const response = await updateUserUsername(user.id, newUsername);
       if (response.status === 200) {
         console.log("User username updated successfully.");
-        user.username = newUsername;
-        setErrorMsg("");
+        setUsername(newUsername);
       } else {
         console.error("Failed to update user username.");
-        setErrorMsg("Error");
+        setErrorMsg("Error updating username.");
       }
     } catch (error) {
-      console.error("Errorrrr updating user username:", error);
+      console.error("Error updating user username:", error);
       setUsername("Username already taken");
     }
   };
 
   const handleEditUsername = () => {
-    console.log("handleEditUsername called");
     const newUsername = prompt("Please enter the new username:");
     if (newUsername) {
-      setUsername(newUsername);
       handleChangeUsername(newUsername);
     }
   };
@@ -79,6 +105,13 @@ export default function Settings() {
             <div className="avatar-overlay" onClick={handleEditClick}>
               Edit
             </div>
+            <input
+              type="file"
+              ref={inputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+              accept="image/*"
+            />
           </div>
         </div>
       </div>
@@ -97,15 +130,6 @@ export default function Settings() {
           </div>
         </div>
       </div>
-      {Boolean(qr) ? (
-        <img src={qr} />
-      ) : (
-        <Button
-          handleClick={activate2fa}
-          text={"activer la 2fa"}
-          clickable
-        ></Button>
-      )}
     </div>
   );
 }
