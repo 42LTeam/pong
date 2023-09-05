@@ -1,31 +1,28 @@
-
 .notifications {
-    position: fixed;
-    display: flex;
-    flex-direction: column-reverse;
-    right: 5%;
-    bottom: 5%;
-    height: 80vh;
-    width: 30vw;
-    gap: 10px;
-    overflow-y: auto;
-    pointer-events: none;
+  position: fixed;
+  display: flex;
+  flex-direction: column-reverse;
+  right: 5%;
+  bottom: 5%;
+  height: 80vh;
+  width: 30vw;
+  gap: 10px;
+  overflow-y: auto;
+  pointer-events: none;
 }
 
 .notification {
-    display: flex;
-    flex-direction: row;
-    pointer-events: auto;
+  display: flex;
+  flex-direction: row;
+  pointer-events: auto;
 }
-
-
 
 .notification-content {
-    height: min-content;
-    margin: 5px;
+  height: min-content;
+  margin: 5px;
 }
 
-.notification-image{
-    max-height: 75px;
-    border-radius: 10px;
+.notification-image {
+  max-height: 75px;
+  border-radius: 10px;
 }

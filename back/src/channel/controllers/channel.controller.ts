@@ -1,8 +1,25 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
-import { Channel } from '@prisma/client';
-import { ChannelService } from '../channel.service';
-import { ArrayMinSize, IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from '@nestjs/class-validator';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Req,
+  UseGuards,
+} from "@nestjs/common";
+import { ApiBody, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger";
+import { Channel } from "@prisma/client";
+import { ChannelService } from "../channel.service";
+import {
+  ArrayMinSize,
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "@nestjs/class-validator";
 import { AuthenticatedGuard } from "../../auth/guards/authenticated.guard";
 
 export class CreateChannelDto {
@@ -25,8 +42,6 @@ export class CreateChannelDto {
   @IsNotEmpty()
   @IsNumber()
   creatorId: number;
-
-
 }
 
 export class SendInviteDto {
@@ -42,14 +57,13 @@ export class SendInviteDto {
 }
 
 @UseGuards(AuthenticatedGuard)
-@ApiTags('channels')
-@Controller('channels')
+@ApiTags("channels")
+@Controller("channels")
 export class ChannelController {
-  constructor(private channelService: ChannelService) { }
-
+  constructor(private channelService: ChannelService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a channel' })
+  @ApiOperation({ summary: "Create a channel" })
   @ApiBody({ type: CreateChannelDto })
   async createChannel(@Body() body: CreateChannelDto): Promise<Channel> {
     return this.channelService.createChannel(body);
@@ -62,31 +76,33 @@ export class ChannelController {
   //   return this.channelService.sendInvite(await req.user.id, body);
   // }
 
-  @Get('channels')
-  @ApiOperation({ summary: 'Get channels of user' })
+  @Get("channels")
+  @ApiOperation({ summary: "Get channels of user" })
   async getChannelOfUser(@Req() req): Promise<Channel[]> {
     const user = await req.user;
     return this.channelService.getChannelOfUser(Number(user.id));
   }
 
-  @Get('channel/users')
-  @ApiOperation({ summary: 'Get channels of user' })
+  @Get("channel/users")
+  @ApiOperation({ summary: "Get channels of user" })
   async getAllUsersInChannel(@Req() req): Promise<Channel[]> {
     const channel = await req.channel;
     return this.channelService.getAllUsersInChannel(Number(channel.id));
   }
 
   @Get("/:channelId/members")
-  @ApiOperation({ summary: 'Get All users in channel by channel Id' })
-  async getChannelAllMembers(@Param('channelId', ParseIntPipe) channelId: number): Promise<any> {
+  @ApiOperation({ summary: "Get All users in channel by channel Id" })
+  async getChannelAllMembers(
+    @Param("channelId", ParseIntPipe) channelId: number
+  ): Promise<any> {
     return await this.channelService.getChannelAllMembers(Number(channelId));
   }
 
-  @Post('/:channelId/remove-user/:userId')
-  @ApiOperation({ summary: 'Remove a user from a channel' })
+  @Post("/:channelId/remove-user/:userId")
+  @ApiOperation({ summary: "Remove a user from a channel" })
   async removeUserFromChannel(
-    @Param('channelId', ParseIntPipe) channelId: number,
-    @Param('userId', ParseIntPipe) userId: number,
+    @Param("channelId", ParseIntPipe) channelId: number,
+    @Param("userId", ParseIntPipe) userId: number
   ): Promise<any> {
     return this.channelService.removeUserFromChannel(channelId, userId);
   }

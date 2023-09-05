@@ -1,23 +1,22 @@
 .popup-root {
-    display: inline-flex;
-    padding: 10px;
-    min-height: 350px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-    position: fixed;
-    border-radius: 10px;
-    background: #34495E;
-    z-index: 999;
+  display: inline-flex;
+  padding: 10px;
+  min-height: 350px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  position: fixed;
+  border-radius: 10px;
+  background: #34495e;
+  z-index: 999;
 }
 
-
 .popover-root {
-    position: fixed;
-    background: rgba(127, 140, 141, 0.50);
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 999;
+  position: fixed;
+  background: rgba(127, 140, 141, 0.5);
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
 }

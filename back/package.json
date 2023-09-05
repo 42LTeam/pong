@@ -44,6 +44,7 @@
     "express-session": "^1.17.3",
     "passport": "^0.6.0",
     "passport-42": "^1.2.6",
+    "pretier": "^0.0.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
@@ -59,7 +60,7 @@
     "eslint": "^8.0.1",
     "express": "^4.18.2",
     "jest": "latest",
-    "prettier": "^2.3.2",
+    "prettier": "^2.8.8",
     "prisma": "^5.2.0",
     "src": "^1.0.0",
     "supertest": "^6.1.3",
