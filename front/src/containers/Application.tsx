@@ -12,6 +12,8 @@ import HomePage from "./HomePage/HomePage";
 import Notification from "../components/utils/Notification";
 import GamePage from "./gamepage/GamePage";
 import { socket } from "../api";
+import React from "react";
+import NotFound from "./NotFound";
 
 type ApplicationEngine = {
   sendNotification: (
@@ -195,9 +197,11 @@ const Application = function ({ children }: { children?: any }) {
               <Route
                 path={`${PATHS.profile}/:userID`}
                 element={<ProfilePage />}
+                errorElement={<NotFound/>}
               />
               <Route path={PATHS.leaderboard} element={<LeaderboardPage />} />
               <Route path={PATHS.game} element={<GamePage />} />
+              <Route path="*" element={<NotFound/>} />
             </Routes>
             <div className="notifications">
               {notifications.reverse().map((current) => {
