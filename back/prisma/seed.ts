@@ -52,7 +52,7 @@ async function main() {
             avatar: 'avatar2',
             username: 'username2',
             secretO2FA: 'secret2',
-            xp: 200,
+            xp: 0,
         },
         select: {
             id: true,

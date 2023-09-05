@@ -1,5 +1,6 @@
 import Game from "./Game.class";
 import {MatchService} from "../../../match/match.service";
+import { UserService } from "src/user/user.service";
 
 export default class MatchMaking {
 
@@ -7,7 +8,11 @@ export default class MatchMaking {
     newGameId = 0;
     nbOfGames = 0;
 
-    constructor(private server, private matchService: MatchService) {}
+    constructor(
+        private server,
+        private matchService: MatchService,
+        private userService: UserService
+    ) {}
 
     handleLeave(user) {
         console.log('MatchMaking : handleLeave of', user?.username);
@@ -29,7 +34,7 @@ export default class MatchMaking {
     }
 
     newGame(user, player, custom) {
-        const newGame = new Game(++this.newGameId, player == null, custom, this.server, this.matchService);
+        const newGame = new Game(++this.newGameId, player == null, custom, this.server, this.matchService, this.userService);
         this.games.push(newGame);
         this.nbOfGames++;
         console.log('MatchMaking : New game', this.newGameId);
