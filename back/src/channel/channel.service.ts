@@ -8,7 +8,6 @@ import { FriendService } from "../friend/friend.service";
 import { MessageService } from "../message/message.service";
 import { Channel } from "@prisma/client";
 
-
 @Injectable()
 export class ChannelService {
   constructor(
@@ -254,7 +253,6 @@ export class ChannelService {
       });
     }
   }
-
 
   async banUserFromChannel(channelId: number, userId: number): Promise<any> {
     return this.prisma.userChannel.updateMany({
