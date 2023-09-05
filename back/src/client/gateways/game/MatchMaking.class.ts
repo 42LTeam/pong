@@ -1,5 +1,5 @@
 import Game from "./Game.class";
-import {MatchService} from "../../../match/match.service";
+import { MatchService } from "../../../match/match.service";
 import { UserService } from "src/user/user.service";
 
 export default class MatchMaking {
@@ -7,43 +7,44 @@ export default class MatchMaking {
   newGameId = 0;
   nbOfGames = 0;
 
-  constructor(private server, private matchService: MatchService) {}
+  constructor(
+    private server,
+    private matchService: MatchService,
+    private userService: UserService
+  ) {}
 
-    constructor(
-        private server,
-        private matchService: MatchService,
-        private userService: UserService
-    ) {}
-
-    handleLeave(user) {
-        console.log('MatchMaking : handleLeave of', user?.username);
-        if (user)
-            this.games.forEach((game) => {
-                game.handleLeave(user);
-            })
-        let index = 0;
-        while (index < this.nbOfGames) {
-            if (this.games[index].canDelete()) {
-                this.games[index].playersLeave();
-                console.log("Game", this.games[index].matchId, "deleted");
-                this.games.splice(index, 1);
-                this.nbOfGames--;
-            }
-            else
-                index++;
-        }
+  handleLeave(user) {
+    console.log("MatchMaking : handleLeave of", user?.username);
+    if (user)
+      this.games.forEach((game) => {
+        game.handleLeave(user);
+      });
+    let index = 0;
+    while (index < this.nbOfGames) {
+      if (this.games[index].canDelete()) {
+        this.games[index].playersLeave();
+        console.log("Game", this.games[index].matchId, "deleted");
+        this.games.splice(index, 1);
+        this.nbOfGames--;
+      } else index++;
     }
   }
 
-    newGame(user, player, custom) {
-        const newGame = new Game(++this.newGameId, player == null, custom, this.server, this.matchService, this.userService);
-        this.games.push(newGame);
-        this.nbOfGames++;
-        console.log('MatchMaking : New game', this.newGameId);
-        newGame.handleJoin(user, false);
-        if (player)
-            newGame.handleJoin(player, true);
-    }
+  newGame(user, player, custom) {
+    const newGame = new Game(
+      ++this.newGameId,
+      player == null,
+      custom,
+      this.server,
+      this.matchService,
+      this.userService
+    );
+    this.games.push(newGame);
+    this.nbOfGames++;
+    console.log("MatchMaking : New game", this.newGameId);
+    newGame.handleJoin(user, false);
+    if (player) newGame.handleJoin(player, true);
+  }
 
   handleJoin(user, invite, custom, playerId) {
     console.log("MatchMaking : handleJoin of", user.username);
@@ -56,7 +57,7 @@ export default class MatchMaking {
       this.server.sockets.sockets.get(user.session)?.emit("game-not-found");
     } else {
       for (let game of this.games)
-        if (game.onGame(user.id) && game.started) {
+        if (game.onGame(user.id) /* && game.started*/) {
           game.handleJoin(user, false);
           return;
         }

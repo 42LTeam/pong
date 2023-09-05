@@ -1,6 +1,6 @@
 import GamePlayer, { playerStatus } from "./GamePlayer.class";
 import GameEngine from "./GameEngine.class";
-import {MatchService} from "../../../match/match.service";
+import { MatchService } from "../../../match/match.service";
 import { UserService } from "src/user/user.service";
 
 export enum gameState {
@@ -15,29 +15,21 @@ export default class Game {
   public engine: GameEngine;
   public players: GamePlayer[] = [];
   public state: gameState = gameState.CREATING;
-  public started = false;
+  // public started = false;
 
   constructor(
     public matchId: number,
     public random: boolean,
     public custom: boolean,
     private server,
-    public matchService: MatchService
+    public matchService: MatchService,
+    public userService: UserService
   ) {
     this.engine = new GameEngine(this);
+    console.log("Game : New game ", this.matchId);
   }
 
-	constructor(
-				public matchId: number,
-				public random: boolean,
-				public custom: boolean,
-				private server,
-				public matchService: MatchService,
-        public userService: UserService
-	) {
-    this.engine = new GameEngine(this);
-    console.log('Game : New game ', this.matchId);
-  }
+  MATCH_ROOM = "Match-" + this.matchId;
 
   onGame(userId) {
     return (
@@ -95,9 +87,8 @@ export default class Game {
 
   canDelete() {
     return (
-      this.state == gameState.FINISH ||
-      (!this.started &&
-        this.players[0].status == playerStatus.OFFLINE &&
+      this.state == gameState.FINISH /*!this.started &&*/ ||
+      (this.players[0].status == playerStatus.OFFLINE &&
         (this.players.length < 2 ||
           this.players[1].status == playerStatus.OFFLINE))
     );
