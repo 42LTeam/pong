@@ -1,11 +1,11 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { Status, User} from '@prisma/client';
-import { FriendService } from '../friend/friend.service';
-import {SearchDTO} from "./user.controller";
-import { MatchService } from 'src/match/match.service';
-import {authenticator} from "otplib";
-import * as qrcode from 'qrcode'
+import { Inject, Injectable, forwardRef } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { Status, User } from "@prisma/client";
+import { FriendService } from "../friend/friend.service";
+import { SearchDTO } from "./user.controller";
+import { MatchService } from "src/match/match.service";
+import { authenticator } from "otplib";
+import * as qrcode from "qrcode";
 
 @Injectable()
 export class UserService {
@@ -244,21 +244,21 @@ export class UserService {
     });
   }
 
-  generateQRCode(name, secret)  {
+  generateQRCode(name, secret) {
     const otp = authenticator.keyuri(name, "Trans", secret);
     return qrcode.toDataURL(otp);
-}
+  }
 
   async newSecret(user) {
-    if (!user.secretO2FA){
+    if (!user.secretO2FA) {
       const secret = authenticator.generateSecret();
       await this.prisma.user.update({
         where: {
-          id: user.id
+          id: user.id,
         },
         data: {
           secretO2FA: secret,
-        }
+        },
       });
       return this.generateQRCode(user.name, secret);
     }

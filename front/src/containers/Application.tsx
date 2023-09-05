@@ -41,9 +41,9 @@ const PATHS = {
   game: "/game",
 };
 
-const Application = function ({children}: {children?: any}){
-    const user = useContext(AuthContext);
-    const [notifications, setNotifications] = useState<any[]>([]);
+const Application = function ({ children }: { children?: any }) {
+  const user = useContext(AuthContext);
+  const [notifications, setNotifications] = useState<any[]>([]);
 
   const sendNotification = (
     key: any,
@@ -169,42 +169,49 @@ const Application = function ({children}: {children?: any}){
 
   if (!user) return <div>Ah ouais chaud t'es pas log</div>;
 
-    if (children) return children;
-    if (!application)
-        setApplication({
-            sendNotification,
-            clearMessage,
-            social: {
-                newMessages: [],
-                newConversations: [],
-            }
-        })
-    else
+  if (children) return children;
+  if (!application)
+    setApplication({
+      sendNotification,
+      clearMessage,
+      social: {
+        newMessages: [],
+        newConversations: [],
+      },
+    });
+  else
     return (
-        <>
-            <BrowserRouter>
-                <ApplicationContext.Provider value={application}>
-                    <Header></Header>
-                    <Routes>
-                        <Route index path={PATHS.home} element={<HomePage />} />
-                        <Route path={PATHS.social+'/:channelId?'} element={<SocialBody key="chatbody"/>} />
-                        <Route path={PATHS.settings} element={<Setting />} />
-                        <Route path={`${PATHS.profile}/:userID`} element={<ProfilePage />} />
-                        <Route path={PATHS.leaderboard} element={<LeaderboardPage />} />
-                        <Route path={PATHS.game} element={<GamePage />} />
-                    </Routes>
-                    <div className="notifications">
-                        {notifications.reverse().map(current => {
-                            return (
-                                <Notification {...current} close={handleNotificationClick} ></Notification>
-                            )
-                        })}
-                    </div>
-                </ApplicationContext.Provider>
-
-            </BrowserRouter>
-        </>
-    )
-
-}
+      <>
+        <BrowserRouter>
+          <ApplicationContext.Provider value={application}>
+            <Header></Header>
+            <Routes>
+              <Route index path={PATHS.home} element={<HomePage />} />
+              <Route
+                path={PATHS.social + "/:channelId?"}
+                element={<SocialBody key="chatbody" />}
+              />
+              <Route path={PATHS.settings} element={<Setting />} />
+              <Route
+                path={`${PATHS.profile}/:userID`}
+                element={<ProfilePage />}
+              />
+              <Route path={PATHS.leaderboard} element={<LeaderboardPage />} />
+              <Route path={PATHS.game} element={<GamePage />} />
+            </Routes>
+            <div className="notifications">
+              {notifications.reverse().map((current) => {
+                return (
+                  <Notification
+                    {...current}
+                    close={handleNotificationClick}
+                  ></Notification>
+                );
+              })}
+            </div>
+          </ApplicationContext.Provider>
+        </BrowserRouter>
+      </>
+    );
+};
 export default Application;

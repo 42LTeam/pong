@@ -6,39 +6,40 @@ import "../css/main.css";
 import DoubleAuth from "./DoubleAuth";
 
 export interface User {
-    avatar: String,
-    username: String,
-    id: number,
-    xp: number,
-    pointAverage: number,
-    ratio: number,
-    playedMatch: boolean,
-    leaderboard : boolean,
-    secretO2FA: boolean,
-    blockList?: number[],
-    friendList?: number[],
-
+  avatar: String;
+  username: String;
+  id: number;
+  xp: number;
+  pointAverage: number;
+  ratio: number;
+  playedMatch: boolean;
+  leaderboard: boolean;
+  secretO2FA: boolean;
+  blockList?: number[];
+  friendList?: number[];
 }
 
 export const AuthContext = createContext<User | undefined>(undefined);
 
 function Auth() {
-    const [wsConnected, setConnected] = useState(false);
-    const [destination, setDestination] = useState(null);
-    const [user, setUser] = useState<User>(null);
-    const localhostback = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + ':3000/auth/login' : 'http://localhost:3000/auth/login';
-    useEffect(() => {
-        if (!user)
-        getStatus()
-            .then(function (response) {
-                setUser(response.data.user);
-                setDestination(response.data.destination);
-                console.log(response.data);
-            })
-            .catch(function () {
-                window.location.replace(localhostback);
-            });
-    },[user])
+  const [wsConnected, setConnected] = useState(false);
+  const [destination, setDestination] = useState(null);
+  const [user, setUser] = useState<User>(null);
+  const localhostback = import.meta.env.VITE_API_URL
+    ? import.meta.env.VITE_API_URL + ":3000/auth/login"
+    : "http://localhost:3000/auth/login";
+  useEffect(() => {
+    if (!user)
+      getStatus()
+        .then(function (response) {
+          setUser(response.data.user);
+          setDestination(response.data.destination);
+          console.log(response.data);
+        })
+        .catch(function () {
+          window.location.replace(localhostback);
+        });
+  }, [user]);
 
   useEffect(() => {
     function onDisconnect() {
@@ -62,13 +63,15 @@ function Auth() {
       socket.emit("register", { target: response.data });
     });
 
-    return (
-        <AuthContext.Provider value={user}>
-                <Application>
-                    {destination == '2fa' ? <DoubleAuth setDestination={setDestination}></DoubleAuth> : null}
-                </Application>
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={user}>
+      <Application>
+        {destination == "2fa" ? (
+          <DoubleAuth setDestination={setDestination}></DoubleAuth>
+        ) : null}
+      </Application>
+    </AuthContext.Provider>
+  );
 }
 
 export default Auth;
