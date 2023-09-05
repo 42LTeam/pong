@@ -3,7 +3,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { Status, User } from "@prisma/client";
 import { FriendService } from "../friend/friend.service";
 import { SearchDTO } from "./user.controller";
-import { MatchService } from "src/match/match.service";
+import { MatchService } from "../match/match.service";
 import { authenticator } from "otplib";
 import * as qrcode from "qrcode";
 
@@ -14,7 +14,7 @@ export class UserService {
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
     @Inject(forwardRef(() => MatchService))
-    private matchService: MatchService
+    private matchService: MatchService,
   ) {}
 
   async createUser(
@@ -22,7 +22,7 @@ export class UserService {
     username: string,
     secretO2FA: string,
     avatar: string,
-    xp: number
+    xp: number,
   ): Promise<User> {
     return this.prisma.user.create({
       data: {
@@ -56,13 +56,27 @@ export class UserService {
     });
   }
 
-  async updateUserAvatar(id: number, avatar: string): Promise<User> {
-    return this.prisma.user.update({
-      where: { id },
-      data: {
-        avatar: avatar,
-      },
-    });
+  // async updateUserAvatar(id: number, avatar: string): Promise<User> {
+  //   return this.prisma.user.update({
+  //     where: { id },
+  //     data: {
+  //       avatar: avatar,
+  //     },
+  //   });
+  // }
+
+  async updateUserAvatar(userId: number, avatarPath: string) {
+    try {
+      const updatedUser = await this.prisma.user.update({
+        where: { id: userId },
+        data: { avatar: avatarPath },
+      });
+      console.log(updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating user avatar in Prisma:", error);
+      throw new Error("Failed to update avatar in database");
+    }
   }
 
   async updateUserName(id: number, username: string): Promise<User> {
@@ -106,7 +120,7 @@ export class UserService {
     });
 
     const pending = await user.userFriendships.map(
-      (current) => current.senderId
+      (current) => current.senderId,
     );
     return (
       await this.prisma.user.findMany({
@@ -120,7 +134,7 @@ export class UserService {
       return {
         ...current,
         friendShipId: user.userFriendships.filter(
-          (c) => c.senderId == current.id
+          (c) => c.senderId == current.id,
         )[0].id,
       };
     });
@@ -128,7 +142,7 @@ export class UserService {
 
   async getFriendsOfUser(
     id: number,
-    options: { startWith?: string; online?: boolean } = {}
+    options: { startWith?: string; online?: boolean } = {},
   ): Promise<User[]> {
     const ids = await this.friendService.getUserFriendships(id);
 
@@ -150,8 +164,8 @@ export class UserService {
     if (options.notFriend)
       forbiddenIds.push(
         ...(await this.getFriendsOfUser(id, { startWith: query })).map(
-          (c) => c.id
-        )
+          (c) => c.id,
+        ),
       );
 
     if (options.friendOnly)

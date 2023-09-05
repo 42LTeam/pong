@@ -29,15 +29,15 @@ export class AdminController {
   @ApiOperation({ summary: "Create a friendship" })
   @ApiBody({ type: CreateFriendshipDto })
   async createFriendship(
-    @Body() body: CreateFriendshipDto
+    @Body() body: CreateFriendshipDto,
   ): Promise<UserFriendship> {
     const friendship = await this.friendService.createFriendRequest(
       body.initiatorId,
-      body.acceptorId
+      body.acceptorId,
     );
     return this.friendService.acceptFriendRequest(
       body.acceptorId,
-      friendship.id
+      friendship.id,
     );
   }
 }

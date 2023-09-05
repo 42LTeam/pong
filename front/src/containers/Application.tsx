@@ -1,7 +1,7 @@
 import Header from "./header/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SocialBody from "./social/SocialBody";
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./Auth";
 
 import "../css/notification.css";

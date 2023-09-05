@@ -1,6 +1,6 @@
 import "../../css/chat.css";
 import Conversations from "./conversation/Conversations";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Friends from "./friend/Friends";
 import Chat from "./chat/Chat";
 import { useParams } from "react-router-dom";

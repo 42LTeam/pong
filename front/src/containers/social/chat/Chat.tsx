@@ -29,7 +29,6 @@ export default function Chat(props: ChatProps) {
   );
 
   const fetchData = async () => {
-    console.log("mount2");
     const response = await getChannelMessages(props.channel);
     const data = response.data;
     const tmp_messages = [...data.messages].reverse();

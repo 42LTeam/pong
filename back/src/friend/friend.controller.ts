@@ -61,12 +61,13 @@ export class FriendController {
   @ApiOperation({ summary: "Decline a friend request" })
   async declineFriendRequest(
     @Param("friendshipId") friendshipId: number,
-    @Req() req: any
+    @Req() req: any,
   ) {
     const user = await req.user;
     return this.friendService.declineFriendRequest(
       user.id,
       Number(friendshipId)
+    ,
     );
   }
 
@@ -74,7 +75,7 @@ export class FriendController {
   @ApiOperation({ summary: "remove a friendship" })
   async removeFriendship(
     @Param("friendId", ParseIntPipe) friendId: number,
-    @Req() req: any
+    @Req() req: any,
   ) {
     const user = await req.user;
     return this.friendService.removeFriendship(user.id, Number(friendId));

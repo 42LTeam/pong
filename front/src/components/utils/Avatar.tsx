@@ -5,7 +5,7 @@ interface AvatarProps {
   height?: string;
 }
 export default function Avatar(props: AvatarProps) {
-  const url = props.url ? 'url("' + props.url + '")' : null;
+  const url = props.url ? `url("${props.url}")` : null;
 
   return (
     <div

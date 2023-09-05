@@ -36,7 +36,7 @@ class CreateBlockDto {
 export class BlockController {
   constructor(
     private blockService: BlockService,
-    private friendService: FriendService
+    private friendService: FriendService,
   ) {}
 
   @Post("/create")
@@ -53,11 +53,11 @@ export class BlockController {
     const user = await req.user;
     const ret = await this.blockService.createBlockRequest(
       user.id,
-      createBlockDto.blockedId
+      createBlockDto.blockedId,
     );
     await this.friendService.removeFriendship(
       user.id,
-      createBlockDto.blockedId
+      createBlockDto.blockedId,
     );
     return ret;
   }
