@@ -93,8 +93,10 @@ export default function NewMessagePopup({ position, clear }: Props) {
   };
 
   const handleClickPrivate = async (isPrivate) => {
-    const enteredPassword = prompt("Please enter the password for the private channel:");
-    if (enteredPassword === null) { 
+    const enteredPassword = prompt(
+      "Please enter the password for the private channel:",
+    );
+    if (enteredPassword === null) {
       return;
     }
     const response = await createChannel({
@@ -111,7 +113,7 @@ export default function NewMessagePopup({ position, clear }: Props) {
     }).then(() => {
       clear(true);
     });
-    setChannelPassword(channel.id, enteredPassword)
+    setChannelPassword(channel.id, enteredPassword);
   };
 
   const toggleCheck = (current, check) => {

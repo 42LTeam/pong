@@ -1,4 +1,11 @@
-import { Controller, Req, Get, Param, UseGuards, BadRequestException } from "@nestjs/common";
+import {
+  Controller,
+  Req,
+  Get,
+  Param,
+  UseGuards,
+  BadRequestException,
+} from "@nestjs/common";
 import { ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { Channel } from "@prisma/client";
 import { ChannelService } from "../channel.service";

@@ -266,14 +266,13 @@ export async function getConversation(userId: number) {
     url: URL + "/conversation/" + userId,
     withCredentials: true,
   };
-  console.log("id mygeue: " + userId)
+  console.log("id mygeue: " + userId);
   try {
     return await axios(config);
   } catch (error) {
     throw error;
   }
 }
-
 
 export async function acceptFriendship(id: number) {
   const config = {
@@ -446,12 +445,15 @@ export async function getUserMatchesResume(ID) {
   return axios(config);
 }
 
-export async function setChannelPassword(channelId: number, newPassword: string) {
+export async function setChannelPassword(
+  channelId: number,
+  newPassword: string,
+) {
   const config = {
-    method: 'post',
+    method: "post",
     url: URL + "/channels/" + channelId + "/set-password",
     data: {
-      password: newPassword
+      password: newPassword,
     },
     withCredentials: true,
   };

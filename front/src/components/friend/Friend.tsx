@@ -27,7 +27,6 @@ export default function Friend(props: Props) {
   const user = useContext(AuthContext);
   const [display, setDisplay] = useState(null);
   const buttons = [
-
     {
       text: "Profile",
       handleClick: () => navigate("/profile/" + props.friend.id),
@@ -106,15 +105,17 @@ export default function Friend(props: Props) {
       const response = await getConversation(friend.id);
       navigate("/social/" + response.data.id);
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         console.error(`Error: ${error.response.data.message}`);
       } else {
         console.error("Error while fetching conversation.");
       }
     }
   };
-
-
 
   return (
     <ContextMenu buttons={buttons} buttonProps={buttonProps}>

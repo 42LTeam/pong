@@ -65,12 +65,11 @@ export class UpdateChannelPasswordDto {
   password: string;
 }
 
-
 @UseGuards(AuthenticatedGuard)
 @ApiTags("channels")
 @Controller("channels")
 export class ChannelController {
-  constructor(private channelService: ChannelService) { }
+  constructor(private channelService: ChannelService) {}
 
   @Post()
   @ApiOperation({ summary: "Create a channel" })
@@ -172,6 +171,9 @@ export class ChannelController {
     @Param("channelId", ParseIntPipe) channelId: number,
     @Body() updatePasswordDto: UpdateChannelPasswordDto
   ): Promise<Channel> {
-    return this.channelService.setChannelPassword(channelId, updatePasswordDto.password);
+    return this.channelService.setChannelPassword(
+      channelId,
+      updatePasswordDto.password
+    );
   }
 }
