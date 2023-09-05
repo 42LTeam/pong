@@ -1,5 +1,5 @@
 import PopUp from "./PopUp";
-import { Children, useState } from "react";
+import React, { Children, useState } from "react";
 import Button from "./Button";
 
 type Props = {

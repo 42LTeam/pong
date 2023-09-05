@@ -11,8 +11,8 @@ import {UserService} from "src/user/user.service";
 import {FriendService} from "src/friend/friend.service";
 
 @Module({
-    providers: [ClientService, MatchService, ClientGateway, GameGateway, UserService, FriendService],
-    exports: [ClientService],
-    imports: [PrismaModule, MessageModule, ChannelModule, MatchModule]
+  providers: [ClientService, MatchService, ClientGateway, GameGateway, UserService, FriendService],
+  exports: [ClientService],
+  imports: [PrismaModule, MessageModule, ChannelModule, MatchModule],
 })
 export class ClientModule {}

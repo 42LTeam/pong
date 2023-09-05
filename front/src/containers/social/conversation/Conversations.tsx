@@ -1,7 +1,7 @@
 import "../../../css/chat.css";
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getChannels } from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 import SidePanel from "../../../components/utils/SidePanel";

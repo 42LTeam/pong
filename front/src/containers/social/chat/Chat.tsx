@@ -1,5 +1,5 @@
 import TextInput from "../../../components/utils/TextInput";
-import { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Message from "../../../components/chat/Message";
 import { AuthContext } from "../../Auth";
 import "../../../css/chatBody.css";
@@ -35,7 +35,8 @@ export default function Chat(props: ChatProps) {
     const tmp_messages = [...data.messages].reverse();
     setMessages(tmp_messages);
     setLastRead(data.lastRead);
-    if (tmp_messages.length) readMessage(props.channel, tmp_messages[0].id);
+    if (tmp_messages.length)
+      await readMessage(props.channel, tmp_messages[0].id);
   };
 
   useEffect(() => {

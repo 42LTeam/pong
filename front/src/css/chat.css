@@ -105,6 +105,16 @@
   line-height: normal;
 }
 
+.conversation-username-ban {
+  color: #e74c3c;
+  text-align: center;
+  font-family: "Kulim Park", serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
 .conversation-preview {
   color: #ecf0f1;
   text-align: center;

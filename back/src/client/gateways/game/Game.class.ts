@@ -4,135 +4,127 @@ import {MatchService} from "../../../match/match.service";
 import { UserService } from "src/user/user.service";
 
 export enum gameState {
-  CREATING,
-  STARTING,
-  PLAYING,
-  PAUSE,
-  FINISH,
+	CREATING,
+	STARTING,
+	PLAYING,
+	PAUSE,
+	FINISH,
 }
 
 export default class Game {
-  public engine: GameEngine;
-  public players: GamePlayer[] = [];
-  public state: gameState = gameState.CREATING;
-  public started = false;
-
-  constructor(
-    public matchId: number,
-    public random: boolean,
-    public custom: boolean,
-    private server,
-    public matchService: MatchService
-  ) {
-    this.engine = new GameEngine(this);
-  }
+	public engine: GameEngine;
+	public players: GamePlayer[] = [];
+	public state: gameState = gameState.CREATING;
+	public started = false;
 
 	constructor(
-				public matchId: number,
-				public random: boolean,
-				public custom: boolean,
-				private server,
-				public matchService: MatchService,
-        public userService: UserService
+		public matchId: number,
+		public random: boolean,
+		public custom: boolean,
+		private server,
+		public matchService: MatchService,
+		public userService: UserService
 	) {
-    this.engine = new GameEngine(this);
-    console.log('Game : New game ', this.matchId);
-  }
+		this.engine = new GameEngine(this);
+		console.log('Game : New game ', this.matchId);
+	}
 
-  onGame(userId) {
-    return (
-      this.state != gameState.FINISH &&
-      (this.players[0].userId == userId ||
-        (this.players.length > 1 && this.players[1].userId == userId))
-    );
-  }
+	MATCH_ROOM = "Match-" + this.matchId;
 
-  goodGame(userId, playerId) {
-    return !this.random && this.onGame(userId) && this.onGame(playerId);
-  }
+	onGame(userId) {
+		return (
+			this.state != gameState.FINISH &&
+			(this.players[0].userId == userId ||
+				(this.players.length > 1 && this.players[1].userId == userId))
+		);
+	}
 
-  canJoinInvite(userId, playerId, custom) {
-    return this.goodGame(userId, playerId) && this.custom == custom;
-  }
+	goodGame(userId, playerId) {
+		return !this.random && this.onGame(userId) && this.onGame(playerId);
+	}
 
-  wrongCustom(userId, playerId, custom) {
-    return this.goodGame(userId, playerId) && this.custom != custom;
-  }
+	canJoinInvite(userId, playerId, custom) {
+		return this.goodGame(userId, playerId) && this.custom == custom;
+	}
 
-  canJoinRandom(custom) {
-    return this.random && this.players.length < 2 && this.custom == custom;
-  }
+	wrongCustom(userId, playerId, custom) {
+		return this.goodGame(userId, playerId) && this.custom != custom;
+	}
 
-  handleJoin(user, invite: Boolean) {
-    // console.log('Game : handleJoin');
-    const socket = this.server.sockets.sockets.get(user.session);
-    let player = this.players.find((p) => p.userId == user.id);
-    if (!player) {
-      player = new GamePlayer(
-        user.id,
-        user.username,
-        socket,
-        !Boolean(this.players.length),
-        this.engine.ball.BALL_SEMI_SIZE
-      );
-      this.players.push(player);
-      socket?.join(this.MATCH_ROOM);
-      // console.log('Player', player.name, 'join game', this.matchId);
-      if (invite) player.status = playerStatus.OFFLINE;
-      // else
-      // 	console.log('New connection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
-    } else {
-      player.status = playerStatus.ONLINE;
-      player.socket = socket;
-      // console.log('Player', player.name, 're-join game', this.matchId);
-      // console.log('New connection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
-    }
-    if (this.players.length == 1) player.send("game-wait", null);
-    else if (this.players[0].status != this.players[1].status)
-      player.send("game-pause", null);
-    else this.engine.startGame();
-  }
+	canJoinRandom(custom) {
+		return this.random && this.players.length < 2 && this.custom == custom;
+	}
 
-  canDelete() {
-    return (
-      this.state == gameState.FINISH ||
-      (!this.started &&
-        this.players[0].status == playerStatus.OFFLINE &&
-        (this.players.length < 2 ||
-          this.players[1].status == playerStatus.OFFLINE))
-    );
-  }
+	handleJoin(user, invite: Boolean) {
+		// console.log('Game : handleJoin');
+		const socket = this.server.sockets.sockets.get(user.session);
+		let player = this.players.find((p) => p.userId == user.id);
+		if (!player) {
+			player = new GamePlayer(
+				user.id,
+				user.username,
+				socket,
+				!Boolean(this.players.length),
+				this.engine.ball.BALL_SEMI_SIZE
+			);
+			this.players.push(player);
+			socket?.join(this.MATCH_ROOM);
+			// console.log('Player', player.name, 'join game', this.matchId);
+			if (invite) player.status = playerStatus.OFFLINE;
+			// else
+			// 	console.log('New connection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
+		} else {
+			player.status = playerStatus.ONLINE;
+			player.socket = socket;
+			// console.log('Player', player.name, 're-join game', this.matchId);
+			// console.log('New connection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
+		}
+		if (this.players.length == 1) player.send("game-wait", null);
+		else if (this.players[0].status != this.players[1].status)
+			player.send("game-pause", null);
+		else this.engine.startGame();
+	}
 
-  playersLeave() {
-    this.players.forEach((player) => {
-      player.socket.leave(this.MATCH_ROOM);
-    });
-  }
+	canDelete() {
+		return (
+			this.state == gameState.FINISH ||
+			(!this.started &&
+				this.players[0].status == playerStatus.OFFLINE &&
+				(this.players.length < 2 ||
+					this.players[1].status == playerStatus.OFFLINE))
+		);
+	}
 
-  handleLeave(user) {
-    const index = this.players.findIndex((p) => p.userId == user.id);
-    // console.log('Game : handleLeave of index', index);
-    if (index >= 0) {
-      console.log("Player", this.players[index].name, "left");
-      if (this.state == gameState.FINISH) {
-        this.players.splice(index, 1);
-        // console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
-      } else {
-        this.players[index].status = playerStatus.OFFLINE;
-        // console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
-        if (this.state != gameState.PAUSE) {
-          this.state = gameState.PAUSE;
-          // console.log('The game', this.matchId, 'is on pause');
-        }
-      }
-    }
-  }
+	playersLeave() {
+		this.players.forEach((player) => {
+			player.socket.leave(this.MATCH_ROOM);
+		});
+	}
 
-  updateInput(user, data) {
-    if (this.state == gameState.PLAYING) {
-      const index = this.players.findIndex((c) => c.userId == user.id);
-      this.players[index].moveUp = data.moveUp;
-      this.players[index].moveDown = data.moveDown;
-    }
-  }
+	handleLeave(user) {
+		const index = this.players.findIndex((p) => p.userId == user.id);
+		// console.log('Game : handleLeave of index', index);
+		if (index >= 0) {
+			console.log("Player", this.players[index].name, "left");
+			if (this.state == gameState.FINISH) {
+				this.players.splice(index, 1);
+				// console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
+			} else {
+				this.players[index].status = playerStatus.OFFLINE;
+				// console.log('New deconnection, total :', this.players.length, 'matchId:', this.MATCH_ROOM);
+				if (this.state != gameState.PAUSE) {
+					this.state = gameState.PAUSE;
+					// console.log('The game', this.matchId, 'is on pause');
+				}
+			}
+		}
+	}
+
+	updateInput(user, data) {
+		if (this.state == gameState.PLAYING) {
+			const index = this.players.findIndex((c) => c.userId == user.id);
+			this.players[index].moveUp = data.moveUp;
+			this.players[index].moveDown = data.moveDown;
+		}
+	}
 }

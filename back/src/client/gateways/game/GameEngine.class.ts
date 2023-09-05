@@ -80,41 +80,7 @@ export default class GameEngine {
     }
   }
 
-	async loop() {
-		if (this.game.state == gameState.PLAYING) {
-			this.game.players.forEach(p => p.update())
-			this.ball.update();
-			if (this.checkScores()) {
-				this.game.players.forEach((player) => {
-					player.send('game-finish', this.getData());
-				});
-				await this.game.matchService.createMatch(
-					[this.game.players[0].userId, this.game.players[1].userId],
-					this.score,
-					[(this.score[0] === 5), (this.score[1] === 5)]
-				);
-				await this.game.userService.updateUserXP( //Add of xp for player [0]
-					this.game.players[0].userId, ( (this.score[0] === 5 ? 50 : 10) + this.score[0] * 10 )
-				)
-				await this.game.userService.updateUserXP( //Add of xp for player [0]
-					this.game.players[1].userId, ( (this.score[1] === 5 ? 50 : 10) + this.score[1] * 10 )
-				)
-			}
-			else {
-				this.game.players.forEach((player) => {
-					player.send('gameplay', this.getData());
-				});
-				setTimeout(() => {
-					this.loop();
-				}, this.TIME_REFRESH);
-			}
-		}
-		else {
-			this.game.players.forEach((player) => {
-				player.send('game-pause', this.getData());
-			});
-		}
-	}
+  sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   async startGame() {
     this.game.started = true;

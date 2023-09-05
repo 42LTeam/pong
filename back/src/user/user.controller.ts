@@ -125,7 +125,7 @@ export class UserController {
     return this.userService.getAllUsers(user.id, { notFriend });
   }
 
-  @Get("id/:id")
+  @Get("/:id")
   @ApiOperation({ summary: "Get user by id" })
   async getUserById(
     @Param("id", ParseIntPipe, UserIdValidationPipe) id: number

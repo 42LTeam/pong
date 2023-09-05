@@ -227,14 +227,14 @@ export class UserService {
   }
 
   async updateUserXP(id: number, AddedXp: number): Promise<User> {
-    
+
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) {
       throw new Error(`User with id = ${id} does not exist`);
     }
 
   const updatedXP = user.xp + AddedXp;
-    
+
     return this.prisma.user.update({
       where: { id },
       data: {
