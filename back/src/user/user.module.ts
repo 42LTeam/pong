@@ -22,4 +22,3 @@ import { FileUploadService } from "../file-upload/file-upload.service"; // Adjus
   exports: [UserService],
 })
 export class UserModule {}
-

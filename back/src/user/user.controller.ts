@@ -99,7 +99,7 @@ export class SearchDTO {
 export class UserController {
   constructor(
     private userService: UserService,
-    private matchService: MatchService,
+    private matchService: MatchService
   ) {}
 
   @Post()
@@ -112,7 +112,7 @@ export class UserController {
       createUserDto.username,
       createUserDto.secretO2FA,
       createUserDto.avatar,
-      createUserDto.xp,
+      createUserDto.xp
     );
   }
 
@@ -140,11 +140,11 @@ export class UserController {
   @ApiBody({ type: UpdateUserAvatarDto })
   async updateUserAvatar(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserAvatarDto: UpdateUserAvatarDto,
+    @Body() updateUserAvatarDto: UpdateUserAvatarDto
   ): Promise<User> {
     return this.userService.updateUserAvatar(
       Number(id),
-      updateUserAvatarDto.avatar,
+      updateUserAvatarDto.avatar
     );
   }
 
@@ -153,11 +153,11 @@ export class UserController {
   @ApiBody({ type: UpdateUserNameDto })
   async updateUserName(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserNameDto: UpdateUserNameDto,
+    @Body() updateUserNameDto: UpdateUserNameDto
   ): Promise<User> {
     return this.userService.updateUserName(
       Number(id),
-      updateUserNameDto.username,
+      updateUserNameDto.username
     );
   }
 
@@ -251,7 +251,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor("avatar"))
   async uploadAvatar(
     @Param("id", ParseIntPipe) id: number,
-    @UploadedFile() file,
+    @UploadedFile() file
   ): Promise<any> {
     const fileName = file.path.split("/").pop();
     const formattedPath = `//localhost:3000/uploads/${fileName}`;

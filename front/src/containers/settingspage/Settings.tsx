@@ -1,7 +1,12 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 import "../../css/settings.css";
 import { AuthContext } from "../Auth";
-import { get2fa, updateUserAvatar, updateUserUsername, uploadUserAvatar } from "../../api";
+import {
+  get2fa,
+  updateUserAvatar,
+  updateUserUsername,
+  uploadUserAvatar,
+} from "../../api";
 import Button from "../../components/utils/Button";
 
 export default function Settings() {

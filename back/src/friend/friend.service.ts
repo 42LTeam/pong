@@ -8,7 +8,7 @@ export class FriendService {
   constructor(
     private prisma: PrismaService,
     @Inject(forwardRef(() => UserService))
-    private userService: UserService,
+    private userService: UserService
   ) {}
 
   async createFriendRequest(
