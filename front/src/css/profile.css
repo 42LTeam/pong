@@ -1,163 +1,162 @@
-.main-frame-profile{
-    display: flex;
-    padding: 10px 0px;
-    align-items: center;
-    flex: 1 0 0;
-    align-self: stretch;
-    border-radius: 10px;
-    background: #2C3E50;
+.main-frame-profile {
+  display: flex;
+  padding: 10px 0px;
+  align-items: center;
+  flex: 1 0 0;
+  align-self: stretch;
+  border-radius: 10px;
+  background: #2c3e50;
 }
 
-.left-frame-profile{
-    display: flex;
-    padding: 10px 20px;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    flex: 1 0 0;
-    align-self: stretch;
+.left-frame-profile {
+  display: flex;
+  padding: 10px 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
 }
 
-.right-frame-profile{
-    display: flex;
-    padding: 10px 20px;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    flex: 1 0 0;
-    align-self: stretch;
+.right-frame-profile {
+  display: flex;
+  padding: 10px 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
 }
 
 .user-profile-picture {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: #7F8C8D;
-    background-size: 100%;
-    background-position: 50% 50%;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #7f8c8d;
+  background-size: 100%;
+  background-position: 50% 50%;
 }
 
-.user-profile-title{
-    display: flex;
-    align-items: center;
+.user-profile-title {
+  display: flex;
+  align-items: center;
 
-    color: #FFF;
-    text-align: center;
-    font-family: Krub, serif;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+  color: #fff;
+  text-align: center;
+  font-family: Krub, serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
-.match-history{
-    display: flex;
-    padding: 5px 0px;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    flex: 1 0 0;
-    align-self: stretch;
-    border-radius: 10px;
-    overflow-y: scroll;
-    overflow: auto;
+.match-history {
+  display: flex;
+  padding: 5px 0px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
+  border-radius: 10px;
+  overflow-y: scroll;
+  overflow: auto;
 }
 
-.match-history-bubble{
-    display: flex;
-    padding: 5px 10px;
-    justify-content: space-between;
-    align-items: center;
-    align-self: stretch;
-    border-radius: 10px;
-    background: #2C3E50;
+.match-history-bubble {
+  display: flex;
+  padding: 5px 10px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 10px;
+  background: #2c3e50;
 }
-.match-history-bubble:hover{
-    background: #34495E;
-}
-
-.match-history-pp-pseudo-group{
-    display: flex;
-    padding: 2px 0px;
-    align-items: center;
-    gap: 8px;
-    align-self: stretch;
+.match-history-bubble:hover {
+  background: #34495e;
 }
 
-.match-history-profile-picture{
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: #7F8C8D;
-    background-size: 100%;
-    background-position: 50% 50%;
+.match-history-pp-pseudo-group {
+  display: flex;
+  padding: 2px 0px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
 }
 
-.match-history-opponent-pseudo{
-    
-    color: #FFF;
-    text-align: left;
-    font-family: 'KoHo', sans-serif;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-
-    min-width: 100px;
+.match-history-profile-picture {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #7f8c8d;
+  background-size: 100%;
+  background-position: 50% 50%;
 }
 
-.match-history-data{
-    color: #7F8C8D;
-    text-align: center;
-    font-family: 'KoHo', sans-serif;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 275;
-    line-height: normal;
+.match-history-opponent-pseudo {
+  color: #fff;
+  text-align: left;
+  font-family: "KoHo", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+
+  min-width: 100px;
 }
 
-.victory-icon{
-    min-width: 80px;
-    display: flex;
-    padding: 0px 10px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    background: #2ECC71;
-
-    color: #FFF;
-    text-align: center;
-    font-family: 'KoHo', sans-serif;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+.match-history-data {
+  color: #7f8c8d;
+  text-align: center;
+  font-family: "KoHo", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 275;
+  line-height: normal;
 }
 
-.defeat-icon{
-    min-width: 80px;
-    display: flex;
-    padding: 0px 10px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    background: #ECF0F1;
-    
-    color: #2980B9;
-    text-align: center;
-    font-family: KoHo;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+.victory-icon {
+  min-width: 80px;
+  display: flex;
+  padding: 0px 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background: #2ecc71;
+
+  color: #fff;
+  text-align: center;
+  font-family: "KoHo", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
-.leaderboard-profile-data{
-    color: #FFF;
-    text-align: center;
-    font-family: KoHo, sans-serif;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 275;
-    line-height: normal;
+.defeat-icon {
+  min-width: 80px;
+  display: flex;
+  padding: 0px 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background: #ecf0f1;
+
+  color: #2980b9;
+  text-align: center;
+  font-family: KoHo;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.leaderboard-profile-data {
+  color: #fff;
+  text-align: center;
+  font-family: KoHo, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 275;
+  line-height: normal;
 }
