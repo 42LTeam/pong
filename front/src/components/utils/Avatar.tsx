@@ -4,8 +4,8 @@ interface AvatarProps {
     width?: string,
     height?: string,
 }
-export default function Avatar(props : AvatarProps){
-    const url = props.url ? "url(\"" + props.url + "\")" : null;
+export default function Avatar(props: AvatarProps) {
+    const url = props.url ? `url("${props.url}")` : null;
 
     return (
         <div className="avatar-root user-picture" style={{

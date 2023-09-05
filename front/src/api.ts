@@ -5,7 +5,7 @@ const localhostwebsocket = process.env.VITE_API_URL ? `${process.env.VITE_API_UR
 const webSocketURL = localhostwebsocket;
 const localhostback = process.env.VITE_API_URL ? `${process.env.VITE_API_URL}:3000` : 'http://localhost:3000';
 const URL = localhostback;
-export const socket = io(webSocketURL, { autoConnect: true});
+export const socket = io(webSocketURL, { autoConnect: true });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* File: /back/src/channel/controllers/channel.controller.ts                                                          */
@@ -13,8 +13,7 @@ export const socket = io(webSocketURL, { autoConnect: true});
 
 //  @Post('/:channelId/admin-quit/:userId')
 //  @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
-export async function removeUserAdminFromChannel(channelId: number, userId: number)
-{
+export async function removeUserAdminFromChannel(channelId: number, userId: number) {
     const config = {
         method: 'post',
         url: URL + '/channels/' + channelId + '/admin-quit/' + userId,
@@ -28,8 +27,7 @@ export async function removeUserAdminFromChannel(channelId: number, userId: numb
 
 //  @Post('/:channelId/quit/:userId')
 //  @ApiOperation({ summary: 'Remove a user from a channel (User perspective)' })
-export async function removeUserFromChannel(channelId: number, userId: number)
-{
+export async function removeUserFromChannel(channelId: number, userId: number) {
     const config = {
         method: 'post',
         url: URL + '/channels/' + channelId + '/quit/' + userId,
@@ -43,8 +41,7 @@ export async function removeUserFromChannel(channelId: number, userId: number)
 
 //  @Post('/:channelId/ban/:userId')
 //  @ApiOperation({ summary: 'Ban a user from a channel' })
-export async function banUserFromChannel(channelId: number, userId: number)
-{
+export async function banUserFromChannel(channelId: number, userId: number) {
     const config = {
         method: 'post',
         url: URL + '/channels/' + channelId + '/ban/' + userId,
@@ -58,8 +55,7 @@ export async function banUserFromChannel(channelId: number, userId: number)
 
 //  @Post('/:channelId/unban/:userId')
 //  @ApiOperation({ summary: 'Un-Ban a user from a channel' })
-export async function unbanUserFromChannel(channelId: number, userId: number)
-{
+export async function unbanUserFromChannel(channelId: number, userId: number) {
     const config = {
         method: 'post',
         url: URL + '/channels/' + channelId + '/unban/' + userId,
@@ -73,8 +69,7 @@ export async function unbanUserFromChannel(channelId: number, userId: number)
 
 //   @Post('/:channelId/mute/:userId')
 //   @ApiOperation({ summary: 'Mute a user from a channel' })
-export async function muteUserFromChannel(channelId: number, userId: number)
-{
+export async function muteUserFromChannel(channelId: number, userId: number) {
     const config = {
         method: 'post',
         url: URL + '/channels/' + channelId + '/mute/' + userId,
@@ -88,8 +83,7 @@ export async function muteUserFromChannel(channelId: number, userId: number)
 
 //   @Get('/:channelId/is-muted/:userId')
 //   @ApiOperation({ summary: 'Mute a user from a channel' })
-export async function isMutedBannedFromChannel(channelId: number, userId: number)
-{
+export async function isMutedBannedFromChannel(channelId: number, userId: number) {
     const config = {
         method: 'get',
         url: URL + '/channels/' + channelId + '/is-muted/' + userId,
@@ -103,10 +97,10 @@ export async function isMutedBannedFromChannel(channelId: number, userId: number
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-export async function searchUser(search, options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
+export async function searchUser(search, options: { friendOnly?: boolean, notFriend?: boolean } = { friendOnly: false, notFriend: false }) {
     const config = {
         method: 'get',
-        url: URL + '/users/search/'  +search,
+        url: URL + '/users/search/' + search,
         data: {
             options
         },
@@ -115,7 +109,7 @@ export async function searchUser(search, options: {friendOnly?: boolean, notFrie
     return axios(config);
 }
 
-export async function getStatus(){
+export async function getStatus() {
     const config = {
         method: 'get',
         url: URL + '/auth/status',
@@ -124,7 +118,7 @@ export async function getStatus(){
     return axios(config);
 }
 
-export async function blockUser(blockedId: number){
+export async function blockUser(blockedId: number) {
     const config = {
         method: 'post',
         url: URL + '/block/create',
@@ -137,7 +131,7 @@ export async function blockUser(blockedId: number){
 }
 
 
-export async function unblockUser(blockedId: number){
+export async function unblockUser(blockedId: number) {
     const config = {
         method: 'delete',
         url: URL + '/block/remove',
@@ -150,7 +144,7 @@ export async function unblockUser(blockedId: number){
 }
 
 
-export async function updateUserAvatar(id, avatarUrl){
+export async function updateUserAvatar(id, avatarUrl) {
     const config = {
         method: 'put',
         url: URL + '/users/avatar/' + id,
@@ -162,7 +156,7 @@ export async function updateUserAvatar(id, avatarUrl){
     return axios(config);
 }
 
-export async function updateUserUsername(id, username){
+export async function updateUserUsername(id, username) {
     const config = {
         method: 'put',
         url: URL + '/users/username/' + id,
@@ -174,9 +168,9 @@ export async function updateUserUsername(id, username){
     return axios(config);
 }
 
-export async function getAllUsers(options: {friendOnly?: boolean, notFriend?: boolean} = {friendOnly: false, notFriend: false}){
+export async function getAllUsers(options: { friendOnly?: boolean, notFriend?: boolean } = { friendOnly: false, notFriend: false }) {
 
-    const queryParams = Object.entries(options).map((key) => key[0]+'='+key[1]).join('&');
+    const queryParams = Object.entries(options).map((key) => key[0] + '=' + key[1]).join('&');
     const config = {
         method: 'get',
         url: URL + '/users?' + queryParams,
@@ -188,7 +182,7 @@ export async function getAllUsers(options: {friendOnly?: boolean, notFriend?: bo
     return axios(config);
 }
 
-export async function getFriendOfUser(id: number){
+export async function getFriendOfUser(id: number) {
     const config = {
         method: 'get',
         url: URL + '/users/friend/' + id,
@@ -197,7 +191,7 @@ export async function getFriendOfUser(id: number){
     return axios(config);
 }
 
-export async function getChannels(){
+export async function getChannels() {
     const config = {
         method: 'get',
         url: URL + '/channels/channels',
@@ -206,7 +200,7 @@ export async function getChannels(){
     return axios(config);
 }
 
-export async function getChannelAllMembers(id: number){
+export async function getChannelAllMembers(id: number) {
     const config = {
         method: 'get',
         url: URL + `/channels/${id}/members`,
@@ -222,8 +216,8 @@ export async function createChannel(
             password?: string,
             creatorId: number,
             privated?: boolean,
-            conv?:boolean,
-        }, ){
+            conv?: boolean,
+        },) {
     const config = {
         method: 'post',
         url: URL + '/channels',
@@ -234,11 +228,11 @@ export async function createChannel(
 }
 
 export async function sendChannelInvite(data:
-        {
-            ids?: number[],
-            usernames?: string[],
-            channelId: number,
-        }, ){
+    {
+        ids?: number[],
+        usernames?: string[],
+        channelId: number,
+    },) {
     socket.emit('channel-invite', data);
 }
 
@@ -251,7 +245,7 @@ export async function getConversation(userId: number) {
     return axios(config);
 }
 
-export async function acceptFriendship(id: number){
+export async function acceptFriendship(id: number) {
     const config = {
         method: 'put',
         url: URL + '/friend/friend-request/accept/' + id,
@@ -260,7 +254,7 @@ export async function acceptFriendship(id: number){
     return axios(config)
 }
 
-export async function removeFriendship(friendId: number){
+export async function removeFriendship(friendId: number) {
     const config = {
         method: 'delete',
         url: URL + '/friend/friendship/' + friendId,
@@ -269,7 +263,7 @@ export async function removeFriendship(friendId: number){
     return axios(config)
 }
 
-export async function declineFriendship(id: number){
+export async function declineFriendship(id: number) {
     const config = {
         method: 'put',
         url: URL + '/friend/friend-request/decline/' + id,
@@ -278,7 +272,7 @@ export async function declineFriendship(id: number){
     return axios(config)
 }
 
-export async function authSocketId(clientsocketid: string){
+export async function authSocketId(clientsocketid: string) {
     const config = {
         method: 'get',
         url: URL + '/auth/socketId',
@@ -290,12 +284,12 @@ export async function authSocketId(clientsocketid: string){
     return axios(config);
 }
 
-export async function sendFriendRequest(acceptorId: number){
+export async function sendFriendRequest(acceptorId: number) {
     const config = {
         method: 'post',
         url: URL + '/friend/friend-request/',
         withCredentials: true,
-        data : {
+        data: {
             acceptorId
         }
     };
@@ -312,7 +306,7 @@ export async function getChannelLastMessage(channelId: number) {
     return axios(config)
 }
 
-export async function getChannelMessages(channelId: number){
+export async function getChannelMessages(channelId: number) {
     const config = {
         method: 'get',
         url: URL + '/message/channel/' + channelId,
@@ -335,11 +329,11 @@ export async function readMessage(channelId: number, messageId: number) {
 }
 
 
-export async function sendMessageToChannel(channelId: number, content: string){
-    socket.emit('new-message', {channelId, content});
+export async function sendMessageToChannel(channelId: number, content: string) {
+    socket.emit('new-message', { channelId, content });
 }
 
-export async function getPath(path: string){
+export async function getPath(path: string) {
     const config = {
         method: 'get',
         url: URL + path,
@@ -348,7 +342,7 @@ export async function getPath(path: string){
     return axios(config);
 }
 
-export async function getUserByID(ID){
+export async function getUserByID(ID) {
     const config = {
         method: 'get',
         url: URL + '/users/' + ID,
@@ -357,7 +351,7 @@ export async function getUserByID(ID){
     return axios(config);
 }
 
-export async function getUsers(){
+export async function getUsers() {
     const config = {
         method: 'get',
         url: URL + '/users',
@@ -366,16 +360,16 @@ export async function getUsers(){
     return axios(config);
 }
 
-export async function searchFriend(name: string){
+export async function searchFriend(name: string) {
     const config = {
         method: 'get',
-        url: URL + '/users/search/friend/'  +name,
+        url: URL + '/users/search/friend/' + name,
         withCredentials: true,
     };
     return axios(config);
 }
 
-export async function getRatioAgainst(id1: number, id2: number){
+export async function getRatioAgainst(id1: number, id2: number) {
     const config = {
         method: 'get',
         url: URL + '/match/stats/' + id1 + "/" + id2,
@@ -384,7 +378,7 @@ export async function getRatioAgainst(id1: number, id2: number){
     return axios(config);
 }
 
-export async function getUserMatches(ID){
+export async function getUserMatches(ID) {
     const config = {
         method: 'get',
         url: URL + '/users/' + ID + '/matches',
@@ -393,11 +387,29 @@ export async function getUserMatches(ID){
     return axios(config);
 }
 
-export async function getUserMatchesResume(ID){
+export async function getUserMatchesResume(ID) {
     const config = {
         method: "get",
         url: URL + "/users/" + ID + "/matches-resume",
         withCredentials: true
     };
+    return axios(config);
+
+}
+
+export async function uploadUserAvatar(id, file) {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    console.log("file in api.ts : " + file);
+    const config = {
+        method: 'post',
+        url: `${URL}/users/avatar-upload/${id}`,
+        withCredentials: true,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+        data: formData,
+    };
+    console.log(`post avatar request: ${config}`, config);
     return axios(config);
 }

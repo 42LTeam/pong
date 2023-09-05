@@ -4,6 +4,7 @@ import { setupSwagger } from "./swagger";
 import { ValidationPipe } from "@nestjs/common";
 import * as session from "express-session";
 import * as passport from "passport";
+import * as express from "express";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +31,11 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Serve static files from the public/uploads directory (users's avatar)
+  app.use('/uploads', express.static('public/uploads'));
+
   await app.listen(3000);
 }
 bootstrap();
+
