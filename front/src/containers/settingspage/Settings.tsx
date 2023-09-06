@@ -54,6 +54,7 @@ export default function Settings(props: Props) {
     try {
       const response = await updateUserUsername(user.id, newUsername);
       user.username = newUsername;
+      setUsername(newUsername);
       setErrorMsg("");
     } catch (error) {
       const responseData = error.response ? error.response.data : null;
