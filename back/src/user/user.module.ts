@@ -11,7 +11,12 @@ import { UsernameValidationPipe } from "./pipes/usernameValidation.pipe";
 
 @Module({
   controllers: [UserController],
-  providers: [UserService, StringPipe, UsernameValidationPipe, FileUploadService],
+  providers: [
+    UserService,
+    StringPipe,
+    UsernameValidationPipe,
+    FileUploadService,
+  ],
   imports: [
     PrismaModule,
     forwardRef(() => FriendModule),

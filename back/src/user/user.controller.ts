@@ -100,7 +100,7 @@ export class UserController {
   constructor(
     private userService: UserService,
     private matchService: MatchService
-  ) { }
+  ) {}
 
   @Post()
   @Roles(Role.ADMIN) // For admin restrictions
@@ -150,17 +150,15 @@ export class UserController {
   }
 
   @Put("username/:id")
-@ApiOperation({ summary: "Update user's username" })
-@ApiBody({ type: UpdateUserNameDto })
-async updateUserName(
-  @Param("id", ParseIntPipe) id: number,
-  @Body('username', UsernameValidationPipe) username: string,
-  @Body() updateUserNameDto: UpdateUserNameDto
-): Promise<User> {
-  return this.userService.updateUserName(Number(id), username);
-}
-
-
+  @ApiOperation({ summary: "Update user's username" })
+  @ApiBody({ type: UpdateUserNameDto })
+  async updateUserName(
+    @Param("id", ParseIntPipe) id: number,
+    @Body("username", UsernameValidationPipe) username: string,
+    @Body() updateUserNameDto: UpdateUserNameDto
+  ): Promise<User> {
+    return this.userService.updateUserName(Number(id), username);
+  }
 
   @Get("friend/:id")
   @ApiOperation({ summary: "Get friend of user" })

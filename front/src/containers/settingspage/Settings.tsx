@@ -26,7 +26,7 @@ export default function Settings(props: Props) {
     });
   };
 
-  useEffect(() => { }, [username]);
+  useEffect(() => {}, [username]);
   useEffect(() => {
     if (user.secretO2FA) activate2fa();
   }, []);
@@ -55,7 +55,6 @@ export default function Settings(props: Props) {
       const response = await updateUserUsername(user.id, newUsername);
       user.username = newUsername;
       setErrorMsg("");
-
     } catch (error) {
       const responseData = error.response ? error.response.data : null;
       if (responseData && responseData.message) {
@@ -66,11 +65,6 @@ export default function Settings(props: Props) {
       }
     }
   };
-
-
-
-
-
 
   const handleEditUsername = () => {
     const newUsername = prompt("Please enter the new username:");

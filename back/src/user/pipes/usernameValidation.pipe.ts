@@ -6,7 +6,7 @@ export class UsernameValidationPipe implements PipeTransform {
   constructor(private readonly prisma: PrismaService) {}
 
   async transform(value: any) {
-    if (typeof value !== 'string' || value.length > 16) {
+    if (typeof value !== "string" || value.length > 16) {
       throw new BadRequestException("Maximum 16 characters");
     }
 
@@ -20,4 +20,3 @@ export class UsernameValidationPipe implements PipeTransform {
     return value;
   }
 }
-
