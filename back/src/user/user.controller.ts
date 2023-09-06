@@ -32,6 +32,7 @@ import { MatchService } from "../match/match.service";
 import { UserIdValidationPipe } from "./pipes/userIdValid.pipe";
 import { UsernameAlreadyExistsPipe } from "./pipes/usernameExist.pipe";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { UsernameLengthValidationPipe } from "./pipes/usernameLengthCheck.pipe";
 
 class CreateUserDto {
   @ApiProperty()
@@ -137,17 +138,19 @@ export class UserController {
   }
 
   @Put("avatar/:id")
-  @ApiOperation({ summary: "Update user's avatar" })
-  @ApiBody({ type: UpdateUserAvatarDto })
-  async updateUserAvatar(
-    @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserAvatarDto: UpdateUserAvatarDto
-  ): Promise<User> {
-    return this.userService.updateUserAvatar(
-      Number(id),
-      updateUserAvatarDto.avatar
-    );
-  }
+@ApiOperation({ summary: "Update user's avatar" })
+@ApiBody({ type: UpdateUserAvatarDto })
+async updateUserAvatar(
+  @Param("id", ParseIntPipe) id: number,
+  @Body('username', new UsernameLengthValidationPipe()) username: string,
+  @Body() updateUserAvatarDto: UpdateUserAvatarDto
+): Promise<User> {
+  return this.userService.updateUserAvatar(
+    Number(id),
+    updateUserAvatarDto.avatar
+  );
+}
+
 
   @Put("username/:id")
   @ApiOperation({ summary: "Update user's username" })
