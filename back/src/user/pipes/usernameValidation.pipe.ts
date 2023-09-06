@@ -7,7 +7,7 @@ export class UsernameValidationPipe implements PipeTransform {
 
   async transform(value: any) {
     if (typeof value !== 'string' || value.length > 16) {
-      throw new BadRequestException("Username must be 16 characters or fewer");
+      throw new BadRequestException("Maximum 16 characters");
     }
 
     const user = await this.prisma.user.findUnique({
