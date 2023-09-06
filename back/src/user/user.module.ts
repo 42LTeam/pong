@@ -6,11 +6,12 @@ import { StringPipe } from "./pipes/string.pipe";
 import { FriendModule } from "../friend/friend.module";
 import { MatchModule } from "../match/match.module";
 import { MulterModule } from "@nestjs/platform-express";
-import { FileUploadService } from "../file-upload/file-upload.service"; // Adjust this import to point to the FileUploadService file
+import { FileUploadService } from "../file-upload/file-upload.service";
+import { UsernameValidationPipe } from "./pipes/usernameValidation.pipe";
 
 @Module({
   controllers: [UserController],
-  providers: [UserService, StringPipe, FileUploadService],
+  providers: [UserService, StringPipe, UsernameValidationPipe, FileUploadService],
   imports: [
     PrismaModule,
     forwardRef(() => FriendModule),

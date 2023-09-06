@@ -30,9 +30,8 @@ import { Roles } from "../auth/roles.decorator";
 import { Channel, Status, User, UserMatch } from "@prisma/client";
 import { MatchService } from "../match/match.service";
 import { UserIdValidationPipe } from "./pipes/userIdValid.pipe";
-import { UsernameAlreadyExistsPipe } from "./pipes/usernameExist.pipe";
+import { UsernameValidationPipe } from "./pipes/usernameValidation.pipe";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { UsernameLengthValidationPipe } from "./pipes/usernameLengthCheck.pipe";
 
 class CreateUserDto {
   @ApiProperty()
@@ -101,7 +100,7 @@ export class UserController {
   constructor(
     private userService: UserService,
     private matchService: MatchService
-  ) {}
+  ) { }
 
   @Post()
   @Roles(Role.ADMIN) // For admin restrictions
@@ -138,32 +137,30 @@ export class UserController {
   }
 
   @Put("avatar/:id")
-@ApiOperation({ summary: "Update user's avatar" })
-@ApiBody({ type: UpdateUserAvatarDto })
-async updateUserAvatar(
+  @ApiOperation({ summary: "Update user's avatar" })
+  @ApiBody({ type: UpdateUserAvatarDto })
+  async updateUserAvatar(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateUserAvatarDto: UpdateUserAvatarDto
+  ): Promise<User> {
+    return this.userService.updateUserAvatar(
+      Number(id),
+      updateUserAvatarDto.avatar
+    );
+  }
+
+  @Put("username/:id")
+@ApiOperation({ summary: "Update user's username" })
+@ApiBody({ type: UpdateUserNameDto })
+async updateUserName(
   @Param("id", ParseIntPipe) id: number,
-  @Body('username', new UsernameLengthValidationPipe()) username: string,
-  @Body() updateUserAvatarDto: UpdateUserAvatarDto
+  @Body('username', UsernameValidationPipe) username: string,
+  @Body() updateUserNameDto: UpdateUserNameDto
 ): Promise<User> {
-  return this.userService.updateUserAvatar(
-    Number(id),
-    updateUserAvatarDto.avatar
-  );
+  return this.userService.updateUserName(Number(id), username);
 }
 
 
-  @Put("username/:id")
-  @ApiOperation({ summary: "Update user's username" })
-  @ApiBody({ type: UpdateUserNameDto })
-  async updateUserName(
-    @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserNameDto: UpdateUserNameDto
-  ): Promise<User> {
-    return this.userService.updateUserName(
-      Number(id),
-      updateUserNameDto.username
-    );
-  }
 
   @Get("friend/:id")
   @ApiOperation({ summary: "Get friend of user" })
