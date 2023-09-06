@@ -252,6 +252,15 @@ export async function sendChannelInvite(data: {
   socket.emit("channel-invite", data);
 }
 
+export async function getConversation(userId: number) {
+  const config = {
+    method: "get",
+    url: URL + "/conversation/" + userId,
+    withCredentials: true,
+  };
+  return axios(config);
+}
+
 export async function get2fa() {
   const config = {
     method: "get",
