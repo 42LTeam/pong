@@ -8,66 +8,47 @@ import {
   uploadUserAvatar,
 } from "../../api";
 import Button from "../../components/utils/Button";
+import TextInput from "../../components/utils/TextInput";
 
-export default function Settings() {
+type Props = {};
+
+export default function Settings(props: Props) {
   const user = useContext(AuthContext);
-  const inputRef = useRef(null);
+    const inputRef = useRef(null);
 
-  const [qr, setQr] = useState(null);
-  const [username, setUsername] = useState(user.username);
-  const [avatarUrl, setAvatarUrl] = useState(user.avatar);
-  const [errorMsg, setErrorMsg] = useState("");
-
+    const [qr, setQr] = useState(null);
+    const [username, setUsername] = useState(user.username);
+    const [avatarUrl, setAvatarUrl] = useState(user.avatar);
+    const [errorMsg, setErrorMsg] = useState("");
   const activate2fa = () => {
     get2fa().then((response) => {
       setQr(response.data);
     });
   };
 
+
+  useEffect(() => {}, [username]);
   useEffect(() => {
     if (user.secretO2FA) activate2fa();
   }, []);
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      try {
-        const response = await uploadUserAvatar(user.id, file);
-        if (response.status === 201) {
-          console.log(
-            `User avatar updated successfully. Path : ${response.data.path}`,
-            response.data.path,
-          );
-          setAvatarUrl(response.data.path);
-        } else {
-          console.error(
-            "Failed to update user avatar. Response status:",
-            response.status,
-          );
-          console.error("Response data:", response.data);
-          setErrorMsg("Failed to update user avatar.");
-        }
-      } catch (error) {
-        console.error("An error occurred during avatar upload:", error);
-
-        // Log the error message
-        console.error("Error message:", error.message);
-
-        // Log the response data if available
-        if (error.response) {
-          console.error("Server responded with status:", error.response.status);
-          console.error("Response data:", error.response.data);
-        }
-        // Log the request that was made
-        console.error("Request config:", error.config);
-
-        setErrorMsg("An unexpected error occurred.");
-      }
+  const handleChangeImage = async (newAvatarUrl) => {
+    const response = await updateUserAvatar(user.id, newAvatarUrl);
+    if (response.status === 200) {
+      console.log("User avatar updated successfully.");
+      user.avatar = newAvatarUrl;
+    } else {
+      console.error("Failed to update user avatar.");
+      setErrorMsg("Failed to update user avatar.");
     }
   };
 
   const handleEditClick = () => {
-    inputRef.current.click();
+    const newAvatarUrl = prompt("Please enter the new avatar URL:");
+    if (newAvatarUrl) {
+      setAvatarUrl(newAvatarUrl);
+      handleChangeImage(newAvatarUrl);
+    }
   };
 
   const handleChangeUsername = async (newUsername) => {
@@ -75,13 +56,14 @@ export default function Settings() {
       const response = await updateUserUsername(user.id, newUsername);
       if (response.status === 200) {
         console.log("User username updated successfully.");
-        setUsername(newUsername);
+        user.username = newUsername;
+        setErrorMsg("");
       } else {
         console.error("Failed to update user username.");
-        setErrorMsg("Error updating username.");
+        setErrorMsg("Error");
       }
     } catch (error) {
-      console.error("Error updating user username:", error);
+      console.error("Errorrrr updating user username:", error);
       setUsername("Username already taken");
     }
   };
@@ -105,13 +87,6 @@ export default function Settings() {
             <div className="avatar-overlay" onClick={handleEditClick}>
               Edit
             </div>
-            <input
-              type="file"
-              ref={inputRef}
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-              accept="image/*"
-            />
           </div>
         </div>
       </div>

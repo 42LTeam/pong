@@ -58,6 +58,13 @@ export class SendInviteDto {
   channelId: number;
 }
 
+export class UpdateChannelPasswordDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+}
+
 @UseGuards(AuthenticatedGuard)
 @ApiTags("channels")
 @Controller("channels")
@@ -155,5 +162,18 @@ export class ChannelController {
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<boolean> {
     return this.channelService.isUserMutedFromChannel(channelId, userId);
+  }
+
+  @Post("/:channelId/set-password")
+  @ApiOperation({ summary: "Set or Update password for a channel" })
+  @ApiBody({ type: UpdateChannelPasswordDto })
+  async setChannelPassword(
+    @Param("channelId", ParseIntPipe) channelId: number,
+    @Body() updatePasswordDto: UpdateChannelPasswordDto
+  ): Promise<Channel> {
+    return this.channelService.setChannelPassword(
+      channelId,
+      updatePasswordDto.password
+    );
   }
 }

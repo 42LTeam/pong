@@ -18,19 +18,11 @@ export default function SocialBody() {
     <div className="chatbody bubble">
       <Conversations conversations={[]} state={state}></Conversations>
       <div className="vertical-separator"></div>
-      {state ? (
-        <Chat key={channelId} channel={state} channelId={setState}></Chat>
-      ) : (
-        <Friends></Friends>
-      )}
+      {state ? <Chat channel={state}></Chat> : <Friends></Friends>}
       {state ? (
         <>
           <div className="vertical-separator"></div>
-          <ChannelMembersList
-            key={channelId}
-            channelId={state}
-            // setChannelId={setState}
-          />
+          <ChannelMembersList channelId={state} setChannelId={setState} />
         </>
       ) : null}
     </div>

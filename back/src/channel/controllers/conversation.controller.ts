@@ -1,4 +1,6 @@
-import { Controller, Req, Get, Param, UseGuards } from "@nestjs/common";
+import { Controller, Req, Get, Param, UseGuards ,
+  BadRequestException,
+} from "@nestjs/common";
 import { ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { Channel } from "@prisma/client";
 import { ChannelService } from "../channel.service";
@@ -25,7 +27,11 @@ export class ConversationController {
     @Req() req
   ): Promise<Channel> {
     const user = await req.user;
-    if (Number(friendId) == user.id) throw new Error("wtf ?");
+    if (Number(friendId) == user.id) {
+      throw new BadRequestException(
+        "Invalid operation: Cannot create a conversation with oneself."
+      );
+    }
     return this.channelService.getConversation(user.id, Number(friendId));
   }
 }

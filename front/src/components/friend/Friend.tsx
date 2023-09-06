@@ -133,18 +133,26 @@ export default function Friend(props: Props) {
   };
 
   const navigateToConversation = async (friend) => {
-    const response = await getConversation(friend.id);
-    navigate("/social/" + response.data.id);
+    try {
+      const response = await getConversation(friend.id);
+      navigate("/social/" + response.data.id);
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        console.error(`Error: ${error.response.data.message}`);
+      } else {
+        console.error("Error while fetching conversation.");
+      }
+    }
   };
 
   return (
     <ContextMenu buttons={buttons} buttonProps={buttonProps}>
       <div
-        onClick={() => {
-          props.onClick
-            ? props.onClick(props.friend)
-            : navigateToConversation(props.friend);
-        }}
+        onClick={props.onClick}
         className="friend"
         style={display ? { display: "none" } : null}
       >
