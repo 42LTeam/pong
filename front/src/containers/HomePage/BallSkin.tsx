@@ -1,6 +1,7 @@
 import React from "react";
 
 import "../../css/homepage.css";
+import Ball from "../../components/svg/ball";
 
 export const BallSkin = () => {
   const handleClickLeft = () => {
@@ -18,7 +19,8 @@ export const BallSkin = () => {
         src="/svg/vector-left.svg"
         onClick={handleClickLeft}
       />
-      <img className="rectangle" alt="ball" src="/svg/ball.svg" />
+      <div className="ball-glow"><Ball /></div>
+      
       <img
         className="vector"
         alt="Vector"

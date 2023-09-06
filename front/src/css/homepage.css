@@ -225,6 +225,7 @@
   align-items: center;
   flex: 1 0 0;
   align-self: stretch;
+  min-height: 200px;
 }
 
 .ball {
@@ -248,4 +249,15 @@
   gap: 10px;
   align-self: stretch;
   flex: 1 0 0;
+}
+
+.ball-glow{
+  background-color: none;
+  height: 100px;
+  width: 100px;
+  z-index: 999;
+}
+
+.svg {
+  background: none;
 }
