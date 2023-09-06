@@ -12,7 +12,6 @@ import HomePage from "./HomePage/HomePage";
 import Notification from "../components/utils/Notification";
 import GamePage from "./gamepage/GamePage";
 import { socket } from "../api";
-import React from "react";
 import NotFound from "./NotFound";
 
 type ApplicationEngine = {
