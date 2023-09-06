@@ -26,7 +26,7 @@ export default function Settings(props: Props) {
     });
   };
 
-  useEffect(() => {}, [username]);
+  useEffect(() => { }, [username]);
   useEffect(() => {
     if (user.secretO2FA) activate2fa();
   }, []);
@@ -53,19 +53,24 @@ export default function Settings(props: Props) {
   const handleChangeUsername = async (newUsername) => {
     try {
       const response = await updateUserUsername(user.id, newUsername);
-      if (response.status === 200) {
-        console.log("User username updated successfully.");
-        user.username = newUsername;
-        setErrorMsg("");
-      } else {
-        console.error("Failed to update user username.");
-        setErrorMsg("Error");
-      }
+      user.username = newUsername;
+      setErrorMsg("");
+
     } catch (error) {
-      console.error("Errorrrr updating user username:", error);
-      setUsername("Username already taken");
+      const responseData = error.response ? error.response.data : null;
+      if (responseData && responseData.message) {
+        setUsername(responseData.message);
+      } else {
+        setErrorMsg("An unexpected error occurred.");
+        console.error("Error updating user username:", error);
+      }
     }
   };
+
+
+
+
+
 
   const handleEditUsername = () => {
     const newUsername = prompt("Please enter the new username:");
