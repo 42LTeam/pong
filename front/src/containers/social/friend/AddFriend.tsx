@@ -19,9 +19,7 @@ export default function AddFriend() {
       });
     } else
       getAllUsers({ notFriend: true }).then((response) =>
-        setSuggestions(
-          response.data.filter((current) => current.id != user.id),
-        ),
+        setSuggestions(response.data.filter((current) => current.id != user.id))
       );
   };
   const toggleCheck = (current, check) => {
@@ -48,7 +46,7 @@ export default function AddFriend() {
   };
   useEffect(() => {
     getAllUsers({ notFriend: true }).then((response) =>
-      setSuggestions(response.data.filter((current) => current.id != user.id)),
+      setSuggestions(response.data.filter((current) => current.id != user.id))
     );
   }, []);
 

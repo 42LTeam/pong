@@ -14,18 +14,17 @@ type Props = {};
 
 export default function Settings(props: Props) {
   const user = useContext(AuthContext);
-    const inputRef = useRef(null);
+  const inputRef = useRef(null);
 
-    const [qr, setQr] = useState(null);
-    const [username, setUsername] = useState(user.username);
-    const [avatarUrl, setAvatarUrl] = useState(user.avatar);
-    const [errorMsg, setErrorMsg] = useState("");
+  const [qr, setQr] = useState(null);
+  const [username, setUsername] = useState(user.username);
+  const [avatarUrl, setAvatarUrl] = useState(user.avatar);
+  const [errorMsg, setErrorMsg] = useState("");
   const activate2fa = () => {
     get2fa().then((response) => {
       setQr(response.data);
     });
   };
-
 
   useEffect(() => {}, [username]);
   useEffect(() => {

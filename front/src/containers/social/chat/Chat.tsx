@@ -25,7 +25,7 @@ export default function Chat(props: ChatProps) {
   const toAdd = application.social.newMessages.filter(
     (current) =>
       current.channelId == channel &&
-      messages.map((c) => c.id).includes(current.id) == false,
+      messages.map((c) => c.id).includes(current.id) == false
   );
 
   const fetchData = async () => {

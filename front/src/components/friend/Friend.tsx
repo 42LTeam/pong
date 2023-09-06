@@ -38,7 +38,7 @@ export default function Friend(props: Props) {
       text: "Envoyer un message",
       handleClick: () =>
         getConversation(props.friend.id).then((response) =>
-          navigate("/social/" + response.data.id),
+          navigate("/social/" + response.data.id)
         ),
     },
     { separator: true },
@@ -53,8 +53,8 @@ export default function Friend(props: Props) {
               response.data.username +
               "&session=" +
               response.data.session +
-              "&custom=false",
-          ),
+              "&custom=false"
+          )
         ),
     },
     {
@@ -68,8 +68,8 @@ export default function Friend(props: Props) {
               response.data.username +
               "&session=" +
               response.data.session +
-              "&custom=true",
-          ),
+              "&custom=true"
+          )
         ),
     },
     { separator: true },

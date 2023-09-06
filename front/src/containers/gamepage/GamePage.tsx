@@ -73,13 +73,13 @@ export default function GamePage() {
     c2d.fillText(
       player.score.toString(),
       c2d.canvas.width * (left ? 0.375 : 0.625),
-      textPos,
+      textPos
     );
     c2d.fillRect(
       (player.x - ball.semiSize) * c2d.canvas.width,
       (player.y - players.semiHeight) * c2d.canvas.height,
       ball.semiSize * 2 * c2d.canvas.width,
-      players.semiHeight * 2 * c2d.canvas.height,
+      players.semiHeight * 2 * c2d.canvas.height
     );
   };
 
@@ -127,7 +127,7 @@ export default function GamePage() {
       (ball.x - ball.semiSize) * c2d.canvas.width,
       (ball.y - ball.semiSize) * c2d.canvas.height,
       ball.semiSize * 2 * c2d.canvas.width,
-      ball.semiSize * 2 * c2d.canvas.height,
+      ball.semiSize * 2 * c2d.canvas.height
     );
   };
 

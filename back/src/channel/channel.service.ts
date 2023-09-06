@@ -273,8 +273,8 @@ export class ChannelService {
     return this.prisma.userChannel.updateMany({
       where: {
         userId: userId,
-        id: channelId
-       },
+        id: channelId,
+      },
       data: {
         isBanned: false,
       },

@@ -50,8 +50,8 @@ export default function NewMessagePopup({ position, clear }: Props) {
       return getAllUsers({ notFriend: false, friendOnly: false }).then(
         (response) =>
           setSuggestions(
-            response.data.filter((current) => current.id !== user.id),
-          ),
+            response.data.filter((current) => current.id !== user.id)
+          )
       );
     const { data } = await searchUser(search, { friendOnly: false });
     setSuggestions(data);
@@ -94,7 +94,7 @@ export default function NewMessagePopup({ position, clear }: Props) {
 
   const handleClickPrivate = async (isPrivate) => {
     const enteredPassword = prompt(
-      "Please enter the password for the private channel:",
+      "Please enter the password for the private channel:"
     );
     if (enteredPassword === null) {
       return;
@@ -123,7 +123,7 @@ export default function NewMessagePopup({ position, clear }: Props) {
 
   if (!suggestions.length)
     getAllUsers({ notFriend: false, friendOnly: false }).then((response) =>
-      setSuggestions(response.data.filter((current) => current.id !== user.id)),
+      setSuggestions(response.data.filter((current) => current.id !== user.id))
     );
 
   return (

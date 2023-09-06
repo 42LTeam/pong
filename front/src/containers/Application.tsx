@@ -21,7 +21,7 @@ type ApplicationEngine = {
     title: string,
     content: string,
     image?: string,
-    url?: string,
+    url?: string
   ) => void;
   clearMessage: (toClear: any[]) => void;
   social: {
@@ -31,7 +31,7 @@ type ApplicationEngine = {
 };
 
 export const ApplicationContext = createContext<ApplicationEngine | undefined>(
-  undefined,
+  undefined
 );
 
 const PATHS = {
@@ -52,7 +52,7 @@ const Application = function ({ children }: { children?: any }) {
     title: string,
     content: string,
     image?: string,
-    url?: string,
+    url?: string
   ) => {
     setNotifications([...notifications, { key, title, content, image, url }]);
   };
@@ -63,7 +63,7 @@ const Application = function ({ children }: { children?: any }) {
       social: {
         ...application.social,
         newMessages: application.social.newMessages.filter(
-          (c) => !toAdd.includes(c),
+          (c) => !toAdd.includes(c)
         ),
       },
     });
@@ -110,7 +110,7 @@ const Application = function ({ children }: { children?: any }) {
           args.user.username,
           args.content,
           args.user.avatar,
-          "/social/" + args.channelId,
+          "/social/" + args.channelId
         );
     };
 
@@ -122,7 +122,7 @@ const Application = function ({ children }: { children?: any }) {
           args.creator.username + " vous a ajouter a un channel",
           args.users.map((u) => u.username).join(", "),
           args.creator.avatar,
-          "/social/" + args.channelId,
+          "/social/" + args.channelId
         );
     };
 
@@ -132,7 +132,7 @@ const Application = function ({ children }: { children?: any }) {
         args[0].username + " invites " + args[1].username,
         "to play a " + (args[2] ? "custom" : "standard") + " Pong game",
         args[0].avatar,
-        "/game",
+        "/game"
       );
       if (!window.location.pathname.includes("/game"))
         sendNotification(
@@ -140,7 +140,7 @@ const Application = function ({ children }: { children?: any }) {
           args[0].username + " invites " + args[1].username,
           "to play a " + (args[2] ? "custom" : "standard") + " Pong game",
           args[0].avatar,
-          "/game?invite=true&id=" + args[0].id + "&custom=" + args[2],
+          "/game?invite=true&id=" + args[0].id + "&custom=" + args[2]
         );
     };
 

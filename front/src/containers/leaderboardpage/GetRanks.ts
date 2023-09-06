@@ -9,7 +9,7 @@ export interface UserRank extends User {
 
 export const getUsersRanks = async (
   users: User[],
-  StatKind: string,
+  StatKind: string
 ): Promise<UserRank[]> => {
   let currentRank = 0;
   let currentStat = 0;
@@ -17,7 +17,7 @@ export const getUsersRanks = async (
   let statName = ""; //nom precis de l'attribut
 
   const updUsers = await Promise.all(
-    users.map((user) => getUserMatches(user.id)),
+    users.map((user) => getUserMatches(user.id))
   );
 
   const newUsers = updUsers.map((response, idx) => {
@@ -26,14 +26,14 @@ export const getUsersRanks = async (
     if (matches.length > 0) {
       const winNumber = matches.reduce(
         (sum: number, match: { isWin: boolean }) => sum + (match.isWin ? 1 : 0),
-        0,
+        0
       );
       const ratio = winNumber / matches.length;
       user = { ...user, ratio };
 
       const totalPoints = matches.reduce(
         (sum: number, match: { score: number }) => sum + match.score,
-        0,
+        0
       );
       const averagePoints = totalPoints / matches.length;
       user = { ...user, pointAverage: averagePoints };
@@ -66,7 +66,7 @@ export const getUsersRanks = async (
 
 export const getUserRank = (
   targetUser: User,
-  users: UserRank[],
+  users: UserRank[]
 ): number | null => {
   if (targetUser.playedMatch === false) {
     console.log("no match for " + targetUser.username);
@@ -85,7 +85,7 @@ export const getRatio = async (userID: number) => {
     if (matches.length > 0 || !matches) {
       const winNumber = matches.reduce(
         (sum: number, match: { isWin: boolean }) => sum + (match.isWin ? 1 : 0),
-        0,
+        0
       );
       return winNumber / matches.length;
     } else {
@@ -104,7 +104,7 @@ export const getAveragePoint = async (userID: number) => {
     if (matches.length > 0) {
       const totalPoints = matches.reduce(
         (sum: number, match: { score: number }) => sum + match.score,
-        0,
+        0
       );
       const pointAverage = totalPoints / matches.length;
       return pointAverage;

@@ -19,7 +19,7 @@ export const socket = io(webSocketURL, { autoConnect: true });
 //  @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
 export async function removeUserAdminFromChannel(
   channelId: number,
-  userId: number,
+  userId: number
 ) {
   const config = {
     method: "post",
@@ -92,7 +92,7 @@ export async function muteUserFromChannel(channelId: number, userId: number) {
 //   @ApiOperation({ summary: 'Mute a user from a channel' })
 export async function isMutedBannedFromChannel(
   channelId: number,
-  userId: number,
+  userId: number
 ) {
   const config = {
     method: "get",
@@ -112,7 +112,7 @@ export async function searchUser(
   options: { friendOnly?: boolean; notFriend?: boolean } = {
     friendOnly: false,
     notFriend: false,
-  },
+  }
 ) {
   const config = {
     method: "get",
@@ -186,7 +186,7 @@ export async function getAllUsers(
   options: { friendOnly?: boolean; notFriend?: boolean } = {
     friendOnly: false,
     notFriend: false,
-  },
+  }
 ) {
   const queryParams = Object.entries(options)
     .map((key) => key[0] + "=" + key[1])
@@ -282,6 +282,8 @@ export async function getConversation(userId: number) {
   } catch (error) {
     throw error;
   }
+}
+
 export async function set2fa(token: string) {
   console.log(token);
   const config = {
@@ -462,8 +464,10 @@ export async function uploadUserAvatar(id, file) {
   };
   console.log(`post avatar request: ${config}`, config);
   return axios(config);
+}
+
 export async function getUserMatchesResume(ID) {
-  var config = {
+  const config = {
     method: "get",
     url: URL + "/users/" + ID + "/matches-resume",
     withCredentials: true,
@@ -473,7 +477,7 @@ export async function getUserMatchesResume(ID) {
 
 export async function setChannelPassword(
   channelId: number,
-  newPassword: string,
+  newPassword: string
 ) {
   const config = {
     method: "post",

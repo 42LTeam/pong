@@ -21,7 +21,7 @@ export default function LeaderboardPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [state, setState] = useState("Total xp");
   const [usersWithRank, setUsersRanks] = useState<UserRank[] | undefined>(
-    undefined,
+    undefined
   );
 
   const handleClick = (text) => {

@@ -19,8 +19,8 @@ export default function FriendQuickInvite() {
       getFriendOfUser(user.id)
         .then((response) =>
           setSuggestions(
-            response.data.filter((current) => current.id !== user?.id),
-          ),
+            response.data.filter((current) => current.id !== user?.id)
+          )
         )
         .catch((error) => console.error("Error fetching friend data:", error));
     }

@@ -1,4 +1,9 @@
-import { Controller, Req, Get, Param, UseGuards ,
+import {
+  Controller,
+  Req,
+  Get,
+  Param,
+  UseGuards,
   BadRequestException,
 } from "@nestjs/common";
 import { ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger";

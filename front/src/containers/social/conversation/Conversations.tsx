@@ -80,7 +80,7 @@ export default function Conversations({ state }: Props) {
             )}
             {conversations
               .filter(
-                (c) => !c.conv || !user.blockList.includes(c.users[0].user.id),
+                (c) => !c.conv || !user.blockList.includes(c.users[0].user.id)
               )
               .sort((a, b) => {
                 const a_value = a.lastMessage

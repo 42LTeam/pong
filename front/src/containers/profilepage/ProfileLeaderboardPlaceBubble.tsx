@@ -25,7 +25,7 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
   const [placement, setPlacement] = useState(0);
   const [users, setUsers] = useState<User[]>([]);
   const [usersWithRank, setUsersRanks] = useState<UserRank[] | undefined>(
-    undefined,
+    undefined
   );
 
   useEffect(() => {
