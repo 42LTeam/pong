@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "esnext",
-    "jsx": "React",
+    "target": "ES6",  
+    "module": "ESNext",
+    "jsx": "react",
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "types": ["vite/client"]
   },
   "exclude": ["node_modules"]
 }

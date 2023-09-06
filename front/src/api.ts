@@ -4,12 +4,17 @@ import axios from "axios";
 const localhostwebsocket = process.env.VITE_API_URL
   ? `${process.env.VITE_API_URL}:8001`
   : "http://localhost:8001";
+
 const webSocketURL = localhostwebsocket;
 const localhostback = process.env.VITE_API_URL
   ? `${process.env.VITE_API_URL}:3000`
   : "http://localhost:3000";
+
 const URL = localhostback;
+
 export const socket = io(webSocketURL, { autoConnect: true });
+
+
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* File: /back/src/channel/controllers/channel.controller.ts                                                          */

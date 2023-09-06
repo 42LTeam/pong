@@ -6,6 +6,7 @@ import "../../css/utils/user.css";
 import "../../css/header.css";
 
 const UserBubble = () => {
+
   const [menuOpen, setMenuOpen] = useState(false);
   const user = useContext(AuthContext);
   const navigate = useNavigate();
