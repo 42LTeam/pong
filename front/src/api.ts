@@ -261,20 +261,6 @@ export async function get2fa() {
   return axios(config);
 }
 
-export async function getConversation(userId: number) {
-  const config = {
-    method: "get",
-    url: URL + "/conversation/" + userId,
-    withCredentials: true,
-  };
-  console.log("id mygeue: " + userId);
-  try {
-    return await axios(config);
-  } catch (error) {
-    throw error;
-  }
-}
-
 export async function set2fa(token: string) {
   console.log(token);
   const config = {

@@ -30,7 +30,7 @@ import { Roles } from "../auth/roles.decorator";
 import { Channel, Status, User, UserMatch } from "@prisma/client";
 import { MatchService } from "../match/match.service";
 import { UserIdValidationPipe } from "./pipes/userIdValid.pipe";
-import { UsernameAlreadyExistsPipe } from "./pipes/usernameExist.pipe";
+import { UsernameValidationPipe } from "./pipes/usernameValidation.pipe";
 import { FileInterceptor } from "@nestjs/platform-express";
 
 class CreateUserDto {
@@ -154,12 +154,10 @@ export class UserController {
   @ApiBody({ type: UpdateUserNameDto })
   async updateUserName(
     @Param("id", ParseIntPipe) id: number,
+    @Body("username", UsernameValidationPipe) username: string,
     @Body() updateUserNameDto: UpdateUserNameDto
   ): Promise<User> {
-    return this.userService.updateUserName(
-      Number(id),
-      updateUserNameDto.username
-    );
+    return this.userService.updateUserName(Number(id), username);
   }
 
   @Get("friend/:id")
