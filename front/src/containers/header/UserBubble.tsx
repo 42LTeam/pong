@@ -4,6 +4,7 @@ import { AuthContext } from "../Auth";
 
 import "../../css/utils/user.css";
 import "../../css/header.css";
+import { logout } from "../../api";
 
 const UserBubble = () => {
 
@@ -16,6 +17,16 @@ const UserBubble = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        window.location.replace('/');
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la déconnexion : ", error);
+      });
+  }
+
   const handleOptionClick = (option: string) => {
     if (option === "my_profile") {
       setMenuOpen(false);
@@ -25,7 +36,8 @@ const UserBubble = () => {
       navigate("/settings");
     } else if (option === "disconnect") {
       setMenuOpen(false);
-      alert("TODO");
+      handleLogout();
+      //alert("TODO");
     }
   };
 

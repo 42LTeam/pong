@@ -454,3 +454,12 @@ export async function uploadUserAvatar(id, file) {
   console.log(`post avatar request: ${config}`, config);
   return axios(config);
 }
+
+export async function logout() {
+  const config = {
+    method: "get",
+    url: URL + "/auth/logout",
+    withCredentials: true,
+  };
+  return axios(config);
+}

@@ -89,4 +89,17 @@ export class AuthController {
     const user = await req.user;
     return this.clientService.subscribe(user, req.headers.clientsocketid);
   }
+
+  @Get("logout")
+  @UseGuards(AuthenticatedGuard)
+  logout(@Req() req: any, @Res() res: Response) {
+    req.logout();
+    req.session.destroy((err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Erreur de déconnexion');
+      }
+      return res.redirect('/login');
+    });
+  }
 }
