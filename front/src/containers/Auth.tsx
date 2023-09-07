@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 
-import { authSocketId, getStatus, socket, logout } from "../api";
+import { authSocketId, getStatus, socket } from "../api";
 import Application from "./Application";
 import "../css/main.css";
 import DoubleAuth from "./DoubleAuth";
@@ -23,8 +23,6 @@ export interface User {
 export const AuthContext = createContext<User | undefined>(undefined);
 
 function Auth() {
-
-  const apiURL = import.meta.env.VITE_API_URL;
 
   const [wsConnected, setConnected] = useState(false);
   const [destination, setDestination] = useState(null);
@@ -69,8 +67,6 @@ function Auth() {
     authSocketId(socket.id).then((response) => {
       socket.emit("register", { target: response.data });
     });
-
-  console.log("META.ENV=" + apiURL);
 
   if (!isLogged)
   return (<LoginPage />);
