@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { socket } from "../../api";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Simulate } from "react-dom/test-utils";
+import Ball from '../../components/svg/Ball';
+import ReactDOM from "react-dom";
 
 export enum gameState {
   CREATING,
@@ -14,6 +16,8 @@ export enum gameState {
 export default function GamePage() {
   const canvas = useRef(null);
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const { color = "#ECF0F1", shine = false} = location.state || {};
 
   const dataGame = {
     matchId: 0,
@@ -25,6 +29,7 @@ export default function GamePage() {
     x: 0.5,
     y: 0.5,
     semiSize: 0,
+    color: color,
   };
   const players = {
     player0: {
@@ -123,12 +128,15 @@ export default function GamePage() {
     drawPlayer(c2d, players.player0, fontSize);
     drawPlayer(c2d, players.player1, fontSize);
     drawText(c2d, status, countdown);
+    
+    c2d.fillStyle = ball.color;
     c2d.fillRect(
       (ball.x - ball.semiSize) * c2d.canvas.width,
       (ball.y - ball.semiSize) * c2d.canvas.height,
       ball.semiSize * 2 * c2d.canvas.width,
       ball.semiSize * 2 * c2d.canvas.height
     );
+
   };
 
   useEffect(() => {

@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 
 import "../../css/homepage.css";
-import Ball from "../../components/svg/ball";
+import Ball from "../../components/svg/Ball";
 
-const states = ["#ECF0F1", //white
+const colors = ["#ECF0F1", //white
 "#00BAFF", //blue
 "#E74C3C",  //red
 "#2ECC71"]; //green
 
 export const BallSkin = () => {
-  const [state, setState] = useState(states[0]);
+  const [state, setState] = useState(colors[0]);
   const [shine, setShine] = useState(false);
 
-  const handleClickLeft = () => {
-    const currentIndex = states.indexOf(state);
-    const nextIndex = (currentIndex - 1 + states.length) % states.length;
-    setState(states[nextIndex]);
+  const handleBallClickLeft = () => {
+    const currentIndex = colors.indexOf(state);
+    const nextIndex = (currentIndex - 1 + colors.length) % colors.length;
+    setState(colors[nextIndex]);
   };
-  const handleClickRight = () => {
-    const currentIndex = states.indexOf(state);
-    const nextIndex = (currentIndex + 1) % states.length;
-    setState(states[nextIndex]);
+  const handleBallClickRight = () => {
+    const currentIndex = colors.indexOf(state);
+    const nextIndex = (currentIndex + 1) % colors.length;
+    setState(colors[nextIndex]);
   };
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const BallSkin = () => {
         className="vector"
         alt="Vector"
         src="/svg/vector-left.svg"
-        onClick={handleClickLeft}
+        onClick={handleBallClickLeft}
       />
       <div className="ball-glow"><Ball color={state} shine={shine}/></div>
       
@@ -54,7 +54,7 @@ export const BallSkin = () => {
         className="vector"
         alt="Vector"
         src="/svg/vector-right.svg"
-        onClick={handleClickRight}
+        onClick={handleBallClickRight}
       />
     </div>
   );

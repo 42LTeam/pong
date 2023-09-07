@@ -3,7 +3,7 @@ import React from "react";
 import "../../css/homepage.css";
 
 type Props = {
-    shine?: boolean;
+    shine: boolean;
     color: string;
 }
 
