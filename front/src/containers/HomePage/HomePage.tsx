@@ -5,6 +5,7 @@ import Button from "../../components/utils/Button";
 import { useNavigate } from "react-router-dom";
 import FriendQuickInvite from "./FriendQuickInvite";
 import Ball from "../../components/svg/Ball";
+import Test from "./Test";
 
 const colors = ["#ECF0F1", //white
 "#00BAFF", //blue
@@ -117,5 +118,5 @@ export default function HomePage() {
 </div>
 </div>
 </>
-  );
+);
 }

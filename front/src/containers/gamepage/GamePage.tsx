@@ -1,9 +1,6 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { socket } from "../../api";
 import { useLocation, useSearchParams } from "react-router-dom";
-import { Simulate } from "react-dom/test-utils";
-import Ball from '../../components/svg/Ball';
-import ReactDOM from "react-dom";
 
 export enum gameState {
   CREATING,
@@ -18,6 +15,7 @@ export default function GamePage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const { color = "#ECF0F1", shine = false} = location.state || {};
+  //const [isShine, setShine] = useState(shine);
 
   const dataGame = {
     matchId: 0,
@@ -30,6 +28,7 @@ export default function GamePage() {
     y: 0.5,
     semiSize: 0,
     color: color,
+    shine: shine,
   };
   const players = {
     player0: {
@@ -118,6 +117,43 @@ export default function GamePage() {
     }
   };
 
+  const drawBall = (c2d) => {
+    c2d.fillStyle = ball.color;
+    c2d.beginPath();
+    c2d.arc(
+      ball.x * c2d.canvas.width,
+      ball.y * c2d.canvas.height,
+      ball.semiSize * c2d.canvas.width,
+      0,
+      Math.PI * 2
+    );
+    c2d.fill();
+    
+    if (ball.shine) {
+    const gradient = c2d.createRadialGradient(
+      ball.x * c2d.canvas.width,
+      ball.y * c2d.canvas.height,
+      0,
+      ball.x * c2d.canvas.width,
+      ball.y * c2d.canvas.height,
+      ball.semiSize * c2d.canvas.width * 8
+    );
+    gradient.addColorStop(0, `${ball.color}99`);
+    gradient.addColorStop(1, `${ball.color}10`);
+    c2d.fillStyle = gradient;
+  
+    c2d.beginPath();
+    c2d.arc(
+      ball.x * c2d.canvas.width,
+      ball.y * c2d.canvas.height,
+      ball.semiSize * c2d.canvas.width * 8,
+      0,
+      Math.PI * 2
+    );
+    c2d.fill();
+    }
+  };
+
   const draw = (status, countdown) => {
     if (!canvas?.current) return;
     const c2d = canvas.current.getContext("2d");
@@ -130,12 +166,7 @@ export default function GamePage() {
     drawText(c2d, status, countdown);
     
     c2d.fillStyle = ball.color;
-    c2d.fillRect(
-      (ball.x - ball.semiSize) * c2d.canvas.width,
-      (ball.y - ball.semiSize) * c2d.canvas.height,
-      ball.semiSize * 2 * c2d.canvas.width,
-      ball.semiSize * 2 * c2d.canvas.height
-    );
+    drawBall(c2d);
 
   };
 
@@ -188,6 +219,10 @@ export default function GamePage() {
         dataGame.moveDown = true;
         socket.emit("update-input", dataGame);
       }
+      if (event.key === "l") {
+        event.preventDefault();
+        ball.shine = !ball.shine;
+      }
     };
 
     const keyUpHook = (event) => {
@@ -210,6 +245,8 @@ export default function GamePage() {
     document.addEventListener("keydown", keyDownHook);
     document.addEventListener("keyup", keyUpHook);
 
+    console.log("ball.shine= "+ball.shine);
+
     return () => {
       socket.emit("leave-game");
       socket.off("gameplay", onGamePlay);
@@ -221,6 +258,7 @@ export default function GamePage() {
       document.removeEventListener("keydown", keyDownHook);
       document.removeEventListener("keyup", keyUpHook);
     };
+    
   }, []);
 
   useEffect(() => {
@@ -236,6 +274,7 @@ export default function GamePage() {
       } else socket.emit("join-game", [false, false]);
     }
   }, [canvas]);
+
   return (
     <>
       <canvas ref={canvas}></canvas>
