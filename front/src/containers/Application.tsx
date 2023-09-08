@@ -147,6 +147,7 @@ const Application = function ({ children }: { children?: any }) {
       // TODO
       // navigate(PATHS.home);
       console.log(404, "- Game Not Found");
+      // return <NotFound />;
     };
 
     socket.on("new-message", onNewMessage);

@@ -11,31 +11,12 @@ export default class GameEngine {
     this.ball = new GameBall(this.game);
   }
 
-  // printScores() {
-  // 	console.log(
-  // 		'Game',
-  // 		this.game.matchId,
-  // 		'# Player 0 :',
-  // 		this.score[0],
-  // 		'- Player 1 :',
-  // 		this.score[1],
-  // 	);
-  // }
-
   checkScores() {
     if (this.ball.position.x < this.ball.BALL_SEMI_SIZE * 3) this.score[1]++;
     else if (this.ball.position.x > 1 - this.ball.BALL_SEMI_SIZE * 3)
       this.score[0]++;
     else return false;
-    // this.printScores();
     if (this.score[0] == this.WIN_SCORE || this.score[1] == this.WIN_SCORE) {
-      // console.log(
-      // 	'Game',
-      // 	this.game.matchId,
-      // 	'# Player',
-      // 	this.score[0] == this.WIN_SCORE ? 0 : 1,
-      // 	'win!',
-      // );
       this.game.state = gameState.FINISH;
       return true;
     }
@@ -66,12 +47,10 @@ export default class GameEngine {
           [this.score[0] === 5, this.score[1] === 5]
         );
         await this.game.userService.updateUserXP(
-          //Add of xp for player [0]
           this.game.players[0].userId,
           (this.score[0] === 5 ? 50 : 10) + this.score[0] * 10
         );
         await this.game.userService.updateUserXP(
-          //Add of xp for player [0]
           this.game.players[1].userId,
           (this.score[1] === 5 ? 50 : 10) + this.score[1] * 10
         );
@@ -93,12 +72,9 @@ export default class GameEngine {
   sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   async startGame() {
-    // this.game.started = true;
     if (this.ball.speed == 0) this.ball.newBall();
     this.game.state = gameState.STARTING;
-    // this.printScores();
     for (var i = 4; i--; i > 0) {
-      // console.log('game-start', i);
       this.game.players.forEach((player) => {
         player.send("game-start", {
           matchId: this.game.matchId,
@@ -112,6 +88,7 @@ export default class GameEngine {
           player0Name: this.game.players[0].name,
           player1Name: this.game.players[1].name,
           countdown: i,
+          custom: this.game.custom,
         });
       });
       await this.sleep(1000);
