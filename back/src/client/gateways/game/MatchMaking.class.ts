@@ -10,7 +10,7 @@ export default class MatchMaking {
   constructor(
     private server,
     private matchService: MatchService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   handleLeave(user) {
@@ -37,7 +37,7 @@ export default class MatchMaking {
       custom,
       this.server,
       this.matchService,
-      this.userService
+      this.userService,
     );
     this.games.push(newGame);
     this.nbOfGames++;
@@ -70,16 +70,6 @@ export default class MatchMaking {
     }
   }
 
-  // canInvite(user, player) {
-  //     for (let game of this.games)
-  //         if (game.canJoinInvite(user)
-  //             || game.canJoinInvite(player)
-  //             || (game.onGame(player)
-  //                 && game.random))
-  //             return false;
-  //     return true;
-  // }
-
   handleInvite(user, player, custom) {
     console.log("MatchMaking : handleInvite");
     for (let game of this.games) {
@@ -97,14 +87,6 @@ export default class MatchMaking {
       .get(player.session)
       ?.emit("invite-game", [user, player, custom]);
     this.newGame(user, player, custom);
-
-    // if (this.canInvite(user, player)) {
-    //     this.server.sockets.sockets.get(player.session)?.emit('invite-game', [user, player, custom]);
-    //     this.newGame(user, player, custom);
-    //     return;
-    // }
-    // else
-    //     this.server.sockets.sockets.get(user.session)?.emit('game-not-found');
   }
 
   updateInput(user, data) {

@@ -13,7 +13,7 @@ export class AuthService {
         profile.username,
         null,
         JSON.parse(profile._raw).image.link,
-        0
+        0,
       );
     return user;
   }
