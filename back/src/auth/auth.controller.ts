@@ -42,8 +42,10 @@ export class AuthController {
 
   @Post("logout")
   @UseGuards(AuthenticatedGuard)
-  logout(@Req() req) {
-    req.logout(() => {})
+  async logout(@Req() req) {
+    const user = await req.user;
+    await req.logout(() => {});
+    await this.clientService.unsubscribe(user.session);
     return 'ok';
   }
 
