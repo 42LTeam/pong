@@ -30,7 +30,7 @@ export class UserService {
         username: username,
         secretO2FA: secretO2FA,
         avatar: avatar,
-        xp: xp,
+        xp: xp
       },
     });
   }
@@ -278,4 +278,24 @@ export class UserService {
     }
     return this.generateQRCode(user.name, user.secretO2FA);
   }
+
+  async updateUserColorBall(id: number, color: string): Promise<User> {
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        colorball: color,
+      },
+    });
+  }
+
+  async getUserColorball(id: number): Promise<string | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        colorball: true,
+      },
+    });
+  
+    return user?.colorball || null;
+  }  
 }

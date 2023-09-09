@@ -100,6 +100,7 @@ export default class GameEngine {
     for (var i = 4; i--; i > 0) {
       // console.log('game-start', i);
       this.game.players.forEach((player) => {
+        const colorball = this.game.players[player.playerLeft ? 0 : 1].colorball;
         player.send("game-start", {
           matchId: this.game.matchId,
           ball: this.ball.position,
@@ -112,6 +113,7 @@ export default class GameEngine {
           player0Name: this.game.players[0].name,
           player1Name: this.game.players[1].name,
           countdown: i,
+          colorball: colorball,
         });
       });
       await this.sleep(1000);

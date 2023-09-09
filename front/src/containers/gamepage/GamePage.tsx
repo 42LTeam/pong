@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { socket } from "../../api";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export enum gameState {
   CREATING,
@@ -13,9 +13,6 @@ export enum gameState {
 export default function GamePage() {
   const canvas = useRef(null);
   const [searchParams] = useSearchParams();
-  const location = useLocation();
-  const { color = "#ECF0F1", shine = false} = location.state || {};
-  //const [isShine, setShine] = useState(shine);
 
   const dataGame = {
     matchId: 0,
@@ -27,8 +24,8 @@ export default function GamePage() {
     x: 0.5,
     y: 0.5,
     semiSize: 0,
-    color: color,
-    shine: shine,
+    color: "",
+    shine: false,
   };
   const players = {
     player0: {
@@ -191,6 +188,7 @@ export default function GamePage() {
         players.semiHeight = args.playerSemiHeight;
         players.player0.name = args.player0Name;
         players.player1.name = args.player1Name;
+        ball.color = args.colorball;
       }
       draw(gameState.STARTING, args.countdown);
     };

@@ -18,7 +18,8 @@ export default class GamePlayer {
     public name: string,
     public socket,
     public playerLeft: boolean,
-    private ballSemiSize: number
+    private ballSemiSize: number,
+    public colorball: string
   ) {
     this.position = {
       x: this.playerLeft ? 3 * ballSemiSize : 1 - 3 * ballSemiSize,

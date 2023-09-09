@@ -475,3 +475,25 @@ export async function setChannelPassword(
   };
   return axios(config);
 }
+
+export async function updateUserColorball(id: number, color: string) {
+  const config = {
+    method: "put",
+    url: URL + "/users/colorball/" + id,
+    withCredentials: true,
+    data: {
+      colorball: color,
+    },
+  };
+  console.log("colorball is now: "+color);
+  return axios(config);
+}
+
+export async function getUserColorball(id: number) {
+  const config = {
+    method: "get",
+    url: URL + "/colorball/" + id,
+    withCredentials: true,
+  };
+  return axios(config);
+}

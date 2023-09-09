@@ -14,6 +14,7 @@ model User {
   xp              Int
   role            Int              @default(0)
   status          Status           @default(OFFLINE)
+  colorball       String           @default("#ECF0F1")
   userMatches     UserMatch[]
   userFriendships UserFriendship[]
   blocksInitiated Block[]          @relation("blockInitiator")

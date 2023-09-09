@@ -65,7 +65,8 @@ export default class Game {
         user.username,
         socket,
         !Boolean(this.players.length),
-        this.engine.ball.BALL_SEMI_SIZE
+        this.engine.ball.BALL_SEMI_SIZE,
+        user.colorball
       );
       this.players.push(player);
       socket?.join(this.MATCH_ROOM);

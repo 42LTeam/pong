@@ -15,6 +15,7 @@ export interface User {
   playedMatch: boolean;
   leaderboard: boolean;
   secretO2FA: boolean;
+  colorball: string;
   blockList?: number[];
   friendList?: number[];
 }
