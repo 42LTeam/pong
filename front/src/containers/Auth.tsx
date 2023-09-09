@@ -28,9 +28,8 @@ function Auth() {
   const [wsConnected, setConnected] = useState(false);
   const [destination, setDestination] = useState(null);
   const [user, setUser] = useState<User>(null);
-  const localhostback = import.meta.env.VITE_API_URL
-    ? import.meta.env.VITE_API_URL + ":3000/auth/login"
-    : "http://localhost:3000/auth/login";
+  const URL = (import.meta.env.VITE_API_URL || 'http://localhost') + ':3000';
+
   useEffect(() => {
     if (!user)
       getStatus()
@@ -39,34 +38,38 @@ function Auth() {
           setDestination(response.data.destination);
         })
         .catch(function () {
-          window.location.replace(localhostback);
+          window.location.replace(URL + '/auth/login');
         });
+  }, []);
 
-    if (user && wsConnected)
-      authSocketId(socket.id).then((response) => {
-        socket.emit("register", { target: response.data });
-        console.log('register');
-      });
-  }, [user]);
 
+  console.log('auth',import.meta.env.BASE_URL);
   useEffect(() => {
     function onDisconnect() {
       setConnected(false)
     }
     function onConnect() {
       setConnected(true);
+        authSocketId(socket.id).then((response) => {
+          socket.emit("register", { target: response.data });
+          console.log('register');
+        });
     }
 
     socket.on("disconnect", onDisconnect);
     socket.on("connect", onConnect);
 
+
+
+
     return () => {
       socket.off("disconnect", onDisconnect);
       socket.off("connect", onConnect);
     };
-  }, []);
+  }, [user]);
 
 
+  if (!user) return null;
 
   return (
     <AuthContext.Provider value={user}>

@@ -253,7 +253,9 @@ export class UserController {
     @UploadedFile() file,
   ): Promise<any> {
     const fileName = file.path.split("/").pop();
-    const formattedPath = `//localhost:3000/uploads/${fileName}`;
+    const localhostfront = (process.env.LOCALHOST || 'localhost');
+
+    const formattedPath = `//${localhostfront}:3000/uploads/${fileName}`;
     await this.userService.updateUserAvatar(id, formattedPath);
     return { path: formattedPath };
   }
