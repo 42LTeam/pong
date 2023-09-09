@@ -38,13 +38,14 @@ export class ChannelService {
   }
 
   async createChannel(body: CreateChannelDto): Promise<any> {
-    const { name, password, conv, creatorId } = body;
+    const { name, password, conv, privated, creatorId } = body;
 
     return this.prisma.channel.create({
       data: {
         name,
         password,
         conv,
+        privated,
         creator: {
           connect: { id: creatorId },
         },
@@ -312,6 +313,14 @@ export class ChannelService {
     return this.prisma.channel.update({
       where: { id: channelId },
       data: { password: hashedPassword },
+    });
+  }
+
+  async getPublicChannels(): Promise<Channel[]> {
+    return this.prisma.channel.findMany({
+      where: {
+        privated: false,
+      },
     });
   }
 }

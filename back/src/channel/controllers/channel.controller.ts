@@ -44,6 +44,11 @@ export class CreateChannelDto {
   @IsNotEmpty()
   @IsNumber()
   creatorId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsBoolean()
+  privated: boolean;
 }
 
 export class SendInviteDto {
@@ -69,7 +74,7 @@ export class UpdateChannelPasswordDto {
 @ApiTags("channels")
 @Controller("channels")
 export class ChannelController {
-  constructor(private channelService: ChannelService) {}
+  constructor(private channelService: ChannelService) { }
 
   @Post()
   @ApiOperation({ summary: "Create a channel" })
@@ -176,4 +181,11 @@ export class ChannelController {
       updatePasswordDto.password
     );
   }
+
+  @Get("/public-channels")
+  @ApiOperation({ summary: "Get all public channels" })
+  async getPublicChannels(): Promise<Channel[]> {
+    return this.channelService.getPublicChannels();
+  }
+
 }
