@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { socket } from "../../api";
 import { useSearchParams } from "react-router-dom";
 import NotFound from "../NotFound";
@@ -177,7 +177,7 @@ export default function GamePage() {
 
     const onGameNotFound = () => {
       setNotFound(true);
-    }
+    };
 
     const keyDownHook = (event) => {
       if (event.key === "w" && !dataGame.moveUp) {
@@ -238,8 +238,7 @@ export default function GamePage() {
       } else socket.emit("join-game", [false, false]);
     }
   }, [canvas]);
-  if (notFound === true)
-    return (<NotFound />);
+  if (notFound === true) return <NotFound />;
   return (
     <>
       <canvas ref={canvas}></canvas>

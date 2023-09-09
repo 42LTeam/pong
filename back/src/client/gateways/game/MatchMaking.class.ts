@@ -10,7 +10,7 @@ export default class MatchMaking {
   constructor(
     private server,
     private matchService: MatchService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   handleLeave(user) {
@@ -37,7 +37,7 @@ export default class MatchMaking {
       custom,
       this.server,
       this.matchService,
-      this.userService
+      this.userService,
     );
     this.games.push(newGame);
     this.nbOfGames++;

@@ -22,7 +22,7 @@ export default class Game {
     public custom: boolean,
     private server,
     public matchService: MatchService,
-    public userService: UserService
+    public userService: UserService,
   ) {
     this.engine = new GameEngine(this);
     console.log("Game : New game ", this.matchId);
@@ -63,7 +63,7 @@ export default class Game {
         user.username,
         socket,
         !Boolean(this.players.length),
-        this.engine.ball.BALL_SEMI_SIZE
+        this.engine.ball.BALL_SEMI_SIZE,
       );
       this.players.push(player);
       socket?.join(this.MATCH_ROOM);
