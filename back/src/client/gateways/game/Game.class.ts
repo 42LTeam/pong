@@ -56,8 +56,10 @@ export default class Game {
   }
 
   handleJoin(user, invite: Boolean) {
+    ////////////////////////////////
     // console.log('Game : handleJoin');
     const socket = this.server.sockets.sockets.get(user.session);
+    console.log("user.colorball EN HAUT="+user.colorball + " when user.username = "+user.username);
     let player = this.players.find((p) => p.userId == user.id);
     if (!player) {
       player = new GamePlayer(
@@ -66,8 +68,13 @@ export default class Game {
         socket,
         !Boolean(this.players.length),
         this.engine.ball.BALL_SEMI_SIZE,
-        user.colorball
+        user.colorball,
       );
+      if (player.colorball === undefined){
+        player.colorball = user.colorball;
+        console.log("apres undefined player.colorball is now !!!!="+player.colorball);
+      }
+
       this.players.push(player);
       socket?.join(this.MATCH_ROOM);
       // console.log('Player', player.name, 'join game', this.matchId);
