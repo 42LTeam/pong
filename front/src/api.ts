@@ -485,7 +485,6 @@ export async function updateUserColorball(id: number, color: string) {
       colorball: color,
     },
   };
-  console.log("colorball is now: "+color);
   return axios(config);
 }
 

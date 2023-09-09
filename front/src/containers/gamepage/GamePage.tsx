@@ -189,7 +189,6 @@ export default function GamePage() {
         players.player0.name = args.player0Name;
         players.player1.name = args.player1Name;
         ball.color = args.colorball;
-        console.log("I recieved a ball colored to: [" + args.colorball + "]");  /////////////////////////////
       }
       draw(gameState.STARTING, args.countdown);
     };
@@ -243,8 +242,6 @@ export default function GamePage() {
     socket.on("game-finish", onGameFinish);
     document.addEventListener("keydown", keyDownHook);
     document.addEventListener("keyup", keyUpHook);
-
-    console.log("ball.shine= "+ball.shine);
 
     return () => {
       socket.emit("leave-game");

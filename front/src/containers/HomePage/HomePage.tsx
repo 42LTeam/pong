@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import FriendQuickInvite from "./FriendQuickInvite";
 import Ball from "../../components/svg/Ball";
 import { AuthContext } from "../Auth";
-import { updateUserColorball, getUserColorball, getUserByID } from "../../api";
+import { updateUserColorball, getUserByID } from "../../api";
 
 const colors = ["#ECF0F1", //white
 "#00BAFF", //blue
