@@ -4,6 +4,8 @@ import { authSocketId, getStatus, socket } from "../api";
 import Application from "./Application";
 import "../css/main.css";
 import DoubleAuth from "./DoubleAuth";
+import PopOver from "../components/utils/PopOver";
+import Button from "../components/utils/Button";
 
 export interface User {
   avatar: String;
@@ -34,16 +36,21 @@ function Auth() {
         .then(function (response) {
           setUser(response.data.user);
           setDestination(response.data.destination);
-          console.log(response.data);
         })
         .catch(function () {
           window.location.replace(localhostback);
         });
+
+    if (user && wsConnected)
+      authSocketId(socket.id).then((response) => {
+        socket.emit("register", { target: response.data });
+        console.log('register');
+      });
   }, [user]);
 
   useEffect(() => {
     function onDisconnect() {
-      alert("deco mon reuf");
+      setConnected(false)
     }
     function onConnect() {
       setConnected(true);
@@ -56,12 +63,9 @@ function Auth() {
       socket.off("disconnect", onDisconnect);
       socket.off("connect", onConnect);
     };
-  }, [wsConnected]);
+  }, []);
 
-  if (user && wsConnected)
-    authSocketId(socket.id).then((response) => {
-      socket.emit("register", { target: response.data });
-    });
+
 
   return (
     <AuthContext.Provider value={user}>
@@ -70,6 +74,15 @@ function Auth() {
           <DoubleAuth setDestination={setDestination}></DoubleAuth>
         ) : null}
       </Application>
+      {!wsConnected && Boolean(user) ?
+          <PopOver clear={null}>
+            <h1>Deconnecter</h1>
+            <h3>Vous ne pouvez avoir qu'un seul onglet a la fois.</h3>
+            <Button handleClick={() => window.location.reload()} text="Reprendre le controle" clickable></Button>
+          </PopOver>
+          :
+          null
+      }
     </AuthContext.Provider>
   );
 }
