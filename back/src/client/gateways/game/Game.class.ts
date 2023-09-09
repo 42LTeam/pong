@@ -80,7 +80,7 @@ export default class Game {
 
   canDelete() {
     return (
-      this.state == gameState.FINISH /*!this.started &&*/ ||
+      this.state == gameState.FINISH ||
       (this.players[0].status == playerStatus.OFFLINE &&
         (this.players.length < 2 ||
           this.players[1].status == playerStatus.OFFLINE))
