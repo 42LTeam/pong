@@ -5,14 +5,13 @@ import {
   get2fa,
   updateUserAvatar,
   updateUserUsername,
-  uploadUserAvatar,
+
 } from "../../api";
 import Button from "../../components/utils/Button";
-import TextInput from "../../components/utils/TextInput";
 
 type Props = {};
 
-export default function Settings(props: Props) {
+export default function Settings() {
   const user = useContext(AuthContext);
   const inputRef = useRef(null);
 
@@ -104,6 +103,10 @@ export default function Settings(props: Props) {
           </div>
         </div>
       </div>
+      {Boolean(qr) ?
+          <img src={qr}/> :
+          <Button handleClick={activate2fa} text={"activer la 2fa"} clickable></Button>
+      }
     </div>
   );
 }
