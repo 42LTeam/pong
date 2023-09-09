@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { socket } from "../../api";
 import { useSearchParams } from "react-router-dom";
+import NotFound from "../NotFound";
 
 export enum gameState {
   CREATING,
@@ -13,6 +14,7 @@ export enum gameState {
 export default function GamePage() {
   const canvas = useRef(null);
   const [searchParams] = useSearchParams();
+  const [notFound, setNotFound] = useState(false);
 
   const dataGame = {
     matchId: 0,
@@ -173,6 +175,10 @@ export default function GamePage() {
       draw(gameState.FINISH, 0);
     };
 
+    const onGameNotFound = () => {
+      setNotFound(true);
+    }
+
     const keyDownHook = (event) => {
       if (event.key === "w" && !dataGame.moveUp) {
         dataGame.moveUp = true;
@@ -201,6 +207,7 @@ export default function GamePage() {
     socket.on("game-pause", onGamePause);
     socket.on("error", onError);
     socket.on("game-finish", onGameFinish);
+    socket.on("game-not-found", onGameNotFound);
     document.addEventListener("keydown", keyDownHook);
     document.addEventListener("keyup", keyUpHook);
 
@@ -212,6 +219,7 @@ export default function GamePage() {
       socket.off("game-pause", onGamePause);
       socket.off("error", onError);
       socket.off("game-finish", onGameFinish);
+      socket.off("game-not-found", onGameNotFound);
       document.removeEventListener("keydown", keyDownHook);
       document.removeEventListener("keyup", keyUpHook);
     };
@@ -230,6 +238,8 @@ export default function GamePage() {
       } else socket.emit("join-game", [false, false]);
     }
   }, [canvas]);
+  if (notFound === true)
+    return (<NotFound />);
   return (
     <>
       <canvas ref={canvas}></canvas>
