@@ -10,6 +10,7 @@ import Button from "../components/utils/Button";
 export interface User {
   avatar: String;
   username: String;
+  status: String,
   id: number;
   xp: number;
   pointAverage: number;
