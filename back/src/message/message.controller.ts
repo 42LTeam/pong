@@ -48,13 +48,13 @@ export class MessageController {
   @ApiBody({ type: CreateMessageDto })
   async createMessage(
     @Body() createMessageDto: CreateMessageDto,
-    @Req() req
+    @Req() req,
   ): Promise<Message> {
     const user = await req.user;
     return this.messageService.createMessage(
       user.id,
       createMessageDto.channelId,
-      createMessageDto.content
+      createMessageDto.content,
     );
   }
 
@@ -70,7 +70,7 @@ export class MessageController {
 
   @Get("user/:user")
   async getMessageByUser(
-    @Param("user") user: number
+    @Param("user") user: number,
   ): Promise<Message[] | null> {
     return this.messageService.getMessageByUser(Number(user));
   }
@@ -78,7 +78,7 @@ export class MessageController {
   @Get("channel/:channel")
   async getMessageByChannel(
     @Param("channel") channel: number,
-    @Req() req
+    @Req() req,
   ): Promise<{ lastRead: number; messages: Message[] } | null> {
     const user = await req.user;
     return this.messageService.getMessageByChannel(user.id, Number(channel));
@@ -93,18 +93,18 @@ export class MessageController {
   @Get(":messageId/readBy/:userId")
   async isMessageReadByUser(
     @Param("messageId", ParseIntPipe) messageId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("userId", ParseIntPipe) userId: number,
   ): Promise<{ read: boolean }> {
     const isRead = await this.messageService.isMessageReadByUser(
       messageId,
-      userId
+      userId,
     );
     return { read: isRead };
   }
 
   @Get("channel/:id/last")
   async getLastMessageInChannel(
-    @Param("id", ParseIntPipe) channelId: number
+    @Param("id", ParseIntPipe) channelId: number,
   ): Promise<Message> {
     return await this.messageService.getLastMessageInChannel(channelId);
   }

@@ -15,7 +15,7 @@ export class ChannelService {
     private prisma: PrismaService,
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   async addInvite(id, userId) {
@@ -168,7 +168,7 @@ export class ChannelService {
         ...current,
         lastRead: lastRead[ids.indexOf(current.id)],
         lastMessage: await this.messageService.getLastMessageInChannel(
-          current.id
+          current.id,
         ),
       };
     };
@@ -201,7 +201,7 @@ export class ChannelService {
       },
     });
     const validConversation = conversation.filter(
-      (conv) => conv.users.length === 2
+      (conv) => conv.users.length === 2,
     );
 
     if (validConversation.length) return validConversation[0];
@@ -292,7 +292,7 @@ export class ChannelService {
 
   async isUserMutedFromChannel(
     channelId: number,
-    userId: number
+    userId: number,
   ): Promise<boolean> {
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
@@ -306,7 +306,7 @@ export class ChannelService {
 
   async setChannelPassword(
     channelId: number,
-    newPassword: string
+    newPassword: string,
   ): Promise<Channel> {
     const hashedPassword = await hashPassword(newPassword);
     return this.prisma.channel.update({

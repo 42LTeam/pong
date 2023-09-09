@@ -31,7 +31,7 @@ export class AuthController {
     private clientService: ClientService,
     private blockService: BlockService,
     private friendService: FriendService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
   @Get("login")
   @UseGuards(FortyTwoAuthGuard)
