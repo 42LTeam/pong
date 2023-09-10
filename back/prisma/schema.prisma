@@ -60,8 +60,9 @@ model Block {
 model Channel {
   id         Int           @id @default(autoincrement())
   conv       Boolean       @default(false)
-  name       String?       @unique
+  name       String?
   password   String?
+  privated   Boolean      @default(false)
   creatorId  Int?
   creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[]
