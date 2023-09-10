@@ -26,7 +26,7 @@ export default function Chat(props: ChatProps) {
     (current) =>
       current.channelId == channel &&
       messages.map((c) => c.id).includes(current.id) == false
-  );
+  ) || [];
 
   const fetchData = async () => {
     const response = await getChannelMessages(props.channel);
@@ -42,7 +42,7 @@ export default function Chat(props: ChatProps) {
     fetchData();
     return () => {
       setMessages([]);
-      application.clearMessage(toAdd);
+      application?.clearMessage(toAdd);
     };
   }, [channel]);
 

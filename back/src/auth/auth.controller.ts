@@ -42,9 +42,7 @@ export class AuthController {
   @Get("redirect")
   @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
-    const localhostfront = process.env.LOCALHOST
-      ? "http://" + process.env.LOCALHOST + ":5173"
-      : "http://localhost:5173";
+    const localhostfront = 'http://' + (process.env.LOCALHOST || 'localhost') + ':5173';
     res.redirect(localhostfront);
   }
 

@@ -4,10 +4,13 @@ import { authSocketId, getStatus, socket } from "../api";
 import Application from "./Application";
 import "../css/main.css";
 import DoubleAuth from "./DoubleAuth";
+import PopOver from "../components/utils/PopOver";
+import Button from "../components/utils/Button";
 
 export interface User {
   avatar: String;
   username: String;
+  status: String,
   id: number;
   xp: number;
   pointAverage: number;
@@ -25,43 +28,48 @@ function Auth() {
   const [wsConnected, setConnected] = useState(false);
   const [destination, setDestination] = useState(null);
   const [user, setUser] = useState<User>(null);
-  const localhostback = import.meta.env.VITE_API_URL
-    ? import.meta.env.VITE_API_URL + ":3000/auth/login"
-    : "http://localhost:3000/auth/login";
+  const URL = (import.meta.env.VITE_API_URL || 'http://localhost') + ':3000';
+
   useEffect(() => {
     if (!user)
       getStatus()
         .then(function (response) {
           setUser(response.data.user);
           setDestination(response.data.destination);
-          console.log(response.data);
         })
         .catch(function () {
-          window.location.replace(localhostback);
+          window.location.replace(URL + '/auth/login');
         });
-  }, [user]);
+  }, []);
 
+
+  console.log('auth',import.meta.env.BASE_URL);
   useEffect(() => {
     function onDisconnect() {
-      alert("deco mon reuf");
+      setConnected(false)
     }
     function onConnect() {
       setConnected(true);
+        authSocketId(socket.id).then((response) => {
+          socket.emit("register", { target: response.data });
+          console.log('register');
+        });
     }
 
     socket.on("disconnect", onDisconnect);
     socket.on("connect", onConnect);
 
+
+
+
     return () => {
       socket.off("disconnect", onDisconnect);
       socket.off("connect", onConnect);
     };
-  }, [wsConnected]);
+  }, [user]);
 
-  if (user && wsConnected)
-    authSocketId(socket.id).then((response) => {
-      socket.emit("register", { target: response.data });
-    });
+
+  if (!user) return null;
 
   return (
     <AuthContext.Provider value={user}>
@@ -70,6 +78,15 @@ function Auth() {
           <DoubleAuth setDestination={setDestination}></DoubleAuth>
         ) : null}
       </Application>
+      {!wsConnected && Boolean(user) ?
+          <PopOver clear={null}>
+            <h1>Deconnecter</h1>
+            <h3>Vous ne pouvez avoir qu'un seul onglet a la fois.</h3>
+            <Button handleClick={() => window.location.reload()} text="Reprendre le controle" clickable></Button>
+          </PopOver>
+          :
+          null
+      }
     </AuthContext.Provider>
   );
 }
