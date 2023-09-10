@@ -27,6 +27,18 @@ a {
   text-decoration: inherit; /* no underline */
 }
 
+.footer{
+  display: flex;
+  justify-content: flex-end;
+  align-self: stretch;
+  background-color: #2C3E50;
+  border-radius: inherit;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  padding: 15px;
+  gap: 10px;
+}
+
 .center {
   top: 50%;
   left: 50%;

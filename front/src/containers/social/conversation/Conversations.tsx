@@ -105,10 +105,10 @@ export default function Conversations({ state }: Props) {
                       <Conversation
                           handleClick={() => setState(conversation.id)}
                           key={"conversation_id " + conversation.id}
-                          avatar={conversation.users[0].user.avatar}
+                          avatar={conversation.users[0]?.user.avatar}
                           username={
                             conversation.conv
-                                ? conversation.users[0].user.username
+                                ? conversation.users[0]?.user.username
                                 : conversation.name
                           }
                           lastMessage={conversation.lastMessage?.content}

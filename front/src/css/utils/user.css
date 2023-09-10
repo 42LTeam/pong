@@ -31,10 +31,10 @@
   background-position: 50% 50%;
 }
 
-.column {
-  display: flex;
-  flex-direction: column;
-}
+/*.column {*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*}*/
 
 .menu {
   position: absolute;

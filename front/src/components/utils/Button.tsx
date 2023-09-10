@@ -7,6 +7,7 @@ export type ButtonProps = {
   buttonProps?: any;
   clickable?: boolean;
   hoverProps?: any;
+  className?: string,
   children?: any;
 };
 
@@ -17,6 +18,7 @@ export default function Button({
   buttonProps,
   clickable,
   hoverProps,
+  className,
   children,
 }: ButtonProps) {
   const [hover, setHover] = useState(null);
@@ -47,7 +49,7 @@ export default function Button({
             }
           : null
       }
-      className={"button" + (clickable ? " button-clickable" : "")}
+      className={"button" + (clickable ? " button-clickable" : "") + (className ? ' ' + className : '')}
     >
       {text}
       {Children.map(children, (child) => (

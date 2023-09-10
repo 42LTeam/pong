@@ -23,7 +23,7 @@ export default function PopUp({
      * Alert if clicked on outside of element
      */
     function handleClickOutside(event) {
-      if (!ref?.current.contains(event.target)) clear();
+      if (clear && !ref?.current.contains(event.target)) clear();
     }
     // Bind the event listener
     document.addEventListener("mousedown", handleClickOutside);
