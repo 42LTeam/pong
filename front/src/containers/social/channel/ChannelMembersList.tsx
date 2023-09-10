@@ -1,6 +1,11 @@
 import "../../../css/chat.css";
 import React, { useContext, useEffect, useState } from "react";
-import { getChannelAllMembers } from "../../../api";
+import {
+    banUserFromChannel,
+    getChannelAllMembers,
+    muteUserFromChannel,
+    removeUserAdminFromChannel,
+} from "../../../api";
 import SidePanel from "../../../components/utils/SidePanel";
 import Friend from "../../../components/friend/Friend";
 import { AuthContext } from "../../Auth";
@@ -33,6 +38,9 @@ export default function ChannelMembersList({
     return member.userId === user.id && member.isAdmin === true;
   });
 
+
+
+
   return (
     <SidePanel
       subheader="Members"
@@ -46,6 +54,23 @@ export default function ChannelMembersList({
                 unremovable={true}
                 friend={current.user}
                 channelId={channelId}
+                contextMenu={(isAdmin && current.user.id != user.id) ? [
+                    {
+                    text: "Kick",
+                    handleClick: () =>
+                        removeUserAdminFromChannel(channelId, current.user.id),
+                    },
+                    {
+                        text: "Mute",
+                        handleClick: () => muteUserFromChannel(channelId, current.user.id),
+                    },
+                    {
+                        text: "Ban",
+                        handleClick: () =>
+                             banUserFromChannel(channelId, current.user.id)
+                    },
+                    { separator: true }
+                ] : null}
                 isAdmin={isAdmin}
                 isBanned={current.isBanned}
               ></Friend>
