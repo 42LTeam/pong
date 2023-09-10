@@ -63,7 +63,7 @@ model Channel {
   name       String?
   password   String?
   creatorId  Int?
-  privated   Boolean
+  privated   Boolean?
   creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[]
   messages   Message[]
