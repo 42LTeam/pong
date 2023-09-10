@@ -77,7 +77,7 @@ export default function ContextMenu(props: Props) {
             return (
               <Button
                 key={"button-" + index}
-                {...props.buttonProps}
+                {...(props.buttonProps || buttonProps)}
                 {...current}
                 clickable={true}
                 handleClick={() => {
