@@ -228,7 +228,6 @@ export async function getChannelAllMembers(id: number) {
 export async function createChannel(data: {
   name: string;
   password?: string;
-  creatorId: number;
   privated?: boolean;
   conv?: boolean;
 }) {

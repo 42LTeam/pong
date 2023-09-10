@@ -37,14 +37,15 @@ export class ChannelService {
     });
   }
 
-  async createChannel(body: CreateChannelDto): Promise<any> {
-    const { name, password, conv, creatorId } = body;
-
+  async createChannel(creatorId, body: CreateChannelDto): Promise<any> {
+    let { name, password, conv,privated  } = body;
+    if (password) password = await hashPassword(password);
     return this.prisma.channel.create({
       data: {
         name,
         password,
         conv,
+        privated,
         creator: {
           connect: { id: creatorId },
         },
@@ -72,11 +73,25 @@ export class ChannelService {
   }
 
   async sendInvite(body: SendInviteDto) {
-    const { ids, channelId } = body;
+    const { ids, channelId, usernames } = body;
+
+    if (usernames){
+      const users = await this.prisma.user.findMany({where:{
+          username: {
+            in: usernames,
+          }
+        }, select: {
+          id: true,
+        }})
+      for (const i of users.map(c => c.id)) {
+        await this.addInvite(channelId, i);
+      }
+    }
 
     for (const i of ids) {
       await this.addInvite(channelId, i);
     }
+
   }
 
   // rename with All attribute and not just s
