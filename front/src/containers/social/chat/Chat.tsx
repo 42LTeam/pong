@@ -22,7 +22,7 @@ export default function Chat(props: ChatProps) {
   const user = useContext(AuthContext);
   const application = useContext(ApplicationContext);
   const ref = useRef(null);
-  const toAdd = application?.social.newMessages.filter(
+  const toAdd = application.social.newMessages.filter(
     (current) =>
       current.channelId == channel &&
       messages.map((c) => c.id).includes(current.id) == false

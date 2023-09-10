@@ -1,3 +1,5 @@
+import Game from "./Game.class";
+
 export enum playerStatus {
   ONLINE,
   OFFLINE,

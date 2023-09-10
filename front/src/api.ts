@@ -257,17 +257,6 @@ export async function getConversation(userId: number) {
   return axios(config);
 }
 
-
-export async function deco() {
-  const config = {
-    method: "post",
-    url: URL + "/auth/logout",
-    withCredentials: true,
-  };
-  return axios(config);
-}
-
-
 export async function get2fa() {
   const config = {
     method: "get",

@@ -2,13 +2,12 @@ import "../../../css/chat.css";
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
 import React, { useContext, useEffect, useState } from "react";
-import {getChannels, removeUserFromChannel} from "../../../api";
+import { getChannels } from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 import SidePanel from "../../../components/utils/SidePanel";
 import { ApplicationContext } from "../../Application";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Auth";
-import ContextMenu from "../../../components/utils/ContextMenu";
 
 type Props = {
   state: any;

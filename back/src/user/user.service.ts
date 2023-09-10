@@ -274,8 +274,8 @@ export class UserService {
           secretO2FA: secret,
         },
       });
-      return this.generateQRCode(user.username, secret);
+      return this.generateQRCode(user.name, secret);
     }
-    return this.generateQRCode(user.username, user.secretO2FA);
+    return this.generateQRCode(user.name, user.secretO2FA);
   }
 }

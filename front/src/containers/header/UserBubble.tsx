@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Auth";
 
 import "../../css/utils/user.css";
-import {deco} from "../../api";
 
 const UserBubble = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,8 +23,6 @@ const UserBubble = () => {
     } else if (option == "settings") {
       setMenuOpen(!menuOpen);
       navigate("/settings");
-    } else if (option == "deco"){
-      deco().then(() => {window.location.reload()})
     }
   };
 
@@ -78,14 +75,6 @@ const UserBubble = () => {
               >
                 Settings
               </li>
-
-              <li
-                  className="user user-title element"
-                  onClick={() => handleOptionClick("deco")}
-              >
-                Deco :(
-              </li>
-
             </ul>
           </div>
         )}

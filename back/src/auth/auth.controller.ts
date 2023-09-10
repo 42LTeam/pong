@@ -39,16 +39,6 @@ export class AuthController {
     console.log("login");
   }
 
-
-  @Post("logout")
-  @UseGuards(AuthenticatedGuard)
-  async logout(@Req() req) {
-    const user = await req.user;
-    await req.logout(() => {});
-    await this.clientService.unsubscribe(user.session);
-    return 'ok';
-  }
-
   @Get("redirect")
   @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
