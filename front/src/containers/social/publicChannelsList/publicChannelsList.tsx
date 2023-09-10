@@ -1,11 +1,18 @@
-import { useEffect, useState } from 'react';
-import { getChannels, getPublicChannels, validateChannelPassword } from '../../../api';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { getChannelAllMembers, getPublicChannels, joinChannel, validateChannelPassword } from '../../../api';
 import Conversation from '../../../components/conversation/Conversation';
-import React from 'react';
-
+import { AuthContext } from '../../Auth';
+import PopOver from '../../../components/utils/PopOver';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../../components/utils/Button';
 
 export default function PublicChannelsList() {
   const [channels, setChannels] = useState([]);
+  const [isPasswordPopUpVisible, setPasswordPopUpVisible] = useState(false);
+  const [selectedChannel, setSelectedChannel] = useState(null);
+  const user = useContext(AuthContext);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     async function fetchChannels() {
@@ -20,40 +27,73 @@ export default function PublicChannelsList() {
   }, []);
 
   const handleChannelClick = async (channel) => {
+    const membersResponse = await getChannelAllMembers(channel.id);
+    const members = membersResponse.data;
+    console.log(members)
+    const isUserMember = members.some(member => member.userId === user.id);
+
+    if (isUserMember) {
+      console.log("Already a member of the channel");
+      navigate(`/social/${channel.id}`);
+      return;
+    }
+
     if (channel.password) {
-      const password = prompt("Please enter the channel password:");
-      if (!password) {
-        console.log("No password entered by user");
-        return;
-      }
+      setSelectedChannel(channel);
+      setPasswordPopUpVisible(true);
+      return;
+    } else {
+      await joinChannelDirectly(channel);
+      navigate(`/social/${channel.id}`);
+    }
+  };
+
+  const handlePasswordSubmit = async (password) => {
+    setPasswordPopUpVisible(false);
+
+    if (selectedChannel) {
       try {
-        const isValidPassword = await validateChannelPassword(channel.id, password);
+        const isValidPassword = await validateChannelPassword(selectedChannel.id, password);
         if (isValidPassword) {
-          // TODO
+          await joinChannelDirectly(selectedChannel);
+          navigate(`/social/${selectedChannel.id}`);
         } else {
           alert("Incorrect password!");
         }
       } catch (error) {
         console.error("Error validating password:", error);
       }
-
-    } else {
-      console.log("Channel doesn't have a password");
-      // TODO
     }
   };
 
+  const joinChannelDirectly = async (channel) => {
+    await joinChannel(channel.id, user.id);
+    navigate(`/social/${channel.id}`);
+  }
 
   return (
-    channels.map(current =>
-      <Conversation
-        username={current.name}
-        handleClick={() => handleChannelClick(current)}
-        avatar={null}
-        lastRead={null}
-        channel={current}
-        hasPassword={Boolean(current.password)}
-      />
-    )
+    <div>
+      {channels.map(current => (
+        <Conversation
+          key={current.id}
+          username={current.name}
+          handleClick={() => handleChannelClick(current)}
+          avatar={null}
+          lastRead={null}
+          channel={current}
+          hasPassword={Boolean(current.password)}
+        />
+      ))}
+      {isPasswordPopUpVisible && (
+        <PopOver clear={() => setPasswordPopUpVisible(false)} height='50px'>
+          <input type="password" placeholder="Enter channel password" id="channelPasswordInput" />
+          <Button
+            handleClick={() => handlePasswordSubmit(document.getElementById('channelPasswordInput').value)}
+            text="Join"
+            clickable={true}
+          />
+        </PopOver>
+      )}
+    </div>
   );
 }
