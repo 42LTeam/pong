@@ -9,7 +9,7 @@ import {
   UseGuards,
   UsePipes,
 } from "@nestjs/common";
-import { ApiBody, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiOperation, ApiParam, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { Channel } from "@prisma/client";
 import { ChannelService } from "../channel.service";
 import {
@@ -205,5 +205,14 @@ export class ChannelController {
     const isValid = await this.channelService.validateChannelPassword(channelId, validatePasswordDto.password);
     return { isValid };
   }
+
+  @Post("/:channelId/join")
+  @ApiOperation({ summary: "Join a channel" })
+  @ApiParam({ name: "channelId", required: true, type: Number, description: "ID of the channel to join" })
+  async joinChannel(@Param("channelId", ParseIntPipe) channelId: number, @Req() req): Promise<any> {
+    const user = await req.user;
+    return this.channelService.joinChannel(channelId, user.id);
+  }
+
 
 }

@@ -335,4 +335,26 @@ export class ChannelService {
     return checkPassword(inputPassword, channel.password);
   }
 
+  async joinChannel(channelId: number, userId: number): Promise<any> {
+    const existingUserChannel = await this.prisma.userChannel.findUnique({
+      where: {
+        userId_channelId: {
+          userId: userId,
+          channelId: channelId
+        }
+      }
+    });
+
+    if (existingUserChannel) {
+      throw new Error("User is already part of the channel");
+    }
+    return this.prisma.userChannel.create({
+      data: {
+        userId: userId,
+        channelId: channelId,
+      }
+    });
+  }
+
+
 }

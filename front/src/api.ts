@@ -498,3 +498,14 @@ export async function validateChannelPassword(channelId: number, inputPassword: 
 }
 
 
+export async function joinChannel(channelId: number) {
+  const config = {
+    method: "post",
+    url: `${URL}/channels/${channelId}/join`,
+    withCredentials: true,
+  };
+  const response = await axios(config);
+  return response.data;
+}
+
+

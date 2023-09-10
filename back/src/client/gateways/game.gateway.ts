@@ -10,7 +10,7 @@ import { WSAuthenticatedGuard } from "../../auth/guards/wsauthenticated.guard";
 import { ClientService } from "../client.service";
 import MatchMaking from "./game/MatchMaking.class";
 import { MatchService } from "../../match/match.service";
-import { UserService } from "src/user/user.service";
+import { UserService } from "../../user/user.service";
 
 @WebSocketGateway(8001, {
   cors: true,
