@@ -484,3 +484,17 @@ export async function setChannelPassword(
   };
   return axios(config);
 }
+export async function validateChannelPassword(channelId: number, inputPassword: string) {
+  const config = {
+    method: "post",
+    url: `${URL}/channels/${channelId}/validate-password`,
+    data: {
+      password: inputPassword,
+    },
+    withCredentials: true,
+  };
+  const response = await axios(config);
+  return response.data.isValid;
+}
+
+

@@ -7,7 +7,7 @@ import {
 import { FriendService } from "../friend/friend.service";
 import { MessageService } from "../message/message.service";
 import { Channel } from "@prisma/client";
-import { hashPassword } from "../auth/password.utils";
+import { checkPassword, hashPassword } from "../auth/password.utils";
 
 @Injectable()
 export class ChannelService {
@@ -16,7 +16,7 @@ export class ChannelService {
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   async addInvite(id, userId) {
     const newUser = await this.prisma.userChannel.create({
@@ -323,4 +323,16 @@ export class ChannelService {
       },
     });
   }
+
+  async validateChannelPassword(channelId: number, inputPassword: string): Promise<boolean> {
+    const channel = await this.prisma.channel.findUnique({
+      where: { id: channelId },
+    });
+
+    if (!channel || !channel.password) {
+      throw new Error("Channel not found or doesn't have a password.");
+    }
+    return checkPassword(inputPassword, channel.password);
+  }
+
 }

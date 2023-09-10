@@ -70,6 +70,13 @@ export class UpdateChannelPasswordDto {
   password: string;
 }
 
+export class ValidateChannelPasswordDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+}
+
 @UseGuards(AuthenticatedGuard)
 @ApiTags("channels")
 @Controller("channels")
@@ -186,6 +193,17 @@ export class ChannelController {
   @ApiOperation({ summary: "Get all public channels" })
   async getPublicChannels(): Promise<Channel[]> {
     return this.channelService.getPublicChannels();
+  }
+
+  @Post("/:channelId/validate-password")
+  @ApiOperation({ summary: "Validate password for a channel" })
+  @ApiBody({ type: ValidateChannelPasswordDto })
+  async validateChannelPassword(
+    @Param("channelId", ParseIntPipe) channelId: number,
+    @Body() validatePasswordDto: ValidateChannelPasswordDto
+  ): Promise<{ isValid: boolean }> {
+    const isValid = await this.channelService.validateChannelPassword(channelId, validatePasswordDto.password);
+    return { isValid };
   }
 
 }
