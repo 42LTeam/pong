@@ -8,15 +8,15 @@ export default function PublicChannelsList() {
   const [channels, setChannels] = useState([]);
 
   useEffect(() => {
-      async function fetchChannels() {
-          try {
-              const response = await getPublicChannels();
-              setChannels(response.data);
-          } catch (error) {
-              console.error("Error fetching channels:", error);
-          }
+    async function fetchChannels() {
+      try {
+        const response = await getPublicChannels();
+        setChannels(response.data);
+      } catch (error) {
+        console.error("Error fetching channels:", error);
       }
-      fetchChannels();
+    }
+    fetchChannels();
   }, []);
 
   const handleChannelClick = async (channel) => {
@@ -29,31 +29,31 @@ export default function PublicChannelsList() {
       try {
         const isValidPassword = await validateChannelPassword(channel.id, password);
         if (isValidPassword) {
-            // TODO
+          // TODO
         } else {
           alert("Incorrect password!");
         }
       } catch (error) {
         console.error("Error validating password:", error);
       }
-  
+
     } else {
       console.log("Channel doesn't have a password");
       // TODO
     }
   };
-  
+
 
   return (
-    channels.map(current => 
-      <Conversation 
-          username={current.name} 
-          handleClick={() => handleChannelClick(current)} 
-          avatar={null} 
-          lastRead={null} 
-          channel={current} 
+    channels.map(current =>
+      <Conversation
+        username={current.name}
+        handleClick={() => handleChannelClick(current)}
+        avatar={null}
+        lastRead={null}
+        channel={current}
+        hasPassword={Boolean(current.password)}
       />
-  )
-  
+    )
   );
 }
