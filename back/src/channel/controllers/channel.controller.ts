@@ -40,17 +40,25 @@ export class CreateChannelDto {
   @IsOptional()
   password?: string;
 
+
   @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  creatorId: number;
+  @IsBoolean()
+  @IsOptional()
+  privated?: boolean;
+
+
 }
 
 export class SendInviteDto {
   @ApiProperty()
   @IsArray()
-  @ArrayMinSize(1)
+  @IsOptional()
   ids?: number[];
+
+  @ApiProperty()
+  @IsArray()
+  @IsOptional()
+  usernames?: string[];
 
   @IsNumber()
   @ApiProperty()
@@ -74,8 +82,9 @@ export class ChannelController {
   @Post()
   @ApiOperation({ summary: "Create a channel" })
   @ApiBody({ type: CreateChannelDto })
-  async createChannel(@Body() body: CreateChannelDto): Promise<Channel> {
-    return this.channelService.createChannel(body);
+  async createChannel(@Body() body: CreateChannelDto, @Req() req): Promise<Channel> {
+    const user = await req.user;
+    return this.channelService.createChannel(user.id, body);
   }
 
   // @Post('invite')
