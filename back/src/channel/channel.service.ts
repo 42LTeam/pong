@@ -16,7 +16,7 @@ export class ChannelService {
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
     private messageService: MessageService
-  ) { }
+  ) {}
 
   async addInvite(id, userId) {
     const newUser = await this.prisma.userChannel.create({
@@ -324,7 +324,10 @@ export class ChannelService {
     });
   }
 
-  async validateChannelPassword(channelId: number, inputPassword: string): Promise<boolean> {
+  async validateChannelPassword(
+    channelId: number,
+    inputPassword: string
+  ): Promise<boolean> {
     const channel = await this.prisma.channel.findUnique({
       where: { id: channelId },
     });
@@ -340,9 +343,9 @@ export class ChannelService {
       where: {
         userId_channelId: {
           userId: userId,
-          channelId: channelId
-        }
-      }
+          channelId: channelId,
+        },
+      },
     });
 
     if (existingUserChannel) {
@@ -352,9 +355,7 @@ export class ChannelService {
       data: {
         userId: userId,
         channelId: channelId,
-      }
+      },
     });
   }
-
-
 }

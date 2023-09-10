@@ -484,7 +484,10 @@ export async function setChannelPassword(
   };
   return axios(config);
 }
-export async function validateChannelPassword(channelId: number, inputPassword: string) {
+export async function validateChannelPassword(
+  channelId: number,
+  inputPassword: string
+) {
   const config = {
     method: "post",
     url: `${URL}/channels/${channelId}/validate-password`,
@@ -497,7 +500,6 @@ export async function validateChannelPassword(channelId: number, inputPassword: 
   return response.data.isValid;
 }
 
-
 export async function joinChannel(channelId: number) {
   const config = {
     method: "post",
@@ -507,5 +509,3 @@ export async function joinChannel(channelId: number) {
   const response = await axios(config);
   return response.data;
 }
-
-

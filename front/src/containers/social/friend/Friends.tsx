@@ -8,15 +8,21 @@ import { getPath } from "../../../api";
 import PublicChannelsList from "../publicChannelsList/publicChannelsList";
 import React from "react";
 
-const states = ["En ligne", "Tous", "En attente", "Bloqué", "Ajouter", "Public Channels"];
+const states = [
+  "En ligne",
+  "Tous",
+  "En attente",
+  "Bloqué",
+  "Ajouter",
+  "Public Channels",
+];
 const paths = [
   "/users/friend/online/",
   "/users/friend/",
   "/users/friend-request/pending/",
   "/block/blocked/",
-  "/channels/"
+  "/channels/",
 ];
-
 
 export default function Friends() {
   const user = useContext(AuthContext);
@@ -29,12 +35,15 @@ export default function Friends() {
 
   const [friends, setFriends] = useState(null);
 
-  if (!friends && states.indexOf(state) != 4 && states.indexOf(state) !== states.length - 1) {
+  if (
+    !friends &&
+    states.indexOf(state) != 4 &&
+    states.indexOf(state) !== states.length - 1
+  ) {
     getPath(paths[states.indexOf(state)] + user.id).then(function (response) {
       setFriends(response.data);
     });
   }
-
 
   const resetFriend = function () {
     setFriends(null);
@@ -60,8 +69,6 @@ export default function Friends() {
           pending={state === states[2]}
         />
       )}
-
     </div>
   );
-
 }

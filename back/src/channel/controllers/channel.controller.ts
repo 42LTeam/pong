@@ -9,7 +9,13 @@ import {
   UseGuards,
   UsePipes,
 } from "@nestjs/common";
-import { ApiBody, ApiOperation, ApiParam, ApiProperty, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiProperty,
+  ApiTags,
+} from "@nestjs/swagger";
 import { Channel } from "@prisma/client";
 import { ChannelService } from "../channel.service";
 import {
@@ -81,7 +87,7 @@ export class ValidateChannelPasswordDto {
 @ApiTags("channels")
 @Controller("channels")
 export class ChannelController {
-  constructor(private channelService: ChannelService) { }
+  constructor(private channelService: ChannelService) {}
 
   @Post()
   @ApiOperation({ summary: "Create a channel" })
@@ -202,17 +208,26 @@ export class ChannelController {
     @Param("channelId", ParseIntPipe) channelId: number,
     @Body() validatePasswordDto: ValidateChannelPasswordDto
   ): Promise<{ isValid: boolean }> {
-    const isValid = await this.channelService.validateChannelPassword(channelId, validatePasswordDto.password);
+    const isValid = await this.channelService.validateChannelPassword(
+      channelId,
+      validatePasswordDto.password
+    );
     return { isValid };
   }
 
   @Post("/:channelId/join")
   @ApiOperation({ summary: "Join a channel" })
-  @ApiParam({ name: "channelId", required: true, type: Number, description: "ID of the channel to join" })
-  async joinChannel(@Param("channelId", ParseIntPipe) channelId: number, @Req() req): Promise<any> {
+  @ApiParam({
+    name: "channelId",
+    required: true,
+    type: Number,
+    description: "ID of the channel to join",
+  })
+  async joinChannel(
+    @Param("channelId", ParseIntPipe) channelId: number,
+    @Req() req
+  ): Promise<any> {
     const user = await req.user;
     return this.channelService.joinChannel(channelId, user.id);
   }
-
-
 }
