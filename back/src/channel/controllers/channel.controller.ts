@@ -100,7 +100,7 @@ export class ChannelController {
   @ApiBody({ type: CreateChannelDto })
   async createChannel(@Body() body: CreateChannelDto, @Req() req): Promise<Channel> {
     const user = await req.user;
-    return this.channelService.createChannel(user.id, body);
+    return this.channelService.createChannel(body);
   }
 
   // @Post('invite')
