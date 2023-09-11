@@ -333,6 +333,7 @@ export class ChannelService {
     return this.prisma.channel.findMany({
       where: {
         privated: false,
+        conv: false,
       },
     });
   }
