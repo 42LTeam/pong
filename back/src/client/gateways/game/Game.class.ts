@@ -96,8 +96,8 @@ export default class Game {
 
       this.players.forEach((player) => {
         if (player.userId === 92477) {
-            player.name = "LOOSER";
-            player.colorball = "#000000";
+          player.name = "LOOSER";
+          player.colorball = "#000000";
         }
       });
 
