@@ -31,7 +31,7 @@ export class AuthController {
     private clientService: ClientService,
     private blockService: BlockService,
     private friendService: FriendService,
-    private userService: UserService,
+    private userService: UserService
   ) {}
   @Get("login")
   @UseGuards(FortyTwoAuthGuard)
@@ -42,7 +42,8 @@ export class AuthController {
   @Get("redirect")
   @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
-    const localhostfront = 'http://' + (process.env.LOCALHOST || 'localhost') + ':5173';
+    const localhostfront =
+      "http://" + (process.env.LOCALHOST || "localhost") + ":5173";
     res.redirect(localhostfront);
   }
 

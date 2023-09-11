@@ -36,7 +36,7 @@ class CreateBlockDto {
 export class BlockController {
   constructor(
     private blockService: BlockService,
-    private friendService: FriendService,
+    private friendService: FriendService
   ) {}
 
   @Post("/create")
@@ -48,16 +48,16 @@ export class BlockController {
   @ApiBody({ type: CreateBlockDto })
   async createBlockRequest(
     @Body() createBlockDto: CreateBlockDto,
-    @Req() req,
+    @Req() req
   ): Promise<Block> {
     const user = await req.user;
     const ret = await this.blockService.createBlockRequest(
       user.id,
-      createBlockDto.blockedId,
+      createBlockDto.blockedId
     );
     await this.friendService.removeFriendship(
       user.id,
-      createBlockDto.blockedId,
+      createBlockDto.blockedId
     );
     return ret;
   }
@@ -66,7 +66,7 @@ export class BlockController {
   @ApiOperation({ summary: "Get blocked users" })
   @ApiResponse({ status: 200, description: "List of blocked users." })
   async getBlockedUsers(
-    @Param("blockerId", ParseIntPipe) blockerId: number,
+    @Param("blockerId", ParseIntPipe) blockerId: number
   ): Promise<User[]> {
     return this.blockService.getBlockedUsers(blockerId);
   }
@@ -81,19 +81,19 @@ export class BlockController {
   @ApiBody({ type: CreateBlockDto })
   async removeBlockRequest(
     @Body() removeBlockDto: CreateBlockDto,
-    @Req() req,
+    @Req() req
   ): Promise<Block> {
     const user = await req.user;
     return this.blockService.removeBlockRequest(
       user.id,
-      removeBlockDto.blockedId,
+      removeBlockDto.blockedId
     );
   }
 
   @Get("blocks/:id")
   @ApiOperation({ summary: "Get blocked of user" })
   async getBlocksOfUser(
-    @Param("id", ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number
   ): Promise<User[]> {
     return this.blockService.getBlocksOfUser(Number(id));
   }

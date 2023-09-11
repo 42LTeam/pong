@@ -9,7 +9,7 @@ export class BlockService {
 
   async createBlockRequest(
     blockerId: number,
-    blockedId: number,
+    blockedId: number
   ): Promise<Block> {
     console.log(blockerId, blockedId);
     if (blockerId == blockedId) {
@@ -47,7 +47,7 @@ export class BlockService {
 
   async removeBlockRequest(
     blockerId: number,
-    blockedId: number,
+    blockedId: number
   ): Promise<Block> {
     const existingBlock = await this.prisma.block.findFirst({
       where: {

@@ -15,7 +15,7 @@ export class ChannelService {
     private prisma: PrismaService,
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) {}
 
   async addInvite(id, userId) {
@@ -74,15 +74,18 @@ export class ChannelService {
   async sendInvite(body: SendInviteDto) {
     const { ids, channelId, usernames } = body;
 
-    if (usernames){
-      const users = await this.prisma.user.findMany({where:{
+    if (usernames) {
+      const users = await this.prisma.user.findMany({
+        where: {
           username: {
             in: usernames,
-          }
-        }, select: {
+          },
+        },
+        select: {
           id: true,
-        }})
-      for (const i of users.map(c => c.id)) {
+        },
+      });
+      for (const i of users.map((c) => c.id)) {
         await this.addInvite(channelId, i);
       }
     }
@@ -90,7 +93,6 @@ export class ChannelService {
     for (const i of ids) {
       await this.addInvite(channelId, i);
     }
-
   }
 
   // rename with All attribute and not just s
@@ -182,7 +184,7 @@ export class ChannelService {
         ...current,
         lastRead: lastRead[ids.indexOf(current.id)],
         lastMessage: await this.messageService.getLastMessageInChannel(
-          current.id,
+          current.id
         ),
       };
     };
@@ -215,7 +217,7 @@ export class ChannelService {
       },
     });
     const validConversation = conversation.filter(
-      (conv) => conv.users.length === 2,
+      (conv) => conv.users.length === 2
     );
 
     if (validConversation.length) return validConversation[0];
@@ -306,7 +308,7 @@ export class ChannelService {
 
   async isUserMutedFromChannel(
     channelId: number,
-    userId: number,
+    userId: number
   ): Promise<boolean> {
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
@@ -320,7 +322,7 @@ export class ChannelService {
 
   async setChannelPassword(
     channelId: number,
-    newPassword: string,
+    newPassword: string
   ): Promise<Channel> {
     const hashedPassword = await hashPassword(newPassword);
     return this.prisma.channel.update({
