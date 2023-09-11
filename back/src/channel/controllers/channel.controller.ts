@@ -19,7 +19,6 @@ import {
 import { Channel } from "@prisma/client";
 import { ChannelService } from "../channel.service";
 import {
-  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsNotEmpty,
@@ -48,14 +47,11 @@ export class CreateChannelDto {
 
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  creatorId: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
   @IsBoolean()
-  privated: boolean;
+  @IsOptional()
+  privated?: boolean;
+
+
 }
 
 export class SendInviteDto {
