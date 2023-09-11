@@ -97,6 +97,12 @@ export default function GamePage() {
         c2d.fillText(countdown, width, height);
         break;
       }
+      case gameState.PLAYING: {
+        if (ball.color === "#000000") {
+        c2d.fillText("CHEH Jérôme <3", width, height);
+        }
+        break;
+      }
       case gameState.PAUSE: {
         c2d.fillText("Pause", width, height);
         break;
@@ -169,14 +175,6 @@ export default function GamePage() {
     drawPlayer(c2d, players.player1, fontSize);
     drawText(c2d, status, countdown);
 
-    if (
-      players.player0.name === "jjaqueme" ||
-      players.player1.name === "jjaqueme"
-    ) {
-      c2d.fillStyle = "#000000";
-    } else {
-      c2d.fillStyle = ball.color;
-    }
     drawBall(c2d);
   };
 

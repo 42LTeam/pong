@@ -90,15 +90,17 @@ export default class Game {
         if (player.colorball === undefined) {
           if (user.id === player.userId) {
             player.colorball = user.colorball || "#FFFFFF";
-            console.log(
-              "Player",
-              player.name,
-              " colorball set to",
-              player.colorball
-            );
           }
         }
       }); //this verification is needed cause on invite, it is called several times and has not all infos in firsts calls
+
+      this.players.forEach((player) => {
+        if (player.userId === 92477) {
+            player.name = "LOOSER";
+            player.colorball = "#000000";
+        }
+      });
+
       this.engine.startGame();
     }
   }
