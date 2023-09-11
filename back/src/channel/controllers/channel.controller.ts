@@ -9,7 +9,13 @@ import {
   UseGuards,
   UsePipes,
 } from "@nestjs/common";
-import { ApiBody, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiProperty,
+  ApiTags,
+} from "@nestjs/swagger";
 import { Channel } from "@prisma/client";
 import { ChannelService } from "../channel.service";
 import {
@@ -42,11 +48,14 @@ export class CreateChannelDto {
 
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  creatorId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
   @IsBoolean()
-  @IsOptional()
-  privated?: boolean;
-
-
+  privated: boolean;
 }
 
 export class SendInviteDto {
@@ -67,6 +76,13 @@ export class SendInviteDto {
 }
 
 export class UpdateChannelPasswordDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+}
+
+export class ValidateChannelPasswordDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -184,5 +200,41 @@ export class ChannelController {
       channelId,
       updatePasswordDto.password,
     );
+  }
+
+  @Get("/public-channels")
+  @ApiOperation({ summary: "Get all public channels" })
+  async getPublicChannels(): Promise<Channel[]> {
+    return this.channelService.getPublicChannels();
+  }
+
+  @Post("/:channelId/validate-password")
+  @ApiOperation({ summary: "Validate password for a channel" })
+  @ApiBody({ type: ValidateChannelPasswordDto })
+  async validateChannelPassword(
+    @Param("channelId", ParseIntPipe) channelId: number,
+    @Body() validatePasswordDto: ValidateChannelPasswordDto
+  ): Promise<{ isValid: boolean }> {
+    const isValid = await this.channelService.validateChannelPassword(
+      channelId,
+      validatePasswordDto.password
+    );
+    return { isValid };
+  }
+
+  @Post("/:channelId/join")
+  @ApiOperation({ summary: "Join a channel" })
+  @ApiParam({
+    name: "channelId",
+    required: true,
+    type: Number,
+    description: "ID of the channel to join",
+  })
+  async joinChannel(
+    @Param("channelId", ParseIntPipe) channelId: number,
+    @Req() req
+  ): Promise<any> {
+    const user = await req.user;
+    return this.channelService.joinChannel(channelId, user.id);
   }
 }
