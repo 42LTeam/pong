@@ -67,7 +67,7 @@ export default class Game {
         socket,
         !Boolean(this.players.length),
         this.engine.ball.BALL_SEMI_SIZE,
-        user.colorball,
+        user.colorball
       );
       this.players.push(player);
 
@@ -90,12 +90,17 @@ export default class Game {
         if (player.colorball === undefined) {
           if (user.id === player.userId) {
             player.colorball = user.colorball || "#FFFFFF";
-            console.log("Player", player.name, " colorball set to", player.colorball);
+            console.log(
+              "Player",
+              player.name,
+              " colorball set to",
+              player.colorball
+            );
           }
         }
-      })  //this verification is needed cause on invite, it is called several times and has not all infos in firsts calls
-      this.engine.startGame()
-    };
+      }); //this verification is needed cause on invite, it is called several times and has not all infos in firsts calls
+      this.engine.startGame();
+    }
   }
 
   canDelete() {

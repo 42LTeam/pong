@@ -30,7 +30,7 @@ export class UserService {
         username: username,
         secretO2FA: secretO2FA,
         avatar: avatar,
-        xp: xp
+        xp: xp,
       },
     });
   }
@@ -295,7 +295,7 @@ export class UserService {
         colorball: true,
       },
     });
-  
+
     return user?.colorball || null;
-  }  
+  }
 }

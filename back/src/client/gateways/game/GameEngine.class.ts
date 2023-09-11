@@ -125,7 +125,7 @@ export default class GameEngine {
           player0Name: this.game.players[0].name,
           player1Name: this.game.players[1].name,
           countdown: i,
-          colorball: this.game.players[player.playerLeft ? 0 : 1].colorball
+          colorball: this.game.players[player.playerLeft ? 0 : 1].colorball,
         });
       });
       await this.sleep(1000);

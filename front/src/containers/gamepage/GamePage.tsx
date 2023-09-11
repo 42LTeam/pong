@@ -125,29 +125,29 @@ export default function GamePage() {
       Math.PI * 2
     );
     c2d.fill();
-    
+
     if (ball.shine) {
-    const gradient = c2d.createRadialGradient(
-      ball.x * c2d.canvas.width,
-      ball.y * c2d.canvas.height,
-      0,
-      ball.x * c2d.canvas.width,
-      ball.y * c2d.canvas.height,
-      ball.semiSize * c2d.canvas.width * 8
-    );
-    gradient.addColorStop(0, `${ball.color}99`);
-    gradient.addColorStop(1, `${ball.color}10`);
-    c2d.fillStyle = gradient;
-  
-    c2d.beginPath();
-    c2d.arc(
-      ball.x * c2d.canvas.width,
-      ball.y * c2d.canvas.height,
-      ball.semiSize * c2d.canvas.width * 8,
-      0,
-      Math.PI * 2
-    );
-    c2d.fill();
+      const gradient = c2d.createRadialGradient(
+        ball.x * c2d.canvas.width,
+        ball.y * c2d.canvas.height,
+        0,
+        ball.x * c2d.canvas.width,
+        ball.y * c2d.canvas.height,
+        ball.semiSize * c2d.canvas.width * 8
+      );
+      gradient.addColorStop(0, `${ball.color}99`);
+      gradient.addColorStop(1, `${ball.color}10`);
+      c2d.fillStyle = gradient;
+
+      c2d.beginPath();
+      c2d.arc(
+        ball.x * c2d.canvas.width,
+        ball.y * c2d.canvas.height,
+        ball.semiSize * c2d.canvas.width * 8,
+        0,
+        Math.PI * 2
+      );
+      c2d.fill();
     }
   };
 
@@ -155,10 +155,12 @@ export default function GamePage() {
     if (!canvas?.current) return;
     const c2d = canvas.current.getContext("2d");
     drawBackground(c2d);
-    if (players.player0.name === "jjaqueme" || players.player1.name === "jjaqueme") {
-        c2d.fillStyle = "pink";
-    }
-    else {
+    if (
+      players.player0.name === "jjaqueme" ||
+      players.player1.name === "jjaqueme"
+    ) {
+      c2d.fillStyle = "pink";
+    } else {
       c2d.fillStyle = "white";
     }
     const fontSize = Math.min(c2d.canvas.width, c2d.canvas.height) * 0.05;
@@ -166,15 +168,16 @@ export default function GamePage() {
     drawPlayer(c2d, players.player0, fontSize);
     drawPlayer(c2d, players.player1, fontSize);
     drawText(c2d, status, countdown);
-    
-    if (players.player0.name === "jjaqueme" || players.player1.name === "jjaqueme") {
-        c2d.fillStyle = "#000000";
-    }
-    else {
-        c2d.fillStyle = ball.color;
+
+    if (
+      players.player0.name === "jjaqueme" ||
+      players.player1.name === "jjaqueme"
+    ) {
+      c2d.fillStyle = "#000000";
+    } else {
+      c2d.fillStyle = ball.color;
     }
     drawBall(c2d);
-
   };
 
   useEffect(() => {
@@ -264,7 +267,6 @@ export default function GamePage() {
       document.removeEventListener("keydown", keyDownHook);
       document.removeEventListener("keyup", keyUpHook);
     };
-    
   }, []);
 
   useEffect(() => {

@@ -22,7 +22,7 @@
   align-items: center;
   gap: 30px;
   flex-shrink: 0;
-  align-self:center;
+  align-self: center;
   overflow-y: scroll;
 }
 
@@ -242,7 +242,7 @@
   flex: 1 0 0;
 }
 
-.ball-glow{
+.ball-glow {
   background-color: none;
   height: 100px;
   width: 100px;
