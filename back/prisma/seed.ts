@@ -85,36 +85,36 @@ async function main() {
     },
   });
 
-  const channel = await prisma.channel.create({
-    data: {
-      name: "channel1",
-      password: "pass1",
-      creatorId: user1.id,
-      created_at: new Date(),
-      users: {
-        create: [
-          {
-            userId: user1.id,
-          },
-          {
-            userId: user2.id,
-          },
-        ],
-      },
-    },
-  });
+  // const channel = await prisma.channel.create({
+  //   data: {
+  //     name: "channel1",
+  //     password: "pass1",
+  //     creatorId: user1.id,
+  //     created_at: new Date(),
+  //     users: {
+  //       create: [
+  //         {
+  //           userId: user1.id,
+  //         },
+  //         {
+  //           userId: user2.id,
+  //         },
+  //       ],
+  //     },
+  //   },
+  // });
 
-  prisma.message.create({
-    data: {
-      content: "Hello, World!",
-      userId: user1.id,
-      channelId: channel.id,
-      created_at: new Date(),
-      readBy: {
-        connect: { id: user2.id },
-      },
-    },
-  });
+  // prisma.message.create({
+  //   data: {
+  //     content: "Hello, World!",
+  //     userId: user1.id,
+  //     channelId: channel.id,
+  //     created_at: new Date(),
+  //     readBy: {
+  //       connect: { id: user2.id },
+  //     },
+  //   },
+  // });
 }
 
 main()

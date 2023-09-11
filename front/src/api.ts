@@ -216,6 +216,15 @@ export async function getChannels() {
   return axios(config);
 }
 
+export async function getPublicChannels() {
+  const config = {
+    method: "get",
+    url: URL + "/channels/public-channels",
+    withCredentials: true,
+  };
+  return axios(config);
+}
+
 export async function getChannelAllMembers(id: number) {
   const config = {
     method: "get",
@@ -470,4 +479,29 @@ export async function setChannelPassword(
     withCredentials: true,
   };
   return axios(config);
+}
+export async function validateChannelPassword(
+  channelId: number,
+  inputPassword: string
+) {
+  const config = {
+    method: "post",
+    url: `${URL}/channels/${channelId}/validate-password`,
+    data: {
+      password: inputPassword,
+    },
+    withCredentials: true,
+  };
+  const response = await axios(config);
+  return response.data.isValid;
+}
+
+export async function joinChannel(channelId: number) {
+  const config = {
+    method: "post",
+    url: `${URL}/channels/${channelId}/join`,
+    withCredentials: true,
+  };
+  const response = await axios(config);
+  return response.data;
 }

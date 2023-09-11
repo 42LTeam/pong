@@ -7,7 +7,7 @@ import {
 import { FriendService } from "../friend/friend.service";
 import { MessageService } from "../message/message.service";
 import { Channel } from "@prisma/client";
-import { hashPassword } from "../auth/password.utils";
+import { checkPassword, hashPassword } from "../auth/password.utils";
 
 @Injectable()
 export class ChannelService {
@@ -327,6 +327,49 @@ export class ChannelService {
     return this.prisma.channel.update({
       where: { id: channelId },
       data: { password: hashedPassword },
+    });
+  }
+
+  async getPublicChannels(): Promise<Channel[]> {
+    return this.prisma.channel.findMany({
+      where: {
+        privated: false,
+      },
+    });
+  }
+
+  async validateChannelPassword(
+    channelId: number,
+    inputPassword: string
+  ): Promise<boolean> {
+    const channel = await this.prisma.channel.findUnique({
+      where: { id: channelId },
+    });
+
+    if (!channel || !channel.password) {
+      throw new Error("Channel not found or doesn't have a password.");
+    }
+    return checkPassword(inputPassword, channel.password);
+  }
+
+  async joinChannel(channelId: number, userId: number): Promise<any> {
+    const existingUserChannel = await this.prisma.userChannel.findUnique({
+      where: {
+        userId_channelId: {
+          userId: userId,
+          channelId: channelId,
+        },
+      },
+    });
+
+    if (existingUserChannel) {
+      throw new Error("User is already part of the channel");
+    }
+    return this.prisma.userChannel.create({
+      data: {
+        userId: userId,
+        channelId: channelId,
+      },
     });
   }
 }

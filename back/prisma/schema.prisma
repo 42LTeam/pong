@@ -81,6 +81,8 @@ model UserChannel {
   isBanned  Boolean   @default(false)
   user      User      @relation(fields: [userId], references: [id])
   channel   Channel   @relation(fields: [channelId], references: [id])
+
+  @@unique([userId, channelId])
 }
 
 model Message {
