@@ -8,9 +8,8 @@ import * as express from "express";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const localhostfront = process.env.LOCALHOST
-    ? "http://" + process.env.LOCALHOST + ":5173"
-    : "http://localhost:5173";
+    const localhostfront = 'http://' + (process.env.LOCALHOST || 'localhost') + ':5173';
+
 
   setupSwagger(app); // Swagger API
   app.enableCors({
@@ -27,7 +26,7 @@ async function bootstrap() {
       secret: "J'aime les hommes",
       resave: false,
       saveUninitialized: false,
-    })
+    }),
   );
   app.use(passport.initialize());
   app.use(passport.session());

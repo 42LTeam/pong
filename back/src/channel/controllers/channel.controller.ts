@@ -46,6 +46,7 @@ export class CreateChannelDto {
   @IsOptional()
   password?: string;
 
+
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
@@ -60,8 +61,13 @@ export class CreateChannelDto {
 export class SendInviteDto {
   @ApiProperty()
   @IsArray()
-  @ArrayMinSize(1)
+  @IsOptional()
   ids?: number[];
+
+  @ApiProperty()
+  @IsArray()
+  @IsOptional()
+  usernames?: string[];
 
   @IsNumber()
   @ApiProperty()
@@ -92,8 +98,9 @@ export class ChannelController {
   @Post()
   @ApiOperation({ summary: "Create a channel" })
   @ApiBody({ type: CreateChannelDto })
-  async createChannel(@Body() body: CreateChannelDto): Promise<Channel> {
-    return this.channelService.createChannel(body);
+  async createChannel(@Body() body: CreateChannelDto, @Req() req): Promise<Channel> {
+    const user = await req.user;
+    return this.channelService.createChannel(user.id, body);
   }
 
   // @Post('invite')
@@ -120,7 +127,7 @@ export class ChannelController {
   @Get("/:channelId/members")
   @ApiOperation({ summary: "Get All users in channel by channel Id" })
   async getChannelAllMembers(
-    @Param("channelId", ParseIntPipe) channelId: number
+    @Param("channelId", ParseIntPipe) channelId: number,
   ): Promise<any> {
     return await this.channelService.getChannelAllMembers(Number(channelId));
   }
@@ -129,7 +136,7 @@ export class ChannelController {
   @ApiOperation({ summary: "Remove a user from a channel (User perspective)" })
   async removeUserFromChannel(
     @Param("channelId", ParseIntPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("userId", ParseIntPipe) userId: number,
   ): Promise<any> {
     return this.channelService.removeUserFromChannel(channelId, userId);
   }
@@ -139,7 +146,7 @@ export class ChannelController {
   @ApiOperation({ summary: "Remove a user from a channel (Admin perspective)" })
   async removeUserAdminFromChannel(
     @Param("channelId", ParseIntPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("userId", ParseIntPipe) userId: number,
   ): Promise<any> {
     return this.channelService.removeUserFromChannel(channelId, userId);
   }
@@ -149,7 +156,7 @@ export class ChannelController {
   @ApiOperation({ summary: "Ban a user from a channel" })
   async banUserFromChannel(
     @Param("channelId", ParseIntPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("userId", ParseIntPipe) userId: number,
   ): Promise<any> {
     return this.channelService.banUserFromChannel(channelId, userId);
   }
@@ -159,7 +166,7 @@ export class ChannelController {
   @ApiOperation({ summary: "Un-Ban a user from a channel" })
   async unbanUserFromChannel(
     @Param("channelId", ParseIntPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("userId", ParseIntPipe) userId: number,
   ): Promise<any> {
     return this.channelService.unbanUserFromChannel(channelId, userId);
   }
@@ -168,7 +175,7 @@ export class ChannelController {
   @ApiOperation({ summary: "Mute a user from a channel" })
   async muteUserFromChannel(
     @Param("channelId", ParseIntPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("userId", ParseIntPipe) userId: number,
   ): Promise<any> {
     return this.channelService.muteUserFromChannel(channelId, userId);
   }
@@ -177,7 +184,7 @@ export class ChannelController {
   @ApiOperation({ summary: "Check if a user is muted from a channel" })
   async isMutedBannedFromChannel(
     @Param("channelId", ParseIntPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("userId", ParseIntPipe) userId: number,
   ): Promise<boolean> {
     return this.channelService.isUserMutedFromChannel(channelId, userId);
   }
@@ -187,11 +194,11 @@ export class ChannelController {
   @ApiBody({ type: UpdateChannelPasswordDto })
   async setChannelPassword(
     @Param("channelId", ParseIntPipe) channelId: number,
-    @Body() updatePasswordDto: UpdateChannelPasswordDto
+    @Body() updatePasswordDto: UpdateChannelPasswordDto,
   ): Promise<Channel> {
     return this.channelService.setChannelPassword(
       channelId,
-      updatePasswordDto.password
+      updatePasswordDto.password,
     );
   }
 

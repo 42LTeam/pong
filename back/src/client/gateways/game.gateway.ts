@@ -24,7 +24,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private clientService: ClientService,
     private matchService: MatchService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   async handleConnection(client: any, ...args): Promise<any> {
@@ -32,7 +32,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.matchMaking = new MatchMaking(
         this.server,
         this.matchService,
-        this.userService
+        this.userService,
       );
   }
 
@@ -54,7 +54,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       "custom =",
       data[1],
       "id =",
-      data[2]
+      data[2],
     );
     if (user) this.matchMaking.handleJoin(user, data[0], data[1], data[2]);
   }
@@ -84,7 +84,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       "to",
       data[0].username,
       "for custom =",
-      data[1]
+      data[1],
     );
     if (user && data) this.matchMaking.handleInvite(user, data[0], data[1]);
   }

@@ -11,8 +11,42 @@ type Props = {
 export default function ContextMenu(props: Props) {
   const [popUpPosition, setPopUpPosition] = useState(null);
 
+
+  const buttonProps = {
+    buttonProps: {
+      style: {
+        background: "none",
+        cursor: "pointer",
+        textAlign: "left",
+      },
+    },
+    fill: true,
+    hoverProps: {
+      background: "#2C3E50",
+    },
+  };
+
   const handleContextMenu = (event) => {
-    setPopUpPosition({ left: event.clientX, top: event.clientY });
+    let tmp: {right: any,left: any, top:any, bottom: any} = {
+      right: 'none',
+      left: 'none',
+      top: 'none',
+      bottom: 'none'
+    }
+    if (event.clientX >= window.innerWidth / 2)
+      tmp.right = window.innerWidth - event.clientX;
+    else
+      tmp.left = event.clientX;
+
+
+
+    if (event.clientY >= window.innerHeight / 2)
+      tmp.bottom = window.innerHeight - event.clientY;
+    else
+      tmp.top = event.clientY;
+
+
+    setPopUpPosition(tmp);
     event.preventDefault();
     return false;
   };
@@ -43,7 +77,7 @@ export default function ContextMenu(props: Props) {
             return (
               <Button
                 key={"button-" + index}
-                {...props.buttonProps}
+                {...(props.buttonProps || buttonProps)}
                 {...current}
                 clickable={true}
                 handleClick={() => {

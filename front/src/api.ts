@@ -1,14 +1,11 @@
 import io from "socket.io-client";
 import axios from "axios";
 
-const localhostwebsocket = process.env.VITE_API_URL
-  ? `${process.env.VITE_API_URL}:8001`
-  : "http://localhost:8001";
-const webSocketURL = localhostwebsocket;
-const localhostback = process.env.VITE_API_URL
-  ? `${process.env.VITE_API_URL}:3000`
-  : "http://localhost:3000";
-const URL = localhostback;
+
+
+const webSocketURL = (import.meta.env.VITE_API_URL || 'http://localhost') + ':8001';
+const URL = (import.meta.env.VITE_API_URL || 'http://localhost') + ':3000';
+console.log('wtd',import.meta.env.VITE_API_URL)
 export const socket = io(webSocketURL, { autoConnect: true });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -240,7 +237,6 @@ export async function getChannelAllMembers(id: number) {
 export async function createChannel(data: {
   name: string;
   password?: string;
-  creatorId: number;
   privated?: boolean;
   conv?: boolean;
 }) {

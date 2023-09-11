@@ -10,25 +10,31 @@ import {
   banUserFromChannel,
   removeUserAdminFromChannel,
   unbanUserFromChannel,
-  getUserByID,
+  getUserByID, unblockUser,
 } from "../../api";
 import { AuthContext, User } from "../../containers/Auth";
 
 type Props = {
-  channelId: number;
-  children?: any;
-  friend: User;
-  isAdmin: boolean;
-  onClick?: any;
-  unremovable: boolean;
-  isBanned: boolean;
+  channelId: number,
+  children?: any,
+  friend: User,
+  isAdmin: boolean,
+  onClick?: any,
+  isBanned: boolean,
+  contextMenu?: any[],
+  buttonProps: unknown
 };
 
 export default function Friend(props: Props) {
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const [display, setDisplay] = useState(null);
-  const buttons = [
+  const blocked = user.blockList.includes(props.friend.id);
+  const isFriend = user.friendList.includes(props.friend.id);
+  const buttons = props.friend.id == user.id ? [ {
+    text: "Profile",
+    handleClick: () => navigate("/profile/" + props.friend.id),
+  }] : [
     // ---------- Basic options
     {
       text: "Profile",
@@ -73,50 +79,35 @@ export default function Friend(props: Props) {
         ),
     },
     { separator: true },
+  ...(props.contextMenu || [])
   ];
 
-  if (props.isAdmin) {
-    buttons.push({
-      text: "Kick",
-      handleClick: () =>
-        removeUserAdminFromChannel(props.channelId, props.friend.id),
-    });
-    buttons.push({
-      text: "Mute",
-      handleClick: () => muteUserFromChannel(props.channelId, props.friend.id),
-    });
-    buttons.push({
-      text: "Ban/Unban",
-      handleClick: () =>
-        !props.isBanned
-          ? banUserFromChannel(props.channelId, props.friend.id)
-          : unbanUserFromChannel(props.channelId, props.friend.id),
-    });
-    buttons.push({ separator: true });
-  }
 
-  if (props.friend.id === user.id) {
-    buttons.push({
-      text: "Leave",
-      handleClick: () =>
-        removeUserFromChannel(props.channelId, props.friend.id),
-    });
-    buttons.push({ separator: true });
-  }
 
-  if (!props.unremovable) {
+  if (blocked) {
     buttons.push({
-      text: "Retirer l'ami",
+      text: 'Debloquer',
       handleClick: () => {
-        removeFriendship(props.friend.id).then(() => setDisplay("none"));
-      },
+        unblockUser(props.friend?.id);
+        user.blockList.splice(user.blockList.indexOf(props.friend?.id), 1);
+        setDisplay('none');
+      }
+    });
+  }else if (props.friend.id != user.id){
+    buttons.push({
+      text: "Bloquer",
+      handleClick: () => alert("TODO"),
     });
   }
+  if (isFriend) {
+    buttons.push({
+      text: 'Retirer l\'ami',
+      handleClick: () => {
+        removeFriendship(props.friend.id).then(() => setDisplay('none'));
+      },
+    })
 
-  buttons.push({
-    text: "Bloquer",
-    handleClick: () => alert("TODO"),
-  });
+  }
 
   const buttonProps = {
     buttonProps: {
@@ -131,6 +122,7 @@ export default function Friend(props: Props) {
       background: "#2C3E50",
     },
   };
+
 
   const navigateToConversation = async (friend) => {
     try {
