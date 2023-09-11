@@ -1,18 +1,18 @@
-.toggle-switch-root{
-    border-radius: 90px!important;
-    width: 60px;
-    height: 30px;
-    display: flex;
-    flex-direction: row;
-    transition: background 500ms;
+.toggle-switch-root {
+  border-radius: 90px !important;
+  width: 60px;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  transition: background 500ms;
 }
 
-.toggle-switch-svg{
-    width: 25px;
-    height: 25px;
-    transition: margin 500ms;
+.toggle-switch-svg {
+  width: 25px;
+  height: 25px;
+  transition: margin 500ms;
 }
 
-.toggle-switch-on{
-    margin-left: 25px;
+.toggle-switch-on {
+  margin-left: 25px;
 }

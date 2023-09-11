@@ -1,11 +1,10 @@
 import io from "socket.io-client";
 import axios from "axios";
 
-
-
-const webSocketURL = (import.meta.env.VITE_API_URL || 'http://localhost') + ':8001';
-const URL = (import.meta.env.VITE_API_URL || 'http://localhost') + ':3000';
-console.log('wtd',import.meta.env.VITE_API_URL)
+const webSocketURL =
+  (import.meta.env.VITE_API_URL || "http://localhost") + ":8001";
+const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
+console.log("wtd", import.meta.env.VITE_API_URL);
 export const socket = io(webSocketURL, { autoConnect: true });
 
 /*--------------------------------------------------------------------------------------------------------------------*/

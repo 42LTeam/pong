@@ -2,7 +2,7 @@ import "../../../css/chat.css";
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
 import React, { useContext, useEffect, useState } from "react";
-import {getChannels, removeUserFromChannel} from "../../../api";
+import { getChannels, removeUserFromChannel } from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 import SidePanel from "../../../components/utils/SidePanel";
 import { ApplicationContext } from "../../Application";
@@ -109,7 +109,6 @@ export default function Conversations({ state }: Props) {
                     lastRead={conversation.lastRead}
                     id={conversation.id}
                   />
-
                 );
               })}
           </>

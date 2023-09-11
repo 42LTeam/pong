@@ -10,19 +10,20 @@ import {
   banUserFromChannel,
   removeUserAdminFromChannel,
   unbanUserFromChannel,
-  getUserByID, unblockUser,
+  getUserByID,
+  unblockUser,
 } from "../../api";
 import { AuthContext, User } from "../../containers/Auth";
 
 type Props = {
-  channelId: number,
-  children?: any,
-  friend: User,
-  isAdmin: boolean,
-  onClick?: any,
-  isBanned: boolean,
-  contextMenu?: any[],
-  buttonProps: unknown
+  channelId: number;
+  children?: any;
+  friend: User;
+  isAdmin: boolean;
+  onClick?: any;
+  isBanned: boolean;
+  contextMenu?: any[];
+  buttonProps: unknown;
 };
 
 export default function Friend(props: Props) {
@@ -31,69 +32,72 @@ export default function Friend(props: Props) {
   const [display, setDisplay] = useState(null);
   const blocked = user.blockList.includes(props.friend.id);
   const isFriend = user.friendList.includes(props.friend.id);
-  const buttons = props.friend.id == user.id ? [ {
-    text: "Profile",
-    handleClick: () => navigate("/profile/" + props.friend.id),
-  }] : [
-    // ---------- Basic options
-    {
-      text: "Profile",
-      handleClick: () => navigate("/profile/" + props.friend.id),
-    },
-    {
-      text: "Envoyer un message",
-      handleClick: () =>
-        getConversation(props.friend.id).then((response) =>
-          navigate("/social/" + response.data.id)
-        ),
-    },
-    { separator: true },
-    {
-      text: "Match standard",
-      handleClick: () =>
-        getUserByID(props.friend.id).then((response) =>
-          navigate(
-            "/game?id=" +
-              props.friend.id +
-              "&username=" +
-              response.data.username +
-              "&session=" +
-              response.data.session +
-              "&custom=false"
-          )
-        ),
-    },
-    {
-      text: "Match custom",
-      handleClick: () =>
-        getUserByID(props.friend.id).then((response) =>
-          navigate(
-            "/game?id=" +
-              props.friend.id +
-              "&username=" +
-              response.data.username +
-              "&session=" +
-              response.data.session +
-              "&custom=true"
-          )
-        ),
-    },
-    { separator: true },
-  ...(props.contextMenu || [])
-  ];
-
-
+  const buttons =
+    props.friend.id == user.id
+      ? [
+          {
+            text: "Profile",
+            handleClick: () => navigate("/profile/" + props.friend.id),
+          },
+        ]
+      : [
+          // ---------- Basic options
+          {
+            text: "Profile",
+            handleClick: () => navigate("/profile/" + props.friend.id),
+          },
+          {
+            text: "Envoyer un message",
+            handleClick: () =>
+              getConversation(props.friend.id).then((response) =>
+                navigate("/social/" + response.data.id)
+              ),
+          },
+          { separator: true },
+          {
+            text: "Match standard",
+            handleClick: () =>
+              getUserByID(props.friend.id).then((response) =>
+                navigate(
+                  "/game?id=" +
+                    props.friend.id +
+                    "&username=" +
+                    response.data.username +
+                    "&session=" +
+                    response.data.session +
+                    "&custom=false"
+                )
+              ),
+          },
+          {
+            text: "Match custom",
+            handleClick: () =>
+              getUserByID(props.friend.id).then((response) =>
+                navigate(
+                  "/game?id=" +
+                    props.friend.id +
+                    "&username=" +
+                    response.data.username +
+                    "&session=" +
+                    response.data.session +
+                    "&custom=true"
+                )
+              ),
+          },
+          { separator: true },
+          ...(props.contextMenu || []),
+        ];
 
   if (blocked) {
     buttons.push({
-      text: 'Debloquer',
+      text: "Debloquer",
       handleClick: () => {
         unblockUser(props.friend?.id);
         user.blockList.splice(user.blockList.indexOf(props.friend?.id), 1);
-        setDisplay('none');
-      }
+        setDisplay("none");
+      },
     });
-  }else if (props.friend.id != user.id){
+  } else if (props.friend.id != user.id) {
     buttons.push({
       text: "Bloquer",
       handleClick: () => alert("TODO"),
@@ -101,12 +105,11 @@ export default function Friend(props: Props) {
   }
   if (isFriend) {
     buttons.push({
-      text: 'Retirer l\'ami',
+      text: "Retirer l'ami",
       handleClick: () => {
-        removeFriendship(props.friend.id).then(() => setDisplay('none'));
+        removeFriendship(props.friend.id).then(() => setDisplay("none"));
       },
-    })
-
+    });
   }
 
   const buttonProps = {
@@ -122,7 +125,6 @@ export default function Friend(props: Props) {
       background: "#2C3E50",
     },
   };
-
 
   const navigateToConversation = async (friend) => {
     try {
