@@ -10,6 +10,19 @@ type Props = {
 
 export default function ContextMenu(props: Props) {
   const [popUpPosition, setPopUpPosition] = useState(null);
+  const buttonProps = props.buttonProps ||   {
+    buttonProps: {
+      style: {
+        background: "none",
+        cursor: "pointer",
+        textAlign: "left",
+      },
+    },
+    fill: true,
+    hoverProps: {
+      background: "#2C3E50",
+    },
+  };
 
 
   const buttonProps = {
