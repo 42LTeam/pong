@@ -7,3 +7,4 @@ import Auth from "./containers/Auth";
 import "./css/main.css";
 
 ReactDOM.createRoot(document.querySelector("#root")).render(<Auth />);
+
