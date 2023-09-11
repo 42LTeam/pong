@@ -155,14 +155,24 @@ export default function GamePage() {
     if (!canvas?.current) return;
     const c2d = canvas.current.getContext("2d");
     drawBackground(c2d);
-    c2d.fillStyle = "white";
+    if (players.player0.name === "jjaqueme" || players.player1.name === "jjaqueme") {
+        c2d.fillStyle = "pink";
+    }
+    else {
+      c2d.fillStyle = "white";
+    }
     const fontSize = Math.min(c2d.canvas.width, c2d.canvas.height) * 0.05;
     c2d.font = fontSize + "px monospace";
     drawPlayer(c2d, players.player0, fontSize);
     drawPlayer(c2d, players.player1, fontSize);
     drawText(c2d, status, countdown);
     
-    c2d.fillStyle = ball.color;
+    if (players.player0.name === "jjaqueme" || players.player1.name === "jjaqueme") {
+        c2d.fillStyle = "#000000";
+    }
+    else {
+        c2d.fillStyle = ball.color;
+    }
     drawBall(c2d);
 
   };
