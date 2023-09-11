@@ -48,11 +48,14 @@ export class CreateChannelDto {
 
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  creatorId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
   @IsBoolean()
-  @IsOptional()
-  privated?: boolean;
-
-
+  privated: boolean;
 }
 
 export class SendInviteDto {

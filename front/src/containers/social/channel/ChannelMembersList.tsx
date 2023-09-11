@@ -38,6 +38,9 @@ export default function ChannelMembersList({
     return member.userId === user.id && member.isAdmin === true;
   });
 
+
+
+
   return (
     <SidePanel
       subheader="Members"
@@ -59,7 +62,7 @@ export default function ChannelMembersList({
                     },
                     {
                         text: "Mute",
-                        handleClick: () => muteUserFromChannel(channelId, current.user.ieed),
+                        handleClick: () => muteUserFromChannel(channelId, current.user.id),
                     },
                     {
                         text: "Ban",

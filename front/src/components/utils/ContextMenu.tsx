@@ -24,6 +24,21 @@ export default function ContextMenu(props: Props) {
     },
   };
 
+
+  const buttonProps = {
+    buttonProps: {
+      style: {
+        background: "none",
+        cursor: "pointer",
+        textAlign: "left",
+      },
+    },
+    fill: true,
+    hoverProps: {
+      background: "#2C3E50",
+    },
+  };
+
   const handleContextMenu = (event) => {
     let tmp: {right: any,left: any, top:any, bottom: any} = {
       right: 'none',
