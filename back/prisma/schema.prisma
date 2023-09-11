@@ -62,9 +62,8 @@ model Channel {
   conv       Boolean       @default(false)
   name       String?
   password   String?
-  privated   Boolean      @default(false)
+  privated   Boolean?      @default(false)
   creatorId  Int?
-  privated   Boolean?
   creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[]
   messages   Message[]
