@@ -1,43 +1,66 @@
-.frame {
+.home-wrapper {
+  /* min-width: 1200px;
+  overflow-x: auto; */
+}
+
+.frame-homepage {
   display: flex;
   padding: 10px;
   align-items: center;
   gap: 10px;
   flex: 1 0 0;
   align-self: stretch;
+  overflow: auto;
 }
 
 .frame-left {
   display: flex;
-  padding: 20px;
+  padding: 20px 20px;
+  width: 50%;
+  height: 100%;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 30px;
+  flex-shrink: 0;
+  align-self:center;
+  overflow-y: scroll;
+}
+
+.ball-skin {
+  display: flex;
+  padding: 0px 20px;
+  justify-content: space-between;
+  align-items: center;
+  /* flex: 1 0 0; */
+  /* align-self: stretch; */
+  gap: 20px;
+  /* min-height: 200px; */
 }
 
 .frame-right {
   display: flex;
   padding: 25px 10px;
+  width: 50%;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   flex: 1 0 0;
   align-self: stretch;
   border-radius: 10px;
-  max-height: 80vh; /*a voir*/
+  /* max-height: 80vh; a voir */
   justify-content: center;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.skin-selection {
+/* .skin-selection {
   display: flex;
-  width: 573px;
-  height: 359px;
-  padding: 20px 0px;
+  padding: 20px 20px;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
   flex-shrink: 0;
-}
+} */
 
 .search-bar-full {
   display: flex;
@@ -168,26 +191,6 @@
   line-height: normal;
 }
 
-.player-skin {
-  display: flex;
-  padding: 0px 30px;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1 0 0;
-  align-self: stretch;
-}
-
-.player-skin .vector {
-  width: 57px;
-  height: 49px;
-  cursor: pointer;
-}
-.player-skin .rectangle {
-  height: 50px;
-  position: relative;
-  width: 300px;
-}
-
 .play-button {
   display: flex;
   width: 220px;
@@ -218,25 +221,13 @@
   line-height: normal;
 }
 
-.ball-skin {
-  display: flex;
-  padding: 0px 30px;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1 0 0;
-  align-self: stretch;
-  min-height: 200px;
-}
-
 .ball {
   border-radius: 90px;
   width: 50px;
   height: 50px;
 }
 
-.ball-skin .vector {
-  width: 57px;
-  height: 49px;
+.vector {
   cursor: pointer;
 }
 

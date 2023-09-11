@@ -92,10 +92,9 @@ export default function HomePage() {
   }
 
   return (
-    <>
-      <div className="frame">
+    // <div className="home-wrapper">
+      <div className="frame-homepage">
         <div className="frame-left">
-          <div className="skin-selection">
             <div className="ball-skin">
               
               <img
@@ -121,9 +120,9 @@ export default function HomePage() {
               clickable
               buttonProps={{
                 style: {
-                  width: "220px",
-                  height: "60px",
-                  fontSize: "37px",
+                   width: "60%",
+                  // height: "60px",
+                   fontSize: "40px",
                 },
               }}
             ></Button>
@@ -134,19 +133,18 @@ export default function HomePage() {
               clickable
               buttonProps={{
                 style: {
-                  width: "220px",
-                  height: "60px",
-                  fontSize: "37px",
+                   width:"60%",
+                  // height: "60px",
+                   fontSize: "40px",
                 },
               }}
             ></Button>
 
-          </div>
         </div>
       <div className="frame-right">
         <FriendQuickInvite></FriendQuickInvite>
       </div>
   </div>
-</>
+// </div>
 );
 }
