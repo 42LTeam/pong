@@ -7,8 +7,8 @@ import { ChannelModule } from "../channel/channel.module";
 import { GameGateway } from "./gateways/game.gateway";
 import { MatchModule } from "../match/match.module";
 import { MatchService } from "../match/match.service";
-import { UserService } from "src/user/user.service";
-import { FriendService } from "src/friend/friend.service";
+import { UserService } from "../user/user.service";
+import { FriendService } from "../friend/friend.service";
 
 @Module({
   providers: [
