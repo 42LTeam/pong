@@ -125,12 +125,13 @@ export default function GamePage() {
   };
 
   const drawBall = (c2d) => {
+    const ballSize = 2 * Math.min(c2d.canvas.width, c2d.canvas.height);
     c2d.fillStyle = ball.color;
     c2d.beginPath();
     c2d.arc(
       ball.x * c2d.canvas.width,
       ball.y * c2d.canvas.height,
-      ball.semiSize * c2d.canvas.width,
+      ball.semiSize * ballSize,
       0,
       Math.PI * 2
     );
@@ -143,7 +144,7 @@ export default function GamePage() {
         0,
         ball.x * c2d.canvas.width,
         ball.y * c2d.canvas.height,
-        ball.semiSize * c2d.canvas.width * 8
+        ball.semiSize * 4 * ballSize
       );
       gradient.addColorStop(0, `${ball.color}99`);
       gradient.addColorStop(1, `${ball.color}10`);
@@ -153,7 +154,7 @@ export default function GamePage() {
       c2d.arc(
         ball.x * c2d.canvas.width,
         ball.y * c2d.canvas.height,
-        ball.semiSize * c2d.canvas.width * 8,
+        ball.semiSize * 4 * ballSize,
         0,
         Math.PI * 2
       );
