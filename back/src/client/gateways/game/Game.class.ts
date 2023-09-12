@@ -25,7 +25,6 @@ export default class Game {
     public userService: UserService
   ) {
     this.engine = new GameEngine(this);
-    console.log("Game : New game ", this.matchId);
   }
 
   MATCH_ROOM = "Match-" + this.matchId;
@@ -67,7 +66,6 @@ export default class Game {
         user.colorball
       );
       this.players.push(player);
-
       socket?.join(this.MATCH_ROOM);
       if (invite) player.status = playerStatus.OFFLINE;
     } else {
@@ -79,11 +77,9 @@ export default class Game {
       player.send("game-pause", null);
     else {
       this.players.forEach((player) => {
-        if (player.colorball === undefined) {
-          if (user.id === player.userId) {
+        if (player.colorball === undefined)
+          if (user.id === player.userId)
             player.colorball = user.colorball || "#FFFFFF";
-          }
-        }
       }); //this verification is needed cause on invite, it is called several times and has not all infos in firsts calls
       // TODO why?
       this.players.forEach((player) => {

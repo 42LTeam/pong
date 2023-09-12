@@ -76,19 +76,6 @@ export default class GameEngine {
     this.game.state = gameState.STARTING;
     for (var i = 4; i--; i > 0) {
       this.game.players.forEach((player) => {
-        //const colorball = this.game.players[player.playerLeft ? 0 : 1].colorball;
-        ///////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////
-        // console.log("LEFT1 HAS COLOR="+this.game.players[player.playerLeft ? 0 : 1].colorball);
-        // console.log("LEFT1 HAS NAME="+this.game.players[player.playerLeft ? 0 : 1].name);
-        // console.log("");
-        // console.log("RIGHT1 HAS COLOR="+this.game.players[player.playerLeft ? 1 : 0].colorball);
-        // console.log("RIGHT1 HAS NAME="+this.game.players[player.playerLeft ? 1 : 0].name);
-        // console.log("");
-        // console.log("");
-        // console.log("");
-        ///////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////
         player.send("game-start", {
           matchId: this.game.matchId,
           ball: this.ball.position,
