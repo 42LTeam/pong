@@ -238,7 +238,7 @@ export default function GamePage() {
       } else socket.emit("join-game", [false, false]);
     }
   }, [canvas]);
-  if (notFound === true) return <NotFound />;
+  if (notFound === true) return <NotFound />; // 404
   return (
     <>
       <canvas ref={canvas}></canvas>
