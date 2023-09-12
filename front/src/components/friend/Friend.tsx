@@ -16,13 +16,13 @@ import {
 import { AuthContext, User } from "../../containers/Auth";
 
 type Props = {
-  channelId: number,
-  children?: any,
-  friend: User,
-  isAdmin: boolean,
-  onClick?: any,
-  isBanned: boolean,
-  contextMenu?: any[],
+  channelId: number;
+  children?: any;
+  friend: User;
+  isAdmin: boolean;
+  onClick?: any;
+  isBanned: boolean;
+  contextMenu?: any[];
 };
 
 export default function Friend(props: Props) {
@@ -124,8 +124,6 @@ export default function Friend(props: Props) {
       background: "#2C3E50",
     },
   };
-
-
 
   return (
     <ContextMenu buttons={buttons} buttonProps={buttonProps}>

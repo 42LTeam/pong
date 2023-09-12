@@ -7,8 +7,6 @@ const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
 console.log("wtd", import.meta.env.VITE_API_URL);
 export const socket = io(webSocketURL, { autoConnect: true });
 
-
-
 export async function deco() {
   const config = {
     method: "post",
@@ -490,6 +488,28 @@ export async function setChannelPassword(
   };
   return axios(config);
 }
+
+export async function updateUserColorball(id: number, color: string) {
+  const config = {
+    method: "put",
+    url: URL + "/users/colorball/" + id,
+    withCredentials: true,
+    data: {
+      colorball: color,
+    },
+  };
+  return axios(config);
+}
+
+export async function getUserColorball(id: number) {
+  const config = {
+    method: "get",
+    url: URL + "/colorball/" + id,
+    withCredentials: true,
+  };
+  return axios(config);
+}
+
 export async function validateChannelPassword(
   channelId: number,
   inputPassword: string

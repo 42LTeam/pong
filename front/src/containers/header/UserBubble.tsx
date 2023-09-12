@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Auth";
 
 import "../../css/utils/user.css";
-import {deco} from "../../api";
+import { deco } from "../../api";
 
 const UserBubble = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -78,10 +78,12 @@ const UserBubble = () => {
               </li>
 
               <li
-                  className="user user-title"
-                  onClick={() => {
-                    deco().then(() => {window.location.reload()});
-                  }}
+                className="user user-title"
+                onClick={() => {
+                  deco().then(() => {
+                    window.location.reload();
+                  });
+                }}
               >
                 Deco :(
               </li>

@@ -49,8 +49,6 @@ export class CreateChannelDto {
   @IsBoolean()
   @IsOptional()
   privated?: boolean;
-
-
 }
 
 export class SendInviteDto {

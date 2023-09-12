@@ -53,6 +53,10 @@ class CreateUserDto {
   @IsNumber()
   @ApiProperty()
   xp: number;
+  @IsNotEmpty()
+  @IsNumber()
+  @ApiProperty()
+  colorball: string;
 }
 
 enum Role {
@@ -79,6 +83,13 @@ export class UpdateUserStatusDto {
   @IsNotEmpty()
   @IsEnum(Status)
   status: Status;
+}
+
+class UpdateUserColorballDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  colorball: string;
 }
 
 export class SearchDTO {
@@ -258,5 +269,26 @@ export class UserController {
     const formattedPath = `//${localhostfront}:3000/uploads/${fileName}`;
     await this.userService.updateUserAvatar(id, formattedPath);
     return { path: formattedPath };
+  }
+
+  @Put("colorball/:id")
+  @ApiOperation({ summary: "Update user's ball's color" })
+  @ApiBody({ type: UpdateUserColorballDto })
+  async updateUserColorball(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateUserColorballDto: UpdateUserColorballDto
+  ): Promise<User> {
+    return this.userService.updateUserColorBall(
+      Number(id),
+      updateUserColorballDto.colorball
+    );
+  }
+
+  @Get("colorball/:id")
+  @ApiOperation({ summary: "Get user's ball's color" })
+  async getUserColorball(
+    @Param("id", ParseIntPipe) id: number
+  ): Promise<String> {
+    return this.userService.getUserColorball(Number(id));
   }
 }

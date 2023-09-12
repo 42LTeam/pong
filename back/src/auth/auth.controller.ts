@@ -39,14 +39,13 @@ export class AuthController {
     console.log("login");
   }
 
-
   @Post("logout")
   @UseGuards(AuthenticatedGuard)
   async logout(@Req() req) {
     const user = await req.user;
     await req.logout(() => {});
     await this.clientService.unsubscribe(user.session);
-    return 'ok';
+    return "ok";
   }
 
   @Get("redirect")
