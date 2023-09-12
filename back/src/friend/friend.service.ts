@@ -8,12 +8,12 @@ export class FriendService {
   constructor(
     private prisma: PrismaService,
     @Inject(forwardRef(() => UserService))
-    private userService: UserService,
+    private userService: UserService
   ) {}
 
   async createFriendRequest(
     initiatorId: number,
-    acceptorId: number,
+    acceptorId: number
   ): Promise<UserFriendship> {
     if (initiatorId == acceptorId)
       throw new Error("Both initiatorId and acceptorId shouldn't be the same");
@@ -58,7 +58,7 @@ export class FriendService {
 
   async acceptFriendRequest(
     acceptorId,
-    friendshipId: number,
+    friendshipId: number
   ): Promise<UserFriendship> {
     const friendship = await this.prisma.userFriendship.findUnique({
       where: {

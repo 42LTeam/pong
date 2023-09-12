@@ -9,7 +9,7 @@ export class MessageService {
   async createMessage(
     userId: number,
     channelId: number,
-    content: string,
+    content: string
   ): Promise<Message> {
     return this.prisma.message.create({
       data: {
@@ -59,7 +59,7 @@ export class MessageService {
 
   async getMessageByChannel(
     userId: number,
-    channelId: number,
+    channelId: number
   ): Promise<{ lastRead: number; messages: Message[] }> {
     const messages = await this.prisma.message.findMany({
       where: {
@@ -95,7 +95,7 @@ export class MessageService {
 
   async isMessageReadByUser(
     messageId: number,
-    userId: number,
+    userId: number
   ): Promise<boolean> {
     const message = await this.prisma.message.findUnique({
       where: {

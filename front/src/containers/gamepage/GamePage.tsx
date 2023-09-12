@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { socket } from "../../api";
 import { useSearchParams } from "react-router-dom";
+import NotFound from "../NotFound";
 
 export enum gameState {
   CREATING,
@@ -13,12 +14,14 @@ export enum gameState {
 export default function GamePage() {
   const canvas = useRef(null);
   const [searchParams] = useSearchParams();
+  const [notFound, setNotFound] = useState(false);
 
   const dataGame = {
     matchId: 0,
     playerId: 0,
     moveUp: false,
     moveDown: false,
+    custom: false,
   };
   const ball = {
     x: 0.5,
@@ -66,7 +69,7 @@ export default function GamePage() {
     c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
   };
 
-  const drawPlayer = (c2d, player, fontSize) => {
+  const drawPlayer = (c2d, player, fontSize, custom) => {
     const textPos = fontSize + 5;
     const left = player.x < 0.5;
     c2d.textAlign = left ? "left" : "right";
@@ -76,12 +79,13 @@ export default function GamePage() {
       c2d.canvas.width * (left ? 0.375 : 0.625),
       textPos
     );
-    c2d.fillRect(
-      (player.x - ball.semiSize) * c2d.canvas.width,
-      (player.y - players.semiHeight) * c2d.canvas.height,
-      ball.semiSize * 2 * c2d.canvas.width,
-      players.semiHeight * 2 * c2d.canvas.height
-    );
+    if (!custom)
+      c2d.fillRect(
+        (player.x - ball.semiSize) * c2d.canvas.width,
+        (player.y - players.semiHeight) * c2d.canvas.height,
+        ball.semiSize * 2 * c2d.canvas.width,
+        players.semiHeight * 2 * c2d.canvas.height
+      );
   };
 
   const drawText = (c2d, status, countdown) => {
@@ -171,8 +175,8 @@ export default function GamePage() {
     }
     const fontSize = Math.min(c2d.canvas.width, c2d.canvas.height) * 0.05;
     c2d.font = fontSize + "px monospace";
-    drawPlayer(c2d, players.player0, fontSize);
-    drawPlayer(c2d, players.player1, fontSize);
+    drawPlayer(c2d, players.player0, fontSize, dataGame.custom);
+    drawPlayer(c2d, players.player1, fontSize, dataGame.custom);
     drawText(c2d, status, countdown);
 
     drawBall(c2d);
@@ -200,6 +204,7 @@ export default function GamePage() {
         players.player0.name = args.player0Name;
         players.player1.name = args.player1Name;
         ball.color = args.colorball;
+        dataGame.custom = args.custom;
       }
       draw(gameState.STARTING, args.countdown);
     };
@@ -217,6 +222,10 @@ export default function GamePage() {
     const onGameFinish = (args) => {
       if (args) getData(args);
       draw(gameState.FINISH, 0);
+    };
+
+    const onGameNotFound = () => {
+      setNotFound(true);
     };
 
     const keyDownHook = (event) => {
@@ -251,6 +260,7 @@ export default function GamePage() {
     socket.on("game-pause", onGamePause);
     socket.on("error", onError);
     socket.on("game-finish", onGameFinish);
+    socket.on("game-not-found", onGameNotFound);
     document.addEventListener("keydown", keyDownHook);
     document.addEventListener("keyup", keyUpHook);
 
@@ -262,6 +272,7 @@ export default function GamePage() {
       socket.off("game-pause", onGamePause);
       socket.off("error", onError);
       socket.off("game-finish", onGameFinish);
+      socket.off("game-not-found", onGameNotFound);
       document.removeEventListener("keydown", keyDownHook);
       document.removeEventListener("keyup", keyUpHook);
     };
@@ -270,17 +281,17 @@ export default function GamePage() {
   useEffect(() => {
     if (canvas) {
       if (searchParams.size > 3) {
-        let player = Object.fromEntries([...searchParams]);
+        const player = Object.fromEntries([...searchParams]);
         player.id = Number(player.id);
         socket.emit("invite-game", [player, player.custom]);
       } else if (searchParams.size > 0) {
-        let option = Object.fromEntries([...searchParams]);
+        const option = Object.fromEntries([...searchParams]);
         console.log("Game Page :", option.invite, option.custom, option.id);
         socket.emit("join-game", [option.invite, option.custom, option.id]);
       } else socket.emit("join-game", [false, false]);
     }
   }, [canvas]);
-
+  if (notFound === true) return <NotFound />;
   return (
     <>
       <canvas ref={canvas}></canvas>
