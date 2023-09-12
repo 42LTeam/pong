@@ -37,8 +37,9 @@ export class ChannelService {
     });
   }
 
-  async createChannel(body: CreateChannelDto): Promise<any> {
-    const { name, password, conv, privated, creatorId } = body;
+  async createChannel(creatorId, body: CreateChannelDto): Promise<any> {
+    let { name, password, conv,privated  } = body;
+    if (password) password = await hashPassword(password);
     return this.prisma.channel.create({
       data: {
         name,

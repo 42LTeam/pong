@@ -7,6 +7,17 @@ const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
 console.log("wtd", import.meta.env.VITE_API_URL);
 export const socket = io(webSocketURL, { autoConnect: true });
 
+
+
+export async function deco() {
+  const config = {
+    method: "post",
+    url: URL + "/auth/logout",
+    withCredentials: true,
+  };
+  return axios(config);
+}
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* File: /back/src/channel/controllers/channel.controller.ts                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -4,7 +4,7 @@ import { Children } from "react";
 export default function PopOver(props: PopUpProps) {
   return (
     <span className="popover-root">
-      <PopUp {...props} center={props.center || true}>
+      <PopUp {...props} center={props.center || true} height={"min-content"}>
         {Children.map(props.children, (child) => (
           <>{child}</>
         ))}

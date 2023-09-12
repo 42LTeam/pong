@@ -8,7 +8,7 @@ interface Props {
   id?: number;
   lastRead: null;
   avatar: string;
-  hasPassword: boolean; // add this
+  hasPassword?: boolean; // add this
 }
 
 export default function Conversation(props: Props) {

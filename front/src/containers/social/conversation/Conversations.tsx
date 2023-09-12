@@ -95,20 +95,29 @@ export default function Conversations({ state }: Props) {
               .map((conversation) => {
                 // console.log(conversation);
                 return (
-                  <Conversation
-                    handleClick={() => setState(conversation.id)}
-                    key={"conversation_id " + conversation.id}
-                    avatar={conversation.users[0]?.user.avatar}
-                    username={
-                      conversation.conv
-                        ? conversation.users[0]?.user.username
-                        : conversation.name
-                    }
-                    lastMessage={conversation.lastMessage?.content}
-                    state={state === conversation.id}
-                    lastRead={conversation.lastRead}
-                    id={conversation.id}
-                  />
+                    <ContextMenu buttons={[
+                      {
+                        text: "Leave",
+                        handleClick: () =>
+                            removeUserFromChannel(conversation.id, user.id),
+                      }
+                    ]}>
+                      <Conversation
+                          handleClick={() => setState(conversation.id)}
+                          key={"conversation_id " + conversation.id}
+                          avatar={conversation.users[0]?.user.avatar}
+                          username={
+                            conversation.conv
+                                ? conversation.users[0]?.user.username
+                                : conversation.name
+                          }
+                          lastMessage={conversation.lastMessage?.content}
+                          state={state === conversation.id}
+                          lastRead={conversation.lastRead}
+                          id={conversation.id}
+                      />
+                    </ContextMenu>
+
                 );
               })}
           </>
