@@ -8,7 +8,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import { REQUEST } from '@nestjs/core'
 
 @Injectable()
-export class IsChannelAdminPipe implements PipeTransform {
+export class isBannedPipe implements PipeTransform {
     constructor(
         @Inject(REQUEST) protected readonly request: Request,
         private prisma: PrismaService) {

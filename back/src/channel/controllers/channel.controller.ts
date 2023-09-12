@@ -111,7 +111,7 @@ export class ChannelController {
   @Get("/:channelId/members")
   @ApiOperation({ summary: "Get All users in channel by channel Id" })
   async getChannelAllMembers(
-    @Param("channelId", ParseIntPipe) channelId: number
+    @Param("channelId", ParseIntPipe, isInChannelPipe) channelId: number
   ): Promise<any> {
     return await this.channelService.getChannelAllMembers(Number(channelId));
   }
@@ -147,7 +147,7 @@ export class ChannelController {
   @Post("/:channelId/mute/:userId")
   @ApiOperation({ summary: "Mute a user from a channel" })
   async muteUserFromChannel(
-    @Param("channelId", ParseIntPipe) channelId: number,
+    @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<any> {
     return this.channelService.muteUserFromChannel(channelId, userId);
@@ -166,7 +166,7 @@ export class ChannelController {
   @ApiOperation({ summary: "Set or Update password for a channel" })
   @ApiBody({ type: UpdateChannelPasswordDto })
   async setChannelPassword(
-    @Param("channelId", ParseIntPipe) channelId: number,
+    @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
     @Body() updatePasswordDto: UpdateChannelPasswordDto
   ): Promise<Channel> {
     return this.channelService.setChannelPassword(

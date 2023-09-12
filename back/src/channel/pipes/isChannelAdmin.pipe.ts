@@ -23,9 +23,9 @@ export class isChannelAdminPipe implements PipeTransform {
       where: {channelId: channelId, userId: testAdminUser.id},
     });
 
-    console.log("log- IsChannelAdminPipe => testAdminUser = ", testAdminUser)
-    console.log("log- IsChannelAdminPipe => isAdminInChannelId = ", isAdminInChannelId)
-    console.log("log- IsChannelAdminPipe => isAdminInChannelId.isAdmin = ", isAdminInChannelId.isAdmin)
+    // console.log("log- IsChannelAdminPipe => testAdminUser = ", testAdminUser)
+    // console.log("log- IsChannelAdminPipe => isAdminInChannelId = ", isAdminInChannelId)
+    // console.log("log- IsChannelAdminPipe => isAdminInChannelId.isAdmin = ", isAdminInChannelId.isAdmin)
 
     if (!isAdminInChannelId.isAdmin) {
       throw new ForbiddenException("User is not an admin of this channel.");

@@ -66,6 +66,12 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WSAuthenticatedGuard)
   async newMessage(client, data): Promise<void> {
     const user = await this.clientService.getClientById(client.id);
+
+    const usersInChannel: User[] = await this.channelService.getAllUsersInChannel(data.channelId);
+    if (!usersInChannel.some(u => u.id === user.id)) {
+      return; // User not in channel
+    }
+
     const message = await this.messageService.createMessage(
       user.id,
       data.channelId,
