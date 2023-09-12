@@ -28,6 +28,8 @@ import {
 } from "@nestjs/class-validator";
 import { AuthenticatedGuard } from "../../auth/guards/authenticated.guard";
 import {isChannelAdminPipe} from "../pipes/isChannelAdmin.pipe";
+import {isInChannelPipe} from "../pipes/isInChannel.pipe";
+import {isBannedPipe} from "../pipes/isBanned.pipe";
 
 
 export class CreateChannelDto {
@@ -111,7 +113,7 @@ export class ChannelController {
   @Get("/:channelId/members")
   @ApiOperation({ summary: "Get All users in channel by channel Id" })
   async getChannelAllMembers(
-    @Param("channelId", ParseIntPipe, isInChannelPipe) channelId: number
+    @Param("channelId", ParseIntPipe, isInChannelPipe, isBannedPipe) channelId: number
   ): Promise<any> {
     return await this.channelService.getChannelAllMembers(Number(channelId));
   }
@@ -129,7 +131,7 @@ export class ChannelController {
   @UsePipes()
   @ApiOperation({ summary: "Remove a user from a channel (Admin perspective)" })
   async removeUserAdminFromChannel(
-    @Param("channelId", ParseIntPipe) channelId: number,
+    @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<any> {
     return this.channelService.removeUserFromChannel(channelId, userId);

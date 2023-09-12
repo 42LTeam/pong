@@ -15,7 +15,7 @@ export class isInChannelPipe implements PipeTransform {
 
   async transform(value: any, _metadata: ArgumentMetadata) {
     const {channelId} = value;
-    let user = this.request["user"]
+    let user = await this.request["user"]
 
     console.log("isInChannelPipe: User from request = ", user, " User.id = ", user.id)
 

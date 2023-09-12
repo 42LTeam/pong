@@ -15,19 +15,18 @@ export class isBannedPipe implements PipeTransform {
     }
 
     async transform(value: any, _metadata: ArgumentMetadata) {
-        const {channelId, userId} = value;
-        let user = this.request["user"]
-        console.log("User from request = ", user, " User.id = ", user.id)
-        const selectBanUser = await this.prisma.userChannel.findFirst({
+        const {channelId} = value;
+        let user = await this.request["user"]
+        console.log("log isBannedPipe - User from request = ", user)
+        console.log("log isBannedPipe - User.id = ", user.id)
+        const userChannel = await this.prisma.userChannel.findFirst({
             where: {channelId: channelId, userId: user.id},
         });
 
-        const userChannel = await this.prisma.userChannel.findFirst({
-            where: {channelId: channelId, userId: userId},
-        });
+        console.log("isBannedPipe: userChannel = ", userChannel)
 
-        if (!userChannel.isAdmin) {
-            throw new ForbiddenException("User is not an admin of this channel.");
+        if (userChannel.isBanned === true) {
+            throw new ForbiddenException("User is ban of this channel.");
         }
         return value
     }

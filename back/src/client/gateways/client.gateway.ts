@@ -72,6 +72,21 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return; // User not in channel
     }
 
+// Fetch the UserChannel records related to the channelId
+    const userChannels = await this.channelService.getChannelAllMembers(data.channelId);
+
+    // Create a map of userId to isBanned status for quick lookups
+    const userBanMap = new Map();
+    userChannels.forEach(uc => {
+      userBanMap.set(uc.userId, uc.isBanned);
+    });
+
+    // Check if the user is in the channel and if they are banned
+    if (!userBanMap.has(user.id) || userBanMap.get(user.id) === true) {
+      return;  // User not in channel or is banned
+    }
+
+
     const message = await this.messageService.createMessage(
       user.id,
       data.channelId,

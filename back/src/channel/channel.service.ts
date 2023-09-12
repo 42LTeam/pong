@@ -344,16 +344,15 @@ export class ChannelService {
   }
 
   async joinChannel(channelId: number, userId: number): Promise<any> {
-    const existingUserChannel = await this.prisma.userChannel.findUnique({
+    const existingUserChannel = await this.prisma.userChannel.findMany({
       where: {
-        userId_channelId: {
-          userId: userId,
-          channelId: channelId,
-        },
+        AND: [
+          { userId: userId },
+          { channelId: channelId },
+        ],
       },
     });
-
-    if (existingUserChannel) {
+    if (Array.isArray(existingUserChannel) && existingUserChannel.length > 0) {
       throw new Error("User is already part of the channel");
     }
     return this.prisma.userChannel.create({
