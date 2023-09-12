@@ -20,6 +20,8 @@ export async function deco() {
 /* File: /back/src/channel/controllers/channel.controller.ts                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+//TODO ownerMakeAdmin
+
 //  @Post('/:channelId/admin-quit/:userId')
 //  @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
 export async function removeUserAdminFromChannel(

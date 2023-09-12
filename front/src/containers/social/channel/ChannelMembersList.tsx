@@ -75,8 +75,8 @@ export default function ChannelMembersList({
                         { separator: true },
                         {
                           text: "Make me Admin",
-                          handleClick: () =>
-                              banUserFromChannel(channelId, current.user.id),
+                          handleClick: () => //TODO in api
+
                         },
                         { separator: true },
                       ]

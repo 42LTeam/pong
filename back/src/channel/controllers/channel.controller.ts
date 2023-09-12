@@ -136,11 +136,11 @@ export class ChannelController {
   ): Promise<any> {
     return this.channelService.removeUserFromChannel(channelId, userId);
   }
-
-  @Post("/:channelId/admin-make-admin/:userId")
+  //TODO Pipe isOwner
+  @Post("/:channelId/owner-make-admin/:userId")
   @UsePipes()
   @ApiOperation({ summary: "Make a User Admin (Admin privilege)" })
-  async makeUserAdmin(
+  async ownerMakeAdmin(
       @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
       @Param("userId", ParseIntPipe) userId: number
   ): Promise<any> {

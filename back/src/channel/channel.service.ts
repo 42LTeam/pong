@@ -293,19 +293,20 @@ export class ChannelService {
     });
   }
 
-  async unBanUserFromChannel(channelId: number, userId: number): Promise<any> {
-    return this.prisma.userChannel.updateMany({
-      where: {
-        channelId: channelId,
-        userId: userId,
-      },
-      data: {
-        isBanned: false
-      },
-    });
-  }
+  //TODO if we want to unban
+  // async unBanUserFromChannel(channelId: number, userId: number): Promise<any> {
+  //   return this.prisma.userChannel.updateMany({
+  //     where: {
+  //       channelId: channelId,
+  //       userId: userId,
+  //     },
+  //     data: {
+  //       isBanned: false
+  //     },
+  //   });
+  // }
 
-  async makeUserAdmin(channelId: number, userId: number): Promise<any> {
+  async ownerMakeAdmin(channelId: number, userId: number): Promise<any> {
     return this.prisma.userChannel.updateMany({
       where: {
         channelId: channelId,
