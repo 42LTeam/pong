@@ -98,7 +98,7 @@ export default function GamePage() {
         break;
       }
       case gameState.STARTING: {
-        c2d.fillText(countdown, width, height);
+        c2d.fillText(countdown, width, height * 0.8);
         break;
       }
       case gameState.PLAYING: {
@@ -125,38 +125,30 @@ export default function GamePage() {
   };
 
   const drawBall = (c2d) => {
+    const ballSize =
+      2 * Math.min(c2d.canvas.width, c2d.canvas.height) * ball.semiSize;
+    const ballX = ball.x * c2d.canvas.width;
+    const ballY = ball.y * c2d.canvas.height;
     c2d.fillStyle = ball.color;
     c2d.beginPath();
-    c2d.arc(
-      ball.x * c2d.canvas.width,
-      ball.y * c2d.canvas.height,
-      ball.semiSize * c2d.canvas.width,
-      0,
-      Math.PI * 2
-    );
+    c2d.arc(ballX, ballY, ballSize, 0, 2 * Math.PI);
     c2d.fill();
 
     if (ball.shine) {
       const gradient = c2d.createRadialGradient(
-        ball.x * c2d.canvas.width,
-        ball.y * c2d.canvas.height,
+        ballX,
+        ballY,
         0,
-        ball.x * c2d.canvas.width,
-        ball.y * c2d.canvas.height,
-        ball.semiSize * c2d.canvas.width * 8
+        ballX,
+        ballY,
+        4 * ballSize
       );
       gradient.addColorStop(0, `${ball.color}99`);
       gradient.addColorStop(1, `${ball.color}10`);
       c2d.fillStyle = gradient;
 
       c2d.beginPath();
-      c2d.arc(
-        ball.x * c2d.canvas.width,
-        ball.y * c2d.canvas.height,
-        ball.semiSize * c2d.canvas.width * 8,
-        0,
-        Math.PI * 2
-      );
+      c2d.arc(ballX, ballY, 4 * ballSize, 0, 2 * Math.PI);
       c2d.fill();
     }
   };
@@ -168,12 +160,10 @@ export default function GamePage() {
     if (
       players.player0.name === "jjaqueme" ||
       players.player1.name === "jjaqueme"
-    ) {
+    )
       c2d.fillStyle = "pink";
-    } else {
-      c2d.fillStyle = "white";
-    }
-    const fontSize = Math.min(c2d.canvas.width, c2d.canvas.height) * 0.05;
+    else c2d.fillStyle = "white";
+    const fontSize = 0.05 * Math.min(c2d.canvas.width, c2d.canvas.height);
     c2d.font = fontSize + "px monospace";
     drawPlayer(c2d, players.player0, fontSize, dataGame.custom);
     drawPlayer(c2d, players.player1, fontSize, dataGame.custom);
