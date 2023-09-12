@@ -8,7 +8,7 @@ import {
 import { ClientService } from "../client.service";
 import { Injectable, UseGuards } from "@nestjs/common";
 import { WSAuthenticatedGuard } from "../../auth/guards/wsauthenticated.guard";
-import { User } from "@prisma/client";
+import {User, UserChannel} from "@prisma/client";
 import { ChannelService } from "../../channel/channel.service";
 import { MessageService } from "../../message/message.service";
 
@@ -67,36 +67,19 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async newMessage(client, data): Promise<void> {
     const user = await this.clientService.getClientById(client.id);
 
-    const usersInChannel: User[] = await this.channelService.getAllUsersInChannel(data.channelId);
-    if (!usersInChannel.some(u => u.id === user.id)) {
+    const usersInChannel = await this.channelService.getAllUserChannelsInChannel(data.channelId);
+    if (!usersInChannel.some(u => !u.isBanned && u.userId === user.id)) {
       return; // User not in channel
     }
-
-// Fetch the UserChannel records related to the channelId
-    const userChannels = await this.channelService.getChannelAllMembers(data.channelId);
-
-    // Create a map of userId to isBanned status for quick lookups
-    const userBanMap = new Map();
-    userChannels.forEach(uc => {
-      userBanMap.set(uc.userId, uc.isBanned);
-    });
-
-    // Check if the user is in the channel and if they are banned
-    if (!userBanMap.has(user.id) || userBanMap.get(user.id) === true) {
-      return;  // User not in channel or is banned
-    }
-
 
     const message = await this.messageService.createMessage(
       user.id,
       data.channelId,
       data.content
     );
-    const users: User[] = await this.channelService.getAllUsersInChannel(
-      data.channelId
-    );
-    for (const u of users) {
-      this.server.sockets.sockets.get(u.session)?.emit("new-message", message);
+
+    for (const u of usersInChannel.filter((u) => !u.isBanned)) {
+      this.server.sockets.sockets.get(u.user.session)?.emit("new-message", message);
     }
   }
 }

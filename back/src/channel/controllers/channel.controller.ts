@@ -113,9 +113,9 @@ export class ChannelController {
   @Get("/:channelId/members")
   @ApiOperation({ summary: "Get All users in channel by channel Id" })
   async getChannelAllMembers(
-    @Param("channelId", ParseIntPipe, isInChannelPipe, isBannedPipe) channelId: number
+    @Param("channelId", ParseIntPipe, isInChannelPipe) channelId: number
   ): Promise<any> {
-    return await this.channelService.getChannelAllMembers(Number(channelId));
+    return await this.channelService.getAllUserChannelsInChannel(Number(channelId));
   }
 
   @Post("/:channelId/quit/:userId")

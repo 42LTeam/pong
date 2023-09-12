@@ -52,7 +52,7 @@ export default function ChannelMembersList({
                 friend={current.user}
                 channelId={channelId}
                 contextMenu={
-                  isAdmin && current.user.id != user.id
+                  isAdmin && current.user.id != user.id && !current.isBanned
                     ? [
                         {
                           text: "Kick",
@@ -71,6 +71,12 @@ export default function ChannelMembersList({
                           text: "Ban",
                           handleClick: () =>
                             banUserFromChannel(channelId, current.user.id),
+                        },
+                        { separator: true },
+                        {
+                          text: "Make me Admin",
+                          handleClick: () =>
+                              banUserFromChannel(channelId, current.user.id),
                         },
                         { separator: true },
                       ]

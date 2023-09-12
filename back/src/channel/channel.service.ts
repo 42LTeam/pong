@@ -116,14 +116,21 @@ export class ChannelService {
     return channel.map((current) => current.user);
   }
 
-  async getChannelAllMembers(channelId: number): Promise<any> {
+  async getAllUserChannelsInChannel(channelId: number): Promise<any> {
     return this.prisma.userChannel.findMany({
       where: {
         channelId: channelId,
       },
-      include: {
+      select: {
+        id: true,
+        userId: true,
+        isAdmin: true,
+        isBlocked: true,
+        isMuted: true,
+        isBanned: true,
         user: {
           select: {
+            session: true,
             avatar: true,
             username: true,
             status: true,
