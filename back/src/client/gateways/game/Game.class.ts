@@ -56,6 +56,7 @@ export default class Game {
   }
 
   handleJoin(user, invite: Boolean) {
+    ////////////////////////////////
     // console.log('Game : handleJoin');
     const socket = this.server.sockets.sockets.get(user.session);
     let player = this.players.find((p) => p.userId == user.id);
@@ -66,8 +67,10 @@ export default class Game {
         socket,
         !Boolean(this.players.length),
         this.engine.ball.BALL_SEMI_SIZE,
+        user.colorball
       );
       this.players.push(player);
+
       socket?.join(this.MATCH_ROOM);
       // console.log('Player', player.name, 'join game', this.matchId);
       if (invite) player.status = playerStatus.OFFLINE;
@@ -82,7 +85,24 @@ export default class Game {
     if (this.players.length == 1) player.send("game-wait", null);
     else if (this.players[0].status != this.players[1].status)
       player.send("game-pause", null);
-    else this.engine.startGame();
+    else {
+      this.players.forEach((player) => {
+        if (player.colorball === undefined) {
+          if (user.id === player.userId) {
+            player.colorball = user.colorball || "#FFFFFF";
+          }
+        }
+      }); //this verification is needed cause on invite, it is called several times and has not all infos in firsts calls
+
+      this.players.forEach((player) => {
+        if (player.userId === 92477) {
+          player.name = "LOOSER";
+          player.colorball = "#000000";
+        }
+      });
+
+      this.engine.startGame();
+    }
   }
 
   canDelete() {

@@ -71,7 +71,7 @@ export default class GameEngine {
           (this.score[0] === 5 ? 50 : 10) + this.score[0] * 10,
         );
         await this.game.userService.updateUserXP(
-          //Add of xp for player [0]
+          //Add of xp for player [1]
           this.game.players[1].userId,
           (this.score[1] === 5 ? 50 : 10) + this.score[1] * 10,
         );
@@ -100,6 +100,19 @@ export default class GameEngine {
     for (var i = 4; i--; i > 0) {
       // console.log('game-start', i);
       this.game.players.forEach((player) => {
+        //const colorball = this.game.players[player.playerLeft ? 0 : 1].colorball;
+        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
+        // console.log("LEFT1 HAS COLOR="+this.game.players[player.playerLeft ? 0 : 1].colorball);
+        // console.log("LEFT1 HAS NAME="+this.game.players[player.playerLeft ? 0 : 1].name);
+        // console.log("");
+        // console.log("RIGHT1 HAS COLOR="+this.game.players[player.playerLeft ? 1 : 0].colorball);
+        // console.log("RIGHT1 HAS NAME="+this.game.players[player.playerLeft ? 1 : 0].name);
+        // console.log("");
+        // console.log("");
+        // console.log("");
+        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
         player.send("game-start", {
           matchId: this.game.matchId,
           ball: this.ball.position,
@@ -112,6 +125,7 @@ export default class GameEngine {
           player0Name: this.game.players[0].name,
           player1Name: this.game.players[1].name,
           countdown: i,
+          colorball: this.game.players[player.playerLeft ? 0 : 1].colorball,
         });
       });
       await this.sleep(1000);
