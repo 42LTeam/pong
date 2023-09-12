@@ -38,7 +38,7 @@ model Match {
 }
 
 model UserMatch {
-  id      Int     @id @default(autoincrement())
+  id      Int   @id @default(autoincrement())
   userId  Int
   matchId Int
   score   Int
@@ -60,11 +60,10 @@ model Block {
 model Channel {
   id         Int           @id @default(autoincrement())
   conv       Boolean       @default(false)
-  name       String?
+  name       String?       @unique
   password   String?
   privated   Boolean      @default(false)
   creatorId  Int?
-  privated   Boolean?
   creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[]
   messages   Message[]
