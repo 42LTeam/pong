@@ -98,7 +98,7 @@ export class ChannelController {
     @Req() req
   ): Promise<Channel> {
     const user = await req.user;
-    return this.channelService.createChannel(body);
+    return this.channelService.createChannel(user.id, body);
   }
 
   // @Post('invite')
