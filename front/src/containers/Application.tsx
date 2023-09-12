@@ -143,22 +143,14 @@ const Application = function ({ children }: { children?: any }) {
         );
     };
 
-    const onGameNotFound = (args) => {
-      // TODO
-      // navigate(PATHS.home);
-      console.log(404, "- Game Not Found");
-    };
-
     socket.on("new-message", onNewMessage);
     socket.on("new-channel", onNewChannel);
     socket.on("invite-game", onInviteGame);
-    socket.on("game-not-found", onGameNotFound);
 
     return () => {
       socket.off("new-channel", onNewChannel);
       socket.off("new-message", onNewMessage);
       socket.off("invite-game", onInviteGame);
-      socket.off("game-not-found", onGameNotFound);
     };
   }, [notifications]);
 

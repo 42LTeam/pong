@@ -7,7 +7,7 @@ export type ButtonProps = {
   buttonProps?: any;
   clickable?: boolean;
   hoverProps?: any;
-  className?: string,
+  className?: string;
   children?: any;
 };
 
@@ -49,7 +49,11 @@ export default function Button({
             }
           : null
       }
-      className={"button" + (clickable ? " button-clickable" : "") + (className ? ' ' + className : '')}
+      className={
+        "button" +
+        (clickable ? " button-clickable" : "") +
+        (className ? " " + className : "")
+      }
     >
       {text}
       {Children.map(children, (child) => (

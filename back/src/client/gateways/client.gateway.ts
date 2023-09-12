@@ -18,7 +18,7 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private clientService: ClientService,
     private channelService: ChannelService,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) {}
 
   @WebSocketServer()
@@ -51,7 +51,7 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const user = await this.clientService.getClientById(client.id);
     await this.channelService.sendInvite(data);
     const users: User[] = await this.channelService.getAllUsersInChannel(
-      data.channelId,
+      data.channelId
     );
     for (const u of users) {
       this.server.sockets.sockets.get(u.session)?.emit("new-channel", {
@@ -69,10 +69,10 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const message = await this.messageService.createMessage(
       user.id,
       data.channelId,
-      data.content,
+      data.content
     );
     const users: User[] = await this.channelService.getAllUsersInChannel(
-      data.channelId,
+      data.channelId
     );
     for (const u of users) {
       this.server.sockets.sockets.get(u.session)?.emit("new-message", message);

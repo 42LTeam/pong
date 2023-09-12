@@ -10,7 +10,7 @@ import Button from "../components/utils/Button";
 export interface User {
   avatar: String;
   username: String;
-  status: String,
+  status: String;
   id: number;
   xp: number;
   pointAverage: number;
@@ -29,7 +29,7 @@ function Auth() {
   const [wsConnected, setConnected] = useState(false);
   const [destination, setDestination] = useState(null);
   const [user, setUser] = useState<User>(null);
-  const URL = (import.meta.env.VITE_API_URL || 'http://localhost') + ':3000';
+  const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
 
   useEffect(() => {
     if (!user)
@@ -39,36 +39,31 @@ function Auth() {
           setDestination(response.data.destination);
         })
         .catch(function () {
-          window.location.replace(URL + '/auth/login');
+          window.location.replace(URL + "/auth/login");
         });
   }, []);
 
-
-  console.log('auth',import.meta.env.BASE_URL);
+  console.log("auth", import.meta.env.BASE_URL);
   useEffect(() => {
     function onDisconnect() {
-      setConnected(false)
+      setConnected(false);
     }
     function onConnect() {
       setConnected(true);
-        authSocketId(socket.id).then((response) => {
-          socket.emit("register", { target: response.data });
-          console.log('register');
-        });
+      authSocketId(socket.id).then((response) => {
+        socket.emit("register", { target: response.data });
+        console.log("register");
+      });
     }
 
     socket.on("disconnect", onDisconnect);
     socket.on("connect", onConnect);
-
-
-
 
     return () => {
       socket.off("disconnect", onDisconnect);
       socket.off("connect", onConnect);
     };
   }, [user]);
-
 
   if (!user) return null;
 
@@ -79,15 +74,17 @@ function Auth() {
           <DoubleAuth setDestination={setDestination}></DoubleAuth>
         ) : null}
       </Application>
-      {!wsConnected && Boolean(user) ?
-          <PopOver clear={null}>
-            <h1>Deconnecter</h1>
-            <h3>Vous ne pouvez avoir qu'un seul onglet a la fois.</h3>
-            <Button handleClick={() => window.location.reload()} text="Reprendre le controle" clickable></Button>
-          </PopOver>
-          :
-          null
-      }
+      {!wsConnected && Boolean(user) ? (
+        <PopOver clear={null}>
+          <h1>Deconnecter</h1>
+          <h3>Vous ne pouvez avoir qu'un seul onglet a la fois.</h3>
+          <Button
+            handleClick={() => window.location.reload()}
+            text="Reprendre le controle"
+            clickable
+          ></Button>
+        </PopOver>
+      ) : null}
     </AuthContext.Provider>
   );
 }

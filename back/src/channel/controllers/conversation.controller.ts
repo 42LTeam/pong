@@ -29,12 +29,12 @@ export class ConversationController {
   @ApiOperation({ summary: "Create or return conversation between friend" })
   async getConversation(
     @Param("friendId") friendId: number,
-    @Req() req,
+    @Req() req
   ): Promise<Channel> {
     const user = await req.user;
     if (Number(friendId) == user.id) {
       throw new BadRequestException(
-        "Invalid operation: Cannot create a conversation with oneself.",
+        "Invalid operation: Cannot create a conversation with oneself."
       );
     }
     return this.channelService.getConversation(user.id, Number(friendId));

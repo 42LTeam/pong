@@ -10,7 +10,7 @@ type Props = {
 
 export default function ContextMenu(props: Props) {
   const [popUpPosition, setPopUpPosition] = useState(null);
-  const buttonProps = props.buttonProps ||   {
+  const buttonProps = props.buttonProps || {
     buttonProps: {
       style: {
         background: "none",
@@ -24,27 +24,20 @@ export default function ContextMenu(props: Props) {
     },
   };
 
-
-
   const handleContextMenu = (event) => {
-    let tmp: {right: any,left: any, top:any, bottom: any} = {
-      right: 'none',
-      left: 'none',
-      top: 'none',
-      bottom: 'none'
-    }
+    let tmp: { right: any; left: any; top: any; bottom: any } = {
+      right: "none",
+      left: "none",
+      top: "none",
+      bottom: "none",
+    };
     if (event.clientX >= window.innerWidth / 2)
       tmp.right = window.innerWidth - event.clientX;
-    else
-      tmp.left = event.clientX;
-
-
+    else tmp.left = event.clientX;
 
     if (event.clientY >= window.innerHeight / 2)
       tmp.bottom = window.innerHeight - event.clientY;
-    else
-      tmp.top = event.clientY;
-
+    else tmp.top = event.clientY;
 
     setPopUpPosition(tmp);
     event.preventDefault();

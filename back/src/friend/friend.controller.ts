@@ -35,12 +35,12 @@ export class FriendController {
   @ApiBody({ type: CreateFriendRequestDto })
   async sendFriendRequest(
     @Req() req: any,
-    @Body() createFriendRequestDto: CreateFriendRequestDto,
+    @Body() createFriendRequestDto: CreateFriendRequestDto
   ): Promise<UserFriendship> {
     const user = await req.user;
     return this.friendService.createFriendRequest(
       user.id,
-      createFriendRequestDto.acceptorId,
+      createFriendRequestDto.acceptorId
     );
   }
 
@@ -48,12 +48,12 @@ export class FriendController {
   @ApiOperation({ summary: "Accept a friend request" })
   async acceptFriendRequest(
     @Param("friendshipId") friendshipId: number,
-    @Req() req: any,
+    @Req() req: any
   ): Promise<UserFriendship> {
     const user = await req.user;
     return this.friendService.acceptFriendRequest(
       user.id,
-      Number(friendshipId),
+      Number(friendshipId)
     );
   }
 
@@ -61,12 +61,12 @@ export class FriendController {
   @ApiOperation({ summary: "Decline a friend request" })
   async declineFriendRequest(
     @Param("friendshipId") friendshipId: number,
-    @Req() req: any,
+    @Req() req: any
   ) {
     const user = await req.user;
     return this.friendService.declineFriendRequest(
       user.id,
-      Number(friendshipId),
+      Number(friendshipId)
     );
   }
 
@@ -74,7 +74,7 @@ export class FriendController {
   @ApiOperation({ summary: "remove a friendship" })
   async removeFriendship(
     @Param("friendId", ParseIntPipe) friendId: number,
-    @Req() req: any,
+    @Req() req: any
   ) {
     const user = await req.user;
     return this.friendService.removeFriendship(user.id, Number(friendId));
