@@ -56,7 +56,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       "id =",
       data[2]
     );
-    if (user) this.matchMaking.handleJoin(user, data[0], data[1], data[2]);
+    if (user)
+      this.matchMaking.handleJoin(user, data[0], data[1] == "true", data[2]);
   }
 
   @SubscribeMessage("leave-game")
@@ -86,6 +87,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       "for custom =",
       data[1]
     );
-    if (user && data) this.matchMaking.handleInvite(user, data[0], data[1]);
+    if (user && data)
+      this.matchMaking.handleInvite(user, data[0], data[1] == "true");
   }
 }

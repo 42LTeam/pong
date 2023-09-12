@@ -178,7 +178,6 @@ export default function GamePage() {
     drawPlayer(c2d, players.player0, fontSize, dataGame.custom);
     drawPlayer(c2d, players.player1, fontSize, dataGame.custom);
     drawText(c2d, status, countdown);
-
     drawBall(c2d);
   };
 
@@ -203,8 +202,8 @@ export default function GamePage() {
         players.semiHeight = args.playerSemiHeight;
         players.player0.name = args.player0Name;
         players.player1.name = args.player1Name;
-        ball.color = args.colorball;
         dataGame.custom = args.custom;
+        ball.color = args.colorball;
       }
       draw(gameState.STARTING, args.countdown);
     };
@@ -286,7 +285,6 @@ export default function GamePage() {
         socket.emit("invite-game", [player, player.custom]);
       } else if (searchParams.size > 0) {
         const option = Object.fromEntries([...searchParams]);
-        console.log("Game Page :", option.invite, option.custom, option.id);
         socket.emit("join-game", [option.invite, option.custom, option.id]);
       } else socket.emit("join-game", [false, false]);
     }
