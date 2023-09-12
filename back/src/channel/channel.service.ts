@@ -7,7 +7,7 @@ import {
 import { FriendService } from "../friend/friend.service";
 import { MessageService } from "../message/message.service";
 import { Channel } from "@prisma/client";
-import { hashPassword } from "../auth/password.utils";
+import { checkPassword, hashPassword } from "../auth/password.utils";
 
 @Injectable()
 export class ChannelService {
@@ -15,7 +15,7 @@ export class ChannelService {
     private prisma: PrismaService,
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   async addInvite(id, userId) {
@@ -37,14 +37,15 @@ export class ChannelService {
     });
   }
 
-  async createChannel(body: CreateChannelDto): Promise<any> {
-    const { name, password, conv, creatorId } = body;
-
+  async createChannel(creatorId, body: CreateChannelDto): Promise<any> {
+    let { name, password, conv,privated  } = body;
+    if (password) password = await hashPassword(password);
     return this.prisma.channel.create({
       data: {
         name,
         password,
         conv,
+        privated,
         creator: {
           connect: { id: creatorId },
         },
@@ -72,11 +73,25 @@ export class ChannelService {
   }
 
   async sendInvite(body: SendInviteDto) {
-    const { ids, channelId } = body;
+    const { ids, channelId, usernames } = body;
+
+    if (usernames){
+      const users = await this.prisma.user.findMany({where:{
+          username: {
+            in: usernames,
+          }
+        }, select: {
+          id: true,
+        }})
+      for (const i of users.map(c => c.id)) {
+        await this.addInvite(channelId, i);
+      }
+    }
 
     for (const i of ids) {
       await this.addInvite(channelId, i);
     }
+
   }
 
   // rename with All attribute and not just s
@@ -168,7 +183,7 @@ export class ChannelService {
         ...current,
         lastRead: lastRead[ids.indexOf(current.id)],
         lastMessage: await this.messageService.getLastMessageInChannel(
-          current.id
+          current.id,
         ),
       };
     };
@@ -201,7 +216,7 @@ export class ChannelService {
       },
     });
     const validConversation = conversation.filter(
-      (conv) => conv.users.length === 2
+      (conv) => conv.users.length === 2,
     );
 
     if (validConversation.length) return validConversation[0];
@@ -292,7 +307,7 @@ export class ChannelService {
 
   async isUserMutedFromChannel(
     channelId: number,
-    userId: number
+    userId: number,
   ): Promise<boolean> {
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
@@ -306,12 +321,55 @@ export class ChannelService {
 
   async setChannelPassword(
     channelId: number,
-    newPassword: string
+    newPassword: string,
   ): Promise<Channel> {
     const hashedPassword = await hashPassword(newPassword);
     return this.prisma.channel.update({
       where: { id: channelId },
       data: { password: hashedPassword },
+    });
+  }
+
+  async getPublicChannels(): Promise<Channel[]> {
+    return this.prisma.channel.findMany({
+      where: {
+        privated: false,
+      },
+    });
+  }
+
+  async validateChannelPassword(
+    channelId: number,
+    inputPassword: string
+  ): Promise<boolean> {
+    const channel = await this.prisma.channel.findUnique({
+      where: { id: channelId },
+    });
+
+    if (!channel || !channel.password) {
+      throw new Error("Channel not found or doesn't have a password.");
+    }
+    return checkPassword(inputPassword, channel.password);
+  }
+
+  async joinChannel(channelId: number, userId: number): Promise<any> {
+    const existingUserChannel = await this.prisma.userChannel.findUnique({
+      where: {
+        userId_channelId: {
+          userId: userId,
+          channelId: channelId,
+        },
+      },
+    });
+
+    if (existingUserChannel) {
+      throw new Error("User is already part of the channel");
+    }
+    return this.prisma.userChannel.create({
+      data: {
+        userId: userId,
+        channelId: channelId,
+      },
     });
   }
 }

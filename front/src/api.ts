@@ -1,15 +1,23 @@
 import io from "socket.io-client";
 import axios from "axios";
 
-const localhostwebsocket = process.env.VITE_API_URL
-  ? `${process.env.VITE_API_URL}:8001`
-  : "http://localhost:8001";
-const webSocketURL = localhostwebsocket;
-const localhostback = process.env.VITE_API_URL
-  ? `${process.env.VITE_API_URL}:3000`
-  : "http://localhost:3000";
-const URL = localhostback;
+
+
+const webSocketURL = (import.meta.env.VITE_API_URL || 'http://localhost') + ':8001';
+const URL = (import.meta.env.VITE_API_URL || 'http://localhost') + ':3000';
+console.log('wtd',import.meta.env.VITE_API_URL)
 export const socket = io(webSocketURL, { autoConnect: true });
+
+
+
+export async function deco() {
+  const config = {
+    method: "post",
+    url: URL + "/auth/logout",
+    withCredentials: true,
+  };
+  return axios(config);
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* File: /back/src/channel/controllers/channel.controller.ts                                                          */
@@ -219,6 +227,15 @@ export async function getChannels() {
   return axios(config);
 }
 
+export async function getPublicChannels() {
+  const config = {
+    method: "get",
+    url: URL + "/channels/public-channels",
+    withCredentials: true,
+  };
+  return axios(config);
+}
+
 export async function getChannelAllMembers(id: number) {
   const config = {
     method: "get",
@@ -231,7 +248,6 @@ export async function getChannelAllMembers(id: number) {
 export async function createChannel(data: {
   name: string;
   password?: string;
-  creatorId: number;
   privated?: boolean;
   conv?: boolean;
 }) {
@@ -495,4 +511,28 @@ export async function getUserColorball(id: number) {
     withCredentials: true,
   };
   return axios(config);
+export async function validateChannelPassword(
+  channelId: number,
+  inputPassword: string
+) {
+  const config = {
+    method: "post",
+    url: `${URL}/channels/${channelId}/validate-password`,
+    data: {
+      password: inputPassword,
+    },
+    withCredentials: true,
+  };
+  const response = await axios(config);
+  return response.data.isValid;
+}
+
+export async function joinChannel(channelId: number) {
+  const config = {
+    method: "post",
+    url: `${URL}/channels/${channelId}/join`,
+    withCredentials: true,
+  };
+  const response = await axios(config);
+  return response.data;
 }

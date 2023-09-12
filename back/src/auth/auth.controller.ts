@@ -31,7 +31,7 @@ export class AuthController {
     private clientService: ClientService,
     private blockService: BlockService,
     private friendService: FriendService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
   @Get("login")
   @UseGuards(FortyTwoAuthGuard)
@@ -39,12 +39,20 @@ export class AuthController {
     console.log("login");
   }
 
+
+  @Post("logout")
+  @UseGuards(AuthenticatedGuard)
+  async logout(@Req() req) {
+    const user = await req.user;
+    await req.logout(() => {});
+    await this.clientService.unsubscribe(user.session);
+    return 'ok';
+  }
+
   @Get("redirect")
   @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
-    const localhostfront = process.env.LOCALHOST
-      ? "http://" + process.env.LOCALHOST + ":5173"
-      : "http://localhost:5173";
+    const localhostfront = 'http://' + (process.env.LOCALHOST || 'localhost') + ':5173';
     res.redirect(localhostfront);
   }
 

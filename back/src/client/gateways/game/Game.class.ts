@@ -23,7 +23,7 @@ export default class Game {
     public custom: boolean,
     private server,
     public matchService: MatchService,
-    public userService: UserService
+    public userService: UserService,
   ) {
     this.engine = new GameEngine(this);
     console.log("Game : New game ", this.matchId);

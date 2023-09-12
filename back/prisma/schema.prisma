@@ -61,8 +61,9 @@ model Block {
 model Channel {
   id         Int           @id @default(autoincrement())
   conv       Boolean       @default(false)
-  name       String?       @unique
+  name       String?
   password   String?
+  privated   Boolean      @default(false)
   creatorId  Int?
   creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[]
@@ -81,6 +82,8 @@ model UserChannel {
   isBanned  Boolean   @default(false)
   user      User      @relation(fields: [userId], references: [id])
   channel   Channel   @relation(fields: [channelId], references: [id])
+
+  @@unique([userId, channelId])
 }
 
 model Message {

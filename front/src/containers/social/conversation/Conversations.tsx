@@ -2,12 +2,13 @@ import "../../../css/chat.css";
 import FriendButton from "../../../components/friend/FriendButton";
 import Conversation from "../../../components/conversation/Conversation";
 import React, { useContext, useEffect, useState } from "react";
-import { getChannels } from "../../../api";
+import {getChannels, removeUserFromChannel} from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 import SidePanel from "../../../components/utils/SidePanel";
 import { ApplicationContext } from "../../Application";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Auth";
+import ContextMenu from "../../../components/utils/ContextMenu";
 
 type Props = {
   state: any;
@@ -80,7 +81,7 @@ export default function Conversations({ state }: Props) {
             )}
             {conversations
               .filter(
-                (c) => !c.conv || !user.blockList.includes(c.users[0].user.id)
+                (c) => !c.conv || !user.blockList.includes(c.users[0]?.user.id)
               )
               .sort((a, b) => {
                 const a_value = a.lastMessage
@@ -94,20 +95,29 @@ export default function Conversations({ state }: Props) {
               .map((conversation) => {
                 // console.log(conversation);
                 return (
-                  <Conversation
-                    handleClick={() => setState(conversation.id)}
-                    key={"conversation_id " + conversation.id}
-                    avatar={conversation.users[0].user.avatar}
-                    username={
-                      conversation.conv
-                        ? conversation.users[0].user.username
-                        : conversation.name
-                    }
-                    lastMessage={conversation.lastMessage?.content}
-                    state={state === conversation.id}
-                    lastRead={conversation.lastRead}
-                    id={conversation.id}
-                  />
+                    <ContextMenu buttons={[
+                      {
+                        text: "Leave",
+                        handleClick: () =>
+                            removeUserFromChannel(conversation.id, user.id),
+                      }
+                    ]}>
+                      <Conversation
+                          handleClick={() => setState(conversation.id)}
+                          key={"conversation_id " + conversation.id}
+                          avatar={conversation.users[0]?.user.avatar}
+                          username={
+                            conversation.conv
+                                ? conversation.users[0]?.user.username
+                                : conversation.name
+                          }
+                          lastMessage={conversation.lastMessage?.content}
+                          state={state === conversation.id}
+                          lastRead={conversation.lastRead}
+                          id={conversation.id}
+                      />
+                    </ContextMenu>
+
                 );
               })}
           </>

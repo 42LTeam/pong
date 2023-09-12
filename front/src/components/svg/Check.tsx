@@ -2,9 +2,9 @@ export default function Check({ color }: { color?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      height="24"
+      height="25"
       viewBox="0 0 24 24"
-      width="24"
+      width="25"
     >
       <path d="M0 0h24v24H0z" fill="none" />
       <path

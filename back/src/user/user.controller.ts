@@ -110,7 +110,7 @@ export class SearchDTO {
 export class UserController {
   constructor(
     private userService: UserService,
-    private matchService: MatchService
+    private matchService: MatchService,
   ) {}
 
   @Post()
@@ -123,7 +123,7 @@ export class UserController {
       createUserDto.username,
       createUserDto.secretO2FA,
       createUserDto.avatar,
-      createUserDto.xp
+      createUserDto.xp,
     );
   }
 
@@ -133,7 +133,7 @@ export class UserController {
   @ApiBody({ type: SearchDTO })
   async getAllUsers(
     @Req() req,
-    @Query("notFriend", ParseBoolPipe) notFriend: boolean
+    @Query("notFriend", ParseBoolPipe) notFriend: boolean,
   ): Promise<User[]> {
     const user = await req.user;
     return this.userService.getAllUsers(user.id, { notFriend });
@@ -142,7 +142,7 @@ export class UserController {
   @Get("/:id")
   @ApiOperation({ summary: "Get user by id" })
   async getUserById(
-    @Param("id", ParseIntPipe, UserIdValidationPipe) id: number
+    @Param("id", ParseIntPipe, UserIdValidationPipe) id: number,
   ): Promise<User | null> {
     return this.userService.getUserById(Number(id));
   }
@@ -152,11 +152,11 @@ export class UserController {
   @ApiBody({ type: UpdateUserAvatarDto })
   async updateUserAvatar(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserAvatarDto: UpdateUserAvatarDto
+    @Body() updateUserAvatarDto: UpdateUserAvatarDto,
   ): Promise<User> {
     return this.userService.updateUserAvatar(
       Number(id),
-      updateUserAvatarDto.avatar
+      updateUserAvatarDto.avatar,
     );
   }
 
@@ -166,7 +166,7 @@ export class UserController {
   async updateUserName(
     @Param("id", ParseIntPipe) id: number,
     @Body("username", UsernameValidationPipe) username: string,
-    @Body() updateUserNameDto: UpdateUserNameDto
+    @Body() updateUserNameDto: UpdateUserNameDto,
   ): Promise<User> {
     return this.userService.updateUserName(Number(id), username);
   }
@@ -174,7 +174,7 @@ export class UserController {
   @Get("friend/:id")
   @ApiOperation({ summary: "Get friend of user" })
   async getFriendsOfUser(
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseIntPipe) id: number,
   ): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id));
   }
@@ -182,7 +182,7 @@ export class UserController {
   @Get("friend/online/:id")
   @ApiOperation({ summary: "Get friend of user" })
   async getOnlineFriendsOfUser(
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseIntPipe) id: number,
   ): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id), { online: true });
   }
@@ -193,7 +193,7 @@ export class UserController {
   async search(
     @Param("query", StringPipe) query: string,
     @Body() body: SearchDTO,
-    @Req() req
+    @Req() req,
   ): Promise<User[]> {
     const user = await req.user;
     return this.userService.search(user.id, query, body);
@@ -203,7 +203,7 @@ export class UserController {
   @ApiOperation({ summary: "Search user by username" })
   async searchFriendOnly(
     @Param("query", StringPipe) query: string,
-    @Req() req
+    @Req() req,
   ): Promise<User[]> {
     const user = await req.user;
     return this.userService.getFriendsOfUser(user.id, { startWith: query });
@@ -223,7 +223,7 @@ export class UserController {
 
   @Get(":id/status")
   async getUserStatus(
-    @Param("id", ParseIntPipe, UserIdValidationPipe) id: string
+    @Param("id", ParseIntPipe, UserIdValidationPipe) id: string,
   ): Promise<Status> {
     return this.userService.getUserStatusById(Number(id));
   }
@@ -233,18 +233,18 @@ export class UserController {
   @ApiOperation({ summary: "Update user status" })
   async updateUserStatus(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserStatusDto: UpdateUserStatusDto
+    @Body() updateUserStatusDto: UpdateUserStatusDto,
   ): Promise<Status> {
     return this.userService.updateUserStatusById(
       id,
-      updateUserStatusDto.status
+      updateUserStatusDto.status,
     );
   }
 
   @Get(":id/matches")
   @ApiOperation({ summary: "Get all matches of user by Id" })
   async getUserMatches(
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseIntPipe) id: number,
   ): Promise<UserMatch[]> {
     return this.matchService.getUserMatches(id);
   }
@@ -252,7 +252,7 @@ export class UserController {
   @Get(":id/matches-resume")
   @ApiOperation({ summary: "Get all matches resume of user by ID" })
   async getUserMatchesResume(
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseIntPipe) id: number,
   ): Promise<any[]> {
     return this.userService.getUserMatchesResume(id);
   }
@@ -261,10 +261,12 @@ export class UserController {
   @UseInterceptors(FileInterceptor("avatar"))
   async uploadAvatar(
     @Param("id", ParseIntPipe) id: number,
-    @UploadedFile() file
+    @UploadedFile() file,
   ): Promise<any> {
     const fileName = file.path.split("/").pop();
-    const formattedPath = `//localhost:3000/uploads/${fileName}`;
+    const localhostfront = (process.env.LOCALHOST || 'localhost');
+
+    const formattedPath = `//${localhostfront}:3000/uploads/${fileName}`;
     await this.userService.updateUserAvatar(id, formattedPath);
     return { path: formattedPath };
   }
