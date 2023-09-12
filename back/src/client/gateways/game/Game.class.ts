@@ -81,7 +81,7 @@ export default class Game {
           if (user.id === player.userId)
             player.colorball = user.colorball || "#FFFFFF";
       }); //this verification is needed cause on invite, it is called several times and has not all infos in firsts calls
-      // TODO why?
+      // TODO why? // c pour Jerome
       this.players.forEach((player) => {
         if (player.userId === 92477) {
           player.name = "LOOSER";

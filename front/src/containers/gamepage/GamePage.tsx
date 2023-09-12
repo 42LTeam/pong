@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { socket } from "../../api";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import NotFound from "../NotFound";
 
 export enum gameState {
@@ -15,6 +15,9 @@ export default function GamePage() {
   const canvas = useRef(null);
   const [searchParams] = useSearchParams();
   const [notFound, setNotFound] = useState(false);
+  const navigate = useNavigate();
+
+  
 
   const dataGame = {
     matchId: 0,
@@ -22,6 +25,7 @@ export default function GamePage() {
     moveUp: false,
     moveDown: false,
     custom: false,
+    finished: false,
   };
   const ball = {
     x: 0.5,
@@ -119,6 +123,7 @@ export default function GamePage() {
         )
           c2d.fillText("You win!", width, height);
         else c2d.fillText("You lose!", width, height);
+        c2d.fillText('Press [esc] to go home', width, height + (height / 5));
         break;
       }
     }
@@ -209,6 +214,7 @@ export default function GamePage() {
     };
 
     const onGameFinish = (args) => {
+      dataGame.finished = true;
       if (args) getData(args);
       draw(gameState.FINISH, 0);
     };
@@ -229,6 +235,9 @@ export default function GamePage() {
       if (event.key === "l") {
         event.preventDefault();
         ball.shine = !ball.shine;
+      }
+      if (event.key === "Escape" && dataGame.finished) {
+          navigate('/');
       }
     };
 
@@ -252,6 +261,7 @@ export default function GamePage() {
     socket.on("game-not-found", onGameNotFound);
     document.addEventListener("keydown", keyDownHook);
     document.addEventListener("keyup", keyUpHook);
+
 
     return () => {
       socket.emit("leave-game");
