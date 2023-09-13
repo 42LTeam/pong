@@ -113,6 +113,8 @@ export default function GamePage() {
       }
       case gameState.PAUSE: {
         c2d.fillText("Pause", width, height);
+        c2d.fillText("If your opponent does not come back in [" + countdown + "] s", width, height+(height / 5));
+        c2d.fillText("you will win with a score of 5 - 0", width, height+(height / 2.5));
         break;
       }
       case gameState.FINISH: {
@@ -205,7 +207,7 @@ export default function GamePage() {
 
     const onGamePause = (args) => {
       if (args) getData(args);
-      draw(gameState.PAUSE, 0);
+      draw(gameState.PAUSE, args.countdown);
     };
 
     const onError = (args) => {

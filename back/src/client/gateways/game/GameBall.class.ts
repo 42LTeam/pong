@@ -3,7 +3,7 @@ import Game from "./Game.class";
 export default class GameBall {
   BALL_MAX_SPEED = 0.0008;
   BALL_SPEED_INCREASE = 0.00004;
-  BALL_START_SPEED = 0.0008; //base 0.0002
+  BALL_START_SPEED = 0.0002;
   MAX_BOUNCE_ANGLE = 1.3;
   BALL_SEMI_SIZE = 0.005;
   position: { x: number; y: number };
