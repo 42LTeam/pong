@@ -54,6 +54,7 @@ export class ChannelService {
           create: {
             userId: creatorId,
             isAdmin: true,
+            isOwner: true,
           },
         },
       },
@@ -128,6 +129,7 @@ export class ChannelService {
         isBlocked: true,
         isMuted: true,
         isBanned: true,
+        isOwner: true,
         channel: {
           select: {
             creatorId: true

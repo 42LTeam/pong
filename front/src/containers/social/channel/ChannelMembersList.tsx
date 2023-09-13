@@ -51,7 +51,7 @@ export default function ChannelMembersList({
                 friend={current.user}
                 channelId={channelId}
                 contextMenu={
-                  isAdmin && current.user.id != user.id && !current.isBanned
+                  isAdmin && current.user.id != user.id && !current.isBanned && !current.isOwner
                       ? [
                         {
                           text: "Kick",

@@ -15,7 +15,6 @@ export class isOwnerPipe implements PipeTransform {
   }
 
   async transform(channelId: any, _metadata: ArgumentMetadata) {
-
     let user = await this.request["user"]
     const userChannel = await this.prisma.userChannel.findFirst({
       where: {
@@ -23,11 +22,10 @@ export class isOwnerPipe implements PipeTransform {
         AND: [{userId: user.id}]
       },
     });
-    console.log ("log- isOwner => userChannel.id = ", user.id, " ==? channelId.creatorId = ", channelId.creatorId)
-    console.log ("log- isOwner => userChannel.id = ", userChannel.id, " ==? channelId.creatorId = ", channelId.creatorId)
-    if (userChannel.id !== user.creatorId) {
-      throw new ForbiddenException("User is not the owner of this channel.");
+    console.log ("isOwnerPipe => userChannel.isOwner === ", userChannel.isOwner)
+    if (userChannel.isOwner === false) {
+      throw new ForbiddenException("User is ban of this channel.");
     }
-    return channelId;
+    return channelId
   }
 }
