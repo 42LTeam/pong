@@ -6,7 +6,7 @@ import {
   WebSocketServer,
 } from "@nestjs/websockets";
 import { ClientService } from "../client.service";
-import { Injectable, UseGuards } from "@nestjs/common";
+import {ForbiddenException, Injectable, UseGuards} from "@nestjs/common";
 import { WSAuthenticatedGuard } from "../../auth/guards/wsauthenticated.guard";
 import {User, UserChannel} from "@prisma/client";
 import { ChannelService } from "../../channel/channel.service";
@@ -69,9 +69,13 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     const usersInChannel = await this.channelService.getAllUserChannelsInChannel(data.channelId);
     if (!usersInChannel.some(u => !u.isBanned && u.userId === user.id)) {
-      return; // User not in channel
+      throw new ForbiddenException("User isn't in this channel.");
     }
-
+    const Until = new Date();
+    Until.setMinutes(Until.getMinutes());
+    if (!usersInChannel.some(u => !u.isMuted !== null || u.isMuted < Until)) {
+      throw new ForbiddenException("User have been mute for a while in this channel.");
+    }
     const message = await this.messageService.createMessage(
       user.id,
       data.channelId,

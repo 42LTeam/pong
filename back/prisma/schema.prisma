@@ -67,6 +67,7 @@ model Channel {
   creatorId  Int?
   creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[]
+  banList    Int[]
   messages   Message[]
   created_at DateTime
 }

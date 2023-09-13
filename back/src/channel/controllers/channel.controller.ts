@@ -189,10 +189,12 @@ export class ChannelController {
     );
   }
 
-  @Get("/public-channels")
-  @ApiOperation({ summary: "Get all public channels" })
-  async getPublicChannels(): Promise<Channel[]> {
-    return this.channelService.getPublicChannels();
+  @Get('/public-channels/:userId')
+  @ApiOperation({ summary: 'Get all public channels the user is not already in' })
+  async getPublicChannels(
+      @Param('userId', ParseIntPipe) userId: number
+  ): Promise<Channel[]> {
+    return this.channelService.getPublicChannels(userId);
   }
 
   @Post("/:channelId/validate-password")

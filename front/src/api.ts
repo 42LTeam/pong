@@ -243,10 +243,10 @@ export async function getChannels() {
   return axios(config);
 }
 
-export async function getPublicChannels() {
+export async function getPublicChannels(userId: number) {
   const config = {
     method: "get",
-    url: URL + "/channels/public-channels",
+    url: URL + "/channels/public-channels/" + userId,
     withCredentials: true,
   };
   return axios(config);
@@ -546,8 +546,8 @@ export async function validateChannelPassword(
 }
 
 export async function joinChannel(channelId: number) {
-  const config = {
-    method: "post",
+    const config = {
+      method: "post",
     url: `${URL}/channels/${channelId}/join`,
     withCredentials: true,
   };

@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import {ForbiddenException, forwardRef, Inject, Injectable} from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import {
   CreateChannelDto,
@@ -358,13 +358,23 @@ export class ChannelService {
     });
   }
 
-  async getPublicChannels(): Promise<Channel[]> {
-    return this.prisma.channel.findMany({
+  async getPublicChannels(userId: number): Promise<Channel[]> {
+
+    const channels = this.prisma.channel.findMany({
       where: {
         privated: false,
         conv: false,
+        NOT: {
+          users: {
+            some: {
+              userId: userId,
+            }
+          }
+        }
       },
     });
+    console.log("getPublicChannels => channels:", channels)
+    return channels
   }
 
   async validateChannelPassword(

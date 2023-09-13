@@ -8,15 +8,17 @@ import { PrismaService } from "../../prisma/prisma.service";
 import { REQUEST } from '@nestjs/core'
 
 @Injectable()
-export class isInChannelPipe implements PipeTransform {
+export class isMutedPipe implements PipeTransform {
   constructor(
       @Inject(REQUEST) protected readonly request: Request,
       private prisma: PrismaService) {}
 
   async transform(channelId: any, _metadata: ArgumentMetadata) {
     let user = await this.request["user"]
+    const Until = new Date();
+    Until.setMinutes(Until.getMinutes());
 
-    console.log("isInChannelPipe: User from request = ", user)
+    console.log("isMutedPipe: User from request = ", user)
     const userChannel = await this.prisma.userChannel.findFirst({
       where: {
         channelId: channelId,
@@ -24,10 +26,10 @@ export class isInChannelPipe implements PipeTransform {
       },
     });
 
-    console.log("isInChannelPipe: userChannel = ", userChannel)
+    console.log("isMutedPipe: userChannel = ", userChannel.isMuted)
 
-    if (!userChannel || userChannel.isBanned) {
-      throw new ForbiddenException("User is not in this channel.");
+    if (userChannel.isMuted || userChannel.isMuted < Until) {
+      throw new ForbiddenException("User is muted for a while in this channel.");
     }
     return channelId;
   }

@@ -26,7 +26,7 @@ export class isBannedPipe implements PipeTransform {
 
         console.log("isBannedPipe: userChannel.isBanned === ", userChannel.isBanned)
 
-        if (userChannel.isBanned === true) {
+        if (userChannel && userChannel.isBanned === true) {
             throw new ForbiddenException("User is ban of this channel.");
         }
         return channelId
