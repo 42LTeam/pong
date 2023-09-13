@@ -71,11 +71,18 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (!usersInChannel.some(u => !u.isBanned && u.userId === user.id)) {
       throw new ForbiddenException("User isn't in this channel.");
     }
-    const Until = new Date();
+    // const Until = new Date();
+    console.log("User muted date: ", usersInChannel.some(u => u.isMuted));
+    console.log("Date now: ", Date());
 
-    if (usersInChannel.some(u => u.isMuted !== null || u.isMuted < Until)) {
-      throw new ForbiddenException("User have been mute for a while in this channel.");
+    const isMuted = await this.channelService.isUserMutedFromChannel(data.channelId, user.id)
+    if (isMuted) {
+      console.log("You are muted", user.username);
+      return;
     }
+    // if (!usersInChannel.some(u => u.isMuted !== null || u.isMuted < Date())) {
+    //   throw new ForbiddenException("User have been mute for a while in this channel.");
+    // }
     const message = await this.messageService.createMessage(
       user.id,
       data.channelId,
