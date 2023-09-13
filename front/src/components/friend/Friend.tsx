@@ -5,13 +5,8 @@ import { useNavigate } from "react-router-dom";
 import {
   getConversation,
   removeFriendship,
-  removeUserFromChannel,
-  muteUserFromChannel,
-  banUserFromChannel,
-  removeUserAdminFromChannel,
-  unbanUserFromChannel,
   getUserByID,
-  unblockUser,
+  unblockUser, blockUser,
 } from "../../api";
 import { AuthContext, User } from "../../containers/Auth";
 
@@ -99,7 +94,9 @@ export default function Friend(props: Props) {
   } else if (props.friend.id != user.id) {
     buttons.push({
       text: "Bloquer",
-      handleClick: () => alert("TODO"),
+      handleClick: () => {
+        blockUser(props.friend.id).then(() => user.blockList.push(props.friend.id));
+      },
     });
   }
   if (isFriend) {
