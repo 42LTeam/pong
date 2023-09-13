@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   banUserFromChannel,
   getChannelAllMembers,
-  muteUserFromChannel,
+  muteUserFromChannel, ownerMakeAdmin,
   removeUserAdminFromChannel,
 } from "../../../api";
 import SidePanel from "../../../components/utils/SidePanel";
@@ -44,37 +44,47 @@ export default function ChannelMembersList({
       body={
         <>
           {ChannelAllMembers.map((current) => {
-            console.log("Current = ", current);
+            console.log("log ChannelMemberList => Current: ", current);
             return (
               <Friend
                 key={current.user.id}
-                unremovable={true}
                 friend={current.user}
                 channelId={channelId}
                 contextMenu={
-                  isAdmin && current.user.id != user.id
-                    ? [
+                  isAdmin && current.user.id != user.id && !current.isBanned && !current.isOwner
+                      ? [
                         {
                           text: "Kick",
                           handleClick: () =>
-                            removeUserAdminFromChannel(
-                              channelId,
-                              current.user.id
-                            ),
+                              removeUserAdminFromChannel(
+                                  channelId,
+                                  current.user.id
+                              ),
                         },
                         {
                           text: "Mute",
                           handleClick: () =>
-                            muteUserFromChannel(channelId, current.user.id),
+                              muteUserFromChannel(channelId, current.user.id),
                         },
                         {
                           text: "Ban",
                           handleClick: () =>
-                            banUserFromChannel(channelId, current.user.id),
+                              banUserFromChannel(channelId, current.user.id),
                         },
                         { separator: true },
+                        ...(
+                            user.id === current.channel.creatorId
+                                ? [
+                                  {
+                                    text: "Make me Admin",
+                                    handleClick: () => ownerMakeAdmin(channelId, current.user.id),
+                                  },
+                                  { separator: true }
+                                ]
+                                : []
+                        ),
                       ]
-                    : null
+                      : null
                 }
                 isAdmin={isAdmin}
                 isBanned={current.isBanned}

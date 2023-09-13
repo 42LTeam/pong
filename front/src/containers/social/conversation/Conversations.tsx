@@ -28,7 +28,7 @@ export default function Conversations({ state }: Props) {
     setPopUpPosition({
       left: event.clientX,
       top: event.clientY,
-      width: "420px",
+      // width: "420px",
     });
   };
 
@@ -92,10 +92,11 @@ export default function Conversations({ state }: Props) {
                   : b.created_at;
                 return a_value < b_value ? 1 : -1;
               })
-              .map((conversation) => {
+              .map((conversation, i) => {
                 // console.log(conversation);
                 return (
                   <ContextMenu
+                      key={i}
                     buttons={[
                       {
                         text: "Leave",

@@ -11,7 +11,7 @@ import PopOver from "../../../components/utils/PopOver";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/utils/Button";
 
-export default function PublicChannelsList() {
+export default function PublicChannelsList(channelId: number) {
   const [channels, setChannels] = useState([]);
   const [isPasswordPopUpVisible, setPasswordPopUpVisible] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState(null);
@@ -21,7 +21,7 @@ export default function PublicChannelsList() {
   useEffect(() => {
     async function fetchChannels() {
       try {
-        const response = await getPublicChannels();
+        const response = await getPublicChannels(user.id);
         setChannels(response.data);
       } catch (error) {
         console.error("Error fetching channels:", error);
@@ -31,16 +31,16 @@ export default function PublicChannelsList() {
   }, []);
 
   const handleChannelClick = async (channel) => {
-    const membersResponse = await getChannelAllMembers(channel.id);
-    const members = membersResponse.data;
-    console.log(members);
-    const isUserMember = members.some((member) => member.userId === user.id);
-
-    if (isUserMember) {
-      console.log("Already a member of the channel");
-      navigate(`/social/${channel.id}`);
-      return;
-    }
+    // const membersResponse = await getChannelAllMembers(channel.id);
+    // const members = membersResponse.data;
+    // console.log(members);
+    // const isUserMember = members.some((member) => member.userId === user.id);
+    //
+    // if (isUserMember) {
+    //   console.log("Already a member of the channel");
+    //   navigate(`/social/${channel.id}`);
+    //   return;
+    // }
 
     if (channel.password) {
       setSelectedChannel(channel);
@@ -74,7 +74,7 @@ export default function PublicChannelsList() {
   };
 
   const joinChannelDirectly = async (channel) => {
-    await joinChannel(channel.id, user.id);
+    await joinChannel(channel.id);
     navigate(`/social/${channel.id}`);
   };
 
@@ -87,7 +87,7 @@ export default function PublicChannelsList() {
           handleClick={() => handleChannelClick(current)}
           avatar={null}
           lastRead={null}
-          channel={current}
+          // channel={current}
           hasPassword={Boolean(current.password)}
         />
       ))}

@@ -67,6 +67,7 @@ model Channel {
   creatorId  Int?
   creator    User?         @relation(fields: [creatorId], references: [id])
   users      UserChannel[]
+  banList    Int[]
   messages   Message[]
   created_at DateTime
 }
@@ -78,6 +79,7 @@ model UserChannel {
   lastRead  Int       @default(0)
   isAdmin   Boolean   @default(false)
   isBlocked Boolean   @default(false)
+  isOwner   Boolean   @default(false)
   isMuted   DateTime?
   isBanned  Boolean   @default(false)
   user      User      @relation(fields: [userId], references: [id])
