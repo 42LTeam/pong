@@ -72,8 +72,8 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
       throw new ForbiddenException("User isn't in this channel.");
     }
     const Until = new Date();
-    Until.setMinutes(Until.getMinutes());
-    if (!usersInChannel.some(u => !u.isMuted !== null || u.isMuted < Until)) {
+
+    if (usersInChannel.some(u => u.isMuted !== null || u.isMuted < Until)) {
       throw new ForbiddenException("User have been mute for a while in this channel.");
     }
     const message = await this.messageService.createMessage(
