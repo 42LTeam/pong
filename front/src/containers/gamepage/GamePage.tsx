@@ -113,8 +113,8 @@ export default function GamePage() {
       }
       case gameState.PAUSE: {
         c2d.fillText("Pause", width, height);
-        c2d.fillText("If your opponent does not come back in [" + countdown + "] s", width, height+(height / 5));
-        c2d.fillText("you will win with a score of 5 - 0", width, height+(height / 2.5));
+        c2d.fillText("If your opponent does not come back in [" + countdown + "] s", width, height+(height / 5), width * 1.9);
+        c2d.fillText("you will win with a score of 5 - 0", width, height+(height / 2.5), width * 1.9);
         break;
       }
       case gameState.FINISH: {

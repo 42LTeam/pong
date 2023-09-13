@@ -95,7 +95,6 @@ export default function HomePage() {
   }
 
   return (
-    // <div className="home-wrapper">
     <div className="frame-homepage">
       <div className="frame-left">
         <div className="ball-skin">
@@ -119,7 +118,7 @@ export default function HomePage() {
         </div>
 
         <Tooltip
-        title={"Original pong from 1972"}
+        title={"Original game of 1972"}
         TransitionComponent={Zoom}>
           <div>
         <Button
@@ -129,7 +128,6 @@ export default function HomePage() {
           buttonProps={{
             style: {
               width: "100%",
-              // height: "60px",
               fontSize: "40px",
             },
           }}
@@ -147,7 +145,6 @@ export default function HomePage() {
           buttonProps={{
             style: {
               width: "100%",
-              // height: "60px",
               fontSize: "40px",
             },
           }}
@@ -158,6 +155,5 @@ export default function HomePage() {
         <FriendQuickInvite></FriendQuickInvite>
       </div>
     </div>
-    // </div>
   );
 }
