@@ -14,8 +14,8 @@ export class isBannedPipe implements PipeTransform {
         private prisma: PrismaService) {
     }
 
-    async transform(value: any, _metadata: ArgumentMetadata) {
-        const {channelId} = value;
+    async transform(channelId: any, _metadata: ArgumentMetadata) {
+
         let user = await this.request["user"]
         console.log("log isBannedPipe - User from request = ", user)
         console.log("log isBannedPipe - User.id = ", user.id)
@@ -28,7 +28,7 @@ export class isBannedPipe implements PipeTransform {
         if (userChannel.isBanned === true) {
             throw new ForbiddenException("User is ban of this channel.");
         }
-        return value
+        return channelId
     }
 }
 //isChannelAdminPipe

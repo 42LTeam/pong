@@ -14,9 +14,7 @@ export class isChannelAdminPipe implements PipeTransform {
       private prisma: PrismaService) {
   }
 
-  async transform(value: any, _metadata: ArgumentMetadata) {
-    const { channelId } = value;
-    console.log ("log- IsChannelAdminPipe => value ", value)
+  async transform(channelId: any, _metadata: ArgumentMetadata) {
 
     let testAdminUser = await this.request["user"]
     const isAdminInChannelId = await this.prisma.userChannel.findFirst({
@@ -30,6 +28,6 @@ export class isChannelAdminPipe implements PipeTransform {
     if (!isAdminInChannelId.isAdmin) {
       throw new ForbiddenException("User is not an admin of this channel.");
     }
-    return value;
+    return channelId;
   }
 }
