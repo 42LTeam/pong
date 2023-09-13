@@ -8,7 +8,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import { REQUEST } from '@nestjs/core'
 
 @Injectable()
-export class isChannelAdminPipe implements PipeTransform {
+export class isOwnerPipe implements PipeTransform {
   constructor(
       @Inject(REQUEST) protected readonly request: Request,
       private prisma: PrismaService) {
@@ -23,13 +23,10 @@ export class isChannelAdminPipe implements PipeTransform {
         AND: [{userId: user.id}]
       },
     });
-
-    // console.log("log- IsChannelAdminPipe => testAdminUser = ", testAdminUser)
-    // console.log("log- IsChannelAdminPipe => isAdminInChannelId = ", isAdminInChannelId)
-    // console.log("log- IsChannelAdminPipe => isAdminInChannelId.isAdmin = ", isAdminInChannelId.isAdmin)
-
-    if (!userChannel.isAdmin) {
-      throw new ForbiddenException("User is not an admin of this channel.");
+    console.log ("log- isOwner => userChannel.id = ", user.id, " ==? channelId.creatorId = ", channelId.creatorId)
+    console.log ("log- isOwner => userChannel.id = ", userChannel.id, " ==? channelId.creatorId = ", channelId.creatorId)
+    if (userChannel.id !== user.creatorId) {
+      throw new ForbiddenException("User is not the owner of this channel.");
     }
     return channelId;
   }

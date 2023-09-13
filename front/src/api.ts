@@ -22,6 +22,23 @@ export async function deco() {
 
 //TODO ownerMakeAdmin
 
+// @Post("/:channelId/owner-make-admin/:userId")
+//   @ApiOperation({ summary: "Make a User Admin (Owner privilege)" })
+export async function ownerMakeAdmin(
+    channelId: number,
+    userId: number
+) {
+  const config = {
+    method: "post",
+    url: URL + "/channels/" + channelId + "/owner-make-admin/" + userId,
+    withCredentials: true,
+  };
+  console.log("ownerMakeAdmin(channelId: number, userId: number)");
+  console.log("channelId = ", channelId);
+  console.log("userId = ", userId);
+  return axios(config);
+}
+
 //  @Post('/:channelId/admin-quit/:userId')
 //  @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
 export async function removeUserAdminFromChannel(

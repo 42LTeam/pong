@@ -30,6 +30,7 @@ import { AuthenticatedGuard } from "../../auth/guards/authenticated.guard";
 import {isChannelAdminPipe} from "../pipes/isChannelAdmin.pipe";
 import {isInChannelPipe} from "../pipes/isInChannel.pipe";
 import {isBannedPipe} from "../pipes/isBanned.pipe";
+import {isOwnerPipe} from "../pipes/isOwner.pipe";
 
 
 export class CreateChannelDto {
@@ -136,15 +137,15 @@ export class ChannelController {
   ): Promise<any> {
     return this.channelService.removeUserFromChannel(channelId, userId);
   }
-  //TODO Pipe isOwner
+
   @Post("/:channelId/owner-make-admin/:userId")
   @UsePipes()
   @ApiOperation({ summary: "Make a User Admin (Admin privilege)" })
   async ownerMakeAdmin(
-      @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
+      @Param("channelId", ParseIntPipe, isOwnerPipe) channelId: number,
       @Param("userId", ParseIntPipe) userId: number
   ): Promise<any> {
-    return this.channelService.makeUserAdmin(channelId, userId);
+    return this.channelService.ownerMakeAdmin(channelId, userId);
   }
 
 

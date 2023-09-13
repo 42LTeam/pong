@@ -11,11 +11,13 @@ import { MessageService } from "../message/message.service";
 import { isChannelAdminPipe} from "./pipes/isChannelAdmin.pipe";
 import {isBannedPipe} from "./pipes/isBanned.pipe";
 import {isInChannelPipe} from "./pipes/isInChannel.pipe";
+import {isOwnerPipe} from "./pipes/isOwner.pipe";
 
 
 @Module({
   controllers: [ChannelController, ConversationController],
-  providers: [ChannelService, FriendService, MessageService, isChannelAdminPipe, isBannedPipe, isInChannelPipe],
+  providers: [ChannelService, FriendService, MessageService, isChannelAdminPipe, isBannedPipe, isInChannelPipe, isOwnerPipe],
+
   imports: [
     PrismaModule,
     forwardRef(() => FriendModule),

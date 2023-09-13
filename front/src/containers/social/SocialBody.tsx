@@ -22,7 +22,7 @@ export default function SocialBody() {
       {state ? (
         <>
           <div className="vertical-separator"></div>
-          <ChannelMembersList channelId={state} setChannelId={setState} />
+          <ChannelMembersList channelId={state} />
         </>
       ) : null}
     </div>

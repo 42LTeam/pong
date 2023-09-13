@@ -128,6 +128,11 @@ export class ChannelService {
         isBlocked: true,
         isMuted: true,
         isBanned: true,
+        channel: {
+          select: {
+            creatorId: true
+          }
+        },
         user: {
           select: {
             session: true,
