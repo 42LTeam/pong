@@ -118,7 +118,7 @@ export default function HomePage() {
 
         <Button
           handleClick={() => navigate("/game")}
-          text={"PLAY"}
+          text={"STANDARD"}
           clickable
           buttonProps={{
             style: {

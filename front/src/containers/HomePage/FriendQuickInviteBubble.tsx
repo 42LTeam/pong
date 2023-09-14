@@ -39,8 +39,7 @@ export default function FriendQuickInviteBubble(props: Props) {
         <div className="quick-invite-pseudo"> {props.user.username} </div>
       </div>
       <div className="quick-invite-ratio">
-        {" "}
-        {ratio?.wins} W/{ratio?.losses} L{" "}
+        {ratio?.wins} V / {ratio?.losses} D
       </div>
       <QuickInviteButton
         userID={props.user.id}
