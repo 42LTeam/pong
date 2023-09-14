@@ -15,7 +15,8 @@ export default class GameEngine {
   sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   checkScores() {
-    if (this.ball.position.x < this.ball.BALL_SEMI_SIZE * 3) this.score[1]++;
+    if (this.ball.position.x < this.ball.BALL_SEMI_SIZE * 3)
+      this.score[1]++;
     else if (this.ball.position.x > 1 - this.ball.BALL_SEMI_SIZE * 3)
       this.score[0]++;
     else return false;

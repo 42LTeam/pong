@@ -9,9 +9,8 @@ export default class GamePlayer {
   position: { x: number; y: number };
   moveUp = false;
   moveDown = false;
-  moveLeft = false;
-  moveRight = false;
   status = playerStatus.ONLINE;
+  konami = false;
 
   constructor(
     public userId: number,
@@ -40,18 +39,6 @@ export default class GamePlayer {
       this.position.y + this.PLAYER_SEMI_HEIGHT + this.PLAYER_SPEED <= 1
     )
       this.position.y += this.PLAYER_SPEED;
-      else if (
-        this.moveLeft &&
-        !this.moveRight &&
-        this.position.x + this.PLAYER_SEMI_HEIGHT + this.PLAYER_SPEED <= 1
-      )
-        this.position.x += this.PLAYER_SPEED;
-        else if (
-          this.moveRight &&
-          !this.moveLeft &&
-          this.position.x + this.PLAYER_SEMI_HEIGHT + this.PLAYER_SPEED <= 1
-        )
-          this.position.x += this.PLAYER_SPEED;
   }
 
   send(event, data) {

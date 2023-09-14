@@ -11,12 +11,21 @@ export enum gameState {
   FINISH,
 }
 
+const dataGame = {
+    matchId: 0,
+    playerId: 0,
+    moveUp: false,
+    moveDown: false,
+    custom: false,
+    finished: false,
+    konami: false,
+  };
+
 export default function GamePage() {
   const canvas = useRef(null);
   const [searchParams] = useSearchParams();
   const [notFound, setNotFound] = useState(false);
   const navigate = useNavigate();
-  const [konami, setKonami] = useState(false);
   const konamiCode = [
     "ArrowUp",
     "ArrowUp",
@@ -31,16 +40,7 @@ export default function GamePage() {
     "Enter",
   ];
 
-  const dataGame = {
-    matchId: 0,
-    playerId: 0,
-    moveUp: false,
-    moveDown: false,
-    moveLeft: false,
-    moveRight: false,
-    custom: false,
-    finished: false,
-  };
+  
   const ball = {
     x: 0.5,
     y: 0.5,
@@ -97,7 +97,7 @@ export default function GamePage() {
       c2d.canvas.width * (left ? 0.375 : 0.625),
       textPos
     );
-    if (!custom)
+    if (!custom)                                              /////////////////////////////////
       c2d.fillRect(
         (player.x - ball.semiSize) * c2d.canvas.width,
         (player.y - players.semiHeight) * c2d.canvas.height,
@@ -200,25 +200,19 @@ export default function GamePage() {
 
     if (currentKey === expectedKey) {
       if (konamiIndex === konamiCode.length - 1) {
-        // Le code Konami a été entré avec succès
         console.log("Code Konami entré !");
-        setKonami(true);
-        // Réinitialiser l'index
+        dataGame.konami = !dataGame.konami;
         setKonamiIndex(0);
       } else {
-        // Passer à l'élément suivant dans le code Konami
         setKonamiIndex(konamiIndex + 1);
       }
     } else {
-      // La touche entrée ne correspond pas à la séquence du code Konami
-      // Réinitialiser l'index
       setKonamiIndex(0);
     }
   };
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
@@ -274,18 +268,11 @@ export default function GamePage() {
     const keyDownHook = (event) => {
       if (event.key === "w" && !dataGame.moveUp) {
         dataGame.moveUp = true;
+        console.log("BTW KONAMI = "+dataGame.konami);
         socket.emit("update-input", dataGame);
       }
       if (event.key === "s" && !dataGame.moveDown) {
         dataGame.moveDown = true;
-        socket.emit("update-input", dataGame);
-      }
-      if (event.key === "a" && !dataGame.moveLeft && konami) {
-        dataGame.moveLeft = true;
-        socket.emit("update-input", dataGame);
-      }
-      if (event.key === "d" && !dataGame.moveRight && konami) {
-        dataGame.moveRight = true;
         socket.emit("update-input", dataGame);
       }
       if (event.key === "l") {
@@ -304,14 +291,6 @@ export default function GamePage() {
       }
       if (event.key === "s") {
         dataGame.moveDown = false;
-        socket.emit("update-input", dataGame);
-      }
-      if (event.key === "a" && konami) {
-        dataGame.moveLeft = false;
-        socket.emit("update-input", dataGame);
-      }
-      if (event.key === "d" && konami) {
-        dataGame.moveRight = false;
         socket.emit("update-input", dataGame);
       }
     };
