@@ -1,11 +1,18 @@
+
 interface AvatarProps {
-  url?: string;
-  color?: string;
-  width?: string;
-  height?: string;
+    url?: string,
+    color?: string,
+    width?: string,
+    height?: string,
+    salon?: boolean
+    id?: any
 }
 export default function Avatar(props: AvatarProps) {
-  const url = props.url ? `url("${props.url}")` : null;
+    let url;
+    if (props.salon === false && props.id)
+        url = `url("/img/discord-salon.png")`
+    else
+        url = props.url ? `url("${props.url}")` : `url("/img/discord-salon.png")`;
 
   return (
     <div
