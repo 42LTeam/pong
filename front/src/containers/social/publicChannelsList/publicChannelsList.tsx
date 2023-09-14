@@ -84,6 +84,7 @@ export default function PublicChannelsList(channelId: number) {
         <Conversation
           key={current.id}
           username={current.name}
+          id={current.id}
           handleClick={() => handleChannelClick(current)}
           avatar={null}
           lastRead={null}

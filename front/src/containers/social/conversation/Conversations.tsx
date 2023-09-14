@@ -61,7 +61,7 @@ export default function Conversations({ state }: Props) {
             state={state}
           ></FriendButton>
         }
-        subheader="Messages privés"
+        subheader="Créer un Salon"
         subheaderIcon={
           <img
             onClick={(event) => handlePopUp(event)}
@@ -109,6 +109,7 @@ export default function Conversations({ state }: Props) {
                       handleClick={() => setState(conversation.id)}
                       key={"conversation_id " + conversation.id}
                       avatar={conversation.users[0]?.user.avatar}
+                      isPrivateMessage={conversation.conv}
                       username={
                         conversation.conv
                           ? conversation.users[0]?.user.username
