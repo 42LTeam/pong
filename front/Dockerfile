@@ -21,3 +21,10 @@ EXPOSE 5173
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["vite", "--host", "--port", "5173"]
 
+# ---- Production ----
+FROM base AS production
+COPY --chown=node:node ./front/package.json ./
+COPY --chown=node:node ./front/package-lock.json ./
+RUN npm ci
+COPY --chown=node:node ./front/ ./
+CMD ["npm", "run", "build"]

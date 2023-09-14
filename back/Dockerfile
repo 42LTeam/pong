@@ -27,3 +27,4 @@ EXPOSE 3000
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 # Command to run your application
 CMD ["sh", "-c", "npx prisma generate && npx tsc && (date | npm run migrate) && npm run start:migrate:prod"]
+
