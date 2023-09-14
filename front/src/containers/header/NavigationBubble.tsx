@@ -47,7 +47,7 @@ const NavigationBubble = () => {
         text="/leaderboard"
         state={state}
         children={<LeaderboardIcon />}
-        description="Leaderboard"
+        description="Classement"
       ></HeaderNavigationIcon>
     </div>
   );

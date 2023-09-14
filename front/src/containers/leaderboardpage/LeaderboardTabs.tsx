@@ -62,7 +62,7 @@ export default function LeaderboardTabs(props: Props) {
       )}
 
       <div className="leaderboard-tabs-text-place">
-        {matches.length > 0 ? `#${props.placement}` : "-"}
+        {matches.length  > 0 ? (props.placement === 1 ? "🥇" : `#${props.placement}`) : "-"}
       </div>
 
       <div className="vertical-separator"></div>

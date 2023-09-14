@@ -61,9 +61,9 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
   const [data, setData] = useState<number>(0);
 
   useEffect(() => {
-    if (props.type === "Total xp") {
+    if (props.type === "XP total") {
       setData(props.user.xp);
-    } else if (props.type === "Average points per match") {
+    } else if (props.type === "Moyenne des points/match") {
       getAveragePoint(props.user.id)
         .then((average) => {
           setData(average);
@@ -72,7 +72,7 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
           console.error("Error fetching average point:", error);
           setData(0);
         });
-    } else if (props.type === "Victories/defeat ratio") {
+    } else if (props.type === "Ratio victoires/défaites") {
       getRatio(props.user.id)
         .then((ratio) => {
           setData(ratio);
@@ -85,7 +85,7 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
   }, [props.type, props.user.id]);
 
   if (usersWithRank === undefined) {
-    return <h2>LOADING</h2>;
+    return <h2>Chargement...</h2>;
   }
 
   return (

@@ -59,13 +59,13 @@ export default function LeaderboardPage() {
   }, [usersWithRank]);
 
   if (usersWithRank === undefined) {
-    return <h1>LOADING</h1>;
+    return <h1>Chargement...</h1>;
   }
 
   return (
     <div className="leaderboard-body">
       <div className="leaderboard-main-frame">
-        <div className="leaderboard-places"> Leaderboard </div>
+        <div className="leaderboard-places"> Classement </div>
 
         <LeaderboardTabs
           key="tabs"

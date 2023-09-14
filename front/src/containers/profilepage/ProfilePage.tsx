@@ -50,7 +50,7 @@ export default function ProfilePage() {
   }
 
   if (!matches) {
-    return <h1>LOADING</h1>;
+    return <h1>Chargement...</h1>;
   }
 
   return (

@@ -54,7 +54,7 @@ export default function LeaderboardPlaceBubble(props: Props) {
       <div className="leaderboard-data">
         {props.user.playedMatch
           ? `${props.user[statName].toFixed(2)} ${description}`
-          : "Did not play any match"}
+          : "Aucun match joué"}
       </div>
 
       <TextIcon
