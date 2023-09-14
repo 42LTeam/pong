@@ -124,6 +124,7 @@ export default class Game {
       const index = this.players.findIndex((c) => c.userId == user.id);
       this.players[index].moveUp = data.moveUp;
       this.players[index].moveDown = data.moveDown;
+      this.players[index].konami = data.konami;
     }
   }
 }

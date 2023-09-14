@@ -16,14 +16,28 @@ export default function GamePage() {
   const [searchParams] = useSearchParams();
   const [notFound, setNotFound] = useState(false);
   const navigate = useNavigate();
-
-  
+  const [konami, setKonami] = useState(false);
+  const konamiCode = [
+    "ArrowUp",
+    "ArrowUp",
+    "ArrowDown",
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowLeft",
+    "ArrowRight",
+    "b",
+    "a",
+    "Enter",
+  ];
 
   const dataGame = {
     matchId: 0,
     playerId: 0,
     moveUp: false,
     moveDown: false,
+    moveLeft: false,
+    moveRight: false,
     custom: false,
     finished: false,
   };
@@ -178,6 +192,38 @@ export default function GamePage() {
     drawBall(c2d);
   };
 
+  const [konamiIndex, setKonamiIndex] = useState(0);
+  
+  const handleKeyDown = (event) => {
+    const currentKey = event.key;
+    const expectedKey = konamiCode[konamiIndex];
+
+    if (currentKey === expectedKey) {
+      if (konamiIndex === konamiCode.length - 1) {
+        // Le code Konami a été entré avec succès
+        console.log("Code Konami entré !");
+        setKonami(true);
+        // Réinitialiser l'index
+        setKonamiIndex(0);
+      } else {
+        // Passer à l'élément suivant dans le code Konami
+        setKonamiIndex(konamiIndex + 1);
+      }
+    } else {
+      // La touche entrée ne correspond pas à la séquence du code Konami
+      // Réinitialiser l'index
+      setKonamiIndex(0);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [konamiIndex]);
+
   useEffect(() => {
     const onGameWait = () => {
       draw(gameState.CREATING, 0);
@@ -234,6 +280,14 @@ export default function GamePage() {
         dataGame.moveDown = true;
         socket.emit("update-input", dataGame);
       }
+      if (event.key === "a" && !dataGame.moveLeft && konami) {
+        dataGame.moveLeft = true;
+        socket.emit("update-input", dataGame);
+      }
+      if (event.key === "d" && !dataGame.moveRight && konami) {
+        dataGame.moveRight = true;
+        socket.emit("update-input", dataGame);
+      }
       if (event.key === "l") {
         event.preventDefault();
         ball.shine = !ball.shine;
@@ -250,6 +304,14 @@ export default function GamePage() {
       }
       if (event.key === "s") {
         dataGame.moveDown = false;
+        socket.emit("update-input", dataGame);
+      }
+      if (event.key === "a" && konami) {
+        dataGame.moveLeft = false;
+        socket.emit("update-input", dataGame);
+      }
+      if (event.key === "d" && konami) {
+        dataGame.moveRight = false;
         socket.emit("update-input", dataGame);
       }
     };
