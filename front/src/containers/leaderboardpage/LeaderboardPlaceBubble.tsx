@@ -17,21 +17,21 @@ export default function LeaderboardPlaceBubble(props: Props) {
   var [description, setDescription] = useState("");
 
   let statName = ""; //nom precis de l'attribut
-  if (props.kind === "Total xp") {
+  if (props.kind === "XP total") {
     statName = "xp";
-  } else if (props.kind === "Victories/defeat ratio") {
+  } else if (props.kind === "Ratio victoires/défaites") {
     statName = "ratio";
-  } else if (props.kind === "Average points per match") {
+  } else if (props.kind === "Moyenne des points par match") {
     statName = "pointAverage";
   }
 
   useEffect(() => {
-    if (props.kind === "Total xp") {
+    if (props.kind === "XP total") {
       setDescription("XP");
-    } else if (props.kind === "Victories/defeat ratio") {
-      setDescription("victories / defeat ratio");
-    } else if (props.kind === "Average points per match") {
-      setDescription("points per match");
+    } else if (props.kind === "Ratio victoires/défaites") {
+      setDescription("ratio victoires / défaites");
+    } else if (props.kind === "Moyenne des points par match") {
+      setDescription("points par match");
     }
   }, [props.kind]);
 

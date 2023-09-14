@@ -1,7 +1,5 @@
 import { User } from "../Auth";
-import { getUserByID, getUserMatches } from "../../api";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { getUserMatches } from "../../api";
 
 export interface UserRank extends User {
   rank: number;
@@ -45,11 +43,11 @@ export const getUsersRanks = async (
     return user;
   });
 
-  if (StatKind === "Total xp") {
+  if (StatKind === "XP total") {
     statName = "xp";
-  } else if (StatKind === "Average points per match") {
+  } else if (StatKind === "Moyenne des points par match") {
     statName = "pointAverage";
-  } else if (StatKind === "Victories/defeat ratio") {
+  } else if (StatKind === "Ratio victoires/défaites") {
     statName = "ratio";
   }
 
