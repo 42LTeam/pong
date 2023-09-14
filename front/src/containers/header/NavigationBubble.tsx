@@ -31,7 +31,7 @@ const NavigationBubble = () => {
         text="/social"
         state={state}
         children={<ChatIcon />}
-        description="social"
+        description="Social"
       ></HeaderNavigationIcon>
 
       <HeaderNavigationIcon
@@ -39,7 +39,7 @@ const NavigationBubble = () => {
         text="/"
         state={state}
         children={<PlayIcon />}
-        description="home"
+        description="Accueil"
       ></HeaderNavigationIcon>
 
       <HeaderNavigationIcon
@@ -47,7 +47,7 @@ const NavigationBubble = () => {
         text="/leaderboard"
         state={state}
         children={<LeaderboardIcon />}
-        description="leaderboard"
+        description="Leaderboard"
       ></HeaderNavigationIcon>
     </div>
   );
