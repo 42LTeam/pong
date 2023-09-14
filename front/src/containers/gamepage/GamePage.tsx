@@ -97,13 +97,15 @@ export default function GamePage() {
       c2d.canvas.width * (left ? 0.375 : 0.625),
       textPos
     );
-    if (!custom)                                              /////////////////////////////////
+    if (!custom || (custom && 0.35 < ball.x && ball.x < 0.65))
+    {
       c2d.fillRect(
         (player.x - ball.semiSize) * c2d.canvas.width,
         (player.y - players.semiHeight) * c2d.canvas.height,
         ball.semiSize * 2 * c2d.canvas.width,
         players.semiHeight * 2 * c2d.canvas.height
       );
+    }
   };
 
   const drawText = (c2d, status, countdown) => {
