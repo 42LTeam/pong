@@ -2,9 +2,9 @@ import io from "socket.io-client";
 import axios from "axios";
 
 const webSocketURL =
-  (import.meta.env.VITE_API_URL || "http://localhost") + ":8001";
+  (import.meta.env.VITE_API_URL || "http://localhost") + "/ws";
 const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
-console.log("wtd", import.meta.env.VITE_API_URL);
+// console.log("wtd", import.meta.env.VITE_API_URL);
 export const socket = io(webSocketURL, { autoConnect: true });
 
 export async function deco() {

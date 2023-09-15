@@ -9,11 +9,11 @@ import * as express from "express";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const localhostfront =
-    "http://" + (process.env.LOCALHOST || "localhost");
+    "http://" + (process.env.LOCALHOST || "localhost") + ":80";
 
   setupSwagger(app); // Swagger API
   app.enableCors({
-    origin: localhostfront, // changez pour le port du front
+    origin: localhostfront,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     credentials: true,
   });

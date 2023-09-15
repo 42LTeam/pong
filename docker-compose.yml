@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - docker-nest-postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - net
   api:
     container_name: api
     build:
@@ -23,19 +36,6 @@ services:
       - ./front/dist:/usr/src/app/dist
     depends_on:
       - api
-    networks:
-      - net
-
-  postgres:
-    container_name: postgres
-    image: postgres
-    restart: always
-    env_file:
-      - .env
-    volumes:
-      - docker-nest-postgres:/var/lib/postgresql/data
-    ports:
-      - '5432:5432'
     networks:
       - net
 
