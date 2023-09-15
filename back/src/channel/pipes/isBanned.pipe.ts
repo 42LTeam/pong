@@ -1,21 +1,35 @@
-// import { Injectable, PipeTransform, ArgumentMetadata, ForbiddenException } from '@nestjs/common';
-// import { PrismaService } from '../../prisma/prisma.service';
+import {
+    Injectable,
+    PipeTransform,
+    ArgumentMetadata,
+    ForbiddenException, Inject,
+} from "@nestjs/common";
+import { PrismaService } from "../../prisma/prisma.service";
+import { REQUEST } from '@nestjs/core'
 
-// @Injectable()
-// export class IsBannedPipe implements PipeTransform {
-//   constructor(private prisma: PrismaService) {}
+@Injectable()
+export class isBannedPipe implements PipeTransform {
+    constructor(
+        @Inject(REQUEST) protected readonly request: Request,
+        private prisma: PrismaService) {
+    }
 
-//   async transform(value: any, _metadata: ArgumentMetadata) {
-//     const { channelId, userId } = value;
+    async transform(channelId: any, _metadata: ArgumentMetadata) {
 
-//     const userChannel = await this.prisma.userChannel.findFirst({
-//       where: { channelId: channelId, userId: userId },
-//     });
+        let user = await this.request["user"]
+        const userChannel = await this.prisma.userChannel.findFirst({
+            where: {
+                channelId: channelId,
+                AND: [{userId: user.id}]
+            },
+        });
 
-//     if (userChannel.isBanned && new Date(userChannel.isBanned) > new Date()) {
-//       throw new ForbiddenException('User is banned from this channel.');
-//     }
+        console.log("isBannedPipe: userChannel.isBanned === ", userChannel.isBanned)
 
-//     return value;
-//   }
-// }
+        if (userChannel && userChannel.isBanned === true) {
+            throw new ForbiddenException("User is ban of this channel.");
+        }
+        return channelId
+    }
+}
+//isChannelAdminPipe
