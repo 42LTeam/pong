@@ -52,7 +52,7 @@ export class AuthController {
   @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
     const localhostfront =
-      "http://" + (process.env.LOCALHOST || "localhost") + ":5173";
+      "http://" + (process.env.LOCALHOST || "localhost");
     res.redirect(localhostfront);
   }
 
