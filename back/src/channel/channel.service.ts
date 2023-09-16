@@ -157,6 +157,7 @@ export class ChannelService {
       select: {
         channelId: true,
         lastRead: true,
+        isAdmin: true,
       },
     });
     const ids = userChannel.map((current) => current.channelId);
@@ -197,10 +198,9 @@ export class ChannelService {
     const mapFunc = async (current) => {
       return {
         ...current,
+        isAdmin: userChannel.some(c => c.channelId == current.id && c.isAdmin),
         lastRead: lastRead[ids.indexOf(current.id)],
-        lastMessage: await this.messageService.getLastMessageInChannel(
-          current.id
-        ),
+        lastMessage: await this.messageService.getLastMessageInChannel(current.id),
       };
     };
 
