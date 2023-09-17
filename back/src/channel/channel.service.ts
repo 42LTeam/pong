@@ -410,4 +410,20 @@ export class ChannelService {
       },
     });
   }
+
+  async setChannelName(channelId: number, name: string) {
+    return this.prisma.channel.update({
+      where: { id: channelId },
+      data: { name },
+    });
+  }
+
+
+
+  async setChannelPrivated(channelId: number, privated: boolean) {
+    return this.prisma.channel.update({
+      where: { id: channelId },
+      data: { privated },
+    });
+  }
 }
