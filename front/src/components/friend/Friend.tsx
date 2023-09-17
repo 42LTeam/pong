@@ -5,18 +5,12 @@ import { useNavigate } from "react-router-dom";
 import {
   getConversation,
   removeFriendship,
-  removeUserFromChannel,
-  muteUserFromChannel,
-  banUserFromChannel,
-  removeUserAdminFromChannel,
-  unbanUserFromChannel,
   getUserByID,
   unblockUser,
 } from "../../api";
 import { AuthContext, User } from "../../containers/Auth";
 
 type Props = {
-  channelId: number;
   children?: any;
   friend: User;
   isAdmin: boolean;
