@@ -1,6 +1,6 @@
 import "../../css/chat.css";
 import Conversations from "./conversation/Conversations";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Friends from "./friend/Friends";
 import Chat from "./chat/Chat";
 import { useParams } from "react-router-dom";
@@ -22,7 +22,7 @@ export default function SocialBody() {
       {state ? (
         <>
           <div className="vertical-separator"></div>
-          <ChannelMembersList channelId={state} setChannelId={setState} />
+          <ChannelMembersList channelId={state} />
         </>
       ) : null}
     </div>

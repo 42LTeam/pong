@@ -6,9 +6,9 @@ import {
   WebSocketServer,
 } from "@nestjs/websockets";
 import { ClientService } from "../client.service";
-import { Injectable, UseGuards } from "@nestjs/common";
+import {ForbiddenException, Injectable, UseGuards} from "@nestjs/common";
 import { WSAuthenticatedGuard } from "../../auth/guards/wsauthenticated.guard";
-import { User } from "@prisma/client";
+import {User, UserChannel} from "@prisma/client";
 import { ChannelService } from "../../channel/channel.service";
 import { MessageService } from "../../message/message.service";
 
@@ -66,16 +66,31 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WSAuthenticatedGuard)
   async newMessage(client, data): Promise<void> {
     const user = await this.clientService.getClientById(client.id);
+
+    const usersInChannel = await this.channelService.getAllUserChannelsInChannel(data.channelId);
+    if (!usersInChannel.some(u => !u.isBanned && u.userId === user.id)) {
+      throw new ForbiddenException("User isn't in this channel.");
+    }
+    // const Until = new Date();
+    console.log("User muted date: ", usersInChannel.some(u => u.isMuted));
+    console.log("Date now: ", Date());
+
+    const isMuted = await this.channelService.isUserMutedFromChannel(data.channelId, user.id)
+    if (isMuted) {
+      console.log("You are muted", user.username);
+      return;
+    }
+    // if (!usersInChannel.some(u => u.isMuted !== null || u.isMuted < Date())) {
+    //   throw new ForbiddenException("User have been mute for a while in this channel.");
+    // }
     const message = await this.messageService.createMessage(
       user.id,
       data.channelId,
       data.content
     );
-    const users: User[] = await this.channelService.getAllUsersInChannel(
-      data.channelId
-    );
-    for (const u of users) {
-      this.server.sockets.sockets.get(u.session)?.emit("new-message", message);
+
+    for (const u of usersInChannel.filter((u) => !u.isBanned)) {
+      this.server.sockets.sockets.get(u.user.session)?.emit("new-message", message);
     }
   }
 }

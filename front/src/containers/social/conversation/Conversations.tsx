@@ -28,7 +28,7 @@ export default function Conversations({ state }: Props) {
     setPopUpPosition({
       left: event.clientX,
       top: event.clientY,
-      width: "420px",
+      // width: "420px",
     });
   };
 
@@ -61,7 +61,7 @@ export default function Conversations({ state }: Props) {
             state={state}
           ></FriendButton>
         }
-        subheader="Messages privés"
+        subheader="Créer un Salon"
         subheaderIcon={
           <img
             onClick={(event) => handlePopUp(event)}
@@ -92,10 +92,10 @@ export default function Conversations({ state }: Props) {
                   : b.created_at;
                 return a_value < b_value ? 1 : -1;
               })
-              .map((conversation) => {
-                 console.log(conversation);
+              .map((conversation, i) => {
                 return (
                   <ContextMenu
+                      key={i}
                     buttons={[
                       {
                         text: "Leave",
@@ -108,6 +108,7 @@ export default function Conversations({ state }: Props) {
                       handleClick={() => setState(conversation.id)}
                       key={"conversation_id " + conversation.id}
                       avatar={conversation.users[0]?.user.avatar}
+                      isPrivateMessage={conversation.conv}
                       username={
                         conversation.conv
                           ? conversation.users[0]?.user.username
