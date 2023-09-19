@@ -9,6 +9,7 @@ import { ApplicationContext } from "../../Application";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Auth";
 import ContextMenu from "../../../components/utils/ContextMenu";
+import EditChannelPopOver from "./EditChannelPopOver";
 
 type Props = {
   state: any;
@@ -23,6 +24,8 @@ export default function Conversations({ state }: Props) {
   const application = useContext(ApplicationContext);
   const user = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const [editChannel, setEditChannel] = useState(null);
 
   const handlePopUp = (event) => {
     setPopUpPosition({
@@ -96,7 +99,11 @@ export default function Conversations({ state }: Props) {
                 return (
                   <ContextMenu
                       key={i}
-                    buttons={[
+                    buttons={[...(conversation.isAdmin ? [{
+                      text: "Modifier le channel",
+                      handleClick: () => setEditChannel(conversation),
+                    },
+                      {separator: true}] : []),
                       {
                         text: "Leave",
                         handleClick: () =>
@@ -125,6 +132,10 @@ export default function Conversations({ state }: Props) {
           </>
         }
       />
+      {editChannel ? <EditChannelPopOver channel={editChannel} checked={null} clear={(bool) => {
+        setEditChannel(null);
+        clear(bool);
+      }}></EditChannelPopOver> : null}
     </>
   );
 }
