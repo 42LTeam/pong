@@ -5,13 +5,8 @@ import { useNavigate } from "react-router-dom";
 import {
   getConversation,
   removeFriendship,
-  removeUserFromChannel,
-  muteUserFromChannel,
-  banUserFromChannel,
-  removeUserAdminFromChannel,
-  unbanUserFromChannel,
   getUserByID,
-  unblockUser,
+  unblockUser, blockUser,
 } from "../../api";
 import { AuthContext, User } from "../../containers/Auth";
 
@@ -45,13 +40,13 @@ export default function Friend(props: Props) {
             text: "Profile",
             handleClick: () => navigate("/profile/" + props.friend.id),
           },
-          {
+        ...(blocked ? [] : [{
             text: "Envoyer un message",
             handleClick: () =>
               getConversation(props.friend.id).then((response) =>
                 navigate("/social/" + response.data.id)
               ),
-          },
+          }]),
           { separator: true },
           {
             text: "Match standard",
@@ -99,7 +94,9 @@ export default function Friend(props: Props) {
   } else if (props.friend.id != user.id) {
     buttons.push({
       text: "Bloquer",
-      handleClick: () => alert("TODO"),
+      handleClick: () => {
+        blockUser(props.friend.id).then(() => user.blockList.push(props.friend.id));
+      },
     });
   }
   if (isFriend) {
@@ -132,12 +129,12 @@ export default function Friend(props: Props) {
         className="friend"
         style={display ? { display: "none" } : null}
       >
-        <Avatar width="48px" height="48px" url={props.friend?.avatar}></Avatar>
+        <Avatar width="48px" height="48px" url={!blocked ? props.friend?.avatar: null}></Avatar>
 
         <div className="conversation-content">
           {!props.isBanned ? (
             <div className="conversation-username">
-              {props.friend?.username}
+              {!blocked ? props.friend?.username: "💔 UwU 💔"}
             </div>
           ) : (
             <div className="conversation-username-ban">

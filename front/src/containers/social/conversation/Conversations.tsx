@@ -93,7 +93,6 @@ export default function Conversations({ state }: Props) {
                 return a_value < b_value ? 1 : -1;
               })
               .map((conversation, i) => {
-                // console.log(conversation);
                 return (
                   <ContextMenu
                       key={i}
