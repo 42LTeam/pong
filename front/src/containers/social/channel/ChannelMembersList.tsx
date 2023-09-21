@@ -40,7 +40,7 @@ export default function ChannelMembersList({
 
   return (
     <SidePanel
-      subheader="Members"
+      subheader="Membres"
       body={
         <>
           {ChannelAllMembers.map((current) => {
@@ -54,7 +54,7 @@ export default function ChannelMembersList({
                   isAdmin && current.user.id != user.id && !current.isBanned && !current.isOwner
                       ? [
                         {
-                          text: "Kick",
+                          text: "Virer du salon",
                           handleClick: () =>
                               removeUserAdminFromChannel(
                                   channelId,
@@ -62,12 +62,12 @@ export default function ChannelMembersList({
                               ),
                         },
                         {
-                          text: "Mute",
+                          text: "Fermer sa bouche",
                           handleClick: () =>
                               muteUserFromChannel(channelId, current.user.id),
                         },
                         {
-                          text: "Ban",
+                          text: "Bannir",
                           handleClick: () =>
                               banUserFromChannel(channelId, current.user.id),
                         },
@@ -76,7 +76,7 @@ export default function ChannelMembersList({
                             user.id === current.channel.creatorId
                                 ? [
                                   {
-                                    text: "Make me Admin",
+                                    text: "Nommer Ministre",
                                     handleClick: () => ownerMakeAdmin(channelId, current.user.id),
                                   },
                                   { separator: true }

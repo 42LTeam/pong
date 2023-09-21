@@ -24,11 +24,11 @@ export default function FriendQuickInvite() {
         )
         .catch((error) => console.error("Error fetching friend data:", error));
     }
-  }, [suggestions, user]);
+  }, [suggestions.length, user]);
 
   return (
     <>
-      <h1>Friends Quick Invite</h1>
+      <h1>Invite tes amis à jouer</h1>
       <TextInput
         key={"quick-invite-input"}
         text="Pseudo"
@@ -40,6 +40,7 @@ export default function FriendQuickInvite() {
         {suggestions.map((current) => (
           <FriendQuickInviteBubble key={current.id} user={current} />
         ))}
+        {!suggestions.length && <h2>Si t'as pas d'amis prends un curly</h2>}
       </div>
     </>
   );

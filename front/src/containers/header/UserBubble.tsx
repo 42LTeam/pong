@@ -67,14 +67,14 @@ const UserBubble = () => {
                 className="user user-title element"
                 onClick={() => handleOptionClick("my_profile")}
               >
-                My profile
+                Mon profile
               </li>
 
               <li
                 className="user user-title"
                 onClick={() => handleOptionClick("settings")}
               >
-                Settings
+                Réglages
               </li>
 
               <li
@@ -85,7 +85,7 @@ const UserBubble = () => {
                   });
                 }}
               >
-                Deco :(
+                Déconnexion
               </li>
             </ul>
           </div>

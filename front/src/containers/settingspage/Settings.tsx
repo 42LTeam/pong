@@ -42,7 +42,7 @@ export default function Settings() {
   };
 
   const handleEditClick = () => {
-    const newAvatarUrl = prompt("Please enter the new avatar URL:");
+    const newAvatarUrl = prompt("Entrez l'URL de votre nouvel avatar:");
     if (newAvatarUrl) {
       setAvatarUrl(newAvatarUrl);
       handleChangeImage(newAvatarUrl);
@@ -67,7 +67,7 @@ export default function Settings() {
   };
 
   const handleEditUsername = () => {
-    const newUsername = prompt("Please enter the new username:");
+    const newUsername = prompt("Entrez votre nouveau pseudo:");
     if (newUsername) {
       handleChangeUsername(newUsername);
     }

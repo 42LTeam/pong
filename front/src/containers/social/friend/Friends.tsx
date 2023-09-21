@@ -14,7 +14,7 @@ const states = [
   "En attente",
   "Bloqué",
   "Ajouter",
-  "Public Channels",
+  "Salons publiques",
 ];
 const paths = [
   "/users/friend/online/",
@@ -60,7 +60,7 @@ export default function Friends() {
       <div className="horizontal-separator"></div>
       {state === "Ajouter" ? (
         <AddFriend />
-      ) : state === "Public Channels" ? (
+      ) : state === "Salons publiques" ? (
         <PublicChannelsList />
       ) : (
         <Friendlist

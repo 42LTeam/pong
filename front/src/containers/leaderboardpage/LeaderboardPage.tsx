@@ -9,9 +9,9 @@ import "../../css/leaderboard.css";
 import { UserRank, getUserRank, getUsersRanks } from "./GetRanks";
 
 const states = [
-  "Total xp",
-  "Victories/defeat ratio",
-  "Average points per match",
+  "XP total",
+  "Ratio victoires/défaites",
+  "Moyenne des points par match",
 ];
 
 export default function LeaderboardPage() {
@@ -19,7 +19,7 @@ export default function LeaderboardPage() {
 
   const [placement, setPlacement] = useState(0);
   const [users, setUsers] = useState<User[]>([]);
-  const [state, setState] = useState("Total xp");
+  const [state, setState] = useState("XP total");
   const [usersWithRank, setUsersRanks] = useState<UserRank[] | undefined>(
     undefined
   );
@@ -59,15 +59,13 @@ export default function LeaderboardPage() {
   }, [usersWithRank]);
 
   if (usersWithRank === undefined) {
-    return <h1>LOADING</h1>;
+    return <h1>Chargement...</h1>;
   }
-
-  //  return <h1>LOADING</h1>
 
   return (
     <div className="leaderboard-body">
       <div className="leaderboard-main-frame">
-        <div className="leaderboard-places"> Leaderboard </div>
+        <div className="leaderboard-places"> Classement </div>
 
         <LeaderboardTabs
           key="tabs"

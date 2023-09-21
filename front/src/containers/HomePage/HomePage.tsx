@@ -118,12 +118,12 @@ export default function HomePage() {
         </div>
 
         <Tooltip
-        title={"Jeu original de 1972"}
+        title={"Semblable au jeu original de 1972"}
         TransitionComponent={Zoom}>
           <div>
         <Button
           handleClick={() => navigate("/game")}
-          text={"PLAY"}
+          text={"STANDARD"}
           clickable
           buttonProps={{
             style: {
