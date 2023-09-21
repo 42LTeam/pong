@@ -9,6 +9,7 @@ import { ApplicationContext } from "../../Application";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Auth";
 import ContextMenu from "../../../components/utils/ContextMenu";
+import EditChannelPopOver from "./EditChannelPopOver";
 
 type Props = {
   state: any;
@@ -24,11 +25,13 @@ export default function Conversations({ state }: Props) {
   const user = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const [editChannel, setEditChannel] = useState(null);
+
   const handlePopUp = (event) => {
     setPopUpPosition({
       left: event.clientX,
       top: event.clientY,
-      width: "420px",
+      // width: "420px",
     });
   };
 
@@ -61,7 +64,7 @@ export default function Conversations({ state }: Props) {
             state={state}
           ></FriendButton>
         }
-        subheader="Messages privés"
+        subheader="Créer un Salon"
         subheaderIcon={
           <img
             onClick={(event) => handlePopUp(event)}
@@ -92,11 +95,15 @@ export default function Conversations({ state }: Props) {
                   : b.created_at;
                 return a_value < b_value ? 1 : -1;
               })
-              .map((conversation) => {
-                // console.log(conversation);
+              .map((conversation, i) => {
                 return (
                   <ContextMenu
-                    buttons={[
+                      key={i}
+                    buttons={[...(conversation.isAdmin ? [{
+                      text: "Modifier le channel",
+                      handleClick: () => setEditChannel(conversation),
+                    },
+                      {separator: true}] : []),
                       {
                         text: "Leave",
                         handleClick: () =>
@@ -108,6 +115,7 @@ export default function Conversations({ state }: Props) {
                       handleClick={() => setState(conversation.id)}
                       key={"conversation_id " + conversation.id}
                       avatar={conversation.users[0]?.user.avatar}
+                      isPrivateMessage={conversation.conv}
                       username={
                         conversation.conv
                           ? conversation.users[0]?.user.username
@@ -124,6 +132,10 @@ export default function Conversations({ state }: Props) {
           </>
         }
       />
+      {editChannel ? <EditChannelPopOver channel={editChannel} checked={null} clear={(bool) => {
+        setEditChannel(null);
+        clear(bool);
+      }}></EditChannelPopOver> : null}
     </>
   );
 }

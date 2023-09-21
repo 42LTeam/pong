@@ -9,6 +9,7 @@
   border-radius: 10px;
   background: #34495e;
   z-index: 999;
+  min-width: min-content;
 }
 
 .popover-root {

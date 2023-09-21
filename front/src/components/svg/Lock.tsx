@@ -1,4 +1,4 @@
-export default function Lock({ color }) {
+export default function Lock({ color }: { color?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

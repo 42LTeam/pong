@@ -40,7 +40,7 @@ const TextInput = forwardRef(function MyInput(props: Props, ref) {
         onChange={props.onChange}
         placeholder={props.text}
         type={props.password ? "password" : ""}
-        {...(props.value ? { value: props.value } : {})}
+        {...(props.value ? { defaultValue: props.value } : {})}
       />
       {props.button}
     </div>

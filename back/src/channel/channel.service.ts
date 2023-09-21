@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import {ForbiddenException, forwardRef, Inject, Injectable} from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import {
   CreateChannelDto,
@@ -54,6 +54,7 @@ export class ChannelService {
           create: {
             userId: creatorId,
             isAdmin: true,
+            isOwner: true,
           },
         },
       },
@@ -116,14 +117,27 @@ export class ChannelService {
     return channel.map((current) => current.user);
   }
 
-  async getChannelAllMembers(channelId: number): Promise<any> {
+  async getAllUserChannelsInChannel(channelId: number): Promise<any> {
     return this.prisma.userChannel.findMany({
       where: {
         channelId: channelId,
       },
-      include: {
+      select: {
+        id: true,
+        userId: true,
+        isAdmin: true,
+        isBlocked: true,
+        isMuted: true,
+        isBanned: true,
+        isOwner: true,
+        channel: {
+          select: {
+            creatorId: true
+          }
+        },
         user: {
           select: {
+            session: true,
             avatar: true,
             username: true,
             status: true,
@@ -143,6 +157,7 @@ export class ChannelService {
       select: {
         channelId: true,
         lastRead: true,
+        isAdmin: true,
       },
     });
     const ids = userChannel.map((current) => current.channelId);
@@ -183,10 +198,9 @@ export class ChannelService {
     const mapFunc = async (current) => {
       return {
         ...current,
+        isAdmin: userChannel.some(c => c.channelId == current.id && c.isAdmin),
         lastRead: lastRead[ids.indexOf(current.id)],
-        lastMessage: await this.messageService.getLastMessageInChannel(
-          current.id
-        ),
+        lastMessage: await this.messageService.getLastMessageInChannel(current.id),
       };
     };
 
@@ -277,8 +291,8 @@ export class ChannelService {
   async banUserFromChannel(channelId: number, userId: number): Promise<any> {
     return this.prisma.userChannel.updateMany({
       where: {
+        channelId: channelId,
         userId: userId,
-        id: channelId,
       },
       data: {
         isBanned: true,
@@ -286,21 +300,33 @@ export class ChannelService {
     });
   }
 
-  async unbanUserFromChannel(channelId: number, userId: number): Promise<any> {
+  //TODO if we want to unban
+  // async unBanUserFromChannel(channelId: number, userId: number): Promise<any> {
+  //   return this.prisma.userChannel.updateMany({
+  //     where: {
+  //       channelId: channelId,
+  //       userId: userId,
+  //     },
+  //     data: {
+  //       isBanned: false
+  //     },
+  //   });
+  // }
+
+  async ownerMakeAdmin(channelId: number, userId: number): Promise<any> {
     return this.prisma.userChannel.updateMany({
       where: {
+        channelId: channelId,
         userId: userId,
-        id: channelId,
       },
       data: {
-        isBanned: false,
+        isAdmin: true,
       },
     });
   }
-
   async muteUserFromChannel(channelId: number, userId: number): Promise<any> {
     const muteUntil = new Date();
-    muteUntil.setMinutes(muteUntil.getMinutes() + 5);
+    muteUntil.setMinutes(muteUntil.getMinutes() + 1);
     return this.prisma.userChannel.updateMany({
       where: { channelId: channelId, userId: userId },
       data: { isMuted: muteUntil },
@@ -332,13 +358,23 @@ export class ChannelService {
     });
   }
 
-  async getPublicChannels(): Promise<Channel[]> {
-    return this.prisma.channel.findMany({
+  async getPublicChannels(userId: number): Promise<Channel[]> {
+
+    const channels = this.prisma.channel.findMany({
       where: {
         privated: false,
         conv: false,
+        NOT: {
+          users: {
+            some: {
+              userId: userId,
+            }
+          }
+        }
       },
     });
+    console.log("getPublicChannels => channels:", channels)
+    return channels
   }
 
   async validateChannelPassword(
@@ -356,16 +392,15 @@ export class ChannelService {
   }
 
   async joinChannel(channelId: number, userId: number): Promise<any> {
-    const existingUserChannel = await this.prisma.userChannel.findUnique({
+    const existingUserChannel = await this.prisma.userChannel.findMany({
       where: {
-        userId_channelId: {
-          userId: userId,
-          channelId: channelId,
-        },
+        AND: [
+          { userId: userId },
+          { channelId: channelId },
+        ],
       },
     });
-
-    if (existingUserChannel) {
+    if (Array.isArray(existingUserChannel) && existingUserChannel.length > 0) {
       throw new Error("User is already part of the channel");
     }
     return this.prisma.userChannel.create({
@@ -373,6 +408,22 @@ export class ChannelService {
         userId: userId,
         channelId: channelId,
       },
+    });
+  }
+
+  async setChannelName(channelId: number, name: string) {
+    return this.prisma.channel.update({
+      where: { id: channelId },
+      data: { name },
+    });
+  }
+
+
+
+  async setChannelPrivated(channelId: number, privated: boolean) {
+    return this.prisma.channel.update({
+      where: { id: channelId },
+      data: { privated },
     });
   }
 }

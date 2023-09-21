@@ -20,6 +20,25 @@ export async function deco() {
 /* File: /back/src/channel/controllers/channel.controller.ts                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+//TODO ownerMakeAdmin
+
+// @Post("/:channelId/owner-make-admin/:userId")
+//   @ApiOperation({ summary: "Make a User Admin (Owner privilege)" })
+export async function ownerMakeAdmin(
+    channelId: number,
+    userId: number
+) {
+  const config = {
+    method: "post",
+    url: URL + "/channels/" + channelId + "/owner-make-admin/" + userId,
+    withCredentials: true,
+  };
+  console.log("ownerMakeAdmin(channelId: number, userId: number)");
+  console.log("channelId = ", channelId);
+  console.log("userId = ", userId);
+  return axios(config);
+}
+
 //  @Post('/:channelId/admin-quit/:userId')
 //  @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
 export async function removeUserAdminFromChannel(
@@ -224,10 +243,10 @@ export async function getChannels() {
   return axios(config);
 }
 
-export async function getPublicChannels() {
+export async function getPublicChannels(userId: number) {
   const config = {
     method: "get",
-    url: URL + "/channels/public-channels",
+    url: URL + "/channels/public-channels/" + userId,
     withCredentials: true,
   };
   return axios(config);
@@ -238,6 +257,20 @@ export async function getChannelAllMembers(id: number) {
     method: "get",
     url: URL + `/channels/${id}/members`,
     withCredentials: true,
+  };
+  return axios(config);
+}
+
+export async function editChannel(channelId: number, data: {
+  name?: string;
+  password?: string;
+  privated?: boolean;
+}) {
+  const config = {
+    method: "post",
+    url: URL + "/channels/edit/" + channelId,
+    withCredentials: true,
+    data,
   };
   return axios(config);
 }
@@ -527,8 +560,8 @@ export async function validateChannelPassword(
 }
 
 export async function joinChannel(channelId: number) {
-  const config = {
-    method: "post",
+    const config = {
+      method: "post",
     url: `${URL}/channels/${channelId}/join`,
     withCredentials: true,
   };
