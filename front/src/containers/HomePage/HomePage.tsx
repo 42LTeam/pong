@@ -118,7 +118,7 @@ export default function HomePage() {
         </div>
 
         <Tooltip
-        title={"Original game of 1972"}
+        title={"Jeu original de 1972"}
         TransitionComponent={Zoom}>
           <div>
         <Button
@@ -135,7 +135,7 @@ export default function HomePage() {
         </Tooltip>
 
         <Tooltip
-        title={"Pretty like the same but with invisible paddles"}
+        title={"La même mais avec des paddles invisibles"}
         TransitionComponent={Zoom}>
           <div>
         <Button
