@@ -5,11 +5,13 @@ import {
   get2fa,
   updateUserAvatar,
   updateUserUsername,
+
 } from "../../api";
+import Button from "../../components/utils/Button";
 
 type Props = {};
 
-export default function Settings(props: Props) {
+export default function Settings() {
   const user = useContext(AuthContext);
   const inputRef = useRef(null);
 
@@ -72,35 +74,39 @@ export default function Settings(props: Props) {
   };
 
   return (
-    <div className="main-frame">
-      <div className="avatar-section">
-        <div className="user-avatar">
-          <div className="avatar-container">
-            <div
-              className="avatar"
-              style={{ backgroundImage: `url(${avatarUrl})` }}
-            ></div>
-            <div className="avatar-overlay" onClick={handleEditClick}>
-              Edit
+      <div className="main-frame">
+        <div className="avatar-section">
+          <div className="user-avatar">
+            <div className="avatar-container">
+              <div
+                  className="avatar"
+                  style={{ backgroundImage: `url(${avatarUrl})` }}
+              ></div>
+              <div className="avatar-overlay" onClick={handleEditClick}>
+                Edit
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="username-section">
-        <div className="username-button">
-          <div className="username-container">
-            <div className="username-overlay" onClick={handleEditUsername}>
-              Edit
-            </div>
-            <div
-              className="user-username"
-              style={{ fontSize: username === "Error" ? "smaller" : "inherit" }}
-            >
-              {username}
+        <div className="username-section">
+          <div className="username-button">
+            <div className="username-container">
+              <div className="username-overlay" onClick={handleEditUsername}>
+                Edit
+              </div>
+              <div
+                  className="user-username"
+                  style={{ fontSize: username === "Error" ? "smaller" : "inherit" }}
+              >
+                {username}
+              </div>
             </div>
           </div>
         </div>
+        {Boolean(qr) ?
+            <img src={qr}/> :
+            <Button handleClick={activate2fa} text={"activer la 2fa"} clickable></Button>
+        }
       </div>
-    </div>
   );
 }
