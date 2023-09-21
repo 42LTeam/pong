@@ -77,16 +77,18 @@ export default class Game {
       player.send("game-pause", null);
     else {
       this.players.forEach((player) => {
-        if (player.colorball === undefined)
-          if (user.id === player.userId)
+        if (player.colorball === undefined) {
+          if (user.id === player.userId) {
             player.colorball = user.colorball || "#FFFFFF";
-      });
-      this.players.forEach((player) => {
-        if (player.userId === 92477) {
-            player.name = "LOOSER";
-            player.colorball = "#000000";
+            console.log(
+              "Player",
+              player.name,
+              " colorball set to",
+              player.colorball
+            );
+          }
         }
-      });
+      }); //this verification is needed cause on invite, it is called several times and has not all infos in firsts calls
       this.engine.startGame();
     }
   }

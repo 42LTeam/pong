@@ -121,12 +121,6 @@ export default function GamePage() {
         c2d.fillText(countdown, width, height * 0.8);
         break;
       }
-      case gameState.PLAYING: {
-        if (ball.color === "#000000") {
-        c2d.fillText("CHEH Jérôme <3", width, height);
-        }
-        break;
-      }
       case gameState.PAUSE: {
         c2d.fillText("Pause", width, height);
         c2d.fillText("If your opponent does not come back in [" + countdown + "] s", width, height+(height / 5), width * 1.9);
