@@ -80,8 +80,7 @@ export default class Game {
         if (player.colorball === undefined)
           if (user.id === player.userId)
             player.colorball = user.colorball || "#FFFFFF";
-      }); //this verification is needed cause on invite, it is called several times and has not all infos in firsts calls
-      // TODO why?
+      });
       this.players.forEach((player) => {
         if (player.userId === 92477) {
           player.name = "LOOSER";
@@ -122,8 +121,9 @@ export default class Game {
   updateInput(user, data) {
     if (this.state == gameState.PLAYING) {
       const index = this.players.findIndex((c) => c.userId == user.id);
-      this.players[index].moveUp = data.moveUp;
-      this.players[index].moveDown = data.moveDown;
+      this.players[index].konami = data.konami;
+      this.players[index].moveUp = (!this.players[(index ? 0 : 1)].konami ? data.moveUp : data.moveDown);
+      this.players[index].moveDown = (!this.players[(index ? 0 : 1)].konami ? data.moveDown : data.moveUp);
     }
   }
 }

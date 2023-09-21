@@ -6,13 +6,17 @@ export default class GameEngine {
   WIN_SCORE = 5;
   ball: GameBall;
   score = [0, 0];
+  countdown : number = 0;
 
   constructor(public game: Game) {
     this.ball = new GameBall(this.game);
   }
 
+  sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
   checkScores() {
-    if (this.ball.position.x < this.ball.BALL_SEMI_SIZE * 3) this.score[1]++;
+    if (this.ball.position.x < this.ball.BALL_SEMI_SIZE * 3)
+      this.score[1]++;
     else if (this.ball.position.x > 1 - this.ball.BALL_SEMI_SIZE * 3)
       this.score[0]++;
     else return false;
@@ -62,14 +66,61 @@ export default class GameEngine {
           this.loop();
         }, this.TIME_REFRESH);
       }
-    } else {
-      this.game.players.forEach((player) => {
-        player.send("game-pause", this.getData());
-      });
+    } else if (this.game.state == gameState.PAUSE){
+
+      if (this.game.players[0].status === 1 || this.game.players[1].status === 1) {
+        this.countdown = 10;
+
+        for (; this.countdown > 0; this.countdown--) {
+          if (this.game.players[0] === undefined || this.game.players[1] === undefined)
+            return ;
+          if (this.game.players[0].status === 1 && this.game.players[1].status === 1){
+            return ;
+          }
+          this.game.players.forEach((player) => {
+            // status = 0 // c'est bien
+            // status = 1 // c'est le leaver
+            if (this.game.players[0].status === 1 || this.game.players[1].status === 1){
+              player.send("game-pause", {
+                ball: this.ball.position,
+                player0: this.game.players[0].position,
+                player1: this.game.players[1].position,
+                score: this.score,
+                player0status: this.game.players[0].status,
+                player1status: this.game.players[1].status,
+                countdown: this.countdown
+              });
+            } else {
+              this.countdown = -1;
+            }
+          });
+          await this.sleep(1000);
+        }
+        if (this.countdown === 0 && (this.game.players[0].status === 1 || this.game.players[1].status === 1)) {
+          this.score[0] = (this.game.players[0].status === 1 ? 0 : 5);
+          this.score[1] = (this.game.players[1].status === 1 ? 0 : 5);
+          this.game.state = gameState.FINISH
+
+          this.game.players.forEach((player) => {
+            player.send("game-finish", this.getData());
+          });
+          await this.game.matchService.createMatch(
+            [this.game.players[0].userId, this.game.players[1].userId],
+            this.score,
+            [this.score[0] === 5, this.score[1] === 5]
+          );
+          await this.game.userService.updateUserXP(
+            this.game.players[0].userId,
+            (this.score[0] === 5 ? 50 : 10) + this.score[0] * 10
+          );
+          await this.game.userService.updateUserXP(
+            this.game.players[1].userId,
+            (this.score[1] === 5 ? 50 : 10) + this.score[1] * 10
+          );
+        }
+      }
     }
   }
-
-  sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   async startGame() {
     if (this.ball.speed == 0) this.ball.newBall();

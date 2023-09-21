@@ -6,6 +6,8 @@ import FriendQuickInvite from "./FriendQuickInvite";
 import Ball from "../../components/svg/Ball";
 import { AuthContext } from "../Auth";
 import { updateUserColorball, getUserByID } from "../../api";
+import Tooltip from "@mui/material/Tooltip";
+import Zoom from "@mui/material/Zoom";
 
 const colors = [
   "#ECF0F1", //white
@@ -93,7 +95,6 @@ export default function HomePage() {
   }
 
   return (
-    // <div className="home-wrapper">
     <div className="frame-homepage">
       <div className="frame-left">
         <div className="ball-skin">
@@ -116,36 +117,43 @@ export default function HomePage() {
           />
         </div>
 
+        <Tooltip
+        title={"Jeu original de 1972"}
+        TransitionComponent={Zoom}>
+          <div>
         <Button
           handleClick={() => navigate("/game")}
           text={"STANDARD"}
           clickable
           buttonProps={{
             style: {
-              width: "60%",
-              // height: "60px",
+              width: "100%",
               fontSize: "40px",
             },
           }}
-        ></Button>
+        ></Button></div>
+        </Tooltip>
 
+        <Tooltip
+        title={"La même mais avec des paddles invisibles"}
+        TransitionComponent={Zoom}>
+          <div>
         <Button
           handleClick={() => navigate("/game?custom=true")}
           text={"CUSTOM"}
           clickable
           buttonProps={{
             style: {
-              width: "60%",
-              // height: "60px",
+              width: "100%",
               fontSize: "40px",
             },
           }}
-        ></Button>
+        ></Button></div>
+        </Tooltip>
       </div>
       <div className="frame-right">
         <FriendQuickInvite></FriendQuickInvite>
       </div>
     </div>
-    // </div>
   );
 }

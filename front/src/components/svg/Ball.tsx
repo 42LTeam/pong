@@ -24,7 +24,7 @@ export default function Ball(props: Props) {
               result="thicken"
             />
             <feGaussianBlur in="thicken" stdDeviation="10" result="blurred" />
-            <feFlood flood-color={props.color} result="glowColor" />
+            <feFlood floodColor={props.color} result="glowColor" />
             <feComposite
               in="glowColor"
               in2="blurred"

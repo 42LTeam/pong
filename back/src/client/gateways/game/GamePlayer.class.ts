@@ -10,6 +10,7 @@ export default class GamePlayer {
   moveUp = false;
   moveDown = false;
   status = playerStatus.ONLINE;
+  konami = false;
 
   constructor(
     public userId: number,
