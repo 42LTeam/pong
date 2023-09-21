@@ -33,8 +33,9 @@
   height: 100px;
   border-radius: 50%;
   background: #7f8c8d;
-  background-size: 100%;
+  background-size: cover;
   background-position: 50% 50%;
+  background-repeat: no-repeat;
 }
 
 .user-profile-title {
@@ -89,8 +90,9 @@
   height: 30px;
   border-radius: 50%;
   background: #7f8c8d;
-  background-size: 100%;
+  background-size: cover;
   background-position: 50% 50%;
+  background-repeat: no-repeat;
 }
 
 .match-history-opponent-pseudo {
