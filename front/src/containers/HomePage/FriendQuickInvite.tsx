@@ -24,7 +24,7 @@ export default function FriendQuickInvite() {
         )
         .catch((error) => console.error("Error fetching friend data:", error));
     }
-  }, [suggestions, user]);
+  }, [suggestions.length, user]);
 
   return (
     <>
