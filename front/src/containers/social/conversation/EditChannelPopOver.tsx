@@ -8,14 +8,14 @@ import {createChannel, editChannel, sendChannelInvite} from "../../../api";
 
 export default function EditChannelPopOver({channel, checked, clear, privateddefault}:{channel?: any,checked: any[], clear: any, privateddefault?: boolean}){
     const [hasName, setHasName] = useState(false);
-    const [privated, setPrivated] = useState(privateddefault);
+    const [privated, setPrivated] = useState(channel ? channel.privated : privateddefault);
     const nameRef = useRef(null);
     const passwordRef = useRef(null);
 
     const handleValidation = channel ?
         () => {
             const name = hasName ? nameRef.current.value : null;
-            const password = hasName ? passwordRef.current.value : null;
+            const password = passwordRef.current.value;
             editChannel(channel.id,{privated, name, password}).then(() => clear(true))
         }
         : async () => {
@@ -81,7 +81,7 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
                 <Button
                     handleClick={handleValidation}
                     text={channel ? "Modier le salon" : "Créer un salon"}
-                    clickable={nameRef.current?.value}
+                    clickable={true}
                 ></Button>
             </div>
         </PopOver>
