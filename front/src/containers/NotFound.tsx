@@ -16,17 +16,23 @@ const NotFound = function (props: Props) {
 
   return (
     <div className="not-found">
-      {props.page === "profile" ? (
-        <h1>The user with id {props.id} does not exist</h1>
-      ) : (
+      {props.page === "profile" && (
+        <h1>L'utilisateur avec l'identifiant {props.id} n'existe pas</h1>
+      )}
+
+      {props.page === "social" && (
+        <h1>La conversation que tu cherches n'existe pas ou tu n'as pas le droit d'y accéder</h1>
+      )}
+
+      {!props.page && (
         <>
-          <h1>404 Not Found</h1>
-          <h1>The ressource you are looking for does not exist</h1>
+          <h1>404 Pas trouvé</h1>
+          <h1>La ressource que tu cherches n'existe pas</h1>
         </>
       )}
       <Button
         handleClick={() => navigate("/")}
-        text={"HOME"}
+        text={"Accueil"}
         clickable
         buttonProps={{
           style: {
