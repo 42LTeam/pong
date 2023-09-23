@@ -172,6 +172,7 @@ export class ChannelService {
         id: true,
         conv: true,
         name: true,
+        privated: true,
         users: {
           take: 10,
           where: {
