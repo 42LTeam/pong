@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import { authSocketId, getStatus, socket } from "../api";
 import Application from "./Application";
@@ -6,6 +6,7 @@ import "../css/main.css";
 import DoubleAuth from "./DoubleAuth";
 import PopOver from "../components/utils/PopOver";
 import Button from "../components/utils/Button";
+import React from "react";
 
 export interface User {
   avatar: String;
@@ -24,12 +25,24 @@ export interface User {
 }
 
 export const AuthContext = createContext<User | undefined>(undefined);
+const RerenderContext = createContext(undefined);
+
+export function useRerender() {
+  return useContext(RerenderContext);
+};
+
+
 
 function Auth() {
   const [wsConnected, setConnected] = useState(false);
   const [destination, setDestination] = useState(null);
   const [user, setUser] = useState<User>(null);
+  const [rerender, setRerender] = useState(false);
   const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
+
+  const forceRerender = () => {
+    setRerender(!rerender);
+  };
 
   useEffect(() => {
     if (!user)
@@ -69,22 +82,24 @@ function Auth() {
 
   return (
     <AuthContext.Provider value={user}>
-      <Application>
-        {destination == "2fa" ? (
-          <DoubleAuth setDestination={setDestination}></DoubleAuth>
+      <RerenderContext.Provider value={forceRerender}>
+        <Application>
+          {destination == "2fa" ? (
+            <DoubleAuth setDestination={setDestination}></DoubleAuth>
+          ) : null}
+        </Application>
+        {!wsConnected && Boolean(user) ? (
+          <PopOver clear={null}>
+            <h1>Deconnecter</h1>
+            <h3>Vous ne pouvez avoir qu'un seul onglet a la fois.</h3>
+            <Button
+              handleClick={() => window.location.reload()}
+              text="Reprendre le controle"
+              clickable
+            ></Button>
+          </PopOver>
         ) : null}
-      </Application>
-      {!wsConnected && Boolean(user) ? (
-        <PopOver clear={null}>
-          <h1>Deconnecter</h1>
-          <h3>Vous ne pouvez avoir qu'un seul onglet a la fois.</h3>
-          <Button
-            handleClick={() => window.location.reload()}
-            text="Reprendre le controle"
-            clickable
-          ></Button>
-        </PopOver>
-      ) : null}
+      </RerenderContext.Provider>
     </AuthContext.Provider>
   );
 }

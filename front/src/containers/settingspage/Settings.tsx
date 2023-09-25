@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 import "../../css/settings.css";
-import { AuthContext } from "../Auth";
+import { AuthContext, useRerender } from "../Auth";
 import {
   get2fa,
   updateUserAvatar,
@@ -14,6 +14,7 @@ type Props = {};
 export default function Settings() {
   const user = useContext(AuthContext);
   const inputRef = useRef(null);
+  const forceRerender = useRerender();
 
   const [qr, setQr] = useState(null);
   const [username, setUsername] = useState(user.username);
@@ -39,6 +40,7 @@ export default function Settings() {
       console.error("Failed to update user avatar.");
       setErrorMsg("Failed to update user avatar.");
     }
+    forceRerender();
   };
 
   const handleEditClick = () => {
@@ -64,6 +66,7 @@ export default function Settings() {
         console.error("Error updating user username:", error);
       }
     }
+    forceRerender();
   };
 
   const handleEditUsername = () => {
@@ -72,6 +75,10 @@ export default function Settings() {
       handleChangeUsername(newUsername);
     }
   };
+
+  const test = () => {
+    forceRerender();
+  }
 
   return (
       <div className="main-frame">
@@ -108,5 +115,6 @@ export default function Settings() {
             <Button handleClick={activate2fa} text={"activer la 2fa"} clickable></Button>
         }
       </div>
+      
   );
 }
