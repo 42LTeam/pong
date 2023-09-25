@@ -32,18 +32,9 @@
   background-repeat: no-repeat;
 }
 
-/*.column {*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*}*/
-
 .menu {
+  z-index: 999;
   position: absolute;
-  top: 60px;
-  right: 10px;
-  min-width: 120px;
-  /* width: 100%; */ /*   je sais pas faire en sorte que ca fasse la
-                            meme largeur que la user bubble u.U         */
 }
 
 .list {
