@@ -39,6 +39,9 @@
 
 .menu {
   position: absolute;
+  top: 60px;
+  right: 10px;
+  min-width: 120px;
   /* width: 100%; */ /*   je sais pas faire en sorte que ca fasse la
                             meme largeur que la user bubble u.U         */
 }
@@ -47,4 +50,8 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.user-bubble{
+  min-width: 120px;
 }

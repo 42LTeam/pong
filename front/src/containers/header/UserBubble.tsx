@@ -50,7 +50,7 @@ const UserBubble = () => {
 
   return (
     <div className="column">
-      <div className="user bubble" onClick={handleBubbleClick}>
+      <div className="user bubble user-bubble" onClick={handleBubbleClick}>
         <div className="user-title">{user?.username}</div>
         {user?.avatar && (
           <div
