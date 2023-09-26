@@ -9,7 +9,7 @@ import "../../css/header.css";
 const Header = function () {
   return (
     <div className="header">
-      <div className="header-title">Transendance</div>
+      <div className="header-title">Transpirance 💦</div>
       <NavigationBubble></NavigationBubble>
       <UserBubble></UserBubble>
     </div>

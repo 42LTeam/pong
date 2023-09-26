@@ -1,7 +1,7 @@
 import TextInput from "../../../components/utils/TextInput";
 import Button from "../../../components/utils/Button";
 import PopUp from "../../../components/utils/PopUp";
-import { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Friend from "../../../components/friend/Friend";
 import {
   createChannel,
@@ -20,6 +20,7 @@ import Avatar from "../../../components/utils/Avatar";
 import Check from "../../../components/svg/Check";
 import Cross from "../../../components/svg/Cross";
 import ToggleSwitch from "../../../components/utils/ToggleSwitch";
+import EditChannelPopOver from "./EditChannelPopOver";
 
 type Props = {
   position: { left: number; top: number };
@@ -82,46 +83,6 @@ export default function NewMessagePopup({ position, clear }: Props) {
     });
   };
 
-  const handleClick = async (isPrivate) => {
-    const response = await createChannel({
-      name: [...checked, user.username].sort().join("+"),
-      creatorId: user.id,
-      privated: isPrivate,
-    });
-    const channel = response.data;
-    sendChannelInvite({
-      channelId: channel.id,
-      ids: suggestions
-        .filter((f) => checked.includes(f.username))
-        .map((f) => f.id),
-    }).then(() => {
-      clear(true);
-    });
-  };
-
-  const handleClickPrivate = async (isPrivate) => {
-    const enteredPassword = prompt(
-      "Please enter the password for the private channel:"
-    );
-    if (enteredPassword === null) {
-      return;
-    }
-    const response = await createChannel({
-      name: [...checked, user.username].sort().join("+"),
-      creatorId: user.id,
-      privated: isPrivate,
-    });
-    const channel = response.data;
-    sendChannelInvite({
-      channelId: channel.id,
-      ids: suggestions
-        .filter((f) => checked.includes(f.username))
-        .map((f) => f.id),
-    }).then(() => {
-      clear(true);
-    });
-    setChannelPassword(channel.id, enteredPassword);
-  };
 
   const toggleCheck = (current, check) => {
     if (check) setChecked((c) => [...c, current]);
@@ -135,79 +96,12 @@ export default function NewMessagePopup({ position, clear }: Props) {
   }, []);
 
   const [popOver, setPopOver] = useState(false);
-  const [privated, setPrivated] = useState(false);
-  const [hasName, setHasName] = useState(false);
-  const nameRef = useRef(null);
-  const passwordRef = useRef(null);
-  const handleChannelCreation = async () => {
-    const response = await createChannel({
-      name: nameRef.current.value,
-      conv: false,
-      creatorId: 0,
-      password: passwordRef.current.value || null,
-      privated,
-    });
-    const channel = response.data;
-    sendChannelInvite({
-      channelId: channel.id,
-      usernames: checked,
-    }).then(() => {
-      clear(true);
-    });
-  };
+
 
   return (
     <PopUp key={"newmessage-root"} position={position} clear={clear}>
       {popOver ? (
-        <PopOver divStyle={{ width: "15vw", padding: 0 }} clear={null}>
-          <div
-            className="column align-start"
-            style={{ padding: 10, gap: "5px" }}
-          >
-            <h1>Créer un salon</h1>
-            <h3>dans salons textuels</h3>
-            <h2>Nom du salon</h2>
-            <TextInput
-              ref={nameRef}
-              onChange={(event) => {
-                if (!event.target.value.length) setHasName(false);
-                else if (!hasName) setHasName(true);
-              }}
-              text="Entrez un nom"
-              bgColor="#2C3E50"
-            ></TextInput>
-            <h2>Mot de passe</h2>
-            <TextInput
-              ref={passwordRef}
-              password
-              text="Entrez un mot de passe"
-              bgColor="#2C3E50"
-            ></TextInput>
-            <div className="row">
-              <div className={"row"} style={{ gap: "5px" }}>
-                <Lock></Lock>
-                <h2>Salon privé</h2>
-              </div>
-              <ToggleSwitch
-                toggle={() => setPrivated(!privated)}
-                state={privated}
-              ></ToggleSwitch>
-            </div>
-          </div>
-          <div className="footer">
-            <Button
-              handleClick={() => clear(false)}
-              text={"Annuler"}
-              clickable
-              buttonProps={{ style: { background: "none" } }}
-            ></Button>
-            <Button
-              handleClick={handleChannelCreation}
-              text={"Créer un salon"}
-              clickable={hasName}
-            ></Button>
-          </div>
-        </PopOver>
+        <EditChannelPopOver checked={checked} clear={clear}></EditChannelPopOver>
       ) : null}
       <h1>Sélectionne des amis</h1>
       <h3>Tu peux ajouter des amis.</h3>

@@ -31,12 +31,10 @@ export default function MatchHistoryBubble(props: Props) {
         {props.matchResume.UserScore} / {props.matchResume.OpponentScore}{" "}
       </div>
 
-      {/* <div className="match-history-data"> {time} </div> */}
-
       {props.matchResume.UserScore > props.matchResume.OpponentScore ? (
-        <TextIcon style={"victory-icon"} text={"Victory"} />
+        <TextIcon style={"victory-icon"} text={"Victoire"} />
       ) : (
-        <TextIcon style={"defeat-icon"} text={"Defeat"} />
+        <TextIcon style={"defeat-icon"} text={"Défaite"} />
       )}
     </div>
   );

@@ -62,7 +62,7 @@
 }
 
 .leaderboard-title-stat {
-  min-width: 210px;
+  min-width: 220px;
   color: #fff;
   text-align: left;
   font-family: KoHo, sans-serif;
@@ -115,8 +115,9 @@
   height: 30px;
   border-radius: 50%;
   background: #7f8c8d;
-  background-size: 100%;
+  background-size: cover;
   background-position: 50% 50%;
+  background-repeat: no-repeat;
 }
 
 .leaderboard-tabs-text {

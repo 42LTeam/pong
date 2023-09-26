@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { socket } from "../../api";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import NotFound from "../NotFound";
 
 export enum gameState {
@@ -11,18 +11,36 @@ export enum gameState {
   FINISH,
 }
 
-export default function GamePage() {
-  const canvas = useRef(null);
-  const [searchParams] = useSearchParams();
-  const [notFound, setNotFound] = useState(false);
-
-  const dataGame = {
+const dataGame = {
     matchId: 0,
     playerId: 0,
     moveUp: false,
     moveDown: false,
     custom: false,
+    finished: false,
+    konami: false,
   };
+
+export default function GamePage() {
+  const canvas = useRef(null);
+  const [searchParams] = useSearchParams();
+  const [notFound, setNotFound] = useState(false);
+  const navigate = useNavigate();
+  const konamiCode = [
+    "ArrowUp",
+    "ArrowUp",
+    "ArrowDown",
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowLeft",
+    "ArrowRight",
+    "b",
+    "a",
+    "Enter",
+  ];
+
+  
   const ball = {
     x: 0.5,
     y: 0.5,
@@ -79,13 +97,15 @@ export default function GamePage() {
       c2d.canvas.width * (left ? 0.375 : 0.625),
       textPos
     );
-    if (!custom)
+    if (!custom || (custom && 0.35 < ball.x && ball.x < 0.65))
+    {
       c2d.fillRect(
         (player.x - ball.semiSize) * c2d.canvas.width,
         (player.y - players.semiHeight) * c2d.canvas.height,
         ball.semiSize * 2 * c2d.canvas.width,
         players.semiHeight * 2 * c2d.canvas.height
       );
+    }
   };
 
   const drawText = (c2d, status, countdown) => {
@@ -109,6 +129,8 @@ export default function GamePage() {
       }
       case gameState.PAUSE: {
         c2d.fillText("Pause", width, height);
+        c2d.fillText("If your opponent does not come back in [" + countdown + "] s", width, height+(height / 5), width * 1.9);
+        c2d.fillText("you will win with a score of 5 - 0", width, height+(height / 2.5), width * 1.9);
         break;
       }
       case gameState.FINISH: {
@@ -119,6 +141,7 @@ export default function GamePage() {
         )
           c2d.fillText("You win!", width, height);
         else c2d.fillText("You lose!", width, height);
+        c2d.fillText('Press [esc] to go home', width, height + (height / 5));
         break;
       }
     }
@@ -171,6 +194,32 @@ export default function GamePage() {
     drawBall(c2d);
   };
 
+  const [konamiIndex, setKonamiIndex] = useState(0);
+  
+  const handleKeyDown = (event) => {
+    const currentKey = event.key;
+    const expectedKey = konamiCode[konamiIndex];
+
+    if (currentKey === expectedKey) {
+      if (konamiIndex === konamiCode.length - 1) {
+        console.log("Code Konami entré !");
+        dataGame.konami = !dataGame.konami;
+        setKonamiIndex(0);
+      } else {
+        setKonamiIndex(konamiIndex + 1);
+      }
+    } else {
+      setKonamiIndex(0);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [konamiIndex]);
+
   useEffect(() => {
     const onGameWait = () => {
       draw(gameState.CREATING, 0);
@@ -200,7 +249,7 @@ export default function GamePage() {
 
     const onGamePause = (args) => {
       if (args) getData(args);
-      draw(gameState.PAUSE, 0);
+      draw(gameState.PAUSE, args.countdown);
     };
 
     const onError = (args) => {
@@ -209,6 +258,7 @@ export default function GamePage() {
     };
 
     const onGameFinish = (args) => {
+      dataGame.finished = true;
       if (args) getData(args);
       draw(gameState.FINISH, 0);
     };
@@ -220,6 +270,7 @@ export default function GamePage() {
     const keyDownHook = (event) => {
       if (event.key === "w" && !dataGame.moveUp) {
         dataGame.moveUp = true;
+        console.log("BTW KONAMI = "+dataGame.konami);
         socket.emit("update-input", dataGame);
       }
       if (event.key === "s" && !dataGame.moveDown) {
@@ -229,6 +280,9 @@ export default function GamePage() {
       if (event.key === "l") {
         event.preventDefault();
         ball.shine = !ball.shine;
+      }
+      if (event.key === "Escape" && dataGame.finished) {
+          navigate('/');
       }
     };
 
@@ -252,6 +306,7 @@ export default function GamePage() {
     socket.on("game-not-found", onGameNotFound);
     document.addEventListener("keydown", keyDownHook);
     document.addEventListener("keyup", keyUpHook);
+
 
     return () => {
       socket.emit("leave-game");

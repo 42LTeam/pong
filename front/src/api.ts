@@ -261,6 +261,20 @@ export async function getChannelAllMembers(id: number) {
   return axios(config);
 }
 
+export async function editChannel(channelId: number, data: {
+  name?: string;
+  password?: string;
+  privated?: boolean;
+}) {
+  const config = {
+    method: "post",
+    url: URL + "/channels/edit/" + channelId,
+    withCredentials: true,
+    data,
+  };
+  return axios(config);
+}
+
 export async function createChannel(data: {
   name: string;
   password?: string;

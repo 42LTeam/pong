@@ -40,6 +40,9 @@ export class MatchService {
       where: {
         userId: userId,
       },
+      orderBy: {
+        matchId: 'desc',
+      },
     });
   }
 

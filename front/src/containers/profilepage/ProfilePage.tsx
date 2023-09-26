@@ -45,12 +45,11 @@ export default function ProfilePage() {
   if (user === null) {
     return (
       <NotFound page="profile" id={userID} />
-      // <h1>User with ID={userID} does not exist</h1>
     );
   }
 
   if (!matches) {
-    return <h1>LOADING</h1>;
+    return <h1>Chargement...</h1>;
   }
 
   return (
@@ -71,22 +70,24 @@ export default function ProfilePage() {
               <MatchHistoryBubble user={user} matchResume={match} />
             ))
           ) : (
-            <h2>No match played for the moment</h2>
+            <h2>Aucun match joué pour le moment</h2>
           )}
         </div>
       </div>
       <div className="vertical-separator"></div>
       <div className="right-frame-profile">
-        <div className="leaderboard-places"> Leaderboard places</div>
-        <ProfileLeaderboardPlaceBubble user={user} type="Total xp" />
+        <div className="leaderboard-places">Places du classement</div>
         <ProfileLeaderboardPlaceBubble
           user={user}
-          type="Average points per match"
-        />
+          type="XP total" />
         <ProfileLeaderboardPlaceBubble
           user={user}
-          type="Victories/defeat ratio"
+          type="Ratio victoires/défaites"/>
+        <ProfileLeaderboardPlaceBubble
+          user={user}
+          type="Moyenne des points/match"
         />
+        
       </div>
     </div>
   );

@@ -72,6 +72,26 @@ export class SendInviteDto {
   channelId: number;
 }
 
+export class EdiChannelDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  password?: string;
+
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  privated?: boolean;
+
+
+}
+
 export class UpdateChannelPasswordDto {
   @ApiProperty()
   @IsNotEmpty()
@@ -225,5 +245,24 @@ export class ChannelController {
   ): Promise<any> {
     const user = await req.user;
     return this.channelService.joinChannel(channelId, user.id);
+  }
+
+
+  @Post("/edit/:channelId")
+  @ApiParam({
+    name: "channelId",
+    required: true,
+    type: Number,
+    description: "ID of the channel to edit",
+  })
+  @ApiOperation({summary: "Edit a channel"})
+  @ApiBody( {type: EdiChannelDto})
+  async editChannel(@Body() body: EdiChannelDto, @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId){
+    if (body.name)
+      await this.channelService.setChannelName(channelId, body.name)
+    if (body.password)
+      await this.channelService.setChannelPassword(channelId, body.password)
+    await this.channelService.setChannelPrivated(channelId, body.privated)
+    return 'ok';
   }
 }

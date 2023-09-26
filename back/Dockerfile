@@ -26,5 +26,5 @@ EXPOSE 3000
 # Set the entrypoint
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 # Command to run your application
-CMD ["sh", "-c", "npx prisma generate && npx tsc && (date | npm run migrate) && npm run start:migrate:prod"]
+CMD ["sh", "-c", "npm i;npx prisma generate && npx tsc && (date | npm run migrate) && npm run start:migrate:prod"]
 

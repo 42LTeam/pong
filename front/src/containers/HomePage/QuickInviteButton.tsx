@@ -1,8 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import { getUserByID } from "../../api";
-import { listSubheaderClasses } from "@mui/material";
-import { text } from "stream/consumers";
 
 type Props = {
   userID: number;
