@@ -24,9 +24,11 @@ export default function ChannelMembersList({
     getChannelAllMembers(channelId)
       .then((response) => {
         setChannelAllMembers(response.data);
-        console.log(response);
+        //console.log(response);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        //console.log(err)
+      });
   };
 
   useEffect(() => {
