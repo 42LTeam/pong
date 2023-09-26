@@ -133,7 +133,7 @@ export default function Friend(props: Props) {
         <div className="conversation-content">
           {!props.isBanned ? (
             <div className="conversation-username">
-              {!blocked ? props.friend?.username: "💔 UwU 💔"}
+              {!blocked ? props.friend?.username: "💔 Blocked UwU 💔"}
             </div>
           ) : (
             <div className="conversation-username-ban">
