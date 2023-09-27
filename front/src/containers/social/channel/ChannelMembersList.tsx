@@ -28,7 +28,9 @@ export default function ChannelMembersList({
         setRerenderFlag(true);
         //console.log(response);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        //console.log(err)
+      });
   };
 
   useEffect(() => {
