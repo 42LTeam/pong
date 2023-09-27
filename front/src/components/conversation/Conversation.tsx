@@ -13,7 +13,12 @@ interface Props {
   isPrivateMessage?: boolean
 }
 
+
+
 export default function Conversation(props: Props) {
+
+  const lastMessage : string = props.lastMessage?.slice(0, 10) + "...";
+
   return (
     <div
       onClick={props.handleClick}
@@ -22,7 +27,7 @@ export default function Conversation(props: Props) {
       <Avatar url={props.avatar} salon={props.isPrivateMessage} id={props.id} height={"48px"}></Avatar>
       <div className="conversation-content">
         <div className="conversation-username">{props.isPrivateMessage && <span>💬</span>} {!props.isPrivateMessage && <span>👥 </span>}{props.username}</div>
-        <h3>{props.lastMessage || "Nouvelle conversation"}</h3>
+        <h3>{props.lastMessage ? lastMessage : "Nouvelle conv."}</h3>
         {props.hasPassword && <span>🔒</span>}{" "}
         {/* Render lock icon if hasPassword is true */}
       </div>
