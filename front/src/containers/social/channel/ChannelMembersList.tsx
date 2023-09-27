@@ -60,6 +60,10 @@ export default function ChannelMembersList({
       .catch((err) => console.log(err));
   };
 
+  const handleBlockUser = (userId) => {
+    
+  }
+
   return (
     <SidePanel
       subheader="Membres"
