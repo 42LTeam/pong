@@ -7,6 +7,7 @@
   gap: 10px;
   flex: 85%;
   align-self: stretch;
+  width: 45vw;
 }
 
 .chat-messages {
@@ -24,10 +25,14 @@
   gap: 10px;
   align-self: stretch;
   align-items: flex-end;
+  /* word-wrap: break-word;
+  overflow-wrap: break-word; */
 }
 
 .chat-message-sent {
   flex-direction: row-reverse;
+  /* word-wrap: break-word;
+  overflow-wrap: break-word; */
 }
 
 .chat-message-avatar {
@@ -51,12 +56,18 @@
   font-weight: 400;
   line-height: normal;
   max-width: 70%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .chat-message-bubble-sent {
   border-radius: 10px 10px 0 10px;
   background: #2980b9;
   color: #ecf0f1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .chat-message-time {
@@ -67,4 +78,13 @@
   font-weight: 400;
   line-height: normal;
   align-self: center;
+}
+
+.max-length-alert {
+  color: #e74c3c;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

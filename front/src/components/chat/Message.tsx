@@ -1,6 +1,7 @@
 import Avatar from "../utils/Avatar";
 import { useContext } from "react";
 import { AuthContext } from "../../containers/Auth";
+import React from "react";
 
 export type MessageProps = {
   sender: any;
