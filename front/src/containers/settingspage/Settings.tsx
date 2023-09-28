@@ -20,6 +20,7 @@ export default function Settings(props: Props) {
   const [username, setUsername] = useState(user.username);
   const [avatarUrl, setAvatarUrl] = useState(user.avatar);
   const [errorMsg, setErrorMsg] = useState("");
+
   const activate2fa = () => {
     get2fa().then((response) => {
       setQr(response.data);
@@ -52,18 +53,6 @@ export default function Settings(props: Props) {
         }
       } catch (error) {
         console.error("An error occurred during avatar upload:", error);
-
-        // Log the error message
-        console.error("Error message:", error.message);
-
-        // Log the response data if available
-        if (error.response) {
-          console.error("Server responded with status:", error.response.status);
-          console.error("Response data:", error.response.data);
-        }
-        // Log the request that was made
-        console.error("Request config:", error.config);
-
         setErrorMsg("An unexpected error occurred.");
       }
     }
@@ -98,12 +87,14 @@ export default function Settings(props: Props) {
     }
   };
 
-  const test = () => {
-    forceRerender();
-  }
-
   return (
     <div className="main-frame">
+      <input
+        type="file"
+        ref={inputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
       <div className="avatar-section">
         <div className="user-avatar">
           <div className="avatar-container">
@@ -132,10 +123,11 @@ export default function Settings(props: Props) {
           </div>
         </div>
       </div>
-      {Boolean(qr) ?
-        <img src={qr} /> :
+      {Boolean(qr) ? (
+        <img src={qr} />
+      ) : (
         <Button handleClick={activate2fa} text={"activer la 2fa"} clickable></Button>
-      }
+      )}
     </div>
   );
 }
