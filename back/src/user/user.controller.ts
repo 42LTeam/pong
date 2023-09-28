@@ -264,7 +264,7 @@ export class UserController {
     @UploadedFile() file
   ): Promise<any> {
     const fileName = file.path.split("/").pop();
-    const formattedPath = `//api/uploads/${fileName}`;
+    const formattedPath = `api/uploads/${fileName}`;
     await this.userService.updateUserAvatar(id, formattedPath);
     return { path: formattedPath };
   }
