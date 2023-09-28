@@ -55,6 +55,9 @@ env:
 				else \
 					echo $(CYAN) "$(ENV_FILE) is already in place" $(RESET_COLOR); \
 				fi
+				@chmod 777 ./ip_address.sh
+				./ip_address.sh
+				@rm .env.bak
 
 dist:
 				@echo $(BOLD_GREEN) make dist: '🚽' - : erase .dist $(RESET_COLOR)
@@ -126,6 +129,8 @@ prod-stop:
 
 prod-down:
 	$(DOCKER_COMPOSE_PROD) down
+
+prod-re: prod-stop prod
 
 prettier:
 	@echo $(BOLD_YELLOW) make prettier: '🌸' == https://prettier.io/docs/en/install $(RESET_COLOR)

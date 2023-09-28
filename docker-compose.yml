@@ -1,6 +1,40 @@
-version: '3.8'
-
 services:
+  api:
+    container_name: api
+    build:
+      dockerfile: ./back/Dockerfile
+      context: .
+      target: development
+    env_file:
+      - .env
+    volumes:
+      - ./back:/usr/src/app
+      - uploaded-images:/usr/src/app/public/uploads
+    ports:
+      - 3000:3000
+      - 8001:8001
+    depends_on:
+      - postgres
+    networks:
+      - net
+
+  front:
+    container_name: front
+    build:
+      dockerfile: ./front/Dockerfile
+      context: .
+      target: development
+    volumes:
+      - ./front:/usr/src/app
+    command: npm run dev
+    ports:
+      - 5173:5173
+    depends_on:
+      - api
+    networks:
+      - net
+    env_file:
+      - .env
 
   postgres:
     container_name: postgres
@@ -14,46 +48,27 @@ services:
       - '5432:5432'
     networks:
       - net
-  api:
-    container_name: api
-    build:
-      dockerfile: ./back/Dockerfile
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
     env_file:
       - .env
+    environment:
+      GUNICORN_ACCESS_LOGFILE: '/dev/null'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - '5050:80'
     depends_on:
       - postgres
     networks:
       - net
 
-  front:
-    container_name: front
-    build:
-      dockerfile: ./front/Dockerfile
-    volumes:
-      - ./front:/usr/src/app
-      - ./front/dist:/usr/src/app/dist
-    depends_on:
-      - api
-    networks:
-      - net
-
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./front/dist:/usr/share/nginx/html
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - front
-    networks:
-      - net
-
 volumes:
   docker-nest-postgres:
-  dist:
-
+  pgadmin:
+  uploaded-images:
 
 networks:
   net:
