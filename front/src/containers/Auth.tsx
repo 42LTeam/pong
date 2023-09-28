@@ -38,7 +38,7 @@ function Auth() {
   const [destination, setDestination] = useState(null);
   const [user, setUser] = useState<User>(null);
   const [rerender, setRerender] = useState(false);
-  const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
+  const URL = "/api";
 
   const forceRerender = () => {
     setRerender(!rerender);

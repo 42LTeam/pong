@@ -8,12 +8,9 @@ import * as express from "express";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const localhostfront =
-    "http://" + (process.env.LOCALHOST || "localhost") + ":5173";
-
   setupSwagger(app); // Swagger API
   app.enableCors({
-    origin: localhostfront, // changez pour le port du front
+    origin: "*",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     credentials: true,
   });
