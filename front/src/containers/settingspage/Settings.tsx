@@ -132,14 +132,10 @@ export default function Settings(props: Props) {
           </div>
         </div>
       </div>
-<<<<<<< HEAD
-      
-=======
       {Boolean(qr) ?
         <img src={qr} /> :
         <Button handleClick={activate2fa} text={"activer la 2fa"} clickable></Button>
       }
     </div>
->>>>>>> main
   );
 }
