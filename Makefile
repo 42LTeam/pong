@@ -55,9 +55,13 @@ env:
 				else \
 					echo $(CYAN) "$(ENV_FILE) is already in place" $(RESET_COLOR); \
 				fi
+
+env-prod:		env
 				@chmod 777 ./ip_address.sh
 				./ip_address.sh
-				@rm .env.bak
+				@if [-e .env.bak]; then \
+					rm .env.bak;
+				fi
 
 dist:
 				@echo $(BOLD_GREEN) make dist: '🚽' - : erase .dist $(RESET_COLOR)
@@ -115,13 +119,13 @@ rebuild: clean all
 reboot: fprune all
 	@echo $(BOLD_YELLOW) make reboot '✋'  STOP + '🔻'  DOWN + '🧼'  PRUNE  + '🛀'  RMVOL + '🚧'  BUILD + '🚀'  UP: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
 
-prod: env prod-build
+prod: env-prod prod-build
 	$(DOCKER_COMPOSE_PROD) up 
 
-prod-build: env
+prod-build: env-prod
 	$(DOCKER_COMPOSE_PROD) build --no-cache
 
-prod-up: env
+prod-up: env-prod
 	$(DOCKER_COMPOSE_PROD) up -d
 
 prod-stop:
