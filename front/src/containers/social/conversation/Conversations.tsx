@@ -6,7 +6,7 @@ import { getChannels, removeUserFromChannel } from "../../../api";
 import NewMessagePopup from "./NewMessagePopup";
 import SidePanel from "../../../components/utils/SidePanel";
 import { ApplicationContext } from "../../Application";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../Auth";
 import ContextMenu from "../../../components/utils/ContextMenu";
 import EditChannelPopOver from "./EditChannelPopOver";
@@ -24,6 +24,7 @@ export default function Conversations({ state }: Props) {
   const application = useContext(ApplicationContext);
   const user = useContext(AuthContext);
   const navigate = useNavigate();
+  const params = useParams();
 
   const [editChannel, setEditChannel] = useState(null);
   const [rerenderFlag, setRerenderFlag] = useState(false);
@@ -59,6 +60,10 @@ export default function Conversations({ state }: Props) {
   const handleLeave = (conversationId) => {
     removeUserFromChannel(conversationId, user.id);
     setRerenderFlag(false);
+    if (conversationId == params.channelId) {
+      navigate("/social");
+      console.log("params = "+JSON.stringify(params));
+    }
   }
 
   return (

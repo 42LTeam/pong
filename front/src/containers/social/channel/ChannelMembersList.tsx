@@ -17,8 +17,11 @@ type ChannelMembersListProps = {
 export default function ChannelMembersList({
   channelId,
 }: ChannelMembersListProps) {
+  if (Number.isNaN(channelId))
+    return ;
   const user = useContext(AuthContext);
   const [rerenderFlag, setRerenderFlag] = useState(false);
+  const forceRerender = useRerender();
 
   const [ChannelAllMembers, setChannelAllMembers] = useState([]);
   const fetchChannelAllMembers = () => {

@@ -80,10 +80,9 @@ export default function Chat(props: ChatProps) {
       <div className="chat-messages">
         {unReadMessages.map((current) => {
           return (
-            
             <>
               <Message
-                key={current.id}
+                
                 senderId={current.userId}
                 senderAvatar={current.user.avatar}
                 content={current.content}

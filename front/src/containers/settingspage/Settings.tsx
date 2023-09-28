@@ -8,6 +8,7 @@ import {
 
 } from "../../api";
 import Button from "../../components/utils/Button";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
@@ -15,6 +16,7 @@ export default function Settings(props: Props) {
   const user = useContext(AuthContext);
   const inputRef = useRef(null);
   const forceRerender = useRerender();
+  const navigate = useNavigate();
 
   const [qr, setQr] = useState(null);
   const [username, setUsername] = useState(user.username);
@@ -89,18 +91,15 @@ export default function Settings(props: Props) {
       setUsername("Username already taken");
     }
     forceRerender();
+    console.log("I tried force re render");
   };
 
   const handleEditUsername = () => {
     const newUsername = prompt("Please enter the new username:");
-    if (newUsername) {
+    if (newUsername && newUsername !== user.username) {
       handleChangeUsername(newUsername);
     }
   };
-
-  const test = () => {
-    forceRerender();
-  }
 
   return (
     <div className="main-frame">

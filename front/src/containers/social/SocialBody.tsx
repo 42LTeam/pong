@@ -18,12 +18,12 @@ export default function SocialBody() {
   }, [channelId]);
 
   useEffect(() => {
-    getChannelAllMembers(state)
-      .catch((err) => {
-        //console.log(err);
-        //console.log("STATUS = "+err.response.status);
-        setError(err.response.status);
-      });
+      getChannelAllMembers(state)
+        .catch((err) => {
+          //console.log(err);
+          //console.log("STATUS = "+err.response.status);
+          setError(err.response.status);
+        });
   }, [channelId]);
 
   if (error && channelId !== undefined && error !== 400){

@@ -8,7 +8,7 @@ import {
   getUserByID,
   unblockUser, blockUser,
 } from "../../api";
-import { AuthContext, User } from "../../containers/Auth";
+import { AuthContext, User, useRerender } from "../../containers/Auth";
 
 type Props = {
   children?: any;
@@ -26,6 +26,7 @@ export default function Friend(props: Props) {
   const [blocked, setBlocked] = useState(user.blockList.includes(props.friend.id));
   const isFriend = user.friendList.includes(props.friend.id);
   const [rerenderFlag, setRerenderFlag] = useState(false);
+  const forceRerender = useRerender;
 
   useEffect(() => {
     setBlocked(user.blockList.includes(props.friend.id));
@@ -49,6 +50,12 @@ export default function Friend(props: Props) {
     });
   }
 
+  const handleNewMessage = () => {
+    getConversation(props.friend.id).then((response) =>
+      navigate("/social/" + response.data.id),
+    );
+  }
+
   const buttons =
     props.friend.id == user.id
       ? [
@@ -66,9 +73,7 @@ export default function Friend(props: Props) {
         ...(blocked ? [] : [{
             text: "Envoyer un message",
             handleClick: () =>
-              getConversation(props.friend.id).then((response) =>
-                navigate("/social/" + response.data.id)
-              ),
+              handleNewMessage(),
           }]),
           { separator: true },
           {

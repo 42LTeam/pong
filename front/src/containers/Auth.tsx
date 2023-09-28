@@ -42,6 +42,7 @@ function Auth() {
 
   const forceRerender = () => {
     setRerender(!rerender);
+    console.log("Auth recieved a re render order");
   };
 
   useEffect(() => {
@@ -81,6 +82,7 @@ function Auth() {
   if (!user) return null;
 
   return (
+    
     <AuthContext.Provider value={user}>
       <RerenderContext.Provider value={forceRerender}>
         <Application>
