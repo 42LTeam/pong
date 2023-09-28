@@ -49,6 +49,7 @@ function Auth() {
     if (!user)
       getStatus()
         .then(function (response) {
+          socket.connect();
           setUser(response.data.user);
           setDestination(response.data.destination);
         })
@@ -64,7 +65,8 @@ function Auth() {
     }
     function onConnect() {
       setConnected(true);
-      authSocketId(socket.id).then((response) => {
+
+      authSocketId(socket.id).catch(err => {return;}).then((response) => {
         socket.emit("register", { target: response.data });
         console.log("register");
       });
