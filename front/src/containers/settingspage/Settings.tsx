@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 import "../../css/settings.css";
-import { AuthContext } from "../Auth";
+import { AuthContext, useRerender } from "../Auth";
 import {
   get2fa,
   uploadUserAvatar,
@@ -14,6 +14,7 @@ type Props = {};
 export default function Settings(props: Props) {
   const user = useContext(AuthContext);
   const inputRef = useRef(null);
+  const forceRerender = useRerender();
 
   const [qr, setQr] = useState(null);
   const [username, setUsername] = useState(user.username);
@@ -66,6 +67,7 @@ export default function Settings(props: Props) {
         setErrorMsg("An unexpected error occurred.");
       }
     }
+    forceRerender();
   };
 
   const handleEditClick = () => {
@@ -86,6 +88,7 @@ export default function Settings(props: Props) {
       console.error("Error updating user username:", error);
       setUsername("Username already taken");
     }
+    forceRerender();
   };
 
   const handleEditUsername = () => {
@@ -94,6 +97,10 @@ export default function Settings(props: Props) {
       handleChangeUsername(newUsername);
     }
   };
+
+  const test = () => {
+    forceRerender();
+  }
 
   return (
     <div className="main-frame">

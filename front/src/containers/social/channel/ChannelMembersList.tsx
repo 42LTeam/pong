@@ -8,7 +8,7 @@ import {
 } from "../../../api";
 import SidePanel from "../../../components/utils/SidePanel";
 import Friend from "../../../components/friend/Friend";
-import { AuthContext } from "../../Auth";
+import { AuthContext, useRerender } from "../../Auth";
 
 type ChannelMembersListProps = {
   channelId: number;
@@ -18,12 +18,14 @@ export default function ChannelMembersList({
   channelId,
 }: ChannelMembersListProps) {
   const user = useContext(AuthContext);
+  const [rerenderFlag, setRerenderFlag] = useState(false);
 
   const [ChannelAllMembers, setChannelAllMembers] = useState([]);
   const fetchChannelAllMembers = () => {
     getChannelAllMembers(channelId)
       .then((response) => {
         setChannelAllMembers(response.data);
+        setRerenderFlag(true);
         //console.log(response);
       })
       .catch((err) => {
@@ -34,11 +36,33 @@ export default function ChannelMembersList({
   useEffect(() => {
     if (!channelId) return;
     fetchChannelAllMembers();
-  }, [channelId]);
+  }, [channelId, rerenderFlag]);
 
   const isAdmin = ChannelAllMembers.some((member) => {
     return member.userId === user.id && member.isAdmin === true;
   });
+
+  const handleRemoveUserFromChannel = (userId) => {
+    removeUserAdminFromChannel(channelId, userId)
+      .then(() => {
+        setRerenderFlag(false);
+        fetchChannelAllMembers();
+      })
+      .catch((err) => console.log(err));
+  };
+  
+  const handleBanUserFromChannel = (userId) => {
+    banUserFromChannel(channelId, userId)
+      .then(() => {
+        setRerenderFlag(false);
+        fetchChannelAllMembers();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleBlockUser = (userId) => {
+    
+  }
 
   return (
     <SidePanel
@@ -46,7 +70,7 @@ export default function ChannelMembersList({
       body={
         <>
           {ChannelAllMembers.map((current) => {
-            console.log("log ChannelMemberList => Current: ", current);
+            //console.log("log ChannelMemberList => Current: ", current);
             return (
               <Friend
                 key={current.user.id}
@@ -58,10 +82,7 @@ export default function ChannelMembersList({
                         {
                           text: "Virer du salon",
                           handleClick: () =>
-                              removeUserAdminFromChannel(
-                                  channelId,
-                                  current.user.id
-                              ),
+                          handleRemoveUserFromChannel(current.user.id)
                         },
                         {
                           text: "Fermer sa bouche",
@@ -71,7 +92,7 @@ export default function ChannelMembersList({
                         {
                           text: "Bannir",
                           handleClick: () =>
-                              banUserFromChannel(channelId, current.user.id),
+                          handleBanUserFromChannel(current.user.id)
                         },
                         { separator: true },
                         ...(
