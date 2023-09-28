@@ -318,6 +318,15 @@ export async function get2fa() {
   return axios(config);
 }
 
+export async function remove2fa() {
+  const config = {
+    method: "get",
+    url: URL + "/auth/deactivate-doubleAuth",
+    withCredentials: true,
+  };
+  return axios(config);
+}
+
 export async function set2fa(token: string) {
   console.log(token);
   const config = {

@@ -5,6 +5,7 @@ import {
   get2fa,
   uploadUserAvatar,
   updateUserUsername,
+  remove2fa,
 
 } from "../../api";
 import Button from "../../components/utils/Button";
@@ -28,6 +29,14 @@ export default function Settings(props: Props) {
       setQr(response.data);
     });
   };
+
+  const deactivate2fa = () => {
+    remove2fa().then((response) => {
+      setQr(null);
+    });
+  };
+
+
 
   useEffect(() => { }, [username]);
   useEffect(() => {
@@ -127,7 +136,10 @@ export default function Settings(props: Props) {
         </div>
       </div>
       {Boolean(qr) ? (
-        <img src={qr} />
+        <div>
+          <img src={qr} />
+          <Button handleClick={deactivate2fa} text={"deactivate 2fa"} clickable></Button>
+        </div>
       ) : (
         <Button handleClick={activate2fa} text={"activer la 2fa"} clickable></Button>
       )}

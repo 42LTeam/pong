@@ -63,6 +63,13 @@ export class AuthController {
     return this.userService.newSecret(user);
   }
 
+  @Get("deactivate-doubleAuth")
+  @UseGuards(TotpGuard)
+  async deactivateDoubleAuth(@Req() request: any) {
+    const user = await request.user;
+    return this.userService.eraseSecret(user);
+  }
+
   @Post("doubleAuth")
   @ApiBody({ type: DoubleAuthDto })
   @UseGuards(TotpGuard)
