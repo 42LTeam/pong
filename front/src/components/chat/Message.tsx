@@ -10,6 +10,8 @@ export type MessageProps = {
   sent: boolean;
 };
 
+
+
 export default function Message(props: MessageProps) {
   const user = useContext(AuthContext);
 
@@ -18,7 +20,10 @@ export default function Message(props: MessageProps) {
   const bubbleClassName =
     "chat-message-bubble" + (props.sent ? " chat-message-bubble-sent" : "");
 
-  return (
+  console.log("user blocklist = "+ user.blockList);
+  console.log("message=["+props.content+"] sent by = "+ JSON.stringify(props.sender));
+  
+    return (
     <div
       className={rootClassName}
       style={{
@@ -28,7 +33,7 @@ export default function Message(props: MessageProps) {
       <Avatar height="30px" width="30px" url={props.sender.avatar}></Avatar>
       <div className={bubbleClassName}>
         {user.blockList.includes(props.sender.id)
-          ? "NE ME LIS PAS SALE MERDE"
+          ? "NE ME LIS PAS SALE *****"
           : props.content}
       </div>
       <div className="chat-message-time">{props.date}</div>
