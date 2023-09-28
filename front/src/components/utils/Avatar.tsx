@@ -9,11 +9,10 @@ interface AvatarProps {
 }
 export default function Avatar(props: AvatarProps) {
     let url;
-    const cacheBust = `?timestamp=${Date.now()}`;
     if (props.salon === false && props.id)
         url = `url("/img/discord-salon.png")`
     else
-        url = props.url ? `url('${props.url}${cacheBust}')` : `url('/img/discord-salon.png')`;
+        url = props.url ? `url('${props.url}')` : `url('/img/discord-salon.png')`;
 
   return (
     <div
