@@ -12,7 +12,12 @@ import {User, UserChannel} from "@prisma/client";
 import { ChannelService } from "../../channel/channel.service";
 import { MessageService } from "../../message/message.service";
 
-@WebSocketGateway(8001, { cors: "*" })
+@WebSocketGateway( { cors: {
+  origin: process.env.WEB_URL,
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  credentials: true,
+}, })
 @Injectable()
 export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(

@@ -51,9 +51,9 @@ export class AuthController {
   @Get("redirect")
   @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
-    const localhostfront =
-      "http://" + (process.env.LOCALHOST || "localhost") + ":5173";
-    res.redirect(localhostfront);
+    // const localhostfront =
+    //   "http://" + (process.env.LOCALHOST || "localhost");
+    res.redirect('/');
   }
 
   @Get("doubleAuth")

@@ -29,7 +29,7 @@ function Auth() {
   const [wsConnected, setConnected] = useState(false);
   const [destination, setDestination] = useState(null);
   const [user, setUser] = useState<User>(null);
-  const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
+  const URL = "/api";
 
   useEffect(() => {
     if (!user)

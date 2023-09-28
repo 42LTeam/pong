@@ -7,7 +7,7 @@
     "dev": "npm install vite && vite --host --port 5173",
     "prisma:generate": "npx prisma generate",
     "prod": "npm install vite && vite --host --port 5173",
-    "build": "vite build",
+    "build": "npm install vite && vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

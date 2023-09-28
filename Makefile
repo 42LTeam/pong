@@ -3,8 +3,10 @@ NAME			:=	$(shell basename $(CURDIR))
 SRCS_DIR		:=	./
 
 YML_FILE		:=	$(SRCS_DIR)docker-compose.yml
+PROD_FILE		:=	$(SRCS_DIR)docker-compose.prod.yml
 ENV_FILE		:=	$(SRCS_DIR).env
 DIST_FOLDER		:=	$(SRCS_DIR)back/dist
+DOCKER_COMPOSE_PROD := @docker compose -f $(PROD_FILE) --env-file $(ENV_FILE) -p $(NAME)
 
 DOCKER_COMPOSE	:=	@docker compose -f $(YML_FILE) --env-file $(ENV_FILE) -p $(NAME)
 
@@ -109,6 +111,21 @@ rebuild: clean all
 
 reboot: fprune all
 	@echo $(BOLD_YELLOW) make reboot '✋'  STOP + '🔻'  DOWN + '🧼'  PRUNE  + '🛀'  RMVOL + '🚧'  BUILD + '🚀'  UP: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
+
+prod: env prod-build
+	$(DOCKER_COMPOSE_PROD) up 
+
+prod-build: env
+	$(DOCKER_COMPOSE_PROD) build --no-cache
+
+prod-up: env
+	$(DOCKER_COMPOSE_PROD) up -d
+
+prod-stop:
+	$(DOCKER_COMPOSE_PROD) stop
+
+prod-down:
+	$(DOCKER_COMPOSE_PROD) down
 
 prettier:
 	@echo $(BOLD_YELLOW) make prettier: '🌸' == https://prettier.io/docs/en/install $(RESET_COLOR)
