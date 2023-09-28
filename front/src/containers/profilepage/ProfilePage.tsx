@@ -56,8 +56,7 @@ export default function ProfilePage() {
   return (
     <div className="main-frame-profile">
       <div className="left-frame-profile">
-        <Avatar url={user.avatar} width={"100"} height={"100"}/>
-
+        <Avatar url={user.avatar} width={"100px"} height={"100px"}/>
         <div className="user-profile-title">{user?.username}</div>
 
         <div className="match-history">
