@@ -24,6 +24,9 @@ services:
       - postgres
     networks:
       - net
+    volumes:
+      - ./back:/usr/src/app
+      - uploaded-images:/usr/src/app/public/uploads
 
   front:
     container_name: front
@@ -46,6 +49,8 @@ services:
     volumes:
       - ./front/dist:/usr/share/nginx/html
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - uploaded-images:/usr/src/app/public/uploads
+
     depends_on:
       - front
     networks:
@@ -54,6 +59,7 @@ services:
 volumes:
   docker-nest-postgres:
   dist:
+  uploaded-images:
 
 
 networks:

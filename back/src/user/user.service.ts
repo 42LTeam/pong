@@ -72,7 +72,7 @@ export class UserService {
     try {
       const updatedUser = await this.prisma.user.update({
         where: { id: userId },
-        data: { avatar: avatarPath },
+        data: { avatar: process.env.VITE_API_URL + '/' + avatarPath },
       });
       console.log(updatedUser);
       return updatedUser;
