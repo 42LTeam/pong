@@ -4,7 +4,8 @@ import { AuthContext } from "../../containers/Auth";
 import React from "react";
 
 export type MessageProps = {
-  sender: any;
+  senderId: any;
+  senderAvatar: any;
   content: string;
   date: string;
   sent: boolean;
@@ -20,19 +21,19 @@ export default function Message(props: MessageProps) {
   const bubbleClassName =
     "chat-message-bubble" + (props.sent ? " chat-message-bubble-sent" : "");
 
-  console.log("user blocklist = "+ user.blockList);
-  console.log("message=["+props.content+"] sent by = "+ JSON.stringify(props.sender));
+  // console.log("user blocklist = "+ user.blockList);
+  // console.log("message=["+props.content+"] sent by = "+ JSON.stringify(props.sender));
   
     return (
     <div
       className={rootClassName}
       style={{
-        filter: user.blockList.includes(props.sender.id) ? "blur(5px)" : "",
+        filter: user.blockList.includes(props.senderId) ? "blur(5px)" : "",
       }}
     >
-      <Avatar height="30px" width="30px" url={props.sender.avatar}></Avatar>
+      <Avatar height="30px" width="30px" url={props.senderAvatar}></Avatar>
       <div className={bubbleClassName}>
-        {user.blockList.includes(props.sender.id)
+        {user.blockList.includes(props.senderId)
           ? "NE ME LIS PAS SALE *****"
           : props.content}
       </div>

@@ -71,8 +71,8 @@ export default function Chat(props: ChatProps) {
     return current.id > lastRead;
   });
 
-  console.log("From Chat.tsx : unRead = "+ JSON.stringify(unReadMessages));
-  console.log("From Chat.tsx : messages = "+ JSON.stringify(messages));
+  // console.log("From Chat.tsx : unRead = "+ JSON.stringify(unReadMessages));
+  // console.log("From Chat.tsx : messages = "+ JSON.stringify(messages));
 
   return (
     <div className="chat-root">
@@ -83,7 +83,8 @@ export default function Chat(props: ChatProps) {
             <>
               <Message
                 key={current.id}
-                sender={current.user}
+                senderId={current.userId}
+                senderAvatar={current.user.avatar}
                 content={current.content}
                 date={new Date(current.created_at).toTimeString().slice(0, 5)}
                 sent={current.userId == user.id}
@@ -124,7 +125,8 @@ export default function Chat(props: ChatProps) {
               <>
                 <Message
                   key={current.id}
-                  sender={current.user}
+                  senderId={current.userId}
+                  senderAvatar={current.user.avatar}
                   content={current.content}
                   date={new Date(current.created_at).toTimeString().slice(0, 5)}
                   sent={current.userId == user.id}
