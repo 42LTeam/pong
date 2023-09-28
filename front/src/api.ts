@@ -252,6 +252,9 @@ export async function getPublicChannels(userId: number) {
 }
 
 export async function getChannelAllMembers(id: number) {
+  if (Number.isNaN(id) || id === null) {
+    return ;
+  }
   const config = {
     method: "get",
     url: URL + `/channels/${id}/members`,
