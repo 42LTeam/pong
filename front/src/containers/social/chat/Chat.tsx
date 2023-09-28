@@ -10,6 +10,7 @@ import {
   sendMessageToChannel,
 } from "../../../api";
 import { ApplicationContext } from "../../Application";
+import TextInputChat from "../../../components/utils/TextInputChat";
 
 interface ChatProps {
   channel: any;
@@ -141,7 +142,7 @@ export default function Chat(props: ChatProps) {
           This is the content when 'conv' is false.
         </div>
       )}
-      <TextInput
+      <TextInputChat
         ref={ref}
         color="#7F8C8D"
         text="Votre message..."
@@ -149,7 +150,7 @@ export default function Chat(props: ChatProps) {
         onKeyDown={handleSendMessage}
         button={<Send handleClick={handleSendMessage}></Send>}
         isChat={true}
-      ></TextInput>
+      ></TextInputChat>
     </div>
   );
 }

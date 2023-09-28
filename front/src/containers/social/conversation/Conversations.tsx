@@ -56,6 +56,11 @@ export default function Conversations({ state }: Props) {
     navigate("/social/" + (state || ""));
   };
 
+  const handleLeave = (conversationId) => {
+    removeUserFromChannel(conversationId, user.id);
+    setRerenderFlag(false);
+  }
+
   return (
     <>
       <SidePanel
@@ -109,7 +114,7 @@ export default function Conversations({ state }: Props) {
                       {
                         text: "Quitter",
                         handleClick: () =>
-                          removeUserFromChannel(conversation.id, user.id),
+                        handleLeave(conversation.id),
                       },
                     ]}
                   >
