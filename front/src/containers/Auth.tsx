@@ -9,7 +9,7 @@ import Button from "../components/utils/Button";
 import React from "react";
 
 export interface User {
-  avatar: String;
+  avatar: string;
   username: String;
   status: String;
   id: number;

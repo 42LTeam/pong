@@ -4,6 +4,7 @@ import { AuthContext } from "../Auth";
 
 import "../../css/utils/user.css";
 import { deco } from "../../api";
+import Avatar from "../../components/utils/Avatar";
 
 const UserBubble = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -68,12 +69,7 @@ const UserBubble = () => {
     <div className="column">
       <div className="user bubble user-bubble" onClick={handleBubbleClick} ref={userBubbleRef}>
         <div className="user-title">{user?.username}</div>
-        {user?.avatar && (
-          <div
-            className="user-picture"
-            style={{ backgroundImage: `url(${user.avatar})` }}
-          />
-        )}
+        <Avatar url={user?.avatar}/>
       </div>
       <div>
         {menuOpen && (
