@@ -78,20 +78,16 @@ export default function Chat(props: ChatProps) {
   return (
     <div className="chat-root">
       <div className="chat-messages">
-        {unReadMessages.map((current) => {
-          return (
-            <>
-              <Message
-                
-                senderId={current.userId}
-                senderAvatar={current.user.avatar}
-                content={current.content}
-                date={new Date(current.created_at).toTimeString().slice(0, 5)}
-                sent={current.userId == user.id}
-              ></Message>
-            </>
-          );
-        })}
+      {unReadMessages.map((current, i) => (
+        <Message
+          key={i}
+          senderId={current.userId}
+          senderAvatar={current.user.avatar}
+          content={current.content}
+          date={new Date(current.created_at).toTimeString().slice(0, 5)}
+          sent={current.userId == user.id}
+        />
+      ))}
 
         {unReadMessages.length ? (
           <div className="row">
@@ -120,20 +116,16 @@ export default function Chat(props: ChatProps) {
           .filter((current) => {
             return current.id <= lastRead;
           })
-          .map((current) => {
-            return (
-              <>
-                <Message
-                  key={current.id}
-                  senderId={current.userId}
-                  senderAvatar={current.user.avatar}
-                  content={current.content}
-                  date={new Date(current.created_at).toTimeString().slice(0, 5)}
-                  sent={current.userId == user.id}
-                ></Message>
-              </>
-            );
-          })}
+          .map((current) => (
+            <Message
+            key={current.id}
+            senderId={current.userId}
+            senderAvatar={current.user.avatar}
+            content={current.content}
+            date={new Date(current.created_at).toTimeString().slice(0, 5)}
+            sent={current.userId == user.id}
+          />
+          ))}
       </div>
       {props.channel.conv === false && (
         <div className="conv-false-content">
