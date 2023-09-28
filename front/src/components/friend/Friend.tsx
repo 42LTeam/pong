@@ -1,4 +1,4 @@
-import React, { Children, useContext, useState } from "react";
+import React, { Children, useContext, useEffect, useState } from "react";
 import Avatar from "../utils/Avatar";
 import ContextMenu from "../utils/ContextMenu";
 import { useNavigate } from "react-router-dom";
@@ -23,8 +23,32 @@ export default function Friend(props: Props) {
   const user = useContext(AuthContext);
   const navigate = useNavigate();
   const [display, setDisplay] = useState(null);
-  const blocked = user.blockList.includes(props.friend.id);
+  const [blocked, setBlocked] = useState(user.blockList.includes(props.friend.id));
   const isFriend = user.friendList.includes(props.friend.id);
+  const [rerenderFlag, setRerenderFlag] = useState(false);
+
+  useEffect(() => {
+    setBlocked(user.blockList.includes(props.friend.id));
+    setRerenderFlag(true);
+  }, [rerenderFlag]);
+
+  const handleUnblockUser = (userId) => {
+    unblockUser(userId)
+      .then(() => {
+        setRerenderFlag(false);
+      })
+      .catch((err) => console.log(err));
+      user.blockList.splice(user.blockList.indexOf(props.friend?.id), 1);
+  };
+
+  const handleBlockUser = (userId) => {
+    blockUser(props.friend.id)
+    .then(() => {
+      user.blockList.push(props.friend.id);
+      setRerenderFlag(false);
+    });
+  }
+
   const buttons =
     props.friend.id == user.id
       ? [
@@ -85,16 +109,18 @@ export default function Friend(props: Props) {
     buttons.push({
       text: "Debloquer",
       handleClick: () => {
-        unblockUser(props.friend?.id);
-        user.blockList.splice(user.blockList.indexOf(props.friend?.id), 1);
-        setDisplay("none");
+        // unblockUser(props.friend?.id);
+        // user.blockList.splice(user.blockList.indexOf(props.friend?.id), 1);
+        // setDisplay("none");
+        handleUnblockUser(props.friend?.id);
       },
     });
   } else if (props.friend.id != user.id) {
     buttons.push({
       text: "Bloquer",
       handleClick: () => {
-        blockUser(props.friend.id).then(() => user.blockList.push(props.friend.id));
+        handleBlockUser(props.friend?.id);
+        // blockUser(props.friend.id).then(() => user.blockList.push(props.friend.id));
       },
     });
   }
@@ -133,7 +159,7 @@ export default function Friend(props: Props) {
         <div className="conversation-content">
           {!props.isBanned ? (
             <div className="conversation-username">
-              {!blocked ? props.friend?.username: "💔 UwU 💔"}
+              {!blocked ? props.friend?.username: "💔 Blocked"}
             </div>
           ) : (
             <div className="conversation-username-ban">

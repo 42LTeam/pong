@@ -142,6 +142,7 @@ export default function Chat(props: ChatProps) {
         bgColor="#ECF0F1"
         onKeyDown={handleSendMessage}
         button={<Send handleClick={handleSendMessage}></Send>}
+        isChat={true}
       ></TextInput>
     </div>
   );

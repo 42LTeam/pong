@@ -12,7 +12,7 @@ import MatchMaking from "./game/MatchMaking.class";
 import { MatchService } from "../../match/match.service";
 import { UserService } from "../../user/user.service";
 
-@WebSocketGateway(8001, {
+@WebSocketGateway({
   cors: true,
 })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
