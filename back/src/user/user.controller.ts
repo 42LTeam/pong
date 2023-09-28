@@ -258,18 +258,17 @@ export class UserController {
   }
 
   @Post("avatar-upload/:id")
-  @UseInterceptors(FileInterceptor("avatar"))
-  async uploadAvatar(
-    @Param("id", ParseIntPipe) id: number,
-    @UploadedFile() file
-  ): Promise<any> {
-    const fileName = file.path.split("/").pop();
-    const localhostfront = process.env.LOCALHOST || "localhost";
+@UseInterceptors(FileInterceptor("avatar"))
+async uploadAvatar(
+  @Param("id", ParseIntPipe) id: number,
+  @UploadedFile() file
+): Promise<any> {
+  const fileName = file.path.split("/").pop();
+  const formattedPath = `//api/uploads/${fileName}`;
+  await this.userService.updateUserAvatar(id, formattedPath);
+  return { path: formattedPath };
+}
 
-    const formattedPath = `//${localhostfront}:3000/uploads/${fileName}`;
-    await this.userService.updateUserAvatar(id, formattedPath);
-    return { path: formattedPath };
-  }
 
   @Put("colorball/:id")
   @ApiOperation({ summary: "Update user's ball's color" })
