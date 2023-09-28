@@ -91,10 +91,10 @@ export default function GamePage() {
     const textPos = fontSize + 5;
     const left = player.x < 0.5;
     c2d.textAlign = left ? "left" : "right";
-    c2d.fillText(player.name, c2d.canvas.width * (left ? 0.1 : 0.9), textPos);
+    c2d.fillText(player.name, c2d.canvas.width * (left ? 0.05 : 0.95), textPos);
     c2d.fillText(
       player.score.toString(),
-      c2d.canvas.width * (left ? 0.375 : 0.625),
+      c2d.canvas.width * (left ? 0.45 : 0.55),
       textPos
     );
     if (!custom || (custom && 0.35 < ball.x && ball.x < 0.65))
