@@ -29,10 +29,10 @@ export default function ChannelMembersList({
       .then((response) => {
         setChannelAllMembers(response.data);
         setRerenderFlag(true);
-        //console.log(response);
+
       })
       .catch((err) => {
-        //console.log(err)
+        console.log(err)
       });
   };
 
@@ -69,7 +69,6 @@ export default function ChannelMembersList({
       body={
         <>
           {ChannelAllMembers.map((current) => {
-            //console.log("log ChannelMemberList => Current: ", current);
             return (
               <Friend
                 key={current.user.id}

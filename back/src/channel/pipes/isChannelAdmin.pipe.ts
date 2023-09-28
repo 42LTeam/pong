@@ -24,7 +24,6 @@ export class isChannelAdminPipe implements PipeTransform {
       },
     });
 
-    console.log("isChannelAdminPipe: userChannel.isAdmin === ", userChannel.isAdmin)
 
     if (!userChannel.isAdmin) {
       throw new ForbiddenException("User is not an admin of this channel.");

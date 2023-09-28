@@ -3,7 +3,6 @@ import axios from "axios";
 
 const webSocketURL = "/";
 const URL = "/api";
-// console.log("wtd", import.meta.env.VITE_API_URL);
 export const socket = io(webSocketURL, { autoConnect: false });
 
 export async function deco() {
@@ -32,9 +31,7 @@ export async function ownerMakeAdmin(
     url: URL + "/channels/" + channelId + "/owner-make-admin/" + userId,
     withCredentials: true,
   };
-  console.log("ownerMakeAdmin(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
+
   return axios(config).catch(err => {return});
 }
 
@@ -49,9 +46,7 @@ export async function removeUserAdminFromChannel(
     url: URL + "/channels/" + channelId + "/admin-quit/" + userId,
     withCredentials: true,
   };
-  console.log("removeUserAdminFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
+
   return axios(config).catch(err => {return});
 }
 
@@ -63,9 +58,7 @@ export async function removeUserFromChannel(channelId: number, userId: number) {
     url: URL + "/channels/" + channelId + "/quit/" + userId,
     withCredentials: true,
   };
-  console.log("removeUserFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
+
   return axios(config).catch(err => {return});
 }
 
@@ -77,9 +70,7 @@ export async function banUserFromChannel(channelId: number, userId: number) {
     url: URL + "/channels/" + channelId + "/ban/" + userId,
     withCredentials: true,
   };
-  console.log("banUserFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
+
   return axios(config).catch(err => {return});
 }
 
@@ -91,9 +82,7 @@ export async function unbanUserFromChannel(channelId: number, userId: number) {
     url: URL + "/channels/" + channelId + "/unban/" + userId,
     withCredentials: true,
   };
-  console.log("unbanUserFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
+
   return axios(config).catch(err => {return});
 }
 
@@ -105,9 +94,7 @@ export async function muteUserFromChannel(channelId: number, userId: number) {
     url: URL + "/channels/" + channelId + "/mute/" + userId,
     withCredentials: true,
   };
-  console.log("muteUserFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
+
   return axios(config).catch(err => {return});
 }
 
@@ -122,9 +109,7 @@ export async function isMutedBannedFromChannel(
     url: URL + "/channels/" + channelId + "/is-muted/" + userId,
     withCredentials: true,
   };
-  console.log("isMutedBannedFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
+
   return axios(config).catch(err => {return});
 }
 
@@ -219,7 +204,7 @@ export async function getAllUsers(
     url: URL + "/users?" + queryParams,
     withCredentials: true,
   };
-  console.log(config);
+
 
   return axios(config).catch(err => {return});
 }
@@ -328,7 +313,7 @@ export async function remove2fa() {
 }
 
 export async function set2fa(token: string) {
-  console.log(token);
+
   const config = {
     method: "post",
     url: URL + "/auth/doubleAuth",
@@ -399,7 +384,7 @@ export async function sendFriendRequest(acceptorId: number) {
       acceptorId,
     },
   };
-  console.log(config);
+
   return axios(config).catch(err => {return});
 }
 
@@ -495,7 +480,7 @@ export async function getUserMatches(ID) {
 export async function uploadUserAvatar(id, file) {
   const formData = new FormData();
   formData.append("avatar", file);
-  console.log("file in api.ts : " + file);
+
   const config = {
     method: "post",
     url: `${URL}/users/avatar-upload/${id}`,
@@ -505,7 +490,7 @@ export async function uploadUserAvatar(id, file) {
     },
     data: formData,
   };
-  console.log(`post avatar request: ${config}`, config);
+
   return axios(config).catch(err => {return});
 }
 

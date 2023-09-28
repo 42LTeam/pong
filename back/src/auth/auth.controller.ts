@@ -36,7 +36,7 @@ export class AuthController {
   @Get("login")
   @UseGuards(FortyTwoAuthGuard)
   login() {
-    console.log("login");
+
   }
 
   @Post("logout")

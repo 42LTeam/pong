@@ -254,7 +254,6 @@ export default function GamePage() {
 
     const onError = (args) => {
       console.log("error");
-      if (args) console.log(args);
     };
 
     const onGameFinish = (args) => {

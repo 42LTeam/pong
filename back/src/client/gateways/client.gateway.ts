@@ -31,13 +31,11 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleDisconnect(client: any) {
     await this.clientService.unsubscribe(client.id);
-    console.log("deconnection " + client.id);
   }
 
   async handleConnection(client: any, ...args): Promise<any> {
     const socketId = client.id;
     const user = await this.clientService.getClientById(socketId);
-    console.log("connection " + client.id);
     if (!user) {
       client.emit("message", "Unregistered.");
       return;
@@ -76,13 +74,9 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (!usersInChannel.some(u => !u.isBanned && u.userId === user.id)) {
       throw new ForbiddenException("User isn't in this channel.");
     }
-    // const Until = new Date();
-    console.log("User muted date: ", usersInChannel.some(u => u.isMuted));
-    console.log("Date now: ", Date());
 
     const isMuted = await this.channelService.isUserMutedFromChannel(data.channelId, user.id)
     if (isMuted) {
-      console.log("You are muted", user.username);
       return;
     }
     // if (!usersInChannel.some(u => u.isMuted !== null || u.isMuted < Date())) {

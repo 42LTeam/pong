@@ -21,9 +21,6 @@ export default function Message(props: MessageProps) {
   const bubbleClassName =
     "chat-message-bubble" + (props.sent ? " chat-message-bubble-sent" : "");
 
-  // console.log("user blocklist = "+ user.blockList);
-  // console.log("message=["+props.content+"] sent by = "+ JSON.stringify(props.sender));
-  
     return (
     <div
       className={rootClassName}

@@ -72,8 +72,6 @@ export default function Chat(props: ChatProps) {
     return current.id > lastRead;
   });
 
-  // console.log("From Chat.tsx : unRead = "+ JSON.stringify(unReadMessages));
-  // console.log("From Chat.tsx : messages = "+ JSON.stringify(messages));
 
   return (
     <div className="chat-root">

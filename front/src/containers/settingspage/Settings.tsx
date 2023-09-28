@@ -49,10 +49,6 @@ export default function Settings(props: Props) {
       try {
         const response = await uploadUserAvatar(user.id, file);
         if (response.status === 201) {
-          console.log(
-            `User avatar updated successfully. Path : ${response.data.path}`,
-            response.data.path,
-          );
           setAvatarUrl(response.data.path);
         } else {
           console.error(
@@ -78,7 +74,7 @@ export default function Settings(props: Props) {
     try {
       const response = await updateUserUsername(user.id, newUsername);
       if (response.status === 200) {
-        console.log("User username updated successfully.");
+
         setUsername(newUsername);
       } else {
         console.error("Failed to update user username.");
@@ -89,7 +85,7 @@ export default function Settings(props: Props) {
       setUsername("Username already taken");
     }
     forceRerender();
-    console.log("I tried force re render");
+
   };
 
   const handleEditUsername = () => {

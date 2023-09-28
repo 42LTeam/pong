@@ -62,7 +62,7 @@ export default function Conversations({ state }: Props) {
     setRerenderFlag(false);
     if (conversationId == params.channelId) {
       navigate("/social");
-      console.log("params = "+JSON.stringify(params));
+
     }
   }
 

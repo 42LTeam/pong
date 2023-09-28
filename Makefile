@@ -56,11 +56,11 @@ env:
 	fi
 
 env-prod: env
-	@chmod 777 ./ip_address.sh
-	./ip_address.sh
-	@if [ -e "./.env.bak" ]; then \
-		rm .env.bak; \
-	fi
+#	@chmod 777 ./ip_address.sh
+#	./ip_address.sh
+#	@if [ -e "./.env.bak" ]; then \
+#		rm .env.bak; \
+#	fi
 
 dist:
 	@echo $(BOLD_GREEN) make dist: '🚽' - : erase .dist $(RESET_COLOR)

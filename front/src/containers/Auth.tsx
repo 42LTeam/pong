@@ -42,7 +42,7 @@ function Auth() {
 
   const forceRerender = () => {
     setRerender(!rerender);
-    console.log("Auth recieved a re render order");
+
   };
 
   useEffect(() => {
@@ -58,7 +58,7 @@ function Auth() {
         });
   }, []);
 
-  console.log("auth", import.meta.env.BASE_URL);
+
   useEffect(() => {
     function onDisconnect() {
       setConnected(false);
@@ -68,7 +68,7 @@ function Auth() {
 
       authSocketId(socket.id).catch(err => {return;}).then((response) => {
         socket.emit("register", { target: response.data });
-        console.log("register");
+
       });
     }
 

@@ -109,7 +109,6 @@ export default class Game {
   handleLeave(user) {
     const index = this.players.findIndex((p) => p.userId == user.id);
     if (index >= 0) {
-      console.log("Player", this.players[index].name, "left");
       if (this.state == gameState.FINISH) this.players.splice(index, 1);
       else {
         this.players[index].status = playerStatus.OFFLINE;

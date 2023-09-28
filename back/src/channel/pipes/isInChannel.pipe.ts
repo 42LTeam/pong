@@ -16,7 +16,6 @@ export class isInChannelPipe implements PipeTransform {
   async transform(channelId: any, _metadata: ArgumentMetadata) {
     let user = await this.request["user"]
 
-    console.log("isInChannelPipe: User from request = ", user)
     const userChannel = await this.prisma.userChannel.findFirst({
       where: {
         channelId: channelId,
@@ -24,7 +23,6 @@ export class isInChannelPipe implements PipeTransform {
       },
     });
 
-    console.log("isInChannelPipe: userChannel = ", userChannel)
 
     if (!userChannel || userChannel.isBanned) {
       throw new ForbiddenException("User is not in this channel.");

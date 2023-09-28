@@ -20,8 +20,6 @@ export default function SocialBody() {
   useEffect(() => {
       getChannelAllMembers(state)
         .catch((err) => {
-          //console.log(err);
-          //console.log("STATUS = "+err.response.status);
           setError(err.response.status);
         });
   }, [channelId]);
