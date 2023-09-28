@@ -29,6 +29,7 @@ services:
     container_name: front
     build:
       dockerfile: ./front/Dockerfile
+      target: prod
     volumes:
       - ./front:/usr/src/app
       - ./front/dist:/usr/src/app/dist

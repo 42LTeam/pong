@@ -59,8 +59,8 @@ env:
 env-prod:		env
 				@chmod 777 ./ip_address.sh
 				./ip_address.sh
-				@if [ -e .env.bak ]; then \
-					rm .env.bak;
+				@if [ -e "./.env.bak" ]; then \
+					rm .env.bak; \
 				fi
 
 dist:
