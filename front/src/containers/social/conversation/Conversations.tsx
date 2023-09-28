@@ -26,6 +26,7 @@ export default function Conversations({ state }: Props) {
   const navigate = useNavigate();
 
   const [editChannel, setEditChannel] = useState(null);
+  const [rerenderFlag, setRerenderFlag] = useState(false);
 
   const handlePopUp = (event) => {
     setPopUpPosition({
@@ -48,7 +49,8 @@ export default function Conversations({ state }: Props) {
 
   useEffect(() => {
     fetchConversations();
-  }, [application]);
+    setRerenderFlag(true);
+  }, [application, rerenderFlag]);
 
   const setState = (state) => {
     navigate("/social/" + (state || ""));
@@ -105,7 +107,7 @@ export default function Conversations({ state }: Props) {
                     },
                       {separator: true}] : []),
                       {
-                        text: "Leave",
+                        text: "Quitter",
                         handleClick: () =>
                           removeUserFromChannel(conversation.id, user.id),
                       },
