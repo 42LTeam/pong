@@ -53,6 +53,7 @@ export default function Settings(props: Props) {
         const response = await uploadUserAvatar(user.id, file);
         if (response.status === 201) {
           setAvatarUrl(response.data.path);
+          setErrorMsg("");
         } else {
           setErrorMsg("Your image file is not valid");
           setShowErrorPopUp(true);
