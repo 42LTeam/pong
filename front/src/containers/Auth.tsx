@@ -38,6 +38,12 @@ function Auth() {
   const [destination, setDestination] = useState(null);
   const [user, setUser] = useState<User | null>(null);  // Ensure user is initially null
   const URL = "/api";
+  const [rerender, setRerender] = useState(false);
+
+  const forceRerender = () => {
+    setRerender(!rerender);
+
+  };
 
   useEffect(() => {
     getStatus()
@@ -49,7 +55,7 @@ function Auth() {
       .catch(() => {
         // handle error
       });
-  }, []);
+  }, [rerender]);
 
   useEffect(() => {
     const onDisconnect = () => setConnected(false);
@@ -89,6 +95,7 @@ function Auth() {
   return (
     
     <AuthContext.Provider value={user}>
+      <RerenderContext.Provider value={forceRerender}>
         <Application>
           {destination == "2fa" ? (
             <DoubleAuth setDestination={setDestination}></DoubleAuth>
@@ -96,7 +103,7 @@ function Auth() {
         </Application>
         {!wsConnected && Boolean(user) ? (
           <PopOver clear={null}>
-            <h1>Deconnecter</h1>
+            <h1>Deconnecté</h1>
             <h3>Vous ne pouvez avoir qu'un seul onglet a la fois.</h3>
             <Button
               handleClick={() => window.location.reload()}
@@ -105,6 +112,7 @@ function Auth() {
             ></Button>
           </PopOver>
         ) : null}
+      </RerenderContext.Provider>
     </AuthContext.Provider>
   );
 }
