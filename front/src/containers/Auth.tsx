@@ -36,41 +36,33 @@ export function useRerender() {
 function Auth() {
   const [wsConnected, setConnected] = useState(false);
   const [destination, setDestination] = useState(null);
-  const [user, setUser] = useState<User>(null);
-  const [rerender, setRerender] = useState(false);
+  const [user, setUser] = useState<User | null>(null);  // Ensure user is initially null
   const URL = "/api";
 
-  const forceRerender = () => {
-    setRerender(!rerender);
-
-  };
-
   useEffect(() => {
-    if (!user)
-      getStatus()
-        .then(function (response) {
-          socket.connect();
-          setUser(response.data.user);
-          setDestination(response.data.destination);
-        })
-        .catch(function () {
-          window.location.replace(URL + "/auth/login");
-        });
+    getStatus()
+      .then(response => {
+        socket.connect();
+        setUser(response.data.user);
+        setDestination(response.data.destination);
+      })
+      .catch(() => {
+        // handle error
+      });
   }, []);
 
-
   useEffect(() => {
-    function onDisconnect() {
-      setConnected(false);
-    }
-    function onConnect() {
+    const onDisconnect = () => setConnected(false);
+    const onConnect = () => {
       setConnected(true);
-
-      authSocketId(socket.id).catch(err => {return;}).then((response) => {
-        socket.emit("register", { target: response.data });
-
-      });
-    }
+      authSocketId(socket.id)
+        .then(response => {
+          socket.emit("register", { target: response.data });
+        })
+        .catch(() => {
+          // handle error
+        });
+    };
 
     socket.on("disconnect", onDisconnect);
     socket.on("connect", onConnect);
@@ -81,12 +73,22 @@ function Auth() {
     };
   }, [user]);
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Button
+          handleClick={() => window.location.replace(URL + "/auth/login")}
+          text="Login"
+          clickable
+        />
+      </div>
+    );
+  }
+  
 
   return (
     
     <AuthContext.Provider value={user}>
-      <RerenderContext.Provider value={forceRerender}>
         <Application>
           {destination == "2fa" ? (
             <DoubleAuth setDestination={setDestination}></DoubleAuth>
@@ -103,7 +105,6 @@ function Auth() {
             ></Button>
           </PopOver>
         ) : null}
-      </RerenderContext.Provider>
     </AuthContext.Provider>
   );
 }
