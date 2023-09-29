@@ -289,8 +289,33 @@ export class ChannelService {
     }
   }
 
-  async banUserFromChannel(channelId: number, userId: number): Promise<any> {
-    return this.prisma.userChannel.updateMany({
+  async banUserFromChannel(channelId: number, userId: number): Promise<void> {
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        id: channelId,
+      },
+    });
+
+    if (!channel) {
+      throw new Error('Channel not found');
+    }
+
+    if (!channel.banList.includes(userId)) {
+      const updatedBanList = [...channel.banList, userId];
+
+      await this.prisma.channel.update({
+        where: {
+          id: channelId,
+        },
+        data: {
+          banList: {
+            set: updatedBanList,
+          },
+        },
+      });
+    }
+
+    await this.prisma.userChannel.updateMany({
       where: {
         channelId: channelId,
         userId: userId,
@@ -300,19 +325,6 @@ export class ChannelService {
       },
     });
   }
-
-  //TODO if we want to unban
-  // async unBanUserFromChannel(channelId: number, userId: number): Promise<any> {
-  //   return this.prisma.userChannel.updateMany({
-  //     where: {
-  //       channelId: channelId,
-  //       userId: userId,
-  //     },
-  //     data: {
-  //       isBanned: false
-  //     },
-  //   });
-  // }
 
   async ownerMakeAdmin(channelId: number, userId: number): Promise<any> {
     return this.prisma.userChannel.updateMany({
@@ -341,11 +353,15 @@ export class ChannelService {
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
     });
-
+    console.log("@@@ userChannel.isMuted = ", userChannel.isMuted);
+    // return (true);
     const currentDateTime = new Date();
     const muteUntil = userChannel.isMuted;
 
-    return muteUntil !== null && muteUntil > currentDateTime;
+    console.log("@@@muteUntil !== null && muteUntil > currentDateTime="
+        , muteUntil !== null && muteUntil > currentDateTime);
+
+    return (muteUntil !== null && muteUntil > currentDateTime);
   }
 
   async setChannelPassword(

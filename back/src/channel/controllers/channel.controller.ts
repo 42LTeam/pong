@@ -189,10 +189,11 @@ export class ChannelController {
 
   @Get("/:channelId/is-muted/:userId")
   @ApiOperation({ summary: "Check if a user is muted from a channel" })
-  async isMutedBannedFromChannel(
+  async isUserMutedFromChannel(
     @Param("channelId", ParseIntPipe) channelId: number,
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<boolean> {
+     console.log("cont => is Muted => ", this.channelService.isUserMutedFromChannel(channelId, userId))
     return this.channelService.isUserMutedFromChannel(channelId, userId);
   }
 
@@ -240,7 +241,7 @@ export class ChannelController {
     description: "ID of the channel to join",
   })
   async joinChannel(
-    @Param("channelId", ParseIntPipe) channelId: number,
+    @Param("channelId", ParseIntPipe, isBannedPipe) channelId: number,
     @Req() req
   ): Promise<any> {
     const user = await req.user;

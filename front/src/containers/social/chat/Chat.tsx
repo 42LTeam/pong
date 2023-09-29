@@ -5,7 +5,7 @@ import { AuthContext } from "../../Auth";
 import "../../../css/chatBody.css";
 import Send from "../../../components/svg/Send";
 import {
-  getChannelMessages,
+  getChannelMessages, getUserByID, isUserMutedFromChannel,
   readMessage,
   sendMessageToChannel,
 } from "../../../api";
@@ -23,6 +23,8 @@ export default function Chat(props: ChatProps) {
   const user = useContext(AuthContext);
   const application = useContext(ApplicationContext);
   const ref = useRef(null);
+  const [isMuted, setMuted] = useState(false);
+
   const toAdd =
     application.social.newMessages.filter(
       (current) =>
@@ -39,6 +41,23 @@ export default function Chat(props: ChatProps) {
     if (tmp_messages.length)
       await readMessage(props.channel, tmp_messages[0].id);
   };
+
+  const checkMute = () => {
+    useEffect(() => {
+
+      isUserMutedFromChannel(props.channel, user.id)
+          .then(function (response) {
+            setMuted(response.data);
+          })
+          .catch(function (error) {
+            console.error("Error fetching muted (@isUserMutedFromChannel):", error);
+            setMuted(false);
+          });
+
+    }, []);
+
+
+  }
 
   useEffect(() => {
     fetchData();
@@ -63,7 +82,17 @@ export default function Chat(props: ChatProps) {
   const handleSendMessage = async (event) => {
     if (!ref || !ref.current.value) return;
     if (event.key != null && event.key != "Enter") return;
+
+    checkMute();
+    if (isMuted)
+    {
+      //affiche error popup
+      alert("frerot t mute pd");
+    }
+
+
     await sendMessageToChannel(channel, ref.current.value);
+
 
     ref.current.value = null;
   };

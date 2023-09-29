@@ -1,5 +1,7 @@
 import io from "socket.io-client";
 import axios from "axios";
+import PopUp from "./components/utils/PopUp";
+import {sendNotificationError} from "./components/Errors/PopupError";
 
 const webSocketURL = "/";
 const URL = "/api";
@@ -100,7 +102,7 @@ export async function muteUserFromChannel(channelId: number, userId: number) {
 
 //   @Get('/:channelId/is-muted/:userId')
 //   @ApiOperation({ summary: 'Mute a user from a channel' })
-export async function isMutedBannedFromChannel(
+export async function isUserMutedFromChannel(
   channelId: number,
   userId: number
 ) {
@@ -420,6 +422,7 @@ export async function readMessage(channelId: number, messageId: number) {
 }
 
 export async function sendMessageToChannel(channelId: number, content: string) {
+
   socket.emit("new-message", { channelId, content });
 }
 
@@ -561,6 +564,9 @@ export async function joinChannel(channelId: number) {
     url: `${URL}/channels/${channelId}/join`,
     withCredentials: true,
   };
-  const response = await axios(config).catch(err => {return});
+  const response = await axios(config).catch( () => {
+    sendNotificationError("t banni")
+  })
+
   return response.data;
 }
