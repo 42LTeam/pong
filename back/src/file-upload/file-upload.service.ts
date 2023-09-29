@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import {
   MulterModuleOptions,
   MulterOptionsFactory,
 } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
+import sharp from 'sharp';
 
 @Injectable()
 export class FileUploadService implements MulterOptionsFactory {
@@ -20,6 +21,20 @@ export class FileUploadService implements MulterOptionsFactory {
           cb(null, `${randomName}${extname(file.originalname)}`);
         },
       }),
+      fileFilter: async (req, file, cb) => {
+        const allowedExtensions = ['.jpg', '.png'];
+
+        if (allowedExtensions.includes(extname(file.originalname).toLowerCase())) {
+          try {
+            await sharp(file.path).metadata();
+            cb(null, true);
+          } catch {
+            cb(new HttpException('Invalid image content', HttpStatus.BAD_REQUEST), false);
+          }
+        } else {
+          cb(new HttpException('Invalid file type', HttpStatus.BAD_REQUEST), false);
+        }
+      },
     };
   }
 }
