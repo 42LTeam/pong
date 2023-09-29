@@ -12,7 +12,6 @@ type Props = {
   children?: any;
   onKeyDown?: any;
   password?: boolean;
-  isChat?: boolean;
 };
 
 const TextInputChat = forwardRef(function MyInput(props: Props, ref) {
@@ -35,13 +34,11 @@ const TextInputChat = forwardRef(function MyInput(props: Props, ref) {
     const newValue = e.target.value;
     setInputValue(newValue);
 
-    if (maxWordLength(newValue)) { // max 25 caractères sans espace
+    if (maxWordLength(newValue) || newValue.length > 100) { // max 25 caractères sans espace
       setShowAlert(true);
-    } else if (newValue.length > 100) { // max 100 cara de long
-      if (props.isChat) {
+      if (newValue.length > 100) { // max 100 cara de long
         alert("Frérot t'es censé écrire un message pas un bouquin 🧐");
       }
-      setShowAlert(true);
     } else {
       setShowAlert(false);
     }
@@ -62,7 +59,7 @@ const TextInputChat = forwardRef(function MyInput(props: Props, ref) {
     <>
     {showAlert && (
     <div className="max-length-alert">
-      Mots de max. 25 caractères et max. 100 caractères au total.
+      Max. 25 caractères par mot et max. 100 caractères au total. (raconte pas ta vie aussi tsais)
     </div>
       )}
 
