@@ -42,11 +42,10 @@ function Auth() {
 
   const forceRerender = () => {
     setRerender(!rerender);
-
   };
 
   useEffect(() => {
-    if (!user)
+    if (!user) {
       getStatus()
         .then(function (response) {
           socket.connect();
@@ -56,7 +55,16 @@ function Auth() {
         .catch(function () {
           window.location.replace(URL + "/auth/login");
         });
-  }, []);
+    }
+    else {
+      getStatus()
+        .then(function (response) {
+          setUser(response.data.user);
+        })
+        .catch(function () {
+        });
+    }
+  }, [rerender]);
 
 
   useEffect(() => {
@@ -66,7 +74,7 @@ function Auth() {
     function onConnect() {
       setConnected(true);
 
-      authSocketId(socket.id).catch(err => {return;}).then((response) => {
+      authSocketId(socket.id).catch(err => { return; }).then((response) => {
         socket.emit("register", { target: response.data });
 
       });
@@ -84,7 +92,7 @@ function Auth() {
   if (!user) return null;
 
   return (
-    
+
     <AuthContext.Provider value={user}>
       <RerenderContext.Provider value={forceRerender}>
         <Application>
