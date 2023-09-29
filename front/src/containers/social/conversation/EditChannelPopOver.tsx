@@ -15,7 +15,7 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
     const handleValidation = channel ?
         () => {
             const name = hasName ? nameRef.current.value : null;
-            const password = passwordRef.current.value;
+            const password = !privated ? passwordRef.current.value : "";
             editChannel(channel.id,{privated, name, password}).then(() => clear(true))
         }
         : async () => {
@@ -53,14 +53,15 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
                     {...(!hasName ? { value: channel?.name } : {})}
                     bgColor="#2C3E50"
                 ></TextInput>
-                {!privated &&(
+                {!privated && (
                 <>
-                <h2>Mot de passe</h2><TextInput
-                        ref={passwordRef}
-                        password
-                        text="Entrez un mot de passe"
-                        bgColor="#2C3E50"
-                    ></TextInput>
+                <h2>Mot de passe</h2>
+                <TextInput
+                    ref={passwordRef}
+                    password
+                    text="Entrez un mot de passe"
+                    bgColor="#2C3E50"
+                ></TextInput>
                 </>)}
                 <div className="row">
                     <div className={"row"} style={{ gap: "5px" }}>
@@ -82,7 +83,7 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
                 ></Button>
                 <Button
                     handleClick={handleValidation}
-                    text={channel ? "Modier le salon" : "Créer un salon"}
+                    text={channel ? "Modifier le salon" : "Créer un salon"}
                     clickable={true}
                 ></Button>
             </div>
