@@ -4,15 +4,30 @@ import { AuthContext } from "../Auth";
 
 import "../../css/utils/user.css";
 import { deco } from "../../api";
+import Avatar from "../../components/utils/Avatar";
 
 const UserBubble = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const userBubbleRef = useRef(null);
+  const [x, setX] = useState();
+  const [y, setY] = useState();
+  const [width, setWidth] = useState();
+
+  const getPosition = () => {
+  const x = userBubbleRef.current?.offsetLeft;
+  setX(x);
+  const y = userBubbleRef.current?.offsetTop + 50;
+  setY(y);
+  const width = userBubbleRef.current?.getBoundingClientRect().width;
+  setWidth(width);
+  }
 
   const user = useContext(AuthContext);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+    getPosition();
   };
 
   const navigate = useNavigate();
@@ -43,25 +58,28 @@ const UserBubble = () => {
     };
 
     document.addEventListener("click", handleClickOutside);
+    window.addEventListener("resize", getPosition);
     return () => {
       document.removeEventListener("click", handleClickOutside);
+      window.removeEventListener("resize", getPosition);
     };
   }, []);
 
   return (
     <div className="column">
-      <div className="user bubble" onClick={handleBubbleClick}>
+      <div className="user bubble user-bubble" onClick={handleBubbleClick} ref={userBubbleRef}>
         <div className="user-title">{user?.username}</div>
-        {user?.avatar && (
-          <div
-            className="user-picture"
-            style={{ backgroundImage: `url(${user.avatar})` }}
-          />
-        )}
+        <Avatar url={user?.avatar}/>
       </div>
       <div>
         {menuOpen && (
-          <div ref={menuRef} className="bubble menu">
+          <div ref={menuRef}
+          className="bubble menu"
+          style={
+            {left: x,
+            top: y,
+            width: width}
+          }>
             <ul className="list">
               <li
                 className="user user-title element"

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import { authSocketId, getStatus, socket } from "../api";
 import Application from "./Application";
@@ -6,9 +6,10 @@ import "../css/main.css";
 import DoubleAuth from "./DoubleAuth";
 import PopOver from "../components/utils/PopOver";
 import Button from "../components/utils/Button";
+import React from "react";
 
 export interface User {
-  avatar: String;
+  avatar: string;
   username: String;
   status: String;
   id: number;
@@ -24,17 +25,31 @@ export interface User {
 }
 
 export const AuthContext = createContext<User | undefined>(undefined);
+const RerenderContext = createContext(undefined);
+
+export function useRerender() {
+  return useContext(RerenderContext);
+};
+
+
 
 function Auth() {
   const [wsConnected, setConnected] = useState(false);
   const [destination, setDestination] = useState(null);
   const [user, setUser] = useState<User>(null);
-  const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
+  const [rerender, setRerender] = useState(false);
+  const URL = "/api";
+
+  const forceRerender = () => {
+    setRerender(!rerender);
+
+  };
 
   useEffect(() => {
     if (!user)
       getStatus()
         .then(function (response) {
+          socket.connect();
           setUser(response.data.user);
           setDestination(response.data.destination);
         })
@@ -43,16 +58,17 @@ function Auth() {
         });
   }, []);
 
-  console.log("auth", import.meta.env.BASE_URL);
+
   useEffect(() => {
     function onDisconnect() {
       setConnected(false);
     }
     function onConnect() {
       setConnected(true);
-      authSocketId(socket.id).then((response) => {
+
+      authSocketId(socket.id).catch(err => {return;}).then((response) => {
         socket.emit("register", { target: response.data });
-        console.log("register");
+
       });
     }
 
@@ -68,23 +84,26 @@ function Auth() {
   if (!user) return null;
 
   return (
+    
     <AuthContext.Provider value={user}>
-      <Application>
-        {destination == "2fa" ? (
-          <DoubleAuth setDestination={setDestination}></DoubleAuth>
+      <RerenderContext.Provider value={forceRerender}>
+        <Application>
+          {destination == "2fa" ? (
+            <DoubleAuth setDestination={setDestination}></DoubleAuth>
+          ) : null}
+        </Application>
+        {!wsConnected && Boolean(user) ? (
+          <PopOver clear={null}>
+            <h1>Deconnecter</h1>
+            <h3>Vous ne pouvez avoir qu'un seul onglet a la fois.</h3>
+            <Button
+              handleClick={() => window.location.reload()}
+              text="Reprendre le controle"
+              clickable
+            ></Button>
+          </PopOver>
         ) : null}
-      </Application>
-      {!wsConnected && Boolean(user) ? (
-        <PopOver clear={null}>
-          <h1>Deconnecter</h1>
-          <h3>Vous ne pouvez avoir qu'un seul onglet a la fois.</h3>
-          <Button
-            handleClick={() => window.location.reload()}
-            text="Reprendre le controle"
-            clickable
-          ></Button>
-        </PopOver>
-      ) : null}
+      </RerenderContext.Provider>
     </AuthContext.Provider>
   );
 }

@@ -11,7 +11,7 @@ export class BlockService {
     blockerId: number,
     blockedId: number
   ): Promise<Block> {
-    console.log(blockerId, blockedId);
+
     if (blockerId == blockedId) {
       throw new Error("Both blockerId and blockedId shouldn't be the same");
     }

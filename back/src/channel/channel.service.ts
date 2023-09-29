@@ -262,7 +262,7 @@ export class ChannelService {
 
     // Check if it's a private conversation and there are only two users
     // if (channel.conv && channel.users.length === 2)
-    console.log(channel.users.length);
+
     if (channel.users.length === 2) {
       // Delete all references to the channel in the UserChannel table
       await this.prisma.userChannel.deleteMany({
@@ -374,7 +374,6 @@ export class ChannelService {
         }
       },
     });
-    console.log("getPublicChannels => channels:", channels)
     return channels
   }
 

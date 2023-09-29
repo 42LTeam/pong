@@ -67,7 +67,7 @@ export const getUserRank = (
   users: UserRank[]
 ): number | null => {
   if (targetUser.playedMatch === false) {
-    console.log("no match for " + targetUser.username);
+
     return null;
   }
 

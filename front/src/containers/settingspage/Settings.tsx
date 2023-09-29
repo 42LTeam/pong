@@ -1,29 +1,42 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 import "../../css/settings.css";
-import { AuthContext } from "../Auth";
+import { AuthContext, useRerender } from "../Auth";
 import {
   get2fa,
   uploadUserAvatar,
   updateUserUsername,
+  remove2fa,
 
 } from "../../api";
 import Button from "../../components/utils/Button";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 export default function Settings(props: Props) {
   const user = useContext(AuthContext);
   const inputRef = useRef(null);
+  const forceRerender = useRerender();
+  const navigate = useNavigate();
 
   const [qr, setQr] = useState(null);
   const [username, setUsername] = useState(user.username);
   const [avatarUrl, setAvatarUrl] = useState(user.avatar);
   const [errorMsg, setErrorMsg] = useState("");
+
   const activate2fa = () => {
     get2fa().then((response) => {
       setQr(response.data);
     });
   };
+
+  const deactivate2fa = () => {
+    remove2fa().then((response) => {
+      setQr(null);
+    });
+  };
+
+
 
   useEffect(() => { }, [username]);
   useEffect(() => {
@@ -36,10 +49,6 @@ export default function Settings(props: Props) {
       try {
         const response = await uploadUserAvatar(user.id, file);
         if (response.status === 201) {
-          console.log(
-            `User avatar updated successfully. Path : ${response.data.path}`,
-            response.data.path,
-          );
           setAvatarUrl(response.data.path);
         } else {
           console.error(
@@ -51,21 +60,10 @@ export default function Settings(props: Props) {
         }
       } catch (error) {
         console.error("An error occurred during avatar upload:", error);
-
-        // Log the error message
-        console.error("Error message:", error.message);
-
-        // Log the response data if available
-        if (error.response) {
-          console.error("Server responded with status:", error.response.status);
-          console.error("Response data:", error.response.data);
-        }
-        // Log the request that was made
-        console.error("Request config:", error.config);
-
         setErrorMsg("An unexpected error occurred.");
       }
     }
+    forceRerender();
   };
 
   const handleEditClick = () => {
@@ -76,7 +74,7 @@ export default function Settings(props: Props) {
     try {
       const response = await updateUserUsername(user.id, newUsername);
       if (response.status === 200) {
-        console.log("User username updated successfully.");
+
         setUsername(newUsername);
       } else {
         console.error("Failed to update user username.");
@@ -86,17 +84,25 @@ export default function Settings(props: Props) {
       console.error("Error updating user username:", error);
       setUsername("Username already taken");
     }
+    forceRerender();
+
   };
 
   const handleEditUsername = () => {
     const newUsername = prompt("Please enter the new username:");
-    if (newUsername) {
+    if (newUsername && newUsername !== user.username) {
       handleChangeUsername(newUsername);
     }
   };
 
   return (
     <div className="main-frame">
+      <input
+        type="file"
+        ref={inputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
       <div className="avatar-section">
         <div className="user-avatar">
           <div className="avatar-container">
@@ -125,10 +131,14 @@ export default function Settings(props: Props) {
           </div>
         </div>
       </div>
-      {Boolean(qr) ?
-        <img src={qr} /> :
+      {Boolean(qr) ? (
+        <div>
+          <img src={qr} />
+          <Button handleClick={deactivate2fa} text={"deactivate 2fa"} clickable></Button>
+        </div>
+      ) : (
         <Button handleClick={activate2fa} text={"activer la 2fa"} clickable></Button>
-      }
+      )}
     </div>
   );
 }

@@ -15,7 +15,7 @@ export class UserService {
     private friendService: FriendService,
     @Inject(forwardRef(() => MatchService))
     private matchService: MatchService
-  ) {}
+  ) { }
 
   async createUser(
     id: number,
@@ -24,16 +24,19 @@ export class UserService {
     avatar: string,
     xp: number
   ): Promise<User> {
+    const formattedUsername = `${username}#${id}`;
+
     return this.prisma.user.create({
       data: {
         id: id,
-        username: username,
+        username: formattedUsername,
         secretO2FA: secretO2FA,
         avatar: avatar,
         xp: xp,
       },
     });
   }
+
 
   async getAllUsers(id: number, options: SearchDTO): Promise<User[]> {
     const forbiddenIds = [id];
@@ -69,7 +72,7 @@ export class UserService {
     try {
       const updatedUser = await this.prisma.user.update({
         where: { id: userId },
-        data: { avatar: avatarPath },
+        data: { avatar: process.env.VITE_API_URL + '/' + avatarPath },
       });
       console.log(updatedUser);
       return updatedUser;
@@ -79,14 +82,29 @@ export class UserService {
     }
   }
 
-  async updateUserName(id: number, username: string): Promise<User> {
-    return this.prisma.user.update({
-      where: { id },
-      data: {
-        username: username,
-      },
-    });
+  async updateUserName(userId: number, newUsername: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const currentUserId = user.username.split('#').pop();
+
+    const formattedUsername = `${newUsername}#${currentUserId}`;
+
+    try {
+      const updatedUser = await this.prisma.user.update({
+        where: { id: userId },
+        data: { username: formattedUsername },
+      });
+
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating username in Prisma:", error);
+      throw new Error("Failed to update username in database");
+    }
   }
+
 
   async deleteUser(id: number): Promise<User> {
     return this.prisma.user.delete({ where: { id } });
@@ -278,6 +296,18 @@ export class UserService {
     }
     return this.generateQRCode(user.name, user.secretO2FA);
   }
+
+  async eraseSecret(user) {
+    return this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        secretO2FA: null,
+      }
+    });
+  }
+  
 
   async updateUserColorBall(id: number, color: string): Promise<User> {
     return this.prisma.user.update({

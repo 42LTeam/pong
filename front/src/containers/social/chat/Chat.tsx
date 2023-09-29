@@ -10,6 +10,7 @@ import {
   sendMessageToChannel,
 } from "../../../api";
 import { ApplicationContext } from "../../Application";
+import TextInputChat from "../../../components/utils/TextInputChat";
 
 interface ChatProps {
   channel: any;
@@ -71,22 +72,20 @@ export default function Chat(props: ChatProps) {
     return current.id > lastRead;
   });
 
+
   return (
     <div className="chat-root">
       <div className="chat-messages">
-        {unReadMessages.map((current) => {
-          return (
-            <>
-              <Message
-                key={current.id}
-                sender={current.user}
-                content={current.content}
-                date={new Date(current.created_at).toTimeString().slice(0, 5)}
-                sent={current.userId == user.id}
-              ></Message>
-            </>
-          );
-        })}
+      {unReadMessages.map((current, i) => (
+        <Message
+          key={i}
+          senderId={current.userId}
+          senderAvatar={current.user.avatar}
+          content={current.content}
+          date={new Date(current.created_at).toTimeString().slice(0, 5)}
+          sent={current.userId == user.id}
+        />
+      ))}
 
         {unReadMessages.length ? (
           <div className="row">
@@ -115,19 +114,16 @@ export default function Chat(props: ChatProps) {
           .filter((current) => {
             return current.id <= lastRead;
           })
-          .map((current) => {
-            return (
-              <>
-                <Message
-                  key={current.id}
-                  sender={current.user}
-                  content={current.content}
-                  date={new Date(current.created_at).toTimeString().slice(0, 5)}
-                  sent={current.userId == user.id}
-                ></Message>
-              </>
-            );
-          })}
+          .map((current) => (
+            <Message
+            key={current.id}
+            senderId={current.userId}
+            senderAvatar={current.user.avatar}
+            content={current.content}
+            date={new Date(current.created_at).toTimeString().slice(0, 5)}
+            sent={current.userId == user.id}
+          />
+          ))}
       </div>
       {props.channel.conv === false && (
         <div className="conv-false-content">
@@ -135,14 +131,15 @@ export default function Chat(props: ChatProps) {
           This is the content when 'conv' is false.
         </div>
       )}
-      <TextInput
+      <TextInputChat
         ref={ref}
         color="#7F8C8D"
         text="Votre message..."
         bgColor="#ECF0F1"
         onKeyDown={handleSendMessage}
         button={<Send handleClick={handleSendMessage}></Send>}
-      ></TextInput>
+        isChat={true}
+      ></TextInputChat>
     </div>
   );
 }

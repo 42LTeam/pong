@@ -9,15 +9,16 @@ RUN chown -R node:node /usr/src/app
 # Set user to node for security
 USER node
 
-
-# Development
-FROM base AS development
 COPY --chown=node:node ./front/package.json ./
 COPY --chown=node:node ./front/package-lock.json ./
 RUN npm ci
 COPY --chown=node:node ./front/ ./
+
+FROM base as development
 EXPOSE 5173
 # Handle Every Signal Correctly by Dumb Init to PID 1
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["vite", "--host", "--port", "5173"]
 
+FROM base as prod
+CMD ["npm", "run", "build"]

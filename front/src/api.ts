@@ -1,11 +1,9 @@
 import io from "socket.io-client";
 import axios from "axios";
 
-const webSocketURL =
-  (import.meta.env.VITE_API_URL || "http://localhost") + ":8001";
-const URL = (import.meta.env.VITE_API_URL || "http://localhost") + ":3000";
-console.log("wtd", import.meta.env.VITE_API_URL);
-export const socket = io(webSocketURL, { autoConnect: true });
+const webSocketURL = "/";
+const URL = "/api";
+export const socket = io(webSocketURL, { autoConnect: false });
 
 export async function deco() {
   const config = {
@@ -13,7 +11,7 @@ export async function deco() {
     url: URL + "/auth/logout",
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -33,10 +31,8 @@ export async function ownerMakeAdmin(
     url: URL + "/channels/" + channelId + "/owner-make-admin/" + userId,
     withCredentials: true,
   };
-  console.log("ownerMakeAdmin(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 //  @Post('/:channelId/admin-quit/:userId')
@@ -50,10 +46,8 @@ export async function removeUserAdminFromChannel(
     url: URL + "/channels/" + channelId + "/admin-quit/" + userId,
     withCredentials: true,
   };
-  console.log("removeUserAdminFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 //  @Post('/:channelId/quit/:userId')
@@ -64,10 +58,8 @@ export async function removeUserFromChannel(channelId: number, userId: number) {
     url: URL + "/channels/" + channelId + "/quit/" + userId,
     withCredentials: true,
   };
-  console.log("removeUserFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 //  @Post('/:channelId/ban/:userId')
@@ -78,10 +70,8 @@ export async function banUserFromChannel(channelId: number, userId: number) {
     url: URL + "/channels/" + channelId + "/ban/" + userId,
     withCredentials: true,
   };
-  console.log("banUserFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 //  @Post('/:channelId/unban/:userId')
@@ -92,10 +82,8 @@ export async function unbanUserFromChannel(channelId: number, userId: number) {
     url: URL + "/channels/" + channelId + "/unban/" + userId,
     withCredentials: true,
   };
-  console.log("unbanUserFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 //   @Post('/:channelId/mute/:userId')
@@ -106,10 +94,8 @@ export async function muteUserFromChannel(channelId: number, userId: number) {
     url: URL + "/channels/" + channelId + "/mute/" + userId,
     withCredentials: true,
   };
-  console.log("muteUserFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 //   @Get('/:channelId/is-muted/:userId')
@@ -123,10 +109,8 @@ export async function isMutedBannedFromChannel(
     url: URL + "/channels/" + channelId + "/is-muted/" + userId,
     withCredentials: true,
   };
-  console.log("isMutedBannedFromChannel(channelId: number, userId: number)");
-  console.log("channelId = ", channelId);
-  console.log("userId = ", userId);
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -146,7 +130,7 @@ export async function searchUser(
     },
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getStatus() {
@@ -155,7 +139,7 @@ export async function getStatus() {
     url: URL + "/auth/status",
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function blockUser(blockedId: number) {
@@ -167,7 +151,7 @@ export async function blockUser(blockedId: number) {
       blockedId,
     },
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function unblockUser(blockedId: number) {
@@ -179,7 +163,7 @@ export async function unblockUser(blockedId: number) {
       blockedId,
     },
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function updateUserAvatar(id, avatarUrl) {
@@ -191,7 +175,7 @@ export async function updateUserAvatar(id, avatarUrl) {
       avatar: avatarUrl,
     },
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function updateUserUsername(id, username) {
@@ -203,7 +187,7 @@ export async function updateUserUsername(id, username) {
       username: username,
     },
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getAllUsers(
@@ -220,9 +204,9 @@ export async function getAllUsers(
     url: URL + "/users?" + queryParams,
     withCredentials: true,
   };
-  console.log(config);
 
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 export async function getFriendOfUser(id: number) {
@@ -231,7 +215,7 @@ export async function getFriendOfUser(id: number) {
     url: URL + "/users/friend/" + id,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getChannels() {
@@ -240,7 +224,7 @@ export async function getChannels() {
     url: URL + "/channels/channels",
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getPublicChannels(userId: number) {
@@ -249,16 +233,19 @@ export async function getPublicChannels(userId: number) {
     url: URL + "/channels/public-channels/" + userId,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getChannelAllMembers(id: number) {
+  if (Number.isNaN(id) || id === null) {
+    return ;
+  }
   const config = {
     method: "get",
     url: URL + `/channels/${id}/members`,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function editChannel(channelId: number, data: {
@@ -272,7 +259,7 @@ export async function editChannel(channelId: number, data: {
     withCredentials: true,
     data,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function createChannel(data: {
@@ -287,7 +274,7 @@ export async function createChannel(data: {
     withCredentials: true,
     data,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function sendChannelInvite(data: {
@@ -304,7 +291,7 @@ export async function getConversation(userId: number) {
     url: URL + "/conversation/" + userId,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function get2fa() {
@@ -313,11 +300,20 @@ export async function get2fa() {
     url: URL + "/auth/doubleAuth",
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
+}
+
+export async function remove2fa() {
+  const config = {
+    method: "get",
+    url: URL + "/auth/deactivate-doubleAuth",
+    withCredentials: true,
+  };
+  return axios(config).catch(err => {return});
 }
 
 export async function set2fa(token: string) {
-  console.log(token);
+
   const config = {
     method: "post",
     url: URL + "/auth/doubleAuth",
@@ -326,7 +322,7 @@ export async function set2fa(token: string) {
       token,
     },
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function acceptFriendship(id: number) {
@@ -336,7 +332,7 @@ export async function acceptFriendship(id: number) {
     withCredentials: true,
   };
   try {
-    const response = await axios(config);
+    const response = await axios(config).catch(err => {return});
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 400) {
@@ -355,7 +351,7 @@ export async function removeFriendship(friendId: number) {
     url: URL + "/friend/friendship/" + friendId,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function declineFriendship(id: number) {
@@ -364,7 +360,7 @@ export async function declineFriendship(id: number) {
     url: URL + "/friend/friend-request/decline/" + id,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function authSocketId(clientsocketid: string) {
@@ -376,7 +372,7 @@ export async function authSocketId(clientsocketid: string) {
       clientsocketid,
     },
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function sendFriendRequest(acceptorId: number) {
@@ -388,8 +384,8 @@ export async function sendFriendRequest(acceptorId: number) {
       acceptorId,
     },
   };
-  console.log(config);
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 export async function getChannelLastMessage(channelId: number) {
@@ -398,7 +394,7 @@ export async function getChannelLastMessage(channelId: number) {
     url: URL + "/message/channel/" + channelId + "/last",
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getChannelMessages(channelId: number) {
@@ -407,7 +403,7 @@ export async function getChannelMessages(channelId: number) {
     url: URL + "/message/channel/" + channelId,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function readMessage(channelId: number, messageId: number) {
@@ -420,7 +416,7 @@ export async function readMessage(channelId: number, messageId: number) {
     },
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function sendMessageToChannel(channelId: number, content: string) {
@@ -433,7 +429,7 @@ export async function getPath(path: string) {
     url: URL + path,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getUserByID(ID) {
@@ -442,7 +438,7 @@ export async function getUserByID(ID) {
     url: URL + "/users/" + ID,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getUsers() {
@@ -451,7 +447,7 @@ export async function getUsers() {
     url: URL + "/users",
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function searchFriend(name: string) {
@@ -460,7 +456,7 @@ export async function searchFriend(name: string) {
     url: URL + "/users/search/friend/" + name,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getRatioAgainst(id1: number, id2: number) {
@@ -469,7 +465,7 @@ export async function getRatioAgainst(id1: number, id2: number) {
     url: URL + "/match/stats/" + id1 + "/" + id2,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getUserMatches(ID) {
@@ -478,13 +474,13 @@ export async function getUserMatches(ID) {
     url: URL + "/users/" + ID + "/matches",
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function uploadUserAvatar(id, file) {
   const formData = new FormData();
   formData.append("avatar", file);
-  console.log("file in api.ts : " + file);
+
   const config = {
     method: "post",
     url: `${URL}/users/avatar-upload/${id}`,
@@ -494,8 +490,8 @@ export async function uploadUserAvatar(id, file) {
     },
     data: formData,
   };
-  console.log(`post avatar request: ${config}`, config);
-  return axios(config);
+
+  return axios(config).catch(err => {return});
 }
 
 export async function getUserMatchesResume(ID) {
@@ -504,7 +500,7 @@ export async function getUserMatchesResume(ID) {
     url: URL + "/users/" + ID + "/matches-resume",
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function setChannelPassword(
@@ -519,7 +515,7 @@ export async function setChannelPassword(
     },
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function updateUserColorball(id: number, color: string) {
@@ -531,7 +527,7 @@ export async function updateUserColorball(id: number, color: string) {
       colorball: color,
     },
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function getUserColorball(id: number) {
@@ -540,7 +536,7 @@ export async function getUserColorball(id: number) {
     url: URL + "/colorball/" + id,
     withCredentials: true,
   };
-  return axios(config);
+  return axios(config).catch(err => {return});
 }
 
 export async function validateChannelPassword(
@@ -555,7 +551,7 @@ export async function validateChannelPassword(
     },
     withCredentials: true,
   };
-  const response = await axios(config);
+  const response = await axios(config).catch(err => {return});
   return response.data.isValid;
 }
 
@@ -565,6 +561,6 @@ export async function joinChannel(channelId: number) {
     url: `${URL}/channels/${channelId}/join`,
     withCredentials: true,
   };
-  const response = await axios(config);
+  const response = await axios(config).catch(err => {return});
   return response.data;
 }

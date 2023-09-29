@@ -18,7 +18,6 @@ export class isMutedPipe implements PipeTransform {
     const Until = new Date();
     Until.setMinutes(Until.getMinutes());
 
-    console.log("isMutedPipe: User from request = ", user)
     const userChannel = await this.prisma.userChannel.findFirst({
       where: {
         channelId: channelId,
@@ -26,7 +25,6 @@ export class isMutedPipe implements PipeTransform {
       },
     });
 
-    console.log("isMutedPipe: userChannel = ", userChannel.isMuted)
 
     if (userChannel.isMuted || userChannel.isMuted < Until) {
       throw new ForbiddenException("User is muted for a while in this channel.");

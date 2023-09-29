@@ -32,19 +32,17 @@
   background-repeat: no-repeat;
 }
 
-/*.column {*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*}*/
-
 .menu {
+  z-index: 999;
   position: absolute;
-  /* width: 100%; */ /*   je sais pas faire en sorte que ca fasse la
-                            meme largeur que la user bubble u.U         */
 }
 
 .list {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.user-bubble{
+  min-width: 120px;
 }

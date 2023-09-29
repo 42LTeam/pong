@@ -36,7 +36,7 @@ export class AuthController {
   @Get("login")
   @UseGuards(FortyTwoAuthGuard)
   login() {
-    console.log("login");
+
   }
 
   @Post("logout")
@@ -51,9 +51,9 @@ export class AuthController {
   @Get("redirect")
   @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
-    const localhostfront =
-      "http://" + (process.env.LOCALHOST || "localhost") + ":5173";
-    res.redirect(localhostfront);
+    // const localhostfront =
+    //   "http://" + (process.env.LOCALHOST || "localhost");
+    res.redirect('/');
   }
 
   @Get("doubleAuth")
@@ -61,6 +61,13 @@ export class AuthController {
   async createDoubleAuth(@Req() request: any) {
     const user = await request.user;
     return this.userService.newSecret(user);
+  }
+
+  @Get("deactivate-doubleAuth")
+  @UseGuards(TotpGuard)
+  async deactivateDoubleAuth(@Req() request: any) {
+    const user = await request.user;
+    return this.userService.eraseSecret(user);
   }
 
   @Post("doubleAuth")

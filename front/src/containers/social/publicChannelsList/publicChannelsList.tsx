@@ -31,16 +31,6 @@ export default function PublicChannelsList(channelId: number) {
   }, []);
 
   const handleChannelClick = async (channel) => {
-    // const membersResponse = await getChannelAllMembers(channel.id);
-    // const members = membersResponse.data;
-    // console.log(members);
-    // const isUserMember = members.some((member) => member.userId === user.id);
-    //
-    // if (isUserMember) {
-    //   console.log("Already a member of the channel");
-    //   navigate(`/social/${channel.id}`);
-    //   return;
-    // }
 
     if (channel.password) {
       setSelectedChannel(channel);

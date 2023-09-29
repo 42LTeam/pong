@@ -8,6 +8,7 @@ import { getUserByID, getUserMatchesResume } from "../../api";
 import "../../css/profile.css";
 import { User } from "../Auth";
 import NotFound from "../NotFound";
+import Avatar from "../../components/utils/Avatar";
 
 export interface MatchResume {
   OpponentAvatar: string;
@@ -55,13 +56,7 @@ export default function ProfilePage() {
   return (
     <div className="main-frame-profile">
       <div className="left-frame-profile">
-        {user?.avatar && (
-          <div
-            className="user-profile-picture"
-            style={{ backgroundImage: `url(${user.avatar})` }}
-          />
-        )}
-
+        <Avatar url={user.avatar} width={"100px"} height={"100px"}/>
         <div className="user-profile-title">{user?.username}</div>
 
         <div className="match-history">

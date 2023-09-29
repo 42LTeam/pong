@@ -12,7 +12,7 @@ export default function Avatar(props: AvatarProps) {
     if (props.salon === false && props.id)
         url = `url("/img/discord-salon.png")`
     else
-        url = props.url ? `url("${props.url}")` : `url("/img/discord-salon.png")`;
+        url = props.url ? `url('${props.url}')` : `url('/img/discord-salon.png')`;
 
   return (
     <div
