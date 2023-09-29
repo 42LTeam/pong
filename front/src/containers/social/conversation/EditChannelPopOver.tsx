@@ -53,13 +53,15 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
                     {...(!hasName ? { value: channel?.name } : {})}
                     bgColor="#2C3E50"
                 ></TextInput>
-                <h2>Mot de passe</h2>
-                <TextInput
-                    ref={passwordRef}
-                    password
-                    text="Entrez un mot de passe"
-                    bgColor="#2C3E50"
-                ></TextInput>
+                {!privated &&(
+                <>
+                <h2>Mot de passe</h2><TextInput
+                        ref={passwordRef}
+                        password
+                        text="Entrez un mot de passe"
+                        bgColor="#2C3E50"
+                    ></TextInput>
+                </>)}
                 <div className="row">
                     <div className={"row"} style={{ gap: "5px" }}>
                         <Lock></Lock>
