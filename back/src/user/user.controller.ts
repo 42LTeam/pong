@@ -13,6 +13,8 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
+  HttpException,
+  HttpStatus,
 } from "@nestjs/common";
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { UserService } from "./user.service";
@@ -111,7 +113,7 @@ export class UserController {
   constructor(
     private userService: UserService,
     private matchService: MatchService
-  ) {}
+  ) { }
 
   @Post()
   @Roles(Role.ADMIN) // For admin restrictions
@@ -263,10 +265,14 @@ export class UserController {
     @Param("id", ParseIntPipe) id: number,
     @UploadedFile() file
   ): Promise<any> {
-    const fileName = file.path.split("/").pop();
-    const formattedPath = `api/uploads/${fileName}`;
-    await this.userService.updateUserAvatar(id, formattedPath);
-    return { path: formattedPath };
+    try {
+      const fileName = file.path.split("/").pop();
+      const formattedPath = `api/uploads/${fileName}`;
+      await this.userService.updateUserAvatar(id, formattedPath);
+      return { path: formattedPath };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Put("colorball/:id")
