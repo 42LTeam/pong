@@ -112,7 +112,7 @@ export async function isUserMutedFromChannel(
     withCredentials: true,
   };
   
-  return axios(config).catch(err => {return});
+  return axios(config).catch(err => {throw(err)});
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -240,14 +240,14 @@ export async function getPublicChannels(userId: number) {
 
 export async function getChannelAllMembers(id: number) {
   if (Number.isNaN(id) || id === null) {
-    return ;
+    throw("Error: channelId not valid");
   }
   const config = {
     method: "get",
     url: URL + `/channels/${id}/members`,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch(err => {throw(err)});
 }
 
 export async function editChannel(channelId: number, data: {

@@ -145,7 +145,7 @@ export class ChannelService {
           },
         },
       },
-    });
+    })
   }
 
   //rename getChannelOfuser in getChannelOfUser
@@ -352,7 +352,11 @@ export class ChannelService {
   ): Promise<boolean> {
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
-    });
+    })
+    if (!userChannel) {
+      return(false);
+    }
+
     const currentDateTime = new Date();
     const muteUntil = userChannel.isMuted;
 
