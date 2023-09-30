@@ -1,0 +1,75 @@
+services:
+  api:
+    container_name: api
+    build:
+      dockerfile: ./back/Dockerfile
+      context: .
+      target: development
+    env_file:
+      - .env
+    volumes:
+      - ./back:/usr/src/app
+      - uploaded-images:/usr/src/app/public/uploads
+    ports:
+      - 3000:3000
+      - 8001:8001
+    depends_on:
+      - postgres
+    networks:
+      - net
+
+  front:
+    container_name: front
+    build:
+      dockerfile: ./front/Dockerfile
+      context: .
+      target: development
+    volumes:
+      - ./front:/usr/src/app
+    command: npm run dev
+    ports:
+      - 5173:5173
+    depends_on:
+      - api
+    networks:
+      - net
+    env_file:
+      - .env
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - docker-nest-postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - net
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    environment:
+      GUNICORN_ACCESS_LOGFILE: '/dev/null'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+    networks:
+      - net
+
+volumes:
+  docker-nest-postgres:
+  pgadmin:
+  uploaded-images:
+
+networks:
+  net:
+    driver: bridge

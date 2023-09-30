@@ -3,11 +3,11 @@ NAME				:= $(shell basename $(CURDIR))
 SRCS_DIR			:= ./
 
 YML_FILE			:= $(SRCS_DIR)docker-compose.yml
-PROD_FILE			:= $(SRCS_DIR)docker-compose.prod.yml
+DEV_FILE			:= $(SRCS_DIR)docker-compose.dev.yml
 ENV_FILE			:= $(SRCS_DIR).env
 DIST_FOLDER			:= $(SRCS_DIR)back/dist
 
-DOCKER_COMPOSE_PROD	:= @docker compose -f $(PROD_FILE) --env-file $(ENV_FILE) -p $(NAME)
+DOCKER_COMPOSE_DEV	:= @docker compose -f $(DEV_FILE) --env-file $(ENV_FILE) -p $(NAME)
 DOCKER_COMPOSE		:= @docker compose -f $(YML_FILE) --env-file $(ENV_FILE) -p $(NAME)
 
 VOLUMES				:= $(filter-out local,$(shell docker volume ls | grep $(NAME)))
@@ -33,7 +33,7 @@ BOLD_CYAN			:= "\033[1;36m"
 BOLD_WHITE			:= "\033[1;37m"
 
 
-all: build up ls 
+all: build up ls script
 
 ls:
 	@echo $(BOLD_BLUE)Images$(RESET_COLOR)
@@ -55,7 +55,7 @@ env:
 		echo $(CYAN) "$(ENV_FILE) is already in place" $(RESET_COLOR); \
 	fi
 
-env-prod: env
+env-dev: env
 	@chmod 777 ./ip_address.sh
 	./ip_address.sh
 	@if [ -e "./.env.bak" ]; then \
@@ -80,7 +80,7 @@ build: env dist
 
 up: env
 	@echo $(GREEN) make up '🚀'  Start development containers$(RESET_COLOR)
-	$(DOCKER_COMPOSE) up -d
+	$(DOCKER_COMPOSE) up
 
 action: build
 	@echo $(GREEN) make action: '🎬'  Start development containers on github action$(RESET_COLOR)
@@ -117,22 +117,22 @@ rebuild: clean all
 reboot: fprune all
 	@echo $(BOLD_YELLOW) make reboot '✋'  STOP + '🔻'  DOWN + '🧼'  PRUNE  + '🛀'  RMVOL + '🚧'  BUILD + '🚀'  UP: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
 
-prod: env-prod prod-build
-	$(DOCKER_COMPOSE_PROD) up 
+dev: env-dev dev-build
+	$(DOCKER_COMPOSE_dev) up 
 
-prod-build: env-prod
-	$(DOCKER_COMPOSE_PROD) build --no-cache
+dev-build: env-dev
+	$(DOCKER_COMPOSE_dev) build --no-cache
 
-prod-up: env-prod
-	$(DOCKER_COMPOSE_PROD) up -d
+dev-up: env-dev
+	$(DOCKER_COMPOSE_dev) up -d
 
-prod-stop:
-	$(DOCKER_COMPOSE_PROD) stop
+dev-stop:
+	$(DOCKER_COMPOSE_dev) stop
 
-prod-down:
-	$(DOCKER_COMPOSE_PROD) down
+dev-down:
+	$(DOCKER_COMPOSE_dev) down
 
-prod-re: prod-stop prod
+dev-re: dev-stop dev
 
 prettier:
 	@echo $(BOLD_YELLOW) make prettier: '🌸' == https://prettier.io/docs/en/install $(RESET_COLOR)
@@ -149,15 +149,15 @@ script:
 
 help:
 	@echo "Available commands:"
-	@echo $(BOLD_GREEN) make env: '✅' - : check .env $(RESET_COLOR)
+	@echo $(BOLD_GREEN) make env: '✅' - : check .env $(RESET_COLOR) $(DOCKER_COMPOSE) build
 	@echo $(BOLD_GREEN) make dist: '🚽' - : erase .dist $(RESET_COLOR)
-	@echo $(BOLD_GREEN) make logs: '🔮' - : logs of containers $(RESET_COLOR)
-	@echo $(BOLD_GREEN) make build: '🚧' - : Build development containers + erase dist folder$(RESET_COLOR)
-	@echo $(GREEN) make up '🚀': Start development containers$(RESET_COLOR)
-	@echo $(GREEN) make action: '🎬' Start development containers on github action$(RESET_COLOR)
-	@echo $(RED) make stop: '✋' Stop development containers$(RESET_COLOR)
-	@echo $(BOLD_RED) make down: '🔻' Remove development containers$(RESET_COLOR)
-	@echo $(BOLD_CYAN) make clean: '✋' STOP + '🔻' DOWN$(RESET_COLOR)
+	@echo $(BOLD_GREEN) make logs: '🔮' - : logs of containers $(RESET_COLOR) $(DOCKER_COMPOSE) logs -f
+	@echo $(BOLD_GREEN) make build: '🚧' - : Build development containers + erase dist folder$(RESET_COLOR) $(DOCKER_COMPOSE) build
+	@echo $(GREEN) make up '🚀': Start development containers$(RESET_COLOR) $(DOCKER_COMPOSE) up
+	@echo $(GREEN) make action: '🎬' Start development containers on github action$(RESET_COLOR)  $(DOCKER_COMPOSE) up -d
+	@echo $(RED) make stop: '✋' Stop development containers$(RESET_COLOR) $(DOCKER_COMPOSE) stop
+	@echo $(BOLD_RED) make down: '🔻' Remove development containers$(RESET_COLOR) $(DOCKER_COMPOSE) down
+	@echo $(BOLD_CYAN) make clean: '✋' STOP + '🔻' DOWN$(RESET_COLOR) $(DOCKER_COMPOSE) stop down
 	@echo $(BOLD_YELLOW) make prune:  - '✋' STOP + '🔻' DOWN + '🧼' PRUNE: Remove all unused Docker resources with confirmation$(RESET_COLOR)
 	@echo $(BOLD_YELLOW) make rmvol: '✋' STOP + '🔻' DOWN + '🛀' RMVOL: Remove specific volumes with confirmation$(RESET_COLOR)
 	@echo $(BOLD_YELLOW) make fprune: '✋' STOP + '🔻' DOWN + '🧼' PRUNE  + '🛀' RMVOL $(RESET_COLOR)
