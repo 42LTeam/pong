@@ -33,7 +33,7 @@ BOLD_CYAN			:= "\033[1;36m"
 BOLD_WHITE			:= "\033[1;37m"
 
 
-all: build up ls script
+all: build up ls
 
 ls:
 	@echo $(BOLD_BLUE)Images$(RESET_COLOR)
@@ -139,14 +139,6 @@ prettier:
 	cd ./back/ && npx prettier . --write
 	cd ./front/ && npx prettier . --write
 
-script:
-	@echo $(BOLD_YELLOW) make script: '🥋' == Run health_script and running_script on local $(RESET_COLOR)
-	@echo $(BOLD_YELLOW) "Health script 5173 and 3000/api"$(RESET_COLOR)
-	chmod 777 ./health_script_5173.sh
-	./health_script_5173.sh
-	chmod 777 ./health_script_3000.sh
-	./health_script_3000.sh
-
 help:
 	@echo "Available commands:"
 	@echo $(BOLD_GREEN) make env: '✅' - : check .env $(RESET_COLOR) $(DOCKER_COMPOSE) build
@@ -165,7 +157,6 @@ help:
 	@echo $(BOLD_YELLOW) make rebuild: '✋' STOP + '🔻' DOWN + '🚧' BUILD + '🚀' UP: Clean and rebuild development containers$(RESET_COLOR)
 	@echo $(BOLD_YELLOW) make reboot '✋' STOP + '🔻' DOWN + '🧼' PRUNE  + '🛀' RMVOL + '🚧' BUILD + '🚀' UP: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
 	@echo $(BOLD_YELLOW) make prettier: '🌸' == https://prettier.io/docs/en/install $(RESET_COLOR)
-	@echo $(BOLD_YELLOW) make script: '🥋' == Run health_script and running_script on local $(RESET_COLOR)
 
 
 .PHONY: all ls env build up stop down clean prune rmvol fprune re rebuild reboot help
