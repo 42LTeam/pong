@@ -146,7 +146,8 @@ export class UserController {
   async getUserById(
     @Param("id", ParseIntPipe, UserIdValidationPipe) id: number
   ): Promise<User | null> {
-    return this.userService.getUserById(Number(id));
+    const user = await this.userService.getUserById(Number(id));
+    return UserSerializer.serialize(user);
   }
 
   @Put("avatar/:id")

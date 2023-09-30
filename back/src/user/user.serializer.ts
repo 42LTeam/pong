@@ -5,6 +5,7 @@ export class UserSerializer {
       username: user.username,
       avatar: user.avatar,
       xp: user.xp,
+      colorball: user.colorball,
     };
   }
   static serializeStatus(user: any): any {
