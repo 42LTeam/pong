@@ -3,10 +3,10 @@ import Lock from "../../../components/svg/Lock";
 import ToggleSwitch from "../../../components/utils/ToggleSwitch";
 import Button from "../../../components/utils/Button";
 import PopOver from "../../../components/utils/PopOver";
-import React, {useRef, useState} from "react";
-import {createChannel, editChannel, sendChannelInvite} from "../../../api";
+import React, { useRef, useState } from "react";
+import { createChannel, editChannel, sendChannelInvite } from "../../../api";
 
-export default function EditChannelPopOver({channel, checked, clear, privateddefault}:{channel?: any,checked: any[], clear: any, privateddefault?: boolean}){
+export default function EditChannelPopOver({ channel, checked, clear, privateddefault }: { channel?: any, checked: any[], clear: any, privateddefault?: boolean }) {
     const [hasName, setHasName] = useState(false);
     const [privated, setPrivated] = useState(channel ? channel.privated : privateddefault);
     const nameRef = useRef(null);
@@ -16,23 +16,29 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
         () => {
             const name = hasName ? nameRef.current.value : null;
             const password = passwordRef.current.value;
-            editChannel(channel.id,{privated, name, password}).then(() => clear(true))
+            const passworded = !!password;
+            editChannel(channel.id, { privated, name, passworded, password }).then(() => clear(true))
         }
         : async () => {
-        const response = await createChannel({
-            name: nameRef.current.value,
-            conv: false,
-            password: passwordRef.current.value || null,
-            privated,
-        });
-        const channel = response.data;
-        sendChannelInvite({
-            channelId: channel.id,
-            usernames: checked,
-        }).then(() => {
-            clear(true);
-        });
-    };
+            const password = passwordRef.current.value;
+            const passworded = !!password;
+            const response = await createChannel({
+                name: nameRef.current.value,
+                conv: false,
+                passworded,
+                password: password || null,
+                privated,
+            });
+            const channel = response.data;
+            sendChannelInvite({
+                channelId: channel.id,
+                usernames: checked,
+            }).then(() => {
+                clear(true);
+            });
+        };
+
+
 
     return (
         <PopOver divStyle={{ width: "15vw", padding: 0 }} clear={clear}>
