@@ -254,32 +254,25 @@ export class ChannelService {
   }
 
   async removeUserFromChannel(channelId: number, userId: number): Promise<any> {
-    // Get the channel and its users
     const channel = await this.prisma.channel.findUnique({
       where: { id: channelId },
       include: { users: true },
     });
 
-    // Check if it's a private conversation and there are only two users
-    // if (channel.conv && channel.users.length === 2)
-
     if (channel.users.length === 2) {
-      // Delete all references to the channel in the UserChannel table
+
       await this.prisma.userChannel.deleteMany({
         where: { channelId: channelId },
       });
 
-      // Delete all messages associated with the channel
       await this.prisma.message.deleteMany({
         where: { channelId: channelId },
       });
 
-      // Delete the channel
       await this.prisma.channel.delete({
         where: { id: channelId },
       });
     } else {
-      // Remove the user from the channel
       await this.prisma.userChannel.deleteMany({
         where: {
           channelId: channelId,

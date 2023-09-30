@@ -1,6 +1,5 @@
 import io from "socket.io-client";
 import axios from "axios";
-import PopUp from "./components/utils/PopUp";
 import {sendNotificationError} from "./components/Errors/PopupError";
 
 const webSocketURL = "/";
@@ -13,7 +12,9 @@ export async function deco() {
     url: URL + "/auth/logout",
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors de la déconnection d'un.e utilisateur.rice. deco")
+  })
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -34,7 +35,9 @@ export async function ownerMakeAdmin(
     withCredentials: true,
   };
 
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors de la promotion d'un.e utilisateur.rice d'un channel. ownerMakeAdmin")
+  })
 }
 
 //  @Post('/:channelId/admin-quit/:userId')
@@ -49,7 +52,9 @@ export async function removeUserAdminFromChannel(
     withCredentials: true,
   };
 
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du kick d'un.e utilisateur.rice d'un channel. removeUserAdminFromChannel")
+  })
 }
 
 //  @Post('/:channelId/quit/:userId')
@@ -61,7 +66,9 @@ export async function removeUserFromChannel(channelId: number, userId: number) {
     withCredentials: true,
   };
 
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du retrait d'un.e utilisateur.rice d'un channel. removeUserFromChannel")
+  })
 }
 
 //  @Post('/:channelId/ban/:userId')
@@ -73,7 +80,9 @@ export async function banUserFromChannel(channelId: number, userId: number) {
     withCredentials: true,
   };
 
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du bannissement d'un.e utilisateur.rice. banUserFromChannel")
+  })
 }
 
 //  @Post('/:channelId/unban/:userId')
@@ -85,7 +94,9 @@ export async function unbanUserFromChannel(channelId: number, userId: number) {
     withCredentials: true,
   };
 
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du débannissement d'un.e utilisateur.rice. isUserMutedFromChannel")
+  })
 }
 
 //   @Post('/:channelId/mute/:userId')
@@ -97,11 +108,11 @@ export async function muteUserFromChannel(channelId: number, userId: number) {
     withCredentials: true,
   };
 
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors de censure temporaire d'un.e utilisateur.rice. muteUserFromChannel")
+  })
 }
 
-//   @Get('/:channelId/is-muted/:userId')
-//   @ApiOperation({ summary: 'Mute a user from a channel' })
 export async function isUserMutedFromChannel(
   channelId: number,
   userId: number
@@ -112,7 +123,9 @@ export async function isUserMutedFromChannel(
     withCredentials: true,
   };
   
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du check d'un.e utilisateur.rice muet.te. isUserMutedFromChannel")
+  })
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -132,7 +145,9 @@ export async function searchUser(
     },
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors de la recherche d'un.e utilisateur.rice. searchUser")
+  })
 }
 
 export async function getStatus() {
@@ -141,7 +156,9 @@ export async function getStatus() {
     url: URL + "/auth/status",
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du status d'un.e utilisateur.rice. getStatus")
+  })
 }
 
 export async function blockUser(blockedId: number) {
@@ -153,7 +170,9 @@ export async function blockUser(blockedId: number) {
       blockedId,
     },
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du blocage d'un.e utilisateur.rice ciblé.e. blockUser")
+  })
 }
 
 export async function unblockUser(blockedId: number) {
@@ -165,7 +184,9 @@ export async function unblockUser(blockedId: number) {
       blockedId,
     },
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du déblocage d'un utilisateur ciblé. unblockUser")
+  })
 }
 
 export async function updateUserAvatar(id, avatarUrl) {
@@ -177,7 +198,9 @@ export async function updateUserAvatar(id, avatarUrl) {
       avatar: avatarUrl,
     },
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du changement de l'avatar de l'utilisateur. updateUserAvatar")
+  })
 }
 
 export async function updateUserUsername(id, username) {
@@ -189,7 +212,9 @@ export async function updateUserUsername(id, username) {
       username: username,
     },
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du changement du nom de l'utilisateur. updateUserUsername")
+  })
 }
 
 export async function getAllUsers(
@@ -208,7 +233,9 @@ export async function getAllUsers(
   };
 
 
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du chargement des utilisateurs. getAllUsers")
+  })
 }
 
 export async function getFriendOfUser(id: number) {
@@ -217,7 +244,9 @@ export async function getFriendOfUser(id: number) {
     url: URL + "/users/friend/" + id,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du chargement des ami.e.s d'un utilisateur. getFriendOfUser")
+  })
 }
 
 export async function getChannels() {
@@ -226,7 +255,9 @@ export async function getChannels() {
     url: URL + "/channels/channels",
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du chargement des channels. getChannels")
+  })
 }
 
 export async function getPublicChannels(userId: number) {
@@ -235,7 +266,9 @@ export async function getPublicChannels(userId: number) {
     url: URL + "/channels/public-channels/" + userId,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du chargement des channels publics. getPublicChannels")
+  })
 }
 
 export async function getChannelAllMembers(id: number) {
@@ -247,7 +280,9 @@ export async function getChannelAllMembers(id: number) {
     url: URL + `/channels/${id}/members`,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du chargement des membres du channel, T'es probablement ban du channel. getChannelAllMembers")
+  })
 }
 
 export async function editChannel(channelId: number, data: {
@@ -261,7 +296,9 @@ export async function editChannel(channelId: number, data: {
     withCredentials: true,
     data,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors de l'édition du channel. editChannel")
+  })
 }
 
 export async function createChannel(data: {
@@ -276,7 +313,9 @@ export async function createChannel(data: {
     withCredentials: true,
     data,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors de la création du channel. createChannel")
+  })
 }
 
 export async function sendChannelInvite(data: {
@@ -293,7 +332,9 @@ export async function getConversation(userId: number) {
     url: URL + "/conversation/" + userId,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du chargement de la conversation. getConversation")
+  })
 }
 
 export async function get2fa() {
@@ -302,7 +343,9 @@ export async function get2fa() {
     url: URL + "/auth/doubleAuth",
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du chargement de la 2FA. get2fa")
+  })
 }
 
 export async function remove2fa() {
@@ -311,7 +354,9 @@ export async function remove2fa() {
     url: URL + "/auth/deactivate-doubleAuth",
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors du retrait de la 2FA. remove2fa")
+  })
 }
 
 export async function set2fa(token: string) {
@@ -324,7 +369,9 @@ export async function set2fa(token: string) {
       token,
     },
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur lors de la définition de la 2FA. set2fa")
+  })
 }
 
 export async function acceptFriendship(id: number) {
@@ -340,9 +387,11 @@ export async function acceptFriendship(id: number) {
     if (error.response && error.response.status === 400) {
       console.error("Bad request:", error.response.data);
       alert("There was an issue getting the conversation. Please try again.");
+      sendNotificationError("❌ Erreur le chargement de la conversation. acceptFriendship")
     } else {
       console.error("Unexpected error:", error.message);
-      alert("An error occurred. Please try again later.");
+      sendNotificationError("❌ Erreur inattendue. acceptFriendship")
+
     }
   }
 }
@@ -353,7 +402,9 @@ export async function removeFriendship(friendId: number) {
     url: URL + "/friend/friendship/" + friendId,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur la fin de l'amitié. removeFriendship")
+  })
 }
 
 export async function declineFriendship(id: number) {
@@ -362,7 +413,9 @@ export async function declineFriendship(id: number) {
     url: URL + "/friend/friend-request/decline/" + id,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur au refus de la demande d'ami.e. declineFriendship")
+  })
 }
 
 export async function authSocketId(clientsocketid: string) {
@@ -374,7 +427,9 @@ export async function authSocketId(clientsocketid: string) {
       clientsocketid,
     },
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur à l'authentification de la socketId. authSocketId")
+  })
 }
 
 export async function sendFriendRequest(acceptorId: number) {
@@ -387,7 +442,9 @@ export async function sendFriendRequest(acceptorId: number) {
     },
   };
 
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur à l'envoi d'une demande d'ami.e. sendFriendRequest")
+  })
 }
 
 export async function getChannelLastMessage(channelId: number) {
@@ -396,7 +453,9 @@ export async function getChannelLastMessage(channelId: number) {
     url: URL + "/message/channel/" + channelId + "/last",
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur au chargement des derniers messages. getChannelLastMessage")
+  })
 }
 
 export async function getChannelMessages(channelId: number) {
@@ -405,7 +464,9 @@ export async function getChannelMessages(channelId: number) {
     url: URL + "/message/channel/" + channelId,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur au chargement des messages. getChannelMessages")
+  })
 }
 
 export async function readMessage(channelId: number, messageId: number) {
@@ -418,7 +479,9 @@ export async function readMessage(channelId: number, messageId: number) {
     },
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur au chargement des messages. readMessage")
+  })
 }
 
 export async function sendMessageToChannel(channelId: number, content: string) {
@@ -432,7 +495,9 @@ export async function getPath(path: string) {
     url: URL + path,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur dans l'accès au path. getPath")
+  })
 }
 
 export async function getUserByID(ID) {
@@ -441,16 +506,9 @@ export async function getUserByID(ID) {
     url: URL + "/users/" + ID,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
-}
-
-export async function getUsers() {
-  const config = {
-    method: "get",
-    url: URL + "/users",
-    withCredentials: true,
-  };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur dans la recherche d'ami.e.s. searchFriend")
+  })
 }
 
 export async function searchFriend(name: string) {
@@ -459,7 +517,9 @@ export async function searchFriend(name: string) {
     url: URL + "/users/search/friend/" + name,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur dans la recherche d'ami.e.s. searchFriend")
+  })
 }
 
 export async function getRatioAgainst(id1: number, id2: number) {
@@ -468,7 +528,9 @@ export async function getRatioAgainst(id1: number, id2: number) {
     url: URL + "/match/stats/" + id1 + "/" + id2,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Impossible de récupérer le ratio contre un adversaire. getRatioAgainst")
+  })
 }
 
 export async function getUserMatches(ID) {
@@ -477,7 +539,9 @@ export async function getUserMatches(ID) {
     url: URL + "/users/" + ID + "/matches",
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Impossible de récupérer les matchs de l'utilisateur. getUserMatches")
+  })
 }
 
 export async function uploadUserAvatar(id, file) {
@@ -494,7 +558,9 @@ export async function uploadUserAvatar(id, file) {
     data: formData,
   };
 
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Erreur dans le téléchargement de l'avatar (fichier taille max | fichier non image). uploadUserAvatar")
+  })
 }
 
 export async function getUserMatchesResume(ID) {
@@ -503,7 +569,9 @@ export async function getUserMatchesResume(ID) {
     url: URL + "/users/" + ID + "/matches-resume",
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Impossible de récupérer les résumés des matchs. getUserMatchesResume()")
+  })
 }
 
 export async function setChannelPassword(
@@ -518,7 +586,9 @@ export async function setChannelPassword(
     },
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Mot de passe invalide. setChannelPassword")
+  })
 }
 
 export async function updateUserColorball(id: number, color: string) {
@@ -530,7 +600,9 @@ export async function updateUserColorball(id: number, color: string) {
       colorball: color,
     },
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch( () => {
+    sendNotificationError("❌ Error dans l'actualisation de la couleur de la balle. updateUserColorball")
+  });
 }
 
 export async function getUserColorball(id: number) {
@@ -554,7 +626,9 @@ export async function validateChannelPassword(
     },
     withCredentials: true,
   };
-  const response = await axios(config).catch(err => {return});
+  const response = await axios(config).catch( () => {
+    sendNotificationError("❌ Mot de passe invalide. validateChannelPassword")
+  })
   return response.data.isValid;
 }
 
@@ -565,7 +639,7 @@ export async function joinChannel(channelId: number) {
     withCredentials: true,
   };
   const response = await axios(config).catch( () => {
-    sendNotificationError("T'es banni toi 🤡")
+    sendNotificationError("T'es banni toi 🤡. joinChannel")
   })
 
   return response.data;

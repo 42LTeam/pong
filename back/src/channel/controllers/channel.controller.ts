@@ -175,7 +175,9 @@ export class ChannelController {
     @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<any> {
-    return this.channelService.banUserFromChannel(channelId, userId);
+    await this.channelService.banUserFromChannel(channelId, userId);
+    await this.channelService.removeUserFromChannel(channelId, userId);
+    return;
   }
 
   @Post("/:channelId/mute/:userId")
