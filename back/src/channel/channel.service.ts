@@ -138,7 +138,7 @@ export class ChannelService {
         },
         user: {
           select: {
-            session: false,
+            session: true,
             avatar: true,
             username: true,
             status: true,
