@@ -1,4 +1,3 @@
-import TextInput from "../../../components/utils/TextInput";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Message from "../../../components/chat/Message";
 import { AuthContext } from "../../Auth";
@@ -11,6 +10,7 @@ import {
 } from "../../../api";
 import { ApplicationContext } from "../../Application";
 import TextInputChat from "../../../components/utils/TextInputChat";
+import { sendNotificationError } from "../../../components/Errors/PopupError";
 
 interface ChatProps {
   channel: any;
@@ -23,7 +23,8 @@ export default function Chat(props: ChatProps) {
   const user = useContext(AuthContext);
   const application = useContext(ApplicationContext);
   const ref = useRef(null);
-  const [isMuted, setMuted] = useState(false);
+  const [isMuted, setMuted] = useState(0);
+  const [checkMute, setCheckMute] = useState(false);
 
   const toAdd =
     application.social.newMessages.filter(
@@ -42,22 +43,15 @@ export default function Chat(props: ChatProps) {
       await readMessage(props.channel, tmp_messages[0].id);
   };
 
-  const checkMute = () => {
-    useEffect(() => {
-
-      isUserMutedFromChannel(props.channel, user.id)
-          .then(function (response) {
-            setMuted(response.data);
-          })
-          .catch(function (error) {
-            console.error("Error fetching muted (@isUserMutedFromChannel):", error);
-            setMuted(false);
-          });
-
-    }, []);
-
-
-  }
+  useEffect(() => {
+    isUserMutedFromChannel(props.channel, user.id)
+      .then(function (response) {
+        setMuted(response.data);
+      })
+      .catch(function (error) {
+        setMuted(0);
+      });
+  }, [checkMute, props.channel, user.id]);
 
   useEffect(() => {
     fetchData();
@@ -76,31 +70,29 @@ export default function Chat(props: ChatProps) {
         setLastRead(last.id);
       }
     }
+    if (toAdd.some((item) => item.content.includes(user.username))) {
+      setCheckMute(!checkMute);
+    }
   }, [application]);
 
   if (props.channel != channel) setChannel(props.channel);
   const handleSendMessage = async (event) => {
     if (!ref || !ref.current.value) return;
     if (event.key != null && event.key != "Enter") return;
-
-    checkMute();
-    if (isMuted)
-    {
-      //affiche error popup
-      alert("frerot t mute pd");
-    }
-
+    
+    setCheckMute(!checkMute);
 
     await sendMessageToChannel(channel, ref.current.value);
 
-
+    if (isMuted) {
+      sendNotificationError("T'es mute alors parle pas frerr");
+    }
     ref.current.value = null;
   };
 
   const unReadMessages = messages.filter((current) => {
     return current.id > lastRead;
   });
-
 
   return (
     <div className="chat-root">

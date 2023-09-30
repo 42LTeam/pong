@@ -192,8 +192,7 @@ export class ChannelController {
   async isUserMutedFromChannel(
     @Param("channelId", ParseIntPipe) channelId: number,
     @Param("userId", ParseIntPipe) userId: number
-  ): Promise<boolean> {
-     console.log("cont => is Muted => ", this.channelService.isUserMutedFromChannel(channelId, userId))
+  ): Promise<any> {
     return this.channelService.isUserMutedFromChannel(channelId, userId);
   }
 

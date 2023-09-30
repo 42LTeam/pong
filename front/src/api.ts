@@ -111,7 +111,7 @@ export async function isUserMutedFromChannel(
     url: URL + "/channels/" + channelId + "/is-muted/" + userId,
     withCredentials: true,
   };
-
+  
   return axios(config).catch(err => {return});
 }
 
@@ -565,7 +565,7 @@ export async function joinChannel(channelId: number) {
     withCredentials: true,
   };
   const response = await axios(config).catch( () => {
-    sendNotificationError("t banni")
+    sendNotificationError("T'es banni toi 🤡")
   })
 
   return response.data;

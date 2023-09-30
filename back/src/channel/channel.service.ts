@@ -353,13 +353,8 @@ export class ChannelService {
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
     });
-    console.log("@@@ userChannel.isMuted = ", userChannel.isMuted);
-    // return (true);
     const currentDateTime = new Date();
     const muteUntil = userChannel.isMuted;
-
-    console.log("@@@muteUntil !== null && muteUntil > currentDateTime="
-        , muteUntil !== null && muteUntil > currentDateTime);
 
     return (muteUntil !== null && muteUntil > currentDateTime);
   }
