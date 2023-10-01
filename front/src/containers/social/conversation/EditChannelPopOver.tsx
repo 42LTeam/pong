@@ -3,12 +3,13 @@ import Lock from "../../../components/svg/Lock";
 import ToggleSwitch from "../../../components/utils/ToggleSwitch";
 import Button from "../../../components/utils/Button";
 import PopOver from "../../../components/utils/PopOver";
-import React, {useRef, useState} from "react";
-import {createChannel, editChannel, sendChannelInvite} from "../../../api";
+import React, { useRef, useState } from "react";
+import { createChannel, editChannel, sendChannelInvite } from "../../../api";
 
-export default function EditChannelPopOver({channel, checked, clear, privateddefault}:{channel?: any,checked: any[], clear: any, privateddefault?: boolean}){
+export default function EditChannelPopOver({ channel, checked, clear, privateddefault }: { channel?: any, checked: any[], clear: any, privateddefault?: boolean }) {
     const [hasName, setHasName] = useState(false);
     const [privated, setPrivated] = useState(channel ? channel.privated : privateddefault);
+    const [passworded, setPassworded] = useState(false);
     const nameRef = useRef(null);
     const passwordRef = useRef(null);
 
@@ -25,6 +26,7 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
         : async () => {
             const name = nameRef.current ? nameRef.current.value : null;
             const password = passwordRef.current ? passwordRef.current.value : null;
+            setPassworded(password ? true : false);
             if (name) {
                 try {
                     const response = await createChannel({
@@ -32,6 +34,7 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
                         conv: false,
                         password,
                         privated,
+                        passworded, 
                     });
                     const channel = response.data;
                     await sendChannelInvite({
@@ -66,15 +69,15 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
                     bgColor="#2C3E50"
                 ></TextInput>
                 {!privated && (
-                <>
-                <h2>Mot de passe</h2>
-                <TextInput
-                    ref={passwordRef}
-                    password
-                    text="Entrez un mot de passe"
-                    bgColor="#2C3E50"
-                ></TextInput>
-                </>)}
+                    <>
+                        <h2>Mot de passe</h2>
+                        <TextInput
+                            ref={passwordRef}
+                            password
+                            text="Entrez un mot de passe"
+                            bgColor="#2C3E50"
+                        ></TextInput>
+                    </>)}
                 <div className="row">
                     <div className={"row"} style={{ gap: "5px" }}>
                         <Lock></Lock>

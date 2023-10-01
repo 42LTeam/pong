@@ -22,6 +22,7 @@ import { AuthenticatedGuard } from "../auth/guards/authenticated.guard";
 import { FriendService } from "../friend/friend.service";
 import { IsNotEmpty, IsNumber } from "@nestjs/class-validator";
 import { Block, User } from "@prisma/client";
+import { UserSerializer } from "../user/user.serializer";
 
 class CreateBlockDto {
   @ApiProperty()

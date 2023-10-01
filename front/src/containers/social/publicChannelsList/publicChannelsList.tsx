@@ -32,7 +32,7 @@ export default function PublicChannelsList(channelId: number) {
 
   const handleChannelClick = async (channel) => {
 
-    if (channel.password) {
+    if (channel.passworded) {
       setSelectedChannel(channel);
       setPasswordPopUpVisible(true);
       return;
@@ -78,8 +78,7 @@ export default function PublicChannelsList(channelId: number) {
           handleClick={() => handleChannelClick(current)}
           avatar={null}
           lastRead={null}
-          // channel={current}
-          hasPassword={Boolean(current.password)}
+          hasPassword={Boolean(current.passworded)}
         />
       ))}
       {isPasswordPopUpVisible && (

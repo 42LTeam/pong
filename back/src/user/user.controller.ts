@@ -34,6 +34,7 @@ import { MatchService } from "../match/match.service";
 import { UserIdValidationPipe } from "./pipes/userIdValid.pipe";
 import { UsernameValidationPipe } from "./pipes/usernameValidation.pipe";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { UserSerializer } from './user.serializer';
 
 class CreateUserDto {
   @ApiProperty()
@@ -138,7 +139,8 @@ export class UserController {
     @Query("notFriend", ParseBoolPipe) notFriend: boolean
   ): Promise<User[]> {
     const user = await req.user;
-    return this.userService.getAllUsers(user.id, { notFriend });
+    const userResult = await this.userService.getAllUsers(user.id, { notFriend });
+    return userResult.map(UserSerializer.serialize);
   }
 
   @Get("/:id")
@@ -146,7 +148,8 @@ export class UserController {
   async getUserById(
     @Param("id", ParseIntPipe, UserIdValidationPipe) id: number
   ): Promise<User | null> {
-    return this.userService.getUserById(Number(id));
+    const user = await this.userService.getUserById(Number(id));
+    return UserSerializer.serialize(user);
   }
 
   @Put("avatar")
@@ -157,10 +160,11 @@ export class UserController {
       @Body() updateUserAvatarDto: UpdateUserAvatarDto
   ): Promise<User> {
     const user = await req.user;
-    return this.userService.updateUserAvatar(
+    const result = await this.userService.updateUserAvatar(
       user.id,
       updateUserAvatarDto.avatar
     );
+    return UserSerializer.serialize(result);
   }
 
   @Put("username/:id")
@@ -172,41 +176,29 @@ export class UserController {
     @Body() updateUserNameDto: UpdateUserNameDto
   ): Promise<User> {
     const user = await req.user;
-    return this.userService.updateUserName(user.id, username);
+    const result =  this.userService.updateUserName(user.id, username);
+    return UserSerializer.serialize(result)
   }
+
   @Get("friend/all")
   @ApiOperation({ summary: "Get friend of user" })
   async getFriends(
       @Req() req,
   ): Promise<User[]> {
     const user = await req.user;
-    return this.userService.getFriendsOfUser(user.id);
+    const ret = await this.userService.getFriendsOfUser(user.id);
+    return ret.map(UserSerializer.serialize);
   }
 
-  // @Get("friend/:id")
-  // @ApiOperation({ summary: "Get friend of user" })
-  // async getFriendsOfUser(
-  //   @Param("id", ParseIntPipe) id: number
-  // ): Promise<User[]> {
-  //   return this.userService.getFriendsOfUser(Number(id));
-  // }
-
-  @Get("friend/online")
+  @Get("friend/online/:id")
   @ApiOperation({ summary: "Get friend of user" })
   async getOnlineFriends(
       @Req() req,
   ): Promise<User[]> {
     const user = await req.user;
-    return this.userService.getFriendsOfUser(user.id, { online: true });
+    const users = await this.userService.getFriendsOfUser(user.id, { online: true });
+    return users.map(UserSerializer.serialize);  // Changed here
   }
-  //
-  // @Get("friend/online/:id")
-  // @ApiOperation({ summary: "Get friend of user" })
-  // async getOnlineFriendsOfUser(
-  //   @Param("id", ParseIntPipe(),) id: number
-  // ): Promise<User[]> {
-  //   return this.userService.getFriendsOfUser(Number(id), { online: true });
-  // }
 
   @Get("search/:query")
   @ApiOperation({ summary: "Search user by username" })
@@ -217,7 +209,8 @@ export class UserController {
     @Req() req
   ): Promise<User[]> {
     const user = await req.user;
-    return this.userService.search(user.id, query, body);
+    const userResult = await this.userService.search(user.id, query, body);
+    return userResult.map(UserSerializer.serialize);
   }
 
   @Get("search/friend/:query")
@@ -227,7 +220,8 @@ export class UserController {
     @Req() req
   ): Promise<User[]> {
     const user = await req.user;
-    return this.userService.getFriendsOfUser(user.id, { startWith: query });
+    const userResult = await this.userService.getFriendsOfUser(user.id, { startWith: query });
+    return userResult.map(UserSerializer.serialize)
   }
 
   @Get("friend-request/pending")
@@ -243,7 +237,8 @@ export class UserController {
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: "Delete user" })
   async deleteUser(@Param("id", ParseIntPipe) id: number): Promise<User> {
-    return this.userService.deleteUser(Number(id));
+    const deletedUser = await this.userService.deleteUser(Number(id));
+    return UserSerializer.serialize(deletedUser);
   }
 
   @Get(":id/status")
@@ -261,10 +256,11 @@ export class UserController {
       @Body() updateUserStatusDto: UpdateUserStatusDto
   ): Promise<Status> {
     const user = await req.user;
-    return this.userService.updateUserStatusById(
+    const updatedStatus = await this.userService.updateUserStatusById(
       user.id,
       updateUserStatusDto.status
     );
+    return UserSerializer.serializeStatus(updatedStatus);
   }
 
   @Get(":id/matches")
@@ -308,10 +304,11 @@ export class UserController {
       @Body() updateUserColorballDto: UpdateUserColorballDto
   ): Promise<User> {
     const user = await req.user;
-    return this.userService.updateUserColorBall(
+    const updatedUser = await this.userService.updateUserColorBall(
       user.id,
       updateUserColorballDto.colorball
     );
+    return UserSerializer.serializeColorball(updatedUser);
   }
 
   @Get("colorball/:id")
@@ -319,6 +316,7 @@ export class UserController {
   async getUserColorball(
     @Param("id", ParseIntPipe) id: number
   ): Promise<String> {
-    return this.userService.getUserColorball(Number(id));
+    const colorball = await this.userService.getUserColorball(Number(id));
+    return UserSerializer.serializeColorball(colorball);
   }
 }
