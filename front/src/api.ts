@@ -169,7 +169,7 @@ export async function unblockUser(blockedId: number) {
 export async function updateUserAvatar(id, avatarUrl) {
   const config = {
     method: "put",
-    url: URL + "/users/avatar/" + id,
+    url: URL + "/users/avatar/",
     withCredentials: true,
     data: {
       avatar: avatarUrl,
@@ -181,7 +181,7 @@ export async function updateUserAvatar(id, avatarUrl) {
 export async function updateUserUsername(id, username) {
   const config = {
     method: "put",
-    url: URL + "/users/username/" + id,
+    url: URL + "/users/username/",
     withCredentials: true,
     data: {
       username: username,
@@ -484,7 +484,7 @@ export async function uploadUserAvatar(id, file) {
 
   const config = {
     method: "post",
-    url: `${URL}/users/avatar-upload/${id}`,
+    url: `${URL}/users/avatar-upload/`,
     withCredentials: true,
     headers: {
       "Content-Type": "multipart/form-data",
@@ -522,7 +522,7 @@ export async function setChannelPassword(
 export async function updateUserColorball(id: number, color: string) {
   const config = {
     method: "put",
-    url: URL + "/users/colorball/" + id,
+    url: URL + "/users/colorball/",
     withCredentials: true,
     data: {
       colorball: color,
