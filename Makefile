@@ -33,7 +33,7 @@ BOLD_CYAN			:= "\033[1;36m"
 BOLD_WHITE			:= "\033[1;37m"
 
 
-all: build up ls
+all: dist env build up ls
 
 ls:
 	@echo $(BOLD_BLUE)Images$(RESET_COLOR)
@@ -78,6 +78,9 @@ build: env dist
 	@echo $(BOLD_GREEN) make build: '🚧'  Build development containers + erase dist folder$(RESET_COLOR)
 	$(DOCKER_COMPOSE) build
 
+eval: dist env-prod build up
+	@echo $(BOLD_GREEN) make evaluation = dist env-prod build up : $(DOCKER_COMPOSE) up --build $(RESET_COLOR)
+
 up: env
 	@echo $(GREEN) make up '🚀'  Start development containers$(RESET_COLOR)
 	$(DOCKER_COMPOSE) up
@@ -118,7 +121,7 @@ reboot: fprune all
 	@echo $(BOLD_YELLOW) make reboot '✋'  STOP + '🔻'  DOWN + '🧼'  PRUNE  + '🛀'  RMVOL + '🚧'  BUILD + '🚀'  UP: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
 
 dev: env-dev dev-build
-	$(DOCKER_COMPOSE_dev) up 
+	$(DOCKER_COMPOSE_dev) up
 
 dev-build: env-dev
 	$(DOCKER_COMPOSE_dev) build --no-cache

@@ -63,14 +63,14 @@ export class BlockController {
     return ret;
   }
 
-  @Get("/blocked/:blockerId")
+  @Get("/blocked")
   @ApiOperation({ summary: "Get blocked users" })
   @ApiResponse({ status: 200, description: "List of blocked users." })
   async getBlockedUsers(
-    @Param("blockerId", ParseIntPipe) blockerId: number
+      @Req() req
   ): Promise<User[]> {
-    const users = await this.blockService.getBlockedUsers(blockerId);
-    return users.map(UserSerializer.serialize)
+    const user = await req.user
+    return this.blockService.getBlockedUsers(user.id);
   }
 
   @Delete("/remove")
@@ -92,12 +92,13 @@ export class BlockController {
     );
   }
 
-  @Get("blocks/:id")
+  @Get("blocks")
   @ApiOperation({ summary: "Get blocked of user" })
   async getBlocksOfUser(
-    @Param("id", ParseIntPipe) id: number
+      @Req() req
+
   ): Promise<User[]> {
-    const users = await this.blockService.getBlocksOfUser(Number(id));
-    return users.map(UserSerializer.serialize)
+    const user = await req.user
+    return this.blockService.getBlocksOfUser(user.id);
   }
 }
