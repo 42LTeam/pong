@@ -13,6 +13,8 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
+  HttpException,
+  HttpStatus,
 } from "@nestjs/common";
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { UserService } from "./user.service";
@@ -111,7 +113,7 @@ export class UserController {
   constructor(
     private userService: UserService,
     private matchService: MatchService
-  ) {}
+  ) { }
 
   @Post()
   @Roles(Role.ADMIN) // For admin restrictions
@@ -147,15 +149,16 @@ export class UserController {
     return this.userService.getUserById(Number(id));
   }
 
-  @Put("avatar/:id")
+  @Put("avatar")
   @ApiOperation({ summary: "Update user's avatar" })
   @ApiBody({ type: UpdateUserAvatarDto })
   async updateUserAvatar(
-    @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserAvatarDto: UpdateUserAvatarDto
+      @Req() req,
+      @Body() updateUserAvatarDto: UpdateUserAvatarDto
   ): Promise<User> {
+    const user = await req.user;
     return this.userService.updateUserAvatar(
-      Number(id),
+      user.id,
       updateUserAvatarDto.avatar
     );
   }
@@ -164,11 +167,12 @@ export class UserController {
   @ApiOperation({ summary: "Update user's username" })
   @ApiBody({ type: UpdateUserNameDto })
   async updateUserName(
-    @Param("id", ParseIntPipe) id: number,
-    @Body("username", UsernameValidationPipe) username: string,
+      @Req() req,
+      @Body("username", UsernameValidationPipe) username: string,
     @Body() updateUserNameDto: UpdateUserNameDto
   ): Promise<User> {
-    return this.userService.updateUserName(Number(id), username);
+    const user = await req.user;
+    return this.userService.updateUserName(user.id, username);
   }
 
   @Get("friend/:id")
@@ -211,11 +215,15 @@ export class UserController {
 
   @Get("friend-request/pending/:userId")
   @ApiOperation({ summary: "Get pending request" })
-  async getPendingFriends(@Param("userId") userId: number): Promise<any[]> {
-    return this.userService.getPendingFriendRequests(Number(userId));
+  async getPendingFriends(
+      @Req() req,
+      @Param("userId") userId: number): Promise<any[]> {
+    const user = await req.user;
+    return this.userService.getPendingFriendRequests(user.id);
   }
 
   @Delete(":id")
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: "Delete user" })
   async deleteUser(@Param("id", ParseIntPipe) id: number): Promise<User> {
     return this.userService.deleteUser(Number(id));
@@ -232,11 +240,12 @@ export class UserController {
   @ApiBody({ type: UpdateUserStatusDto })
   @ApiOperation({ summary: "Update user status" })
   async updateUserStatus(
-    @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserStatusDto: UpdateUserStatusDto
+      @Req() req,
+      @Body() updateUserStatusDto: UpdateUserStatusDto
   ): Promise<Status> {
+    const user = await req.user;
     return this.userService.updateUserStatusById(
-      id,
+      user.id,
       updateUserStatusDto.status
     );
   }
@@ -260,24 +269,30 @@ export class UserController {
   @Post("avatar-upload/:id")
   @UseInterceptors(FileInterceptor("avatar"))
   async uploadAvatar(
-    @Param("id", ParseIntPipe) id: number,
-    @UploadedFile() file
+      @Req() req,
+      @UploadedFile() file
   ): Promise<any> {
-    const fileName = file.path.split("/").pop();
-    const formattedPath = `api/uploads/${fileName}`;
-    await this.userService.updateUserAvatar(id, formattedPath);
-    return { path: formattedPath };
+    try {
+      const user = await req.user;
+      const fileName = file.path.split("/").pop();
+      const formattedPath = `api/uploads/${fileName}`;
+      await this.userService.updateUserAvatar(user.id, formattedPath);
+      return { path: formattedPath };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Put("colorball/:id")
   @ApiOperation({ summary: "Update user's ball's color" })
   @ApiBody({ type: UpdateUserColorballDto })
   async updateUserColorball(
-    @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserColorballDto: UpdateUserColorballDto
+      @Req() req,
+      @Body() updateUserColorballDto: UpdateUserColorballDto
   ): Promise<User> {
+    const user = await req.user;
     return this.userService.updateUserColorBall(
-      Number(id),
+      user.id,
       updateUserColorballDto.colorball
     );
   }
