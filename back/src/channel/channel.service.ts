@@ -1,4 +1,4 @@
-import {ForbiddenException, forwardRef, Inject, Injectable} from "@nestjs/common";
+import { ForbiddenException, forwardRef, Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import {
   CreateChannelDto,
@@ -16,7 +16,7 @@ export class ChannelService {
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   async addInvite(id, userId) {
     const newUser = await this.prisma.userChannel.create({
@@ -38,11 +38,12 @@ export class ChannelService {
   }
 
   async createChannel(creatorId, body: CreateChannelDto): Promise<any> {
-    let { name, password, conv, privated } = body;
+    let { name, passworded, password, conv, privated } = body;
     if (password) password = await hashPassword(password);
     return this.prisma.channel.create({
       data: {
         name,
+        passworded,
         password,
         conv,
         privated,
@@ -247,8 +248,9 @@ export class ChannelService {
           },
         },
         created_at: new Date(),
+        passworded: false,
       },
-    });
+    });    
     await this.addInvite(newConv.id, userId);
     return this.addInvite(newConv.id, friendId);
   }

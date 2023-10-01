@@ -10,6 +10,8 @@ import {
 } from "../../api";
 import Button from "../../components/utils/Button";
 import { useNavigate } from "react-router-dom";
+import PopUp from "../../components/utils/PopUp";
+import PopOver from "../../components/utils/PopOver";
 
 type Props = {};
 
@@ -23,6 +25,7 @@ export default function Settings(props: Props) {
   const [username, setUsername] = useState(user.username);
   const [avatarUrl, setAvatarUrl] = useState(user.avatar);
   const [errorMsg, setErrorMsg] = useState("");
+  const [showErrorPopUp, setShowErrorPopUp] = useState(false);
 
   const activate2fa = () => {
     get2fa().then((response) => {
@@ -50,21 +53,25 @@ export default function Settings(props: Props) {
         const response = await uploadUserAvatar(user.id, file);
         if (response.status === 201) {
           setAvatarUrl(response.data.path);
+          setErrorMsg("");
         } else {
-          console.error(
-            "Failed to update user avatar. Response status:",
-            response.status,
-          );
-          console.error("Response data:", response.data);
-          setErrorMsg("Failed to update user avatar.");
+          setErrorMsg("Your image file is not valid");
+          setShowErrorPopUp(true);
+          setTimeout(() => {
+            setShowErrorPopUp(false);
+          }, 5000);
         }
       } catch (error) {
-        console.error("An error occurred during avatar upload:", error);
-        setErrorMsg("An unexpected error occurred.");
+        setErrorMsg("Your image file is not valid");
+        setShowErrorPopUp(true);
+        setTimeout(() => {
+          setShowErrorPopUp(false);
+        }, 5000);
       }
     }
     forceRerender();
   };
+
 
   const handleEditClick = () => {
     inputRef.current.click();
@@ -72,21 +79,27 @@ export default function Settings(props: Props) {
 
   const handleChangeUsername = async (newUsername) => {
     try {
-      const response = await updateUserUsername(user.id, newUsername);
-      if (response.status === 200) {
+      console.log("Attempting to update username...");
 
+      const response = await updateUserUsername(user.id, newUsername);
+
+      console.log("Received response:", response);
+
+      if (response && response.status === 200) {
+        console.log("Successfully updated username.");
         setUsername(newUsername);
-      } else {
-        console.error("Failed to update user username.");
-        setErrorMsg("Error updating username.");
       }
     } catch (error) {
-      console.error("Error updating user username:", error);
-      setUsername("Username already taken");
+      setErrorMsg("Error updating username.");
+      setUsername(error.response.data.message);
     }
-    forceRerender();
 
+    forceRerender();
   };
+
+
+
+
 
   const handleEditUsername = () => {
     const newUsername = prompt("Please enter the new username:");
@@ -114,6 +127,15 @@ export default function Settings(props: Props) {
               Edit
             </div>
           </div>
+          {showErrorPopUp &&
+            <PopUp
+              clear={() => setShowErrorPopUp(false)}
+              height="20px"
+              position={{ left: 50, top: 100 }} >
+              <p style={{ color: 'red' }}>{errorMsg}</p>
+            </PopUp>
+
+          }
         </div>
       </div>
       <div className="username-section">

@@ -31,6 +31,7 @@ import {isChannelAdminPipe} from "../pipes/isChannelAdmin.pipe";
 import {isInChannelPipe} from "../pipes/isInChannel.pipe";
 import {isBannedPipe} from "../pipes/isBanned.pipe";
 import {isOwnerPipe} from "../pipes/isOwner.pipe";
+import { ChannelSerializer } from "./channel.serializer";
 
 
 export class CreateChannelDto {
@@ -43,6 +44,11 @@ export class CreateChannelDto {
   @IsOptional()
   @IsBoolean()
   conv?: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  passworded?: boolean;
 
   @ApiProperty()
   @IsString()
@@ -216,7 +222,8 @@ export class ChannelController {
   async getPublicChannels(
       @Param('userId', ParseIntPipe) userId: number
   ): Promise<Channel[]> {
-    return this.channelService.getPublicChannels(userId);
+    const channels =  await this.channelService.getPublicChannels(userId);
+    return channels.map(ChannelSerializer.serialize);
   }
 
   @Post("/:channelId/validate-password")
