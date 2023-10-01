@@ -68,7 +68,7 @@ export class BlockController {
   async getBlockedUsers(
       @Req() req
   ): Promise<User[]> {
-    const user = await req.id
+    const user = await req.user
     return this.blockService.getBlockedUsers(user.id);
   }
 
