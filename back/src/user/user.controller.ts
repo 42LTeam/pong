@@ -175,7 +175,7 @@ export class UserController {
     return this.userService.updateUserName(user.id, username);
   }
 
-  @Get("friend/")
+  @Get("friend")
   @ApiOperation({ summary: "Get friend of user" })
   async getFriends(
       @Req() req,
@@ -193,7 +193,7 @@ export class UserController {
     return this.userService.getFriendsOfUser(Number(id));
   }
 
-  @Get("friend/online/")
+  @Get("friend/online")
   @ApiOperation({ summary: "Get friend of user" })
   async getOnlineFriends(
       @Req() req,
