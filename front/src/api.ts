@@ -43,8 +43,8 @@ export async function ownerMakeAdmin(
 //  @Post('/:channelId/admin-quit/:userId')
 //  @ApiOperation({ summary: 'Remove a user from a channel (Admin perspective)' })
 export async function removeUserAdminFromChannel(
-  channelId: number,
-  userId: number
+    channelId: number,
+    userId: number
 ) {
   const config = {
     method: "post",
@@ -114,15 +114,15 @@ export async function muteUserFromChannel(channelId: number, userId: number) {
 }
 
 export async function isUserMutedFromChannel(
-  channelId: number,
-  userId: number
+    channelId: number,
+    userId: number
 ) {
   const config = {
     method: "get",
     url: URL + "/channels/" + channelId + "/is-muted/" + userId,
     withCredentials: true,
   };
-  
+
   return axios(config).catch( () => {
     sendNotificationError("❌ Erreur lors du check d'un.e utilisateur.rice muet.te. isUserMutedFromChannel")
   })
@@ -131,11 +131,11 @@ export async function isUserMutedFromChannel(
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 export async function searchUser(
-  search,
-  options: { friendOnly?: boolean; notFriend?: boolean } = {
-    friendOnly: false,
-    notFriend: false,
-  }
+    search,
+    options: { friendOnly?: boolean; notFriend?: boolean } = {
+      friendOnly: false,
+      notFriend: false,
+    }
 ) {
   const config = {
     method: "get",
@@ -218,14 +218,14 @@ export async function updateUserUsername(id, username) {
 }
 
 export async function getAllUsers(
-  options: { friendOnly?: boolean; notFriend?: boolean } = {
-    friendOnly: false,
-    notFriend: false,
-  }
+    options: { friendOnly?: boolean; notFriend?: boolean } = {
+      friendOnly: false,
+      notFriend: false,
+    }
 ) {
   const queryParams = Object.entries(options)
-    .map((key) => key[0] + "=" + key[1])
-    .join("&");
+      .map((key) => key[0] + "=" + key[1])
+      .join("&");
   const config = {
     method: "get",
     url: URL + "/users?" + queryParams,
@@ -575,8 +575,8 @@ export async function getUserMatchesResume(ID) {
 }
 
 export async function setChannelPassword(
-  channelId: number,
-  newPassword: string
+    channelId: number,
+    newPassword: string
 ) {
   const config = {
     method: "post",
@@ -615,8 +615,8 @@ export async function getUserColorball(id: number) {
 }
 
 export async function validateChannelPassword(
-  channelId: number,
-  inputPassword: string
+    channelId: number,
+    inputPassword: string
 ) {
   const config = {
     method: "post",
@@ -633,8 +633,8 @@ export async function validateChannelPassword(
 }
 
 export async function joinChannel(channelId: number) {
-    const config = {
-      method: "post",
+  const config = {
+    method: "post",
     url: `${URL}/channels/${channelId}/join`,
     withCredentials: true,
   };

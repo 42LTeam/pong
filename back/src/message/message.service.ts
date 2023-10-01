@@ -61,6 +61,9 @@ export class MessageService {
     userId: number,
     channelId: number
   ): Promise<{ lastRead: number; messages: Message[] }> {
+    if (channelId > 999999999){
+      throw("Wallah on a pas autant de channels");
+    }
     const messages = await this.prisma.message.findMany({
       where: {
         channelId: channelId,

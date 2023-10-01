@@ -10,21 +10,33 @@ import NotFound from "../NotFound";
 
 export default function SocialBody() {
   const { channelId } = useParams();
-  const [state, setState] = useState(Number.parseInt(channelId) || null);
-  const [error, setError] = useState(0);
+  if (channelId){
+    if (channelId.length > 9){
+      return (
+        <NotFound page={"social"}/>
+        );
+    }
+  }
+  const [state, setState] = useState<any>(Number.parseInt(channelId));
+  const [error, setError] = useState(undefined);
+
+  const [resp, setResp] = useState(undefined);
 
   useEffect(() => {
     setState(Number.parseInt(channelId));
   }, [channelId]);
 
-  useEffect(() => {
+  useEffect(() => {    
       getChannelAllMembers(state)
+        .then ((response) => {
+          setResp(response);
+        })
         .catch((err) => {
-          setError(err.response.status);
-        });
+          setError(err.response);
+        });    
   }, [channelId]);
 
-  if (error && channelId !== undefined && error !== 400){
+  if ( (error && channelId !== undefined) || (!state && channelId)) {
     return (
     <NotFound page={"social"}/>
     );
