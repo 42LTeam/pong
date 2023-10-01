@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -136,6 +137,9 @@ export class ChannelController {
   async getChannelAllMembers(
     @Param("channelId", ParseIntPipe, isInChannelPipe) channelId: number
   ): Promise<any> {
+    if (channelId > Number.MAX_SAFE_INTEGER) {
+      throw new BadRequestException("ID is too large");
+    }
     return await this.channelService.getAllUserChannelsInChannel(Number(channelId));
   }
 
@@ -193,6 +197,9 @@ export class ChannelController {
     @Param("channelId", ParseIntPipe) channelId: number,
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<any> {
+    if (channelId > Number.MAX_SAFE_INTEGER) {
+      throw new BadRequestException("ID is too large");
+    }
     return this.channelService.isUserMutedFromChannel(channelId, userId);
   }
 

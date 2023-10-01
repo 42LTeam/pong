@@ -8,6 +8,7 @@ import { FriendService } from "../friend/friend.service";
 import { MessageService } from "../message/message.service";
 import { Channel } from "@prisma/client";
 import { checkPassword, hashPassword } from "../auth/password.utils";
+import { throwError } from "rxjs";
 
 @Injectable()
 export class ChannelService {
@@ -118,6 +119,9 @@ export class ChannelService {
   }
 
   async getAllUserChannelsInChannel(channelId: number): Promise<any> {
+    if (channelId > 999999999){
+      throw("Wallah on a pas autant de channels");
+    }
     return this.prisma.userChannel.findMany({
       where: {
         channelId: channelId,
@@ -350,6 +354,10 @@ export class ChannelService {
     channelId: number,
     userId: number
   ): Promise<boolean> {
+    if (channelId > 999999999){
+      throw("Wallah on a pas autant de channels");
+    }
+
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
     })

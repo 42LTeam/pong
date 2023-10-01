@@ -10,6 +10,13 @@ import NotFound from "../NotFound";
 
 export default function SocialBody() {
   const { channelId } = useParams();
+  if (channelId){
+    if (channelId.length > 9){
+      return (
+        <NotFound page={"social"}/>
+        );
+    }
+  }
   const [state, setState] = useState<any>(Number.parseInt(channelId));
   const [error, setError] = useState(undefined);
 
@@ -19,26 +26,21 @@ export default function SocialBody() {
     setState(Number.parseInt(channelId));
   }, [channelId]);
 
-  useEffect(() => {
+  useEffect(() => {    
       getChannelAllMembers(state)
         .then ((response) => {
           setResp(response);
         })
         .catch((err) => {
           setError(err.response);
-        });
+        });    
   }, [channelId]);
 
-  if ( (error && channelId !== undefined) || (!state && channelId) ) {
+  if ( (error && channelId !== undefined) || (!state && channelId)) {
     return (
     <NotFound page={"social"}/>
     );
   }
-
-  console.log("%%%response = "+JSON.stringify(resp));
-  console.log("%%%channelId = "+channelId);
-  console.log("%%%state = "+state);
-  console.log("%%%error = "+JSON.stringify(error));
 
   return (
     <div className="chatbody bubble">

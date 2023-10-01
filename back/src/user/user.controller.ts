@@ -13,6 +13,7 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
+  BadRequestException,
 } from "@nestjs/common";
 import { ApiBody, ApiProperty, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { UserService } from "./user.service";
@@ -144,6 +145,9 @@ export class UserController {
   async getUserById(
     @Param("id", ParseIntPipe, UserIdValidationPipe) id: number
   ): Promise<User | null> {
+    if (id > 999999999) {
+      return (null);
+    }
     return this.userService.getUserById(Number(id));
   }
 
