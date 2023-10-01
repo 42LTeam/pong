@@ -276,7 +276,7 @@ export class UserController {
       const user = await req.user;
       const fileName = file.path.split("/").pop();
       const formattedPath = `api/uploads/${fileName}`;
-      await this.userService.updateUserAvatar(id, formattedPath);
+      await this.userService.updateUserAvatar(user.id, formattedPath);
       return { path: formattedPath };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
