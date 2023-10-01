@@ -14,7 +14,7 @@ USER node
 FROM base AS development
 # Copy package.json and package-lock.json and install dependencies
 COPY --chown=node:node ./back/package*.json ./
-RUN npm ci
+RUN npm install
 # Copy application files
 COPY --chown=node:node ./back/ .
 # Ensure public/uploads directory exists with correct permissions
