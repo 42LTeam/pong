@@ -15,6 +15,7 @@ export default class Game {
   public engine: GameEngine;
   public players: GamePlayer[] = [];
   public state: gameState = gameState.CREATING;
+  private readonly MATCH_ROOM: string;
 
   constructor(
     public matchId: number,
@@ -25,9 +26,8 @@ export default class Game {
     public userService: UserService
   ) {
     this.engine = new GameEngine(this);
+    this.MATCH_ROOM = "Match-" + this.matchId;
   }
-
-  MATCH_ROOM = "Match-" + this.matchId;
 
   onGame(userId) {
     return (
@@ -35,6 +35,10 @@ export default class Game {
       (this.players[0].userId == userId ||
         (this.players.length > 1 && this.players[1].userId == userId))
     );
+  }
+
+  onGameAlready(userId, custom) {
+    return this.onGame(userId) && this.custom == custom;
   }
 
   goodGame(userId, playerId) {
@@ -58,17 +62,25 @@ export default class Game {
     let player = this.players.find((p) => p.userId == user.id);
     if (!player) {
       player = new GamePlayer(
-        user.id,
-        user.username,
-        socket,
-        !Boolean(this.players.length),
-        this.engine.ball.BALL_SEMI_SIZE,
-        user.colorball
+          user.id,
+          user.username,
+          socket,
+          !Boolean(this.players.length),
+          this.engine.ball.BALL_SEMI_SIZE,
+          user.colorball
       );
       this.players.push(player);
-      socket?.join(this.MATCH_ROOM);
-      if (invite) player.status = playerStatus.OFFLINE;
+      if (invite)
+        player.status = playerStatus.OFFLINE;
+      else {
+        socket?.join(this.MATCH_ROOM);
+        console.log("Join Room", player.userId);
+      }
     } else {
+      if (player.socket == undefined) {
+        socket?.join(this.MATCH_ROOM);
+        console.log("Join Room via Invite", player.userId);
+      }
       player.status = playerStatus.ONLINE;
       player.socket = socket;
     }
@@ -102,14 +114,19 @@ export default class Game {
 
   playersLeave() {
     this.players.forEach((player) => {
-      player.socket.leave(this.MATCH_ROOM);
+      console.log("playersLeave auto", player.userId, player.socket != undefined);
+      player.socket?.leave(this.MATCH_ROOM);
     });
   }
 
   handleLeave(user) {
     const index = this.players.findIndex((p) => p.userId == user.id);
     if (index >= 0) {
-      if (this.state == gameState.FINISH) this.players.splice(index, 1);
+      if (this.state == gameState.FINISH) {
+        console.log("playersLeave", this.players[index].userId, this.players[index].socket != undefined);
+        this.players[index].socket?.leave(this.MATCH_ROOM);
+        this.players.splice(index, 1);
+      }
       else {
         this.players[index].status = playerStatus.OFFLINE;
         if (this.state != gameState.PAUSE) this.state = gameState.PAUSE;

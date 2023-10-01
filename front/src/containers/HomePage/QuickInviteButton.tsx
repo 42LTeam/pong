@@ -16,12 +16,12 @@ export const QuickInviteButton = (props: Props): JSX.Element => {
       navigate(
         "/game?id=" +
           props.userID +
-          "&username=" +
-          response.data.username +
-          "&session=" +
-          response.data.session +
+          "&invite=" +
+          true +
           "&custom=" +
-          props.custom
+          props.custom +
+          "&username=" +
+          response.data.username
       )
     );
   };
