@@ -264,6 +264,7 @@ export async function editChannel(channelId: number, data: {
 
 export async function createChannel(data: {
   name: string;
+  passworded: boolean;
   password?: string;
   privated?: boolean;
   conv?: boolean;

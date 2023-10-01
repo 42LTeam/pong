@@ -3,10 +3,10 @@ import Lock from "../../../components/svg/Lock";
 import ToggleSwitch from "../../../components/utils/ToggleSwitch";
 import Button from "../../../components/utils/Button";
 import PopOver from "../../../components/utils/PopOver";
-import React, {useRef, useState} from "react";
-import {createChannel, editChannel, sendChannelInvite} from "../../../api";
+import React, { useRef, useState } from "react";
+import { createChannel, editChannel, sendChannelInvite } from "../../../api";
 
-export default function EditChannelPopOver({channel, checked, clear, privateddefault}:{channel?: any,checked: any[], clear: any, privateddefault?: boolean}){
+export default function EditChannelPopOver({ channel, checked, clear, privateddefault }: { channel?: any, checked: any[], clear: any, privateddefault?: boolean }) {
     const [hasName, setHasName] = useState(false);
     const [privated, setPrivated] = useState(channel ? channel.privated : privateddefault);
     const nameRef = useRef(null);
