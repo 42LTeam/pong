@@ -26,7 +26,7 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
         : async () => {
             const name = nameRef.current ? nameRef.current.value : null;
             const password = passwordRef.current ? passwordRef.current.value : null;
-            const passworded = password ? true : false;
+            setPassworded(password ? true : false);
             if (name) {
                 try {
                     const response = await createChannel({
@@ -35,6 +35,11 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
                         password,
                         privated,
                         passworded, 
+                    });
+                    const channel = response.data;
+                    await sendChannelInvite({
+                        channelId: channel.id,
+                        usernames: checked,
                     });
                     clear(true);
                 } catch (err) {
