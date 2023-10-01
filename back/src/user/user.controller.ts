@@ -213,7 +213,7 @@ export class UserController {
     return this.userService.getFriendsOfUser(user.id, { startWith: query });
   }
 
-  @Get("friend-request/pending/:userId")
+  @Get("friend-request/pending")
   @ApiOperation({ summary: "Get pending request" })
   async getPendingFriends(
       @Req() req,
