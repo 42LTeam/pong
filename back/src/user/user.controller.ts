@@ -174,13 +174,12 @@ export class UserController {
     const user = await req.user;
     return this.userService.updateUserName(user.id, username);
   }
-  @Get("friends")
+  @Get("friend")
   @ApiOperation({ summary: "Get friend of user" })
   async getFriends(
       @Req() req,
   ): Promise<User[]> {
     const user = await req.user;
-
     return this.userService.getFriendsOfUser(user.id);
   }
 
