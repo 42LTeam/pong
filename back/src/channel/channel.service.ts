@@ -91,7 +91,7 @@ export class ChannelService {
         await this.addInvite(channelId, i);
       }
     }
-
+    if (ids)
     for (const i of ids) {
       await this.addInvite(channelId, i);
     }
