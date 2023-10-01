@@ -18,7 +18,7 @@ const states = [
 ];
 const paths = [
   "/users/friend/online",
-  "/users/friend",
+  "/users/friend/all",
   "/users/friend-request/pending",
   "/block/blocked",
   "/channels",
