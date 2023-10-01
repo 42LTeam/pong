@@ -175,12 +175,31 @@ export class UserController {
     return this.userService.updateUserName(user.id, username);
   }
 
+  @Get("friend/")
+  @ApiOperation({ summary: "Get friend of user" })
+  async getFriends(
+      @Req() req,
+  ): Promise<User[]> {
+    const user = await req.user;
+
+    return this.userService.getFriendsOfUser(user.id);
+  }
+
   @Get("friend/:id")
   @ApiOperation({ summary: "Get friend of user" })
   async getFriendsOfUser(
     @Param("id", ParseIntPipe) id: number
   ): Promise<User[]> {
     return this.userService.getFriendsOfUser(Number(id));
+  }
+
+  @Get("friend/online/")
+  @ApiOperation({ summary: "Get friend of user" })
+  async getOnlineFriends(
+      @Req() req,
+  ): Promise<User[]> {
+    const user = await req.user;
+    return this.userService.getFriendsOfUser(user.id, { online: true });
   }
 
   @Get("friend/online/:id")
