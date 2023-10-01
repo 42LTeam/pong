@@ -13,6 +13,7 @@ import { Message } from "@prisma/client";
 import { MessageService } from "./message.service";
 import { AuthenticatedGuard } from "../auth/guards/authenticated.guard";
 import { IsNotEmpty, IsNumber, IsString } from "@nestjs/class-validator";
+import {isInChannelPipe} from "../channel/pipes/isInChannel.pipe";
 
 class CreateMessageDto {
   @ApiProperty()
@@ -68,12 +69,6 @@ export class MessageController {
     return this.messageService.getMessageById(Number(id));
   }
 
-  @Get("user/:user")
-  async getMessageByUser(
-    @Param("user") user: number
-  ): Promise<Message[] | null> {
-    return this.messageService.getMessageByUser(Number(user));
-  }
 
   @Get("channel/:channel")
   async getMessageByChannel(
@@ -102,10 +97,13 @@ export class MessageController {
     return { read: isRead };
   }
 
+
   @Get("channel/:id/last")
   async getLastMessageInChannel(
+
     @Param("id", ParseIntPipe) channelId: number
   ): Promise<Message> {
+
     return await this.messageService.getLastMessageInChannel(channelId);
   }
 }

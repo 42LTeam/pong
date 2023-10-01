@@ -40,7 +40,7 @@ export default function Friends() {
     states.indexOf(state) != 4 &&
     states.indexOf(state) !== states.length - 1
   ) {
-    getPath(paths[states.indexOf(state)] + user.id).then(function (response) {
+    getPath(paths[states.indexOf(state)]).then(function (response) {
       setFriends(response.data);
     });
   }
