@@ -12,32 +12,38 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
     const nameRef = useRef(null);
     const passwordRef = useRef(null);
 
-    const handleValidation = channel ?
-        () => {
-            const name = hasName ? nameRef.current.value : null;
-            const password = passwordRef.current.value;
-            const passworded = !!password;
-            editChannel(channel.id, { privated, name, passworded, password }).then(() => clear(true))
+    const handleValidation = channel
+        ? () => {
+            const name = nameRef.current ? nameRef.current.value : null;
+            const password = passwordRef.current ? passwordRef.current.value : "";
+            if (password || name) {
+                editChannel(channel.id, { privated, name, password })
+                    .then(() => clear(true))
+                    .catch((err) => console.error("Erreur lors de la modification du canal", err));
+            }
         }
         : async () => {
-            const password = passwordRef.current.value;
-            const passworded = !!password;
-            const response = await createChannel({
-                name: nameRef.current.value,
-                conv: false,
-                passworded,
-                password: password || null,
-                privated,
-            });
-            const channel = response.data;
-            sendChannelInvite({
-                channelId: channel.id,
-                usernames: checked,
-            }).then(() => {
-                clear(true);
-            });
+            const name = nameRef.current ? nameRef.current.value : null;
+            const password = passwordRef.current ? passwordRef.current.value : null;
+            if (name) {
+                try {
+                    const response = await createChannel({
+                        name,
+                        conv: false,
+                        password,
+                        privated,
+                    });
+                    const channel = response.data;
+                    await sendChannelInvite({
+                        channelId: channel.id,
+                        usernames: checked,
+                    });
+                    clear(true);
+                } catch (err) {
+                    console.error("Erreur lors de la création du canal ou de l'envoi des invitations", err);
+                }
+            }
         };
-
 
 
     return (
@@ -59,6 +65,8 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
                     {...(!hasName ? { value: channel?.name } : {})}
                     bgColor="#2C3E50"
                 ></TextInput>
+                {!privated && (
+                <>
                 <h2>Mot de passe</h2>
                 <TextInput
                     ref={passwordRef}
@@ -66,6 +74,7 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
                     text="Entrez un mot de passe"
                     bgColor="#2C3E50"
                 ></TextInput>
+                </>)}
                 <div className="row">
                     <div className={"row"} style={{ gap: "5px" }}>
                         <Lock></Lock>
@@ -86,7 +95,7 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
                 ></Button>
                 <Button
                     handleClick={handleValidation}
-                    text={channel ? "Modier le salon" : "Créer un salon"}
+                    text={channel ? "Modifier le salon" : "Créer un salon"}
                     clickable={true}
                 ></Button>
             </div>

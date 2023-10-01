@@ -53,6 +53,10 @@ export default function Conversations({ state }: Props) {
     setRerenderFlag(true);
   }, [application, rerenderFlag]);
 
+  useEffect(() => {
+    fetchConversations();
+  }, [state])
+
   const setState = (state) => {
     navigate("/social/" + (state || ""));
   };
