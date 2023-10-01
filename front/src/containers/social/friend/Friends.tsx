@@ -17,11 +17,11 @@ const states = [
   "Salons publiques",
 ];
 const paths = [
-  "/users/friend/online/",
-  "/users/friend/",
-  "/users/friend-request/pending/",
-  "/block/blocked/",
-  "/channels/",
+  "/users/friend/online",
+  "/users/friend",
+  "/users/friend-request/pending",
+  "/block/blocked",
+  "/channels",
 ];
 
 export default function Friends() {
