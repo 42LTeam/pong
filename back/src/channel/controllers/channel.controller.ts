@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -146,6 +147,9 @@ export class ChannelController {
   async getChannelAllMembers(
     @Param("channelId", ParseIntPipe, isInChannelPipe) channelId: number
   ): Promise<any> {
+    if (channelId > Number.MAX_SAFE_INTEGER) {
+      throw new BadRequestException("ID is too large");
+    }
     return await this.channelService.getAllUserChannelsInChannel(Number(channelId));
   }
 
@@ -185,7 +189,9 @@ export class ChannelController {
     @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<any> {
-    return this.channelService.banUserFromChannel(channelId, userId);
+    await this.channelService.banUserFromChannel(channelId, userId);
+    await this.channelService.removeUserFromChannel(channelId, userId);
+    return;
   }
 
   @Post("/:channelId/mute/:userId")
@@ -199,10 +205,13 @@ export class ChannelController {
 
   @Get("/:channelId/is-muted/:userId")
   @ApiOperation({ summary: "Check if a user is muted from a channel" })
-  async isMutedBannedFromChannel(
+  async isUserMutedFromChannel(
     @Param("channelId", ParseIntPipe) channelId: number,
     @Param("userId", ParseIntPipe) userId: number
-  ): Promise<boolean> {
+  ): Promise<any> {
+    if (channelId > Number.MAX_SAFE_INTEGER) {
+      throw new BadRequestException("ID is too large");
+    }
     return this.channelService.isUserMutedFromChannel(channelId, userId);
   }
 
@@ -251,7 +260,7 @@ export class ChannelController {
     description: "ID of the channel to join",
   })
   async joinChannel(
-    @Param("channelId", ParseIntPipe) channelId: number,
+    @Param("channelId", ParseIntPipe, isBannedPipe) channelId: number,
     @Req() req
   ): Promise<any> {
     const user = await req.user;

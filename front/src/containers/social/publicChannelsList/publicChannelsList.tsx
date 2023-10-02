@@ -11,7 +11,7 @@ import PopOver from "../../../components/utils/PopOver";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/utils/Button";
 
-export default function PublicChannelsList(channelId: number) {
+export default function PublicChannelsList() {
   const [channels, setChannels] = useState([]);
   const [isPasswordPopUpVisible, setPasswordPopUpVisible] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState(null);
@@ -65,6 +65,7 @@ export default function PublicChannelsList(channelId: number) {
 
   const joinChannelDirectly = async (channel) => {
     await joinChannel(channel.id);
+
     navigate(`/social/${channel.id}`);
   };
 

@@ -8,6 +8,7 @@ import { FriendService } from "../friend/friend.service";
 import { MessageService } from "../message/message.service";
 import { Channel } from "@prisma/client";
 import { checkPassword, hashPassword } from "../auth/password.utils";
+import { throwError } from "rxjs";
 
 @Injectable()
 export class ChannelService {
@@ -92,7 +93,7 @@ export class ChannelService {
         await this.addInvite(channelId, i);
       }
     }
-
+    if (ids)
     for (const i of ids) {
       await this.addInvite(channelId, i);
     }
@@ -119,6 +120,9 @@ export class ChannelService {
   }
 
   async getAllUserChannelsInChannel(channelId: number): Promise<any> {
+    if (channelId > 999999999){
+      throw("Wallah on a pas autant de channels");
+    }
     return this.prisma.userChannel.findMany({
       where: {
         channelId: channelId,
@@ -146,7 +150,7 @@ export class ChannelService {
           },
         },
       },
-    });
+    })
   }
 
   //rename getChannelOfuser in getChannelOfUser
@@ -291,8 +295,33 @@ export class ChannelService {
     }
   }
 
-  async banUserFromChannel(channelId: number, userId: number): Promise<any> {
-    return this.prisma.userChannel.updateMany({
+  async banUserFromChannel(channelId: number, userId: number): Promise<void> {
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        id: channelId,
+      },
+    });
+
+    if (!channel) {
+      throw new Error('Channel not found');
+    }
+
+    if (!channel.banList.includes(userId)) {
+      const updatedBanList = [...channel.banList, userId];
+
+      await this.prisma.channel.update({
+        where: {
+          id: channelId,
+        },
+        data: {
+          banList: {
+            set: updatedBanList,
+          },
+        },
+      });
+    }
+
+    await this.prisma.userChannel.updateMany({
       where: {
         channelId: channelId,
         userId: userId,
@@ -302,19 +331,6 @@ export class ChannelService {
       },
     });
   }
-
-  //TODO if we want to unban
-  // async unBanUserFromChannel(channelId: number, userId: number): Promise<any> {
-  //   return this.prisma.userChannel.updateMany({
-  //     where: {
-  //       channelId: channelId,
-  //       userId: userId,
-  //     },
-  //     data: {
-  //       isBanned: false
-  //     },
-  //   });
-  // }
 
   async ownerMakeAdmin(channelId: number, userId: number): Promise<any> {
     return this.prisma.userChannel.updateMany({
@@ -340,14 +356,21 @@ export class ChannelService {
     channelId: number,
     userId: number
   ): Promise<boolean> {
+    if (channelId > 999999999){
+      throw("Wallah on a pas autant de channels");
+    }
+
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
-    });
+    })
+    if (!userChannel) {
+      return(false);
+    }
 
     const currentDateTime = new Date();
     const muteUntil = userChannel.isMuted;
 
-    return muteUntil !== null && muteUntil > currentDateTime;
+    return (muteUntil !== null && muteUntil > currentDateTime);
   }
 
   async setChannelPassword(

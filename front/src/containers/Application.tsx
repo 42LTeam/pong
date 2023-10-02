@@ -13,6 +13,7 @@ import Notification from "../components/utils/Notification";
 import GamePage from "./gamepage/GamePage";
 import { socket } from "../api";
 import NotFound from "./NotFound";
+import {PopupError} from "../components/Errors/PopupError";
 
 type ApplicationEngine = {
   sendNotification: (
@@ -170,6 +171,7 @@ const Application = function ({ children }: { children?: any }) {
     return (
       <>
         <BrowserRouter>
+          <PopupError />
           <ApplicationContext.Provider value={application}>
             <Header></Header>
             <Routes>

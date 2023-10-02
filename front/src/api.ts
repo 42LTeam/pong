@@ -1,5 +1,7 @@
 import io from "socket.io-client";
 import axios from "axios";
+import PopUp from "./components/utils/PopUp";
+import {sendNotificationError} from "./components/Errors/PopupError";
 
 const webSocketURL = "/";
 const URL = "/api";
@@ -100,7 +102,7 @@ export async function muteUserFromChannel(channelId: number, userId: number) {
 
 //   @Get('/:channelId/is-muted/:userId')
 //   @ApiOperation({ summary: 'Mute a user from a channel' })
-export async function isMutedBannedFromChannel(
+export async function isUserMutedFromChannel(
   channelId: number,
   userId: number
 ) {
@@ -109,8 +111,8 @@ export async function isMutedBannedFromChannel(
     url: URL + "/channels/" + channelId + "/is-muted/" + userId,
     withCredentials: true,
   };
-
-  return axios(config).catch(err => {return});
+  
+  return axios(config).catch(err => {throw(err)});
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -169,7 +171,7 @@ export async function unblockUser(blockedId: number) {
 export async function updateUserAvatar(id, avatarUrl) {
   const config = {
     method: "put",
-    url: URL + "/users/avatar/" + id,
+    url: URL + "/users/avatar/",
     withCredentials: true,
     data: {
       avatar: avatarUrl,
@@ -181,7 +183,7 @@ export async function updateUserAvatar(id, avatarUrl) {
 export async function updateUserUsername(id, username) {
   const config = {
     method: "put",
-    url: URL + "/users/username/" + id,
+    url: URL + "/users/username/",
     withCredentials: true,
     data: {
       username: username,
@@ -212,7 +214,7 @@ export async function getAllUsers(
 export async function getFriendOfUser(id: number) {
   const config = {
     method: "get",
-    url: URL + "/users/friend/" + id,
+    url: URL + "/users/friend/all",
     withCredentials: true,
   };
   return axios(config).catch(err => {return});
@@ -238,14 +240,14 @@ export async function getPublicChannels(userId: number) {
 
 export async function getChannelAllMembers(id: number) {
   if (Number.isNaN(id) || id === null) {
-    return ;
+    throw("Error: channelId not valid");
   }
   const config = {
     method: "get",
     url: URL + `/channels/${id}/members`,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch(err => {throw(err)});
 }
 
 export async function editChannel(channelId: number, data: {
@@ -423,6 +425,7 @@ export async function readMessage(channelId: number, messageId: number) {
 }
 
 export async function sendMessageToChannel(channelId: number, content: string) {
+
   socket.emit("new-message", { channelId, content });
 }
 
@@ -486,7 +489,7 @@ export async function uploadUserAvatar(id, file) {
 
   const config = {
     method: "post",
-    url: `${URL}/users/avatar-upload/${id}`,
+    url: `${URL}/users/avatar-upload/`,
     withCredentials: true,
     headers: {
       "Content-Type": "multipart/form-data",
@@ -524,7 +527,7 @@ export async function setChannelPassword(
 export async function updateUserColorball(id: number, color: string) {
   const config = {
     method: "put",
-    url: URL + "/users/colorball/" + id,
+    url: URL + "/users/colorball/",
     withCredentials: true,
     data: {
       colorball: color,
@@ -564,6 +567,9 @@ export async function joinChannel(channelId: number) {
     url: `${URL}/channels/${channelId}/join`,
     withCredentials: true,
   };
-  const response = await axios(config).catch(err => {return});
+  const response = await axios(config).catch( () => {
+    sendNotificationError("T'es banni toi 🤡")
+  })
+
   return response.data;
 }
