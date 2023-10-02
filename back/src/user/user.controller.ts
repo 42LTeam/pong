@@ -152,7 +152,6 @@ export class UserController {
     if (id > 999999999) {
       return (null);
     }
-    return this.userService.getUserById(Number(id));
     const user = await this.userService.getUserById(Number(id));
     return UserSerializer.serialize(user);
   }
