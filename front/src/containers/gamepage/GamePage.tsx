@@ -17,7 +17,6 @@ const dataGame = {
     moveUp: false,
     moveDown: false,
     custom: false,
-    finished: false,
     konami: false,
   };
 
@@ -39,7 +38,6 @@ export default function GamePage() {
     "a",
     "Enter",
   ];
-
   
   const ball = {
     x: 0.5,
@@ -87,16 +85,10 @@ export default function GamePage() {
     c2d.fillRect(0, 0, c2d.canvas.width, c2d.canvas.height);
   };
 
-  const drawPlayer = (c2d, player, fontSize, custom) => {
-    const textPos = fontSize + 5;
+  const drawPlayer = (c2d, player, textPos, custom) => {
     const left = player.x < 0.5;
     c2d.textAlign = left ? "left" : "right";
-    c2d.fillText(player.name, c2d.canvas.width * (left ? 0.05 : 0.95), textPos);
-    c2d.fillText(
-      player.score.toString(),
-      c2d.canvas.width * (left ? 0.45 : 0.55),
-      textPos
-    );
+    c2d.fillText(player.name, c2d.canvas.width * (left ? 0.01 : 0.99), textPos);
     if (!custom || (custom && 0.35 < ball.x && ball.x < 0.65))
     {
       c2d.fillRect(
@@ -108,10 +100,15 @@ export default function GamePage() {
     }
   };
 
-  const drawText = (c2d, status, countdown) => {
+  const drawText = (c2d, status, textPos, countdown, players) => {
     c2d.textAlign = "center";
     const width = c2d.canvas.width / 2;
     const height = c2d.canvas.height / 2;
+    c2d.fillText(
+        players.player0.score.toString() + "|" + players.player1.score.toString(),
+        width,
+        textPos
+    );
     switch (status) {
       case gameState.CREATING: {
         c2d.fillText("Waiting for player", width, height);
@@ -186,11 +183,12 @@ export default function GamePage() {
     )
       c2d.fillStyle = "pink";
     else c2d.fillStyle = "white";
-    const fontSize = 0.05 * Math.min(c2d.canvas.width, c2d.canvas.height);
+    const fontSize = 0.03 * Math.min(c2d.canvas.width, c2d.canvas.height);
+    const textPos = fontSize + 5;
     c2d.font = fontSize + "px monospace";
-    drawPlayer(c2d, players.player0, fontSize, dataGame.custom);
-    drawPlayer(c2d, players.player1, fontSize, dataGame.custom);
-    drawText(c2d, status, countdown);
+    drawPlayer(c2d, players.player0, textPos, dataGame.custom);
+    drawPlayer(c2d, players.player1, textPos, dataGame.custom);
+    drawText(c2d, status, textPos, countdown, players);
     drawBall(c2d);
   };
 
@@ -202,7 +200,6 @@ export default function GamePage() {
 
     if (currentKey === expectedKey) {
       if (konamiIndex === konamiCode.length - 1) {
-        console.log("Code Konami entré !");
         dataGame.konami = !dataGame.konami;
         setKonamiIndex(0);
       } else {
@@ -252,12 +249,7 @@ export default function GamePage() {
       draw(gameState.PAUSE, args.countdown);
     };
 
-    const onError = (args) => {
-      console.log("error");
-    };
-
     const onGameFinish = (args) => {
-      dataGame.finished = true;
       if (args) getData(args);
       draw(gameState.FINISH, 0);
     };
@@ -279,7 +271,7 @@ export default function GamePage() {
         event.preventDefault();
         ball.shine = !ball.shine;
       }
-      if (event.key === "Escape" && dataGame.finished) {
+      if (event.key === "Escape") {
           navigate('/');
       }
     };
@@ -299,12 +291,10 @@ export default function GamePage() {
     socket.on("game-wait", onGameWait);
     socket.on("game-start", onGameStart);
     socket.on("game-pause", onGamePause);
-    socket.on("error", onError);
     socket.on("game-finish", onGameFinish);
     socket.on("game-not-found", onGameNotFound);
     document.addEventListener("keydown", keyDownHook);
     document.addEventListener("keyup", keyUpHook);
-
 
     return () => {
       socket.emit("leave-game");
@@ -312,7 +302,6 @@ export default function GamePage() {
       socket.off("game-wait", onGameWait);
       socket.off("game-start", onGameStart);
       socket.off("game-pause", onGamePause);
-      socket.off("error", onError);
       socket.off("game-finish", onGameFinish);
       socket.off("game-not-found", onGameNotFound);
       document.removeEventListener("keydown", keyDownHook);
@@ -322,14 +311,14 @@ export default function GamePage() {
 
   useEffect(() => {
     if (canvas) {
-      if (searchParams.size > 3) {
+      if (searchParams.size > 2) {
         const player = Object.fromEntries([...searchParams]);
         player.id = Number(player.id);
         socket.emit("invite-game", [player, player.custom]);
       } else if (searchParams.size > 0) {
         const option = Object.fromEntries([...searchParams]);
         socket.emit("join-game", [option.invite, option.custom, option.id]);
-      } else socket.emit("join-game", [false, false]);
+      } else socket.emit("join-game", [false, false, null]);
     }
   }, [canvas]);
   if (notFound === true) return <NotFound />;
