@@ -46,7 +46,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async joinGame(client, data): Promise<void> {
     const user = await this.clientService.getClientById(client.id);
     if (user)
-      this.matchMaking.handleJoin(user, data[0], data[1] == "true", data[2]);
+      this.matchMaking.handleJoin(user, data[0] == "true", data[1] == "true", data[2]);
   }
 
   @SubscribeMessage("leave-game")

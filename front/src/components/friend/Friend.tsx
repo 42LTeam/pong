@@ -83,11 +83,10 @@ export default function Friend(props: Props) {
                 navigate(
                   "/game?id=" +
                     props.friend.id +
-                    "&username=" +
-                    response.data.username +
-                    "&session=" +
-                    response.data.session +
-                    "&custom=false"
+                    "&invite=" +
+                    true +
+                    "&custom=" +
+                    false
                 )
               ),
           },
@@ -96,13 +95,12 @@ export default function Friend(props: Props) {
             handleClick: () =>
               getUserByID(props.friend.id).then((response) =>
                 navigate(
-                  "/game?id=" +
+                    "/game?id=" +
                     props.friend.id +
-                    "&username=" +
-                    response.data.username +
-                    "&session=" +
-                    response.data.session +
-                    "&custom=true"
+                    "&invite=" +
+                    true +
+                    "&custom=" +
+                    true
                 )
               ),
           },
