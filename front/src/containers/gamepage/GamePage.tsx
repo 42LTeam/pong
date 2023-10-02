@@ -17,7 +17,7 @@ const dataGame = {
     moveUp: false,
     moveDown: false,
     custom: false,
-    finished: false,
+//    finished: false,
     konami: false,
   };
 
@@ -257,7 +257,7 @@ export default function GamePage() {
     };
 
     const onGameFinish = (args) => {
-      dataGame.finished = true;
+//      dataGame.finished = true;
       if (args) getData(args);
       draw(gameState.FINISH, 0);
     };
@@ -280,7 +280,7 @@ export default function GamePage() {
         event.preventDefault();
         ball.shine = !ball.shine;
       }
-      if (event.key === "Escape" && dataGame.finished) {
+      if (event.key === "Escape"/* && dataGame.finished*/) {
           navigate('/');
       }
     };
@@ -306,7 +306,6 @@ export default function GamePage() {
     document.addEventListener("keydown", keyDownHook);
     document.addEventListener("keyup", keyUpHook);
 
-
     return () => {
       socket.emit("leave-game");
       socket.off("gameplay", onGamePlay);
@@ -323,14 +322,18 @@ export default function GamePage() {
 
   useEffect(() => {
     if (canvas) {
+      console.log("searchParams :", searchParams.size);
+      console.log("searchParams :", Object.fromEntries([...searchParams]));
       if (searchParams.size > 3) {
         const player = Object.fromEntries([...searchParams]);
         player.id = Number(player.id);
+        console.log("invite-game");
         socket.emit("invite-game", [player, player.custom]);
       } else if (searchParams.size > 0) {
         const option = Object.fromEntries([...searchParams]);
+        console.log("join-game", option.invite, option.custom, option.id);
         socket.emit("join-game", [option.invite, option.custom, option.id]);
-      } else socket.emit("join-game", [false, false]);
+      } else socket.emit("join-game", [false, false, null]);
     }
   }, [canvas]);
   if (notFound === true) return <NotFound />;

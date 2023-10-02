@@ -10,7 +10,7 @@ export default class MatchMaking {
   constructor(
     private server,
     private matchService: MatchService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   handleLeave(user) {
@@ -21,6 +21,7 @@ export default class MatchMaking {
     let index = 0;
     while (index < this.nbOfGames) {
       if (this.games[index].canDelete()) {
+        console.log("Delete", this.games[index].matchId);
         this.games[index].playersLeave();
         this.games.splice(index, 1);
         this.nbOfGames--;
@@ -37,6 +38,7 @@ export default class MatchMaking {
       this.matchService,
       this.userService
     );
+    console.log("New", this.newGameId);
     this.games.push(newGame);
     this.nbOfGames++;
     newGame.handleJoin(user, false);
@@ -44,6 +46,7 @@ export default class MatchMaking {
   }
 
   handleJoin(user, invite, custom, playerId) {
+    console.log("handleJoin", invite, custom);
     if (invite) {
       for (let game of this.games)
         if (game.canJoinInvite(user.id, playerId, custom)) {
@@ -53,7 +56,7 @@ export default class MatchMaking {
       this.server.sockets.sockets.get(user.session)?.emit("game-not-found");
     } else {
       for (let game of this.games)
-        if (game.onGame(user.id) /* && game.started*/) {
+        if (game.onGameAlready(user.id, custom)) {
           game.handleJoin(user, false);
           return;
         }
@@ -67,6 +70,7 @@ export default class MatchMaking {
   }
 
   handleInvite(user, player, custom) {
+    console.log("handleInvite", custom);
     for (let game of this.games) {
       if (game.canJoinInvite(user.id, player.id, custom)) {
         game.handleJoin(user, false);
@@ -77,10 +81,10 @@ export default class MatchMaking {
         return;
       }
     }
-    this.server.sockets.sockets
-      .get(player.session)
-      ?.emit("invite-game", [user, player, custom]);
     this.newGame(user, player, custom);
+    this.server.sockets.sockets
+      .get(this.userService.getUserSession(player.id))
+      ?.emit("invite-game", [user, player, custom]);
   }
 
   updateInput(user, data) {

@@ -45,8 +45,9 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WSAuthenticatedGuard)
   async joinGame(client, data): Promise<void> {
     const user = await this.clientService.getClientById(client.id);
+    console.log("join-game", user.id, data[1]);
     if (user)
-      this.matchMaking.handleJoin(user, data[0], data[1] == "true", data[2]);
+      this.matchMaking.handleJoin(user, data[0] == "true", data[1] == "true", data[2]);
   }
 
   @SubscribeMessage("leave-game")
@@ -67,6 +68,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WSAuthenticatedGuard)
   async inviteGame(client, data): Promise<void> {
     const user = await this.clientService.getClientById(client.id);
+    console.log("invite-game", user.id, data[1]);
     if (user && data)
       this.matchMaking.handleInvite(user, data[0], data[1] == "true");
   }
