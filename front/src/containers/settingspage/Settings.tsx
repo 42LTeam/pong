@@ -31,12 +31,14 @@ export default function Settings(props: Props) {
     get2fa().then((response) => {
       setQr(response.data);
     });
+    forceRerender();
   };
 
   const deactivate2fa = () => {
     remove2fa().then((response) => {
       setQr(null);
     });
+    forceRerender();
   };
 
 
@@ -83,7 +85,6 @@ export default function Settings(props: Props) {
 
       const response = await updateUserUsername(user.id, newUsername);
 
-      // console.log("Received response:", response);
 
       if (response && response.status === 200) {
         console.log("Successfully updated username.");

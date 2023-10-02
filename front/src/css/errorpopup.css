@@ -3,8 +3,9 @@
     z-index: 999;
     position: absolute;
     bottom: 0;
-    padding: 23px;
-    background-color: darkred;
+    padding: 25px;
+    color: #ecf0f1;
+    background-color: #e74c3c;
     width: 100%;
     border-radius: 20px 20px 0px 0px;
     font-family: Krub, serif;

@@ -13,8 +13,9 @@ const colors = [
   "#ECF0F1", //white
   "#00BAFF", //blue
   "#E74C3C", //red
-  "#2ECC71",
-]; //green
+  "#2ECC71", //green
+  "#000000", //black
+];
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -43,13 +44,13 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!loading) {
-      for (let i = 0; i <= 4; i++) {
+      for (let i = 0; i <= colors.length; i++) {
         if (colors[i] === userUp.colorball) {
           index = i;
           break;
         }
       }
-      if (index === 4) {
+      if (index === colors.length) {
         index = 0;
         updateUserColorball(user.id, colors[0]);
         alert("Not supported color detected: default white set");

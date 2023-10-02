@@ -11,6 +11,15 @@ export class MessageService {
     channelId: number,
     content: string
   ): Promise<Message> {
+
+    if (content.length > 100) {
+      throw new Error("Max 100 caractères au total");
+    }
+    const words = content.split(" ");
+    if (words.some((word) => word.length > 25)) {
+      throw new Error("Max 25 caractères par mot");
+    }
+
     return this.prisma.message.create({
       data: {
         userId,

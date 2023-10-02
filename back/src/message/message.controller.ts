@@ -70,6 +70,12 @@ export class MessageController {
     return this.messageService.getMessageById(Number(id));
   }
 
+  @Get("user/:user")
+  async getMessageByUser(
+    @Param("user") user: number
+  ): Promise<Message[] | null> {
+    return this.messageService.getMessageByUser(Number(user));
+  }
 
   @Get("channel/:channel")
   async getMessageByChannel(
