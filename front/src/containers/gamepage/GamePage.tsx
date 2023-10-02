@@ -123,7 +123,7 @@ export default function GamePage() {
       }
       case gameState.PLAYING: {
         if (ball.color === "#000000") {
-          c2d.fillText("CHEH Jérôme <3", width, height);
+          c2d.fillText("Jérôme t bô <3", width, height);
         }
         break;
       }
