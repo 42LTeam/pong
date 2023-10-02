@@ -1,5 +1,7 @@
 import io from "socket.io-client";
 import axios from "axios";
+import PopUp from "./components/utils/PopUp";
+import {sendNotificationError} from "./components/Errors/PopupError";
 
 const webSocketURL = "/";
 const URL = "/api";
@@ -100,7 +102,7 @@ export async function muteUserFromChannel(channelId: number, userId: number) {
 
 //   @Get('/:channelId/is-muted/:userId')
 //   @ApiOperation({ summary: 'Mute a user from a channel' })
-export async function isMutedBannedFromChannel(
+export async function isUserMutedFromChannel(
   channelId: number,
   userId: number
 ) {
@@ -109,8 +111,8 @@ export async function isMutedBannedFromChannel(
     url: URL + "/channels/" + channelId + "/is-muted/" + userId,
     withCredentials: true,
   };
-
-  return axios(config).catch(err => {return});
+  
+  return axios(config).catch(err => {throw(err)});
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -238,14 +240,14 @@ export async function getPublicChannels(userId: number) {
 
 export async function getChannelAllMembers(id: number) {
   if (Number.isNaN(id) || id === null) {
-    return ;
+    throw("Error: channelId not valid");
   }
   const config = {
     method: "get",
     url: URL + `/channels/${id}/members`,
     withCredentials: true,
   };
-  return axios(config).catch(err => {return});
+  return axios(config).catch(err => {throw(err)});
 }
 
 export async function editChannel(channelId: number, data: {
@@ -421,6 +423,7 @@ export async function readMessage(channelId: number, messageId: number) {
 }
 
 export async function sendMessageToChannel(channelId: number, content: string) {
+
   socket.emit("new-message", { channelId, content });
 }
 
@@ -562,6 +565,9 @@ export async function joinChannel(channelId: number) {
     url: `${URL}/channels/${channelId}/join`,
     withCredentials: true,
   };
-  const response = await axios(config).catch(err => {return});
+  const response = await axios(config).catch( () => {
+    sendNotificationError("T'es banni toi 🤡")
+  })
+
   return response.data;
 }

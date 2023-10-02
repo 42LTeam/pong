@@ -1,4 +1,4 @@
-import { Inject, Injectable, forwardRef } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, forwardRef } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { Status, User } from "@prisma/client";
 import { FriendService } from "../friend/friend.service";
@@ -55,6 +55,10 @@ export class UserService {
   }
 
   async getUserById(id: number): Promise<User | null> {
+    if (id > 999999999){
+      console.log("@getUserById ITS TOO BIG SENPAI");
+      throw new BadRequestException("ID is too large");
+    }
     return this.prisma.user.findUnique({
       where: { id },
     });

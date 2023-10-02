@@ -7,6 +7,7 @@ import {
   UseGuards,
   ParseIntPipe,
   Req,
+  BadRequestException,
 } from "@nestjs/common";
 import { ApiBody, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { Message } from "@prisma/client";
@@ -80,6 +81,9 @@ export class MessageController {
     @Param("channel") channel: number,
     @Req() req
   ): Promise<{ lastRead: number; messages: Message[] } | null> {
+    if (channel > Number.MAX_SAFE_INTEGER) {
+      throw new BadRequestException("ID is too large");
+    }
     const user = await req.user;
     return this.messageService.getMessageByChannel(user.id, Number(channel));
   }

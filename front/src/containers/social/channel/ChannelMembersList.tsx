@@ -5,6 +5,7 @@ import {
   getChannelAllMembers,
   muteUserFromChannel, ownerMakeAdmin,
   removeUserAdminFromChannel,
+  sendMessageToChannel,
 } from "../../../api";
 import SidePanel from "../../../components/utils/SidePanel";
 import Friend from "../../../components/friend/Friend";
@@ -63,6 +64,13 @@ export default function ChannelMembersList({
       .catch((err) => console.log(err));
   };
 
+  const handleMuteUserFromChannel = async (user) => {
+    
+    muteUserFromChannel(channelId, user.id);
+    const muteMessage = "J'ai fermé la bouche de [" + user.username + "] pour 1 minute";
+    await sendMessageToChannel(channelId, muteMessage);
+  }
+
   return (
     <SidePanel
       subheader="Membres"
@@ -85,7 +93,7 @@ export default function ChannelMembersList({
                         {
                           text: "Fermer sa bouche",
                           handleClick: () =>
-                              muteUserFromChannel(channelId, current.user.id),
+                              handleMuteUserFromChannel(current.user)
                         },
                         {
                           text: "Bannir",
