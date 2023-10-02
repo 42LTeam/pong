@@ -22,7 +22,6 @@ export class isOwnerPipe implements PipeTransform {
         AND: [{userId: user.id}]
       },
     });
-    console.log ("isOwnerPipe => userChannel.isOwner === ", userChannel.isOwner)
     if (userChannel.isOwner === false) {
       throw new ForbiddenException("User is ban of this channel.");
     }

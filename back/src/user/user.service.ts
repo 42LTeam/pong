@@ -75,7 +75,6 @@ export class UserService {
         where: { id: userId },
         data: { avatar: process.env.VITE_API_URL + '/' + avatarPath },
       });
-      console.log(updatedUser);
       return updatedUser;
     } catch (error) {
       console.error("Error updating user avatar in Prisma:", error);

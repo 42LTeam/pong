@@ -83,7 +83,7 @@ export default function Settings(props: Props) {
 
       const response = await updateUserUsername(user.id, newUsername);
 
-      console.log("Received response:", response);
+      // console.log("Received response:", response);
 
       if (response && response.status === 200) {
         console.log("Successfully updated username.");
