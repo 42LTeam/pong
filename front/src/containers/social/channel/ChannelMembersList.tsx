@@ -66,9 +66,16 @@ export default function ChannelMembersList({
 
   const handleMuteUserFromChannel = async (user) => {
     
-    muteUserFromChannel(channelId, user.id);
+    await muteUserFromChannel(channelId, user.id);
     const muteMessage = "J'ai fermé la bouche de [" + user.username + "] pour 1 minute";
     await sendMessageToChannel(channelId, muteMessage);
+  }
+
+  const handleNewAdminUserFromChannel = async (user) => {
+
+    await ownerMakeAdmin(channelId, user.id);
+    const makeAdminMessage = "J'ai nommé [" + user.username + "] Ministre. Ouai, c'est moi l'owner, je fais ce que je veux.";
+    await sendMessageToChannel(channelId, makeAdminMessage);
   }
 
   return (
@@ -106,7 +113,7 @@ export default function ChannelMembersList({
                                 ? [
                                   {
                                     text: "Nommer Ministre",
-                                    handleClick: () => ownerMakeAdmin(channelId, current.user.id),
+                                    handleClick: () => handleNewAdminUserFromChannel(current.user),
                                   },
                                   { separator: true }
                                 ]

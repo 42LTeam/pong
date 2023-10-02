@@ -1,7 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import {Body, Injectable, Put, Req} from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { Block } from "@prisma/client";
 import { User } from "@prisma/client";
+import {ApiBody, ApiOperation} from "@nestjs/swagger";
+import {UserSerializer} from "../user/user.serializer";
 
 @Injectable()
 export class BlockService {
@@ -34,16 +36,26 @@ export class BlockService {
 
   async getBlockedUsers(blockerId: number): Promise<User[]> {
     const blocks = await this.prisma.block.findMany({
-      where: {
-        blockerId: blockerId,
-      },
-      include: {
-        receivedBy: true,
-      },
+      where: { blockerId: blockerId },
+      include: { receivedBy: true },
     });
 
-    return blocks.map((block) => block.receivedBy);
+    if (!blocks) throw new Error("No blocked users found");
+
+    return blocks.map((block) => UserSerializer.serialize(block.receivedBy));
   }
+
+  async getBlocksOfUser(id: number): Promise<User[]> {
+    const blocks = await this.prisma.block.findMany({
+      where: { blockerId: id },
+      include: { receivedBy: true },
+    });
+
+    if (!blocks) throw new Error("No blocked users found");
+
+    return blocks.map((block) => UserSerializer.serialize(block.receivedBy));
+  }
+
 
   async removeBlockRequest(
     blockerId: number,
@@ -67,14 +79,8 @@ export class BlockService {
     });
   }
 
-  async getBlocksOfUser(id: number): Promise<User[]> {
-    const blocks = await this.prisma.block.findMany({
-      where: { blockerId: id },
-      include: { receivedBy: true },
-    });
-
-    if (!blocks) throw new Error("No blocked users found");
-
-    return blocks.map((block) => block.receivedBy);
-  }
 }
+
+
+
+
