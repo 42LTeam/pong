@@ -31,12 +31,14 @@ export default function Settings(props: Props) {
     get2fa().then((response) => {
       setQr(response.data);
     });
+    forceRerender();
   };
 
   const deactivate2fa = () => {
     remove2fa().then((response) => {
       setQr(null);
     });
+    forceRerender();
   };
 
 

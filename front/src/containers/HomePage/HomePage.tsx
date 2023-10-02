@@ -95,6 +95,9 @@ export default function HomePage() {
     return <h1>Loading...</h1>;
   }
 
+  console.log("user from Homepage = "+JSON.stringify(user)); /////////////////////////////////////////////////////////////////////////////////////
+
+
   return (
     <div className="frame-homepage">
       <div className="frame-left">
