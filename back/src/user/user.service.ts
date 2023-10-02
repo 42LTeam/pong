@@ -313,6 +313,17 @@ export class UserService {
   
 
   async updateUserColorBall(id: number, color: string): Promise<User> {
+    const colors = [
+      "#ECF0F1", //white
+      "#00BAFF", //blue
+      "#E74C3C", //red
+      "#2ECC71", //green
+      "#000000", //black
+    ];
+    if (!colors.some(c => c === color)){
+      throw new Error("Color not in available set");
+    }
+
     return this.prisma.user.update({
       where: { id },
       data: {

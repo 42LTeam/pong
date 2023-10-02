@@ -166,8 +166,8 @@ export default function GamePage() {
         ballY,
         4 * ballSize
       );
-      gradient.addColorStop(0, `${ball.color}99`);
-      gradient.addColorStop(1, `${ball.color}10`);
+      gradient.addColorStop(0, `${(ball.color)}99`);
+      gradient.addColorStop(1, `${(ball.color === "#000000" ? "#FFFFFF" : ball.color)}10`);
       c2d.fillStyle = gradient;
 
       c2d.beginPath();
