@@ -167,7 +167,7 @@ export class UserController {
     return UserSerializer.serialize(result);
   }
 
-  @Put("username/:id")
+  @Put("username")
   @ApiOperation({ summary: "Update user's username" })
   @ApiBody({ type: UpdateUserNameDto })
   async updateUserName(
@@ -279,7 +279,7 @@ export class UserController {
     return this.userService.getUserMatchesResume(id);
   }
 
-  @Post("avatar-upload/:id")
+  @Post("avatar-upload")
   @UseInterceptors(FileInterceptor("avatar"))
   async uploadAvatar(
       @Req() req,
@@ -296,7 +296,7 @@ export class UserController {
     }
   }
 
-  @Put("colorball/:id")
+  @Put("colorball")
   @ApiOperation({ summary: "Update user's ball's color" })
   @ApiBody({ type: UpdateUserColorballDto })
   async updateUserColorball(
