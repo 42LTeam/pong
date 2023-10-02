@@ -74,7 +74,7 @@ logs:
 	@echo $(BOLD_GREEN) make logs: '🔮'  logs of containers $(RESET_COLOR)
 	$(DOCKER_COMPOSE) logs -f
 
-build: env-prod dist
+build: env dist
 	@echo $(BOLD_GREEN) make build: '🚧'  Build development containers + erase dist folder$(RESET_COLOR)
 	$(DOCKER_COMPOSE) build
 

@@ -269,7 +269,6 @@ export default function GamePage() {
     const keyDownHook = (event) => {
       if (event.key === "w" && !dataGame.moveUp) {
         dataGame.moveUp = true;
-        console.log("BTW KONAMI = "+dataGame.konami);
         socket.emit("update-input", dataGame);
       }
       if (event.key === "s" && !dataGame.moveDown) {

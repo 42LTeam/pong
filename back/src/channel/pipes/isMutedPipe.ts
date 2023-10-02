@@ -25,9 +25,8 @@ export class isMutedPipe implements PipeTransform {
       },
     });
 
-
     if (userChannel.isMuted || userChannel.isMuted < Until) {
-      throw new ForbiddenException("User is muted for a while in this channel.");
+      throw new ForbiddenException("User is muted for a while in this channel. isMutedPipe");
     }
     return channelId;
   }

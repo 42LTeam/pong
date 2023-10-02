@@ -19,6 +19,13 @@ export interface MatchResume {
 
 export default function ProfilePage() {
   const { userID } = useParams();
+
+  if (userID.length > 9) {
+    return (
+      <NotFound page="profile" id={userID} />
+    );
+  }
+
   const [user, setUser] = useState<User | null>(null);
   const [matches, setMatches] = useState<MatchResume[]>([]);
 
@@ -28,7 +35,7 @@ export default function ProfilePage() {
         setUser(response.data);
       })
       .catch(function (error) {
-        console.error("Error fetching user data (@getUserByID):", error);
+        //console.log("Error fetching user data (@getUserByID):", error);
         setUser(null);
       });
   }, [userID]);
