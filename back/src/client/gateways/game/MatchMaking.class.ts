@@ -21,7 +21,6 @@ export default class MatchMaking {
     let index = 0;
     while (index < this.nbOfGames) {
       if (this.games[index].canDelete()) {
-        console.log("Delete", this.games[index].matchId);
         this.games[index].playersLeave();
         this.games.splice(index, 1);
         this.nbOfGames--;
@@ -38,7 +37,6 @@ export default class MatchMaking {
       this.matchService,
       this.userService
     );
-    console.log("New", this.newGameId);
     this.games.push(newGame);
     this.nbOfGames++;
     newGame.handleJoin(user, false);
@@ -46,7 +44,6 @@ export default class MatchMaking {
   }
 
   handleJoin(user, invite, custom, playerId) {
-    console.log("handleJoin", invite, custom);
     if (invite) {
       for (let game of this.games)
         if (game.canJoinInvite(user.id, playerId, custom)) {
@@ -69,8 +66,7 @@ export default class MatchMaking {
     }
   }
 
-  handleInvite(user, player, custom) {
-    console.log("handleInvite", custom);
+  async handleInvite(user, player, custom) {
     for (let game of this.games) {
       if (game.canJoinInvite(user.id, player.id, custom)) {
         game.handleJoin(user, false);
@@ -82,9 +78,10 @@ export default class MatchMaking {
       }
     }
     this.newGame(user, player, custom);
+    const adversary = await this.userService.getUserById(player.id);
     this.server.sockets.sockets
-      .get(this.userService.getUserSession(player.id))
-      ?.emit("invite-game", [user, player, custom]);
+      .get(adversary.session)
+      ?.emit("invite-game", {user, adversary, custom});
   }
 
   updateInput(user, data) {

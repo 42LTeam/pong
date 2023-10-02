@@ -86,9 +86,7 @@ export default function Friend(props: Props) {
                     "&invite=" +
                     true +
                     "&custom=" +
-                    false +
-                    "&username=" +
-                    response.data.username
+                    false
                 )
               ),
           },
@@ -102,9 +100,7 @@ export default function Friend(props: Props) {
                     "&invite=" +
                     true +
                     "&custom=" +
-                    true +
-                    "&username=" +
-                    response.data.username
+                    true
                 )
               ),
           },

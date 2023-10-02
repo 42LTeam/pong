@@ -126,14 +126,13 @@ const Application = function ({ children }: { children?: any }) {
     };
 
     const onInviteGame = (args) => {
-
       if (!window.location.pathname.includes("/game"))
         sendNotification(
-          args[1].id,
-          args[0].username + " invites " + args[1].username,
-          "to play a " + (args[2] ? "custom" : "standard") + " Pong game",
-          args[0].avatar,
-          "/game?invite=true&id=" + args[0].id + "&custom=" + args[2]
+          args.adversary.id,
+          args.user.username + " invites " + args.adversary.username,
+          "to play a " + (args.custom ? "custom" : "standard") + " Pong game",
+          args.user.avatar,
+          "/game?invite=true&id=" + args.user.id + "&custom=" + args.custom
         );
     };
 

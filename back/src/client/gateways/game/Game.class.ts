@@ -70,18 +70,12 @@ export default class Game {
           user.colorball
       );
       this.players.push(player);
-      if (invite)
-        player.status = playerStatus.OFFLINE;
-      else {
-        socket?.join(this.MATCH_ROOM);
-        console.log("Join Room", player.userId);
-      }
+      if (invite) player.status = playerStatus.OFFLINE;
+      else socket?.join(this.MATCH_ROOM);
     } else {
-      if (player.socket == undefined) {
-        socket?.join(this.MATCH_ROOM);
-        console.log("Join Room via Invite", player.userId);
-      }
+      if (player.socket == undefined) socket?.join(this.MATCH_ROOM);
       player.status = playerStatus.ONLINE;
+      player.name = user.username;
       player.socket = socket;
     }
     if (this.players.length == 1) player.send("game-wait", null);
@@ -114,7 +108,6 @@ export default class Game {
 
   playersLeave() {
     this.players.forEach((player) => {
-      console.log("playersLeave auto", player.userId, player.socket != undefined);
       player.socket?.leave(this.MATCH_ROOM);
     });
   }
@@ -123,11 +116,9 @@ export default class Game {
     const index = this.players.findIndex((p) => p.userId == user.id);
     if (index >= 0) {
       if (this.state == gameState.FINISH) {
-        console.log("playersLeave", this.players[index].userId, this.players[index].socket != undefined);
         this.players[index].socket?.leave(this.MATCH_ROOM);
         this.players.splice(index, 1);
-      }
-      else {
+      } else {
         this.players[index].status = playerStatus.OFFLINE;
         if (this.state != gameState.PAUSE) this.state = gameState.PAUSE;
       }
