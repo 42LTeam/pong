@@ -96,7 +96,6 @@ export class BlockController {
   @ApiOperation({ summary: "Get blocked of user" })
   async getBlocksOfUser(
       @Req() req
-
   ): Promise<User[]> {
     const user = await req.user
     return this.blockService.getBlocksOfUser(user.id);
