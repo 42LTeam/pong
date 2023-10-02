@@ -354,10 +354,22 @@ export class ChannelService {
     channelId: number,
     newPassword: string
   ): Promise<Channel> {
-    const hashedPassword = await hashPassword(newPassword);
+    let hashedPassword = null;
+    if (newPassword)
+      hashedPassword = await hashPassword(newPassword);
     return this.prisma.channel.update({
       where: { id: channelId },
       data: { password: hashedPassword },
+    });
+  }
+
+  async setChannelPassworded(
+    channelId: number,
+    passworded: boolean
+  ): Promise<Channel> {
+    return this.prisma.channel.update({
+      where: { id: channelId },
+      data: { passworded: passworded },
     });
   }
 

@@ -252,6 +252,7 @@ export async function editChannel(channelId: number, data: {
   name?: string;
   password?: string;
   privated?: boolean;
+  passworded: boolean;
 }) {
   const config = {
     method: "post",
@@ -266,6 +267,7 @@ export async function createChannel(data: {
   name: string;
   passworded: boolean;
   password?: string;
+  passworded: boolean;
   privated?: boolean;
   conv?: boolean;
 }) {

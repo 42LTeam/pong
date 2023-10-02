@@ -9,7 +9,6 @@ import { createChannel, editChannel, sendChannelInvite } from "../../../api";
 export default function EditChannelPopOver({ channel, checked, clear, privateddefault }: { channel?: any, checked: any[], clear: any, privateddefault?: boolean }) {
     const [hasName, setHasName] = useState(false);
     const [privated, setPrivated] = useState(channel ? channel.privated : privateddefault);
-    const [passworded, setPassworded] = useState(false);
     const nameRef = useRef(null);
     const passwordRef = useRef(null);
 
@@ -17,8 +16,9 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
         ? () => {
             const name = nameRef.current ? nameRef.current.value : null;
             const password = passwordRef.current ? passwordRef.current.value : "";
+            const passworded = password ? true : false;
             if (password || name) {
-                editChannel(channel.id, { privated, name, password })
+                editChannel(channel.id, { privated, name, password, passworded })
                     .then(() => clear(true))
                     .catch((err) => console.error("Erreur lors de la modification du canal", err));
             }
@@ -26,7 +26,7 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
         : async () => {
             const name = nameRef.current ? nameRef.current.value : null;
             const password = passwordRef.current ? passwordRef.current.value : null;
-            setPassworded(password ? true : false);
+            const passworded = password ? true : false;
             if (name) {
                 try {
                     const response = await createChannel({
@@ -34,7 +34,7 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
                         conv: false,
                         password,
                         privated,
-                        passworded, 
+                        passworded,
                     });
                     const channel = response.data;
                     await sendChannelInvite({

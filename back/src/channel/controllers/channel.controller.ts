@@ -89,6 +89,10 @@ export class EdiChannelDto {
   @IsString()
   password?: string;
 
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  passworded: boolean;
 
   @ApiProperty()
   @IsOptional()
@@ -269,6 +273,9 @@ export class ChannelController {
       await this.channelService.setChannelName(channelId, body.name)
     if (body.password)
       await this.channelService.setChannelPassword(channelId, body.password)
+    else
+      await this.channelService.setChannelPassword(channelId, null)
+    await this.channelService.setChannelPassworded(channelId, body.passworded)
     await this.channelService.setChannelPrivated(channelId, body.privated)
     return 'ok';
   }
