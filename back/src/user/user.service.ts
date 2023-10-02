@@ -331,4 +331,14 @@ export class UserService {
 
     return user?.colorball || null;
   }
+
+  async getUserSession(id: number): Promise<string | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        session: true,
+      },
+    });
+    return user?.session || null;
+  }
 }
