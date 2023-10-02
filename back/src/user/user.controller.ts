@@ -149,15 +149,11 @@ export class UserController {
   async getUserById(
     @Param("id", ParseIntPipe, UserIdValidationPipe) id: number
   ): Promise<User | null> {
-<<<<<<< HEAD
-    const user = await this.userService.getUserById(Number(id));
-    return UserSerializer.serialize(user);
-=======
     if (id > 999999999) {
       return (null);
     }
-    return this.userService.getUserById(Number(id));
->>>>>>> 205-back-kick-ban-mute-pipe-is-back
+    const user = await this.userService.getUserById(Number(id));
+    return UserSerializer.serialize(user);
   }
 
   @Put("avatar/:id")
