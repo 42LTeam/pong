@@ -212,7 +212,7 @@ export async function getAllUsers(
 export async function getFriendOfUser(id: number) {
   const config = {
     method: "get",
-    url: URL + "/users/friend/" + id,
+    url: URL + "/users/friend/all",
     withCredentials: true,
   };
   return axios(config).catch(err => {return});

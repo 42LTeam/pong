@@ -190,7 +190,7 @@ export class UserController {
     return ret.map(UserSerializer.serialize);
   }
 
-  @Get("friend/online/:id")
+  @Get("friend/online")
   @ApiOperation({ summary: "Get friend of user" })
   async getOnlineFriends(
       @Req() req,
