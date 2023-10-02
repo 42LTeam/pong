@@ -157,51 +157,53 @@ export class UserController {
     return UserSerializer.serialize(user);
   }
 
-  @Put("avatar/:id")
+  @Put("avatar")
   @ApiOperation({ summary: "Update user's avatar" })
   @ApiBody({ type: UpdateUserAvatarDto })
   async updateUserAvatar(
-    @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserAvatarDto: UpdateUserAvatarDto
+      @Req() req,
+      @Body() updateUserAvatarDto: UpdateUserAvatarDto
   ): Promise<User> {
+    const user = await req.user;
     const result = await this.userService.updateUserAvatar(
-      Number(id),
+      user.id,
       updateUserAvatarDto.avatar
     );
     return UserSerializer.serialize(result);
   }
 
-
-  @Put("username/:id")
+  @Put("username")
   @ApiOperation({ summary: "Update user's username" })
   @ApiBody({ type: UpdateUserNameDto })
   async updateUserName(
-    @Param("id", ParseIntPipe) id: number,
-    @Body("username", UsernameValidationPipe) username: string,
+      @Req() req,
+      @Body("username", UsernameValidationPipe) username: string,
     @Body() updateUserNameDto: UpdateUserNameDto
   ): Promise<User> {
-    const result = await this.userService.updateUserName(Number(id), username);
+    const user = await req.user;
+    const result =  this.userService.updateUserName(user.id, username);
     return UserSerializer.serialize(result)
   }
 
-  @Get("friend/:id")
+  @Get("friend/all")
   @ApiOperation({ summary: "Get friend of user" })
-  async getFriendsOfUser(
-    @Param("id", ParseIntPipe) id: number
+  async getFriends(
+      @Req() req,
   ): Promise<User[]> {
-    const users = await this.userService.getFriendsOfUser(Number(id));
-    return users.map(UserSerializer.serialize);
+    const user = await req.user;
+    const ret = await this.userService.getFriendsOfUser(user.id);
+    return ret.map(UserSerializer.serialize);
   }
 
-  @Get("friend/online/:id")
+  @Get("friend/online")
   @ApiOperation({ summary: "Get friend of user" })
-  async getOnlineFriendsOfUser(
-    @Param("id", ParseIntPipe) id: number
+  async getOnlineFriends(
+      @Req() req,
   ): Promise<User[]> {
-    const users = await this.userService.getFriendsOfUser(Number(id), { online: true });
+    const user = await req.user;
+    const users = await this.userService.getFriendsOfUser(user.id, { online: true });
     return users.map(UserSerializer.serialize);  // Changed here
   }
-
 
   @Get("search/:query")
   @ApiOperation({ summary: "Search user by username" })
@@ -227,13 +229,17 @@ export class UserController {
     return userResult.map(UserSerializer.serialize)
   }
 
-  @Get("friend-request/pending/:userId")
+  @Get("friend-request/pending")
   @ApiOperation({ summary: "Get pending request" })
-  async getPendingFriends(@Param("userId") userId: number): Promise<any[]> {
-    return this.userService.getPendingFriendRequests(Number(userId));
+  async getPendingFriends(
+      @Req() req,
+      @Param("userId") userId: number): Promise<any[]> {
+    const user = await req.user;
+    return this.userService.getPendingFriendRequests(user.id);
   }
 
   @Delete(":id")
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: "Delete user" })
   async deleteUser(@Param("id", ParseIntPipe) id: number): Promise<User> {
     const deletedUser = await this.userService.deleteUser(Number(id));
@@ -251,11 +257,12 @@ export class UserController {
   @ApiBody({ type: UpdateUserStatusDto })
   @ApiOperation({ summary: "Update user status" })
   async updateUserStatus(
-    @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserStatusDto: UpdateUserStatusDto
+      @Req() req,
+      @Body() updateUserStatusDto: UpdateUserStatusDto
   ): Promise<Status> {
+    const user = await req.user;
     const updatedStatus = await this.userService.updateUserStatusById(
-      id,
+      user.id,
       updateUserStatusDto.status
     );
     return UserSerializer.serializeStatus(updatedStatus);
@@ -277,31 +284,33 @@ export class UserController {
     return this.userService.getUserMatchesResume(id);
   }
 
-  @Post("avatar-upload/:id")
+  @Post("avatar-upload")
   @UseInterceptors(FileInterceptor("avatar"))
   async uploadAvatar(
-    @Param("id", ParseIntPipe) id: number,
-    @UploadedFile() file
+      @Req() req,
+      @UploadedFile() file
   ): Promise<any> {
     try {
+      const user = await req.user;
       const fileName = file.path.split("/").pop();
       const formattedPath = `api/uploads/${fileName}`;
-      await this.userService.updateUserAvatar(id, formattedPath);
+      await this.userService.updateUserAvatar(user.id, formattedPath);
       return { path: formattedPath };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  @Put("colorball/:id")
+  @Put("colorball")
   @ApiOperation({ summary: "Update user's ball's color" })
   @ApiBody({ type: UpdateUserColorballDto })
   async updateUserColorball(
-    @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserColorballDto: UpdateUserColorballDto
+      @Req() req,
+      @Body() updateUserColorballDto: UpdateUserColorballDto
   ): Promise<User> {
+    const user = await req.user;
     const updatedUser = await this.userService.updateUserColorBall(
-      Number(id),
+      user.id,
       updateUserColorballDto.colorball
     );
     return UserSerializer.serializeColorball(updatedUser);
