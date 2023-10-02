@@ -62,6 +62,7 @@ model Channel {
   id         Int           @id @default(autoincrement())
   conv       Boolean       @default(false)
   name       String?
+  passworded Boolean
   password   String?
   privated   Boolean?      @default(false)
   creatorId  Int?

@@ -6,3 +6,4 @@ front/dist/
 /back/node_modules
 /front/node_modules
 back/prisma/migrations/
+Makefile

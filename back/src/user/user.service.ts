@@ -6,6 +6,7 @@ import { SearchDTO } from "./user.controller";
 import { MatchService } from "../match/match.service";
 import { authenticator } from "otplib";
 import * as qrcode from "qrcode";
+import { UserSerializer } from "./user.serializer";
 
 @Injectable()
 export class UserService {
@@ -152,12 +153,14 @@ export class UserService {
         },
       })
     ).map((current) => {
-      return {
+      const userWithFriendshipId = {
         ...current,
         friendShipId: user.userFriendships.filter(
           (c) => c.senderId == current.id
         )[0].id,
       };
+
+      return UserSerializer.serializeFriendship(userWithFriendshipId);
     });
   }
 

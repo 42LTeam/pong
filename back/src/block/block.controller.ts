@@ -22,6 +22,7 @@ import { AuthenticatedGuard } from "../auth/guards/authenticated.guard";
 import { FriendService } from "../friend/friend.service";
 import { IsNotEmpty, IsNumber } from "@nestjs/class-validator";
 import { Block, User } from "@prisma/client";
+import { UserSerializer } from "../user/user.serializer";
 
 class CreateBlockDto {
   @ApiProperty()
@@ -68,7 +69,8 @@ export class BlockController {
   async getBlockedUsers(
     @Param("blockerId", ParseIntPipe) blockerId: number
   ): Promise<User[]> {
-    return this.blockService.getBlockedUsers(blockerId);
+    const users = await this.blockService.getBlockedUsers(blockerId);
+    return users.map(UserSerializer.serialize)
   }
 
   @Delete("/remove")
@@ -95,6 +97,7 @@ export class BlockController {
   async getBlocksOfUser(
     @Param("id", ParseIntPipe) id: number
   ): Promise<User[]> {
-    return this.blockService.getBlocksOfUser(Number(id));
+    const users = await this.blockService.getBlocksOfUser(Number(id));
+    return users.map(UserSerializer.serialize)
   }
 }

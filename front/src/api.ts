@@ -177,7 +177,7 @@ export async function updateUserAvatar(id, avatarUrl) {
       avatar: avatarUrl,
     },
   };
-  return axios(config).catch(err => {return});
+  return axios(config);
 }
 
 export async function updateUserUsername(id, username) {
@@ -189,7 +189,7 @@ export async function updateUserUsername(id, username) {
       username: username,
     },
   };
-  return axios(config).catch(err => {return});
+  return axios(config);
 }
 
 export async function getAllUsers(
@@ -266,6 +266,7 @@ export async function editChannel(channelId: number, data: {
 
 export async function createChannel(data: {
   name: string;
+  passworded: boolean;
   password?: string;
   privated?: boolean;
   conv?: boolean;

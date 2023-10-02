@@ -3,36 +3,51 @@ import Lock from "../../../components/svg/Lock";
 import ToggleSwitch from "../../../components/utils/ToggleSwitch";
 import Button from "../../../components/utils/Button";
 import PopOver from "../../../components/utils/PopOver";
-import React, {useRef, useState} from "react";
-import {createChannel, editChannel, sendChannelInvite} from "../../../api";
+import React, { useRef, useState } from "react";
+import { createChannel, editChannel, sendChannelInvite } from "../../../api";
 
-export default function EditChannelPopOver({channel, checked, clear, privateddefault}:{channel?: any,checked: any[], clear: any, privateddefault?: boolean}){
+export default function EditChannelPopOver({ channel, checked, clear, privateddefault }: { channel?: any, checked: any[], clear: any, privateddefault?: boolean }) {
     const [hasName, setHasName] = useState(false);
     const [privated, setPrivated] = useState(channel ? channel.privated : privateddefault);
+    const [passworded, setPassworded] = useState(false);
     const nameRef = useRef(null);
     const passwordRef = useRef(null);
 
-    const handleValidation = channel ?
-        () => {
-            const name = hasName ? nameRef.current.value : null;
-            const password = passwordRef.current.value;
-            editChannel(channel.id,{privated, name, password}).then(() => clear(true))
+    const handleValidation = channel
+        ? () => {
+            const name = nameRef.current ? nameRef.current.value : null;
+            const password = passwordRef.current ? passwordRef.current.value : "";
+            if (password || name) {
+                editChannel(channel.id, { privated, name, password })
+                    .then(() => clear(true))
+                    .catch((err) => console.error("Erreur lors de la modification du canal", err));
+            }
         }
         : async () => {
-        const response = await createChannel({
-            name: nameRef.current.value,
-            conv: false,
-            password: passwordRef.current.value || null,
-            privated,
-        });
-        const channel = response.data;
-        sendChannelInvite({
-            channelId: channel.id,
-            usernames: checked,
-        }).then(() => {
-            clear(true);
-        });
-    };
+            const name = nameRef.current ? nameRef.current.value : null;
+            const password = passwordRef.current ? passwordRef.current.value : null;
+            setPassworded(password ? true : false);
+            if (name) {
+                try {
+                    const response = await createChannel({
+                        name,
+                        conv: false,
+                        password,
+                        privated,
+                        passworded, 
+                    });
+                    const channel = response.data;
+                    await sendChannelInvite({
+                        channelId: channel.id,
+                        usernames: checked,
+                    });
+                    clear(true);
+                } catch (err) {
+                    console.error("Erreur lors de la création du canal ou de l'envoi des invitations", err);
+                }
+            }
+        };
+
 
     return (
         <PopOver divStyle={{ width: "15vw", padding: 0 }} clear={clear}>
@@ -53,13 +68,16 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
                     {...(!hasName ? { value: channel?.name } : {})}
                     bgColor="#2C3E50"
                 ></TextInput>
-                <h2>Mot de passe</h2>
-                <TextInput
-                    ref={passwordRef}
-                    password
-                    text="Entrez un mot de passe"
-                    bgColor="#2C3E50"
-                ></TextInput>
+                {!privated && (
+                    <>
+                        <h2>Mot de passe</h2>
+                        <TextInput
+                            ref={passwordRef}
+                            password
+                            text="Entrez un mot de passe"
+                            bgColor="#2C3E50"
+                        ></TextInput>
+                    </>)}
                 <div className="row">
                     <div className={"row"} style={{ gap: "5px" }}>
                         <Lock></Lock>
@@ -80,7 +98,7 @@ export default function EditChannelPopOver({channel, checked, clear, privateddef
                 ></Button>
                 <Button
                     handleClick={handleValidation}
-                    text={channel ? "Modier le salon" : "Créer un salon"}
+                    text={channel ? "Modifier le salon" : "Créer un salon"}
                     clickable={true}
                 ></Button>
             </div>
