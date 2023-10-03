@@ -74,6 +74,10 @@ export class FriendService {
         id: friendshipId,
       },
     });
+    if (!friendship) {
+      throw new ForbiddenException("friendship with this id does not exist");
+    }
+
     if (friendship.targetId != acceptorId)
       throw new ForbiddenException("Both acceptorId and targetId should be the same");
     await this.prisma.userFriendship.update({
@@ -96,7 +100,16 @@ export class FriendService {
     return userFriendship;
   }
 
-  declineFriendRequest(acceptorId, friendshipId: number) {
+  async declineFriendRequest(acceptorId, friendshipId: number) {
+    const exists = await this.prisma.userFriendship.findUnique({
+      where:{
+        id: friendshipId,
+      }
+    });
+    if (!exists){
+      throw new ForbiddenException("Friendship with this id does not exist");
+    }
+    
     return this.prisma.userFriendship.delete({
       where: {
         id: friendshipId,
