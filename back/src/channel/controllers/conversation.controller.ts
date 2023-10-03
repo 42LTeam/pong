@@ -5,6 +5,7 @@ import {
   Param,
   UseGuards,
   BadRequestException,
+  ParseIntPipe,
 } from "@nestjs/common";
 import { ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { Channel } from "@prisma/client";
@@ -25,18 +26,18 @@ export class ConversationController {
   constructor(private channelService: ChannelService) {}
 
   //TODO check if blocked
-  @Get(":friendId")
-  @ApiOperation({ summary: "Create or return conversation between friend" })
+  @Get(":userId")
+  @ApiOperation({ summary: "Create or return conversation between people" })
   async getConversation(
-    @Param("friendId") friendId: number,
+    @Param("userId", ParseIntPipe) userId: number,
     @Req() req
   ): Promise<Channel> {
     const user = await req.user;
-    if (Number(friendId) == user.id) {
+    if (Number(userId) == user.id) {
       throw new BadRequestException(
         "Invalid operation: Cannot create a conversation with oneself."
       );
     }
-    return this.channelService.getConversation(user.id, Number(friendId));
+    return this.channelService.getConversation(user.id, Number(userId));
   }
 }

@@ -248,6 +248,15 @@ export class ChannelService {
   }
 
   async getConversation(userId: number, friendId: number): Promise<any> {
+    const exists = await this.prisma.user.findUnique({
+      where:{
+        id: friendId,
+      }
+    });
+    if (!exists){
+      throw new ForbiddenException("Target user does not exist");
+    }
+
     const conversation = await this.prisma.channel.findMany({
       where: {
         conv: true,
