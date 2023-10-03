@@ -13,7 +13,7 @@ import Notification from "../components/utils/Notification";
 import GamePage from "./gamepage/GamePage";
 import { socket } from "../api";
 import NotFound from "./NotFound";
-import {PopupError} from "../components/Errors/PopupError";
+import {PopupError, sendNotificationError} from "../components/Errors/PopupError";
 
 type ApplicationEngine = {
   sendNotification: (
@@ -140,11 +140,19 @@ const Application = function ({ children }: { children?: any }) {
     socket.on("new-message", onNewMessage);
     socket.on("new-channel", onNewChannel);
     socket.on("invite-game", onInviteGame);
+    socket.on("notInChannelMessage", (data) => {
+      sendNotificationError("T'es plus dans le channel force pas frérot");;
+    });
+    socket.on("banMessage", (data) => {
+      sendNotificationError("Bah alors bibou on est ban ?");;
+    });
 
     return () => {
       socket.off("new-channel", onNewChannel);
       socket.off("new-message", onNewMessage);
       socket.off("invite-game", onInviteGame);
+      socket.off("notInChannelMessage", sendNotificationError);
+      socket.off("banMessage", sendNotificationError);
     };
   }, [notifications]);
 

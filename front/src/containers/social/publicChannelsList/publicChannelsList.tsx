@@ -55,7 +55,7 @@ export default function PublicChannelsList() {
           await joinChannelDirectly(selectedChannel);
           navigate(`/social/${selectedChannel.id}`);
         } else {
-          alert("Incorrect password!");
+          alert("Mauvais mot de passe :(");
         }
       } catch (error) {
         console.error("Error validating password:", error);

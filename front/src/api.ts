@@ -425,8 +425,7 @@ export async function readMessage(channelId: number, messageId: number) {
 }
 
 export async function sendMessageToChannel(channelId: number, content: string) {
-
-  socket.emit("new-message", { channelId, content });
+    socket.emit("new-message", { channelId, content });
 }
 
 export async function getPath(path: string) {
@@ -568,7 +567,7 @@ export async function joinChannel(channelId: number) {
     withCredentials: true,
   };
   const response = await axios(config).catch( () => {
-    sendNotificationError("T'es banni toi 🤡")
+    sendNotificationError("T'es banni toi 🤡");
   })
 
   return response.data;

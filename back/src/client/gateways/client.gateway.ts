@@ -71,9 +71,19 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const user = await this.clientService.getClientById(client.id);
 
     const usersInChannel = await this.channelService.getAllUserChannelsInChannel(data.channelId);
-    if (!usersInChannel.some(u => !u.isBanned && u.userId === user.id)) {
-      throw new ForbiddenException("User isn't in this channel.");
+    
+    if (!usersInChannel.some(u => u.userId === user.id)){
+      const msg = "T'es plus dans le channel force pas frérot"
+      client.emit("notInChannelMessage", {error: msg});
+      throw new ForbiddenException("User is not in this channel.");
     }
+    if (usersInChannel.some(u => u.isBanned && u.userId === user.id)) {
+      const msg = "Bah alors bibou on est ban ?"
+      client.emit("banMessage", {error: msg});
+      throw new ForbiddenException("User is ban from this channel.");
+    }
+    
+    
 
     const isMuted = await this.channelService.isUserMutedFromChannel(data.channelId, user.id)
     if (isMuted) {
@@ -89,6 +99,8 @@ export class ClientGateway implements OnGatewayConnection, OnGatewayDisconnect {
     for (const u of usersInChannel.filter((u) => !u.isBanned)) {
       this.server.sockets.sockets.get(u.user.session)?.emit("new-message", message);
     }
+
+    
   }
 }
 
