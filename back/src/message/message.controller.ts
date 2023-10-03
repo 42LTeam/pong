@@ -79,7 +79,7 @@ export class MessageController {
 
   @Get("channel/:channel")
   async getMessageByChannel(
-    @Param("channel") channel: number,
+    @Param("channel", ParseIntPipe) channel: number,
     @Req() req
   ): Promise<{ lastRead: number; messages: Message[] } | null> {
     if (channel > Number.MAX_SAFE_INTEGER) {
@@ -90,7 +90,10 @@ export class MessageController {
   }
 
   @Post("read")
-  async readMessage(@Body() body: ReadMessageDto, @Req() req) {
+  async readMessage(
+    @Body() body: ReadMessageDto,
+    @Req() req
+  ) {
     const user = await req.user;
     return this.messageService.readMessage(user.id, body);
   }

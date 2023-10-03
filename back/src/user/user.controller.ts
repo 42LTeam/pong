@@ -146,7 +146,7 @@ export class UserController {
 
   @Get("/me")
   @ApiOperation({ summary: "Get my info" })
-  async getUserById(
+  async getMyInfos(
     @Req() req,
   ): Promise<User | null> {
     const user = await req.user;
@@ -155,6 +155,15 @@ export class UserController {
     }
     const userResult = await this.userService.getUserById(user.id);
     return UserSerializer.serialize(userResult);
+  }
+
+  @Get("/:id")
+  @ApiOperation({ summary: "Get user by id" })
+  async getUserById(
+    @Param("id", ParseIntPipe, UserIdValidationPipe) id: number
+  ): Promise<User | null> {
+    const user = await this.userService.getUserById(Number(id));
+    return UserSerializer.serialize(user);
   }
 
   @Put("avatar")
@@ -268,22 +277,20 @@ export class UserController {
   //   return UserSerializer.serializeStatus(updatedStatus);
   // }
 
-  @Get("/matches")
+  @Get(":id/matches")
   @ApiOperation({ summary: "Get all matches of user by Id" })
   async getUserMatches(
-    @Req() req,
+    @Param("id", ParseIntPipe) id: number
   ): Promise<UserMatch[]> {
-    const user = await req.user;
-    return this.matchService.getUserMatches(user.id);
+    return this.matchService.getUserMatches(id);
   }
 
-  @Get("/matches-resume")
+  @Get(":id/matches-resume")
   @ApiOperation({ summary: "Get all matches resume of user by ID" })
   async getUserMatchesResume(
-    @Req() req,
+    @Param("id", ParseIntPipe) id: number
   ): Promise<any[]> {
-    const user = await req.user;
-    return this.userService.getUserMatchesResume(user.id);
+    return this.userService.getUserMatchesResume(id);
   }
 
   @Post("avatar-upload")

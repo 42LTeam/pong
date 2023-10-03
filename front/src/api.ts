@@ -445,6 +445,15 @@ export async function getUserByID(ID) {
   return axios(config).catch(err => {return});
 }
 
+export async function getUserById(ID) {
+  const config = {
+    method: "get",
+    url: URL + "/users/"+ID,
+    withCredentials: true,
+  };
+  return axios(config).catch(err => {return});
+}
+
 export async function getUsers() {
   const config = {
     method: "get",
@@ -475,7 +484,7 @@ export async function getRatioAgainst(id1: number, id2: number) {
 export async function getUserMatches(ID) {
   const config = {
     method: "get",
-    url: URL + "/users/matches",
+    url: URL + "/users/" + ID + "/matches",
     withCredentials: true,
   };
   return axios(config).catch(err => {return});
@@ -501,7 +510,7 @@ export async function uploadUserAvatar(file) {
 export async function getUserMatchesResume(ID) {
   const config = {
     method: "get",
-    url: URL + "/users/matches-resume",
+    url: URL + "/users/" + ID + "/matches-resume",
     withCredentials: true,
   };
   return axios(config).catch(err => {return});
