@@ -119,7 +119,7 @@ const Application = function ({ children }: { children?: any }) {
       if (!window.location.pathname.includes("/social"))
         sendNotification(
           args.channelId + "channel",
-          args.creator.username + " vous a ajouter a un channel",
+          args.creator.username + " vous a ajouté à un channel",
           args.users.map((u) => u.username).join(", "),
           args.creator.avatar,
           "/social/" + args.channelId

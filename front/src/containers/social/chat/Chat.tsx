@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Message from "../../../components/chat/Message";
-import { AuthContext } from "../../Auth";
+import { AuthContext, useRerender } from "../../Auth";
 import "../../../css/chatBody.css";
 import Send from "../../../components/svg/Send";
 import {
-  getChannelMessages, getUserByID, isUserMutedFromChannel,
+  getChannelMessages, isUserMutedFromChannel,
   readMessage,
   sendMessageToChannel,
 } from "../../../api";
@@ -25,6 +25,7 @@ export default function Chat(props: ChatProps) {
   const ref = useRef(null);
   const [isMuted, setMuted] = useState(0);
   const [checkMute, setCheckMute] = useState(false);
+  const forceRerender = useRerender();
 
   const toAdd =
     application.social.newMessages.filter(
@@ -69,6 +70,7 @@ export default function Chat(props: ChatProps) {
       if (last.userId == user.id) {
         setLastRead(last.id);
       }
+      forceRerender();
     }
     if (toAdd.some((item) => item.content.includes(user.username))) {
       setCheckMute(!checkMute);
