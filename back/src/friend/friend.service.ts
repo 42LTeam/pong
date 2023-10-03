@@ -1,4 +1,4 @@
-import { Inject, Injectable, forwardRef } from "@nestjs/common";
+import { ForbiddenException, Inject, Injectable, forwardRef } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { UserService } from "../user/user.service";
 import { UserFriendship } from "@prisma/client";
@@ -16,7 +16,16 @@ export class FriendService {
     acceptorId: number
   ): Promise<UserFriendship> {
     if (initiatorId == acceptorId)
-      throw new Error("Both initiatorId and acceptorId shouldn't be the same");
+      throw new ForbiddenException("Both initiatorId and acceptorId shouldn't be the same");
+
+    const exists = await this.prisma.user.findUnique({
+      where:{
+        id: acceptorId,
+      }
+    });
+    if (!exists){
+      throw new ForbiddenException("Target of request does not exist");
+    }
 
     const oldFriendship = await this.prisma.userFriendship.findMany({
       where: {
@@ -66,7 +75,7 @@ export class FriendService {
       },
     });
     if (friendship.targetId != acceptorId)
-      throw new Error("Both acceptorId and targetId should be the same");
+      throw new ForbiddenException("Both acceptorId and targetId should be the same");
     await this.prisma.userFriendship.update({
       where: {
         id: friendshipId,

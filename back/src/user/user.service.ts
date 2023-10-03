@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, forwardRef } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException, forwardRef } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { Status, User } from "@prisma/client";
 import { FriendService } from "../friend/friend.service";
@@ -82,14 +82,14 @@ export class UserService {
       return updatedUser;
     } catch (error) {
       console.error("Error updating user avatar in Prisma:", error);
-      throw new Error("Failed to update avatar in database");
+      throw new BadRequestException("Failed to update avatar in database");
     }
   }
 
   async updateUserName(userId: number, newUsername: string): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     const currentUserId = user.username.split('#').pop();
@@ -105,7 +105,7 @@ export class UserService {
       return updatedUser;
     } catch (error) {
       console.error("Error updating username in Prisma:", error);
-      throw new Error("Failed to update username in database");
+      throw new BadRequestException("Failed to update username in database");
     }
   }
 
@@ -220,7 +220,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new Error(`No user found for id: ${id}`);
+      throw new NotFoundException(`No user found for id: ${id}`);
     }
 
     return user.status;
@@ -269,7 +269,7 @@ export class UserService {
   async updateUserXP(id: number, AddedXp: number): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) {
-      throw new Error(`User with id = ${id} does not exist`);
+      throw new NotFoundException(`User with id = ${id} does not exist`);
     }
 
     const updatedXP = user.xp + AddedXp;
@@ -324,7 +324,7 @@ export class UserService {
       "#000000", //black
     ];
     if (!colors.some(c => c === color)){
-      throw new Error("Color not in available set");
+      throw new ForbiddenException("Color not in available set");
     }
 
     return this.prisma.user.update({

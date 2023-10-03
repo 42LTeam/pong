@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { Message } from "@prisma/client";
 
@@ -13,11 +13,11 @@ export class MessageService {
   ): Promise<Message> {
 
     if (content.length > 100) {
-      throw new Error("Max 100 caractères au total");
+      throw new ForbiddenException("Max 100 caractères au total");
     }
     const words = content.split(" ");
     if (words.some((word) => word.length > 25)) {
-      throw new Error("Max 25 caractères par mot");
+      throw new ForbiddenException("Max 25 caractères par mot");
     }
 
     return this.prisma.message.create({
@@ -119,7 +119,7 @@ export class MessageService {
     });
 
     if (!message) {
-      throw new Error("Message not found");
+      throw new NotFoundException("Message not found");
     }
 
     return message.readBy.some((user) => user.id === userId);

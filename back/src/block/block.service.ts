@@ -1,4 +1,4 @@
-import {Body, Injectable, Put, Req} from "@nestjs/common";
+import {Body, ForbiddenException, Injectable, NotFoundException, Put, Req} from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { Block } from "@prisma/client";
 import { User } from "@prisma/client";
@@ -15,7 +15,7 @@ export class BlockService {
   ): Promise<Block> {
 
     if (blockerId == blockedId) {
-      throw new Error("Both blockerId and blockedId shouldn't be the same");
+      throw new ForbiddenException("Both blockerId and blockedId shouldn't be the same");
     }
     const existingBlock = await this.prisma.block.findFirst({
       where: {
@@ -24,7 +24,7 @@ export class BlockService {
       },
     });
     if (existingBlock) {
-      throw new Error("User is already blocked");
+      throw new ForbiddenException("User is already blocked");
     }
     return this.prisma.block.create({
       data: {
@@ -40,7 +40,7 @@ export class BlockService {
       include: { receivedBy: true },
     });
 
-    if (!blocks) throw new Error("No blocked users found");
+    if (!blocks) throw new NotFoundException("No blocked users found");
 
     return blocks.map((block) => UserSerializer.serialize(block.receivedBy));
   }
@@ -51,7 +51,7 @@ export class BlockService {
       include: { receivedBy: true },
     });
 
-    if (!blocks) throw new Error("No blocked users found");
+    if (!blocks) throw new NotFoundException("No blocked users found");
 
     return blocks.map((block) => UserSerializer.serialize(block.receivedBy));
   }
@@ -69,7 +69,7 @@ export class BlockService {
     });
 
     if (!existingBlock) {
-      throw new Error("No block found to remove");
+      throw new NotFoundException("No block found to remove");
     }
 
     return this.prisma.block.delete({

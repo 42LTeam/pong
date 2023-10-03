@@ -1,4 +1,4 @@
-import { ForbiddenException, forwardRef, Inject, Injectable } from "@nestjs/common";
+import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import {
   CreateChannelDto,
@@ -337,7 +337,7 @@ export class ChannelService {
     });
 
     if (!channel) {
-      throw new Error('Channel not found');
+      throw new NotFoundException('Channel not found');
     }
 
     if (!channel.banList.includes(userId)) {
@@ -457,7 +457,7 @@ export class ChannelService {
     });
 
     if (!channel || !channel.password) {
-      throw new Error("Channel not found or doesn't have a password.");
+      throw new NotFoundException("Channel not found or doesn't have a password.");
     }
     return checkPassword(inputPassword, channel.password);
   }
@@ -472,7 +472,7 @@ export class ChannelService {
       },
     });
     if (Array.isArray(existingUserChannel) && existingUserChannel.length > 0) {
-      throw new Error("User is already part of the channel");
+      throw new ForbiddenException("User is already part of the channel");
     }
     return this.prisma.userChannel.create({
       data: {

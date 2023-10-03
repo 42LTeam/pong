@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { User, Match, UserMatch } from "@prisma/client";
 
@@ -12,7 +12,7 @@ export class MatchService {
     isWins: boolean[]
   ): Promise<Match> {
     if (!userIds || !scores || userIds.length !== scores.length) {
-      throw new Error("Invalid input");
+      throw new BadRequestException("Invalid input");
     }
 
     return this.prisma.$transaction(async (prisma) => {
