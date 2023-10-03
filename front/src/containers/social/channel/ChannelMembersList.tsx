@@ -84,6 +84,7 @@ export default function ChannelMembersList({
       body={
         <>
           {ChannelAllMembers.map((current) => {
+            console.log("@ChannelMemeberList => user = "+JSON.stringify(current));  //Pour Eduardo :*
             return (
               <Friend
                 key={current.user.id}

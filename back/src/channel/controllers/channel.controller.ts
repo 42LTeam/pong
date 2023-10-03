@@ -150,7 +150,7 @@ export class ChannelController {
     if (channelId > Number.MAX_SAFE_INTEGER) {
       throw new BadRequestException("ID is too large");
     }
-    return await this.channelService.getAllUserChannelsInChannel(Number(channelId));
+    return await this.channelService.getAllUserchannels(Number(channelId));
   }
 
   @Post("/:channelId/quit/:userId")

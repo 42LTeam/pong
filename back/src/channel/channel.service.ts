@@ -153,6 +153,40 @@ export class ChannelService {
     })
   }
 
+  async getAllUserchannels(channelId: number): Promise<any> {
+    if (channelId > 999999999){
+      throw("Wallah on a pas autant de channels");
+    }
+    return this.prisma.userChannel.findMany({
+      where: {
+        channelId: channelId,
+      },
+      select: {
+        id: true,
+        userId: true,
+        isAdmin: true,
+        isBlocked: true,
+        isMuted: true,
+        isBanned: true,
+        isOwner: true,
+        channel: {
+          select: {
+            creatorId: true
+          }
+        },
+        user: {
+          select: {
+            session: false,
+            avatar: true,
+            username: true,
+            status: true,
+            id: true,
+          },
+        },
+      },
+    })
+  }
+
   //rename getChannelOfuser in getChannelOfUser
   async getChannelOfUser(id: number): Promise<Channel[]> {
     const userChannel = await this.prisma.userChannel.findMany({
