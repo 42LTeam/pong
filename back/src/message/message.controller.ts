@@ -46,36 +46,36 @@ class ReadMessageDto {
 export class MessageController {
   constructor(private messageService: MessageService) {}
 
-  @Post()
-  @ApiBody({ type: CreateMessageDto })
-  async createMessage(
-    @Body() createMessageDto: CreateMessageDto,
-    @Req() req
-  ): Promise<Message> {
-    const user = await req.user;
-    return this.messageService.createMessage(
-      user.id,
-      createMessageDto.channelId,
-      createMessageDto.content
-    );
-  }
+  // @Post()
+  // @ApiBody({ type: CreateMessageDto })
+  // async createMessage(
+  //   @Body() createMessageDto: CreateMessageDto,
+  //   @Req() req
+  // ): Promise<Message> {
+  //   const user = await req.user;
+  //   return this.messageService.createMessage(
+  //     user.id,
+  //     createMessageDto.channelId,
+  //     createMessageDto.content
+  //   );
+  // }
 
-  @Get()
-  async getAllMessage(): Promise<Message[]> {
-    return this.messageService.getAllMessages();
-  }
+  // @Get()
+  // async getAllMessage(): Promise<Message[]> {
+  //   return this.messageService.getAllMessages();
+  // }
 
-  @Get("id/:id")
-  async getMessageById(@Param("id") id: number): Promise<Message | null> {
-    return this.messageService.getMessageById(Number(id));
-  }
+  // @Get("id/:id")
+  // async getMessageById(@Param("id") id: number): Promise<Message | null> {
+  //   return this.messageService.getMessageById(Number(id));
+  // }
 
-  @Get("user/:user")
-  async getMessageByUser(
-    @Param("user") user: number
-  ): Promise<Message[] | null> {
-    return this.messageService.getMessageByUser(Number(user));
-  }
+  // @Get("user/:user")
+  // async getMessageByUser(
+  //   @Param("user") user: number
+  // ): Promise<Message[] | null> {
+  //   return this.messageService.getMessageByUser(Number(user));
+  // }
 
   @Get("channel/:channel")
   async getMessageByChannel(
@@ -95,17 +95,17 @@ export class MessageController {
     return this.messageService.readMessage(user.id, body);
   }
 
-  @Get(":messageId/readBy/:userId")
-  async isMessageReadByUser(
-    @Param("messageId", ParseIntPipe) messageId: number,
-    @Param("userId", ParseIntPipe) userId: number
-  ): Promise<{ read: boolean }> {
-    const isRead = await this.messageService.isMessageReadByUser(
-      messageId,
-      userId
-    );
-    return { read: isRead };
-  }
+  // @Get(":messageId/readBy/:userId")
+  // async isMessageReadByUser(
+  //   @Param("messageId", ParseIntPipe) messageId: number,
+  //   @Param("userId", ParseIntPipe) userId: number
+  // ): Promise<{ read: boolean }> {
+  //   const isRead = await this.messageService.isMessageReadByUser(
+  //     messageId,
+  //     userId
+  //   );
+  //   return { read: isRead };
+  // }
 
 
   @Get("channel/:id/last")

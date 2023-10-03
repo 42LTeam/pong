@@ -39,25 +39,25 @@ class CreateMatchDto {
 export class MatchController {
   constructor(private matchService: MatchService) {}
 
-  @Post("create")
-  @ApiOperation({ summary: "Create a match" })
-  @ApiBody({ type: CreateMatchDto })
-  async createMatch(@Body() createMatchDto: CreateMatchDto): Promise<Match> {
-    return this.matchService.createMatch(
-      createMatchDto.usersIds,
-      createMatchDto.scores,
-      createMatchDto.isWins
-    );
-  }
+  // @Post("create")
+  // @ApiOperation({ summary: "Create a match" })
+  // @ApiBody({ type: CreateMatchDto })
+  // async createMatch(@Body() createMatchDto: CreateMatchDto): Promise<Match> {
+  //   return this.matchService.createMatch(
+  //     createMatchDto.usersIds,
+  //     createMatchDto.scores,
+  //     createMatchDto.isWins
+  //   );
+  // }
 
-  @Get("common/:userId1/:userId2")
-  @ApiOperation({ summary: "Get matches between two users" })
-  async getCommonUserMatches(
-    @Param("userId1", ParseIntPipe) userId1: number,
-    @Param("userId2", ParseIntPipe) userId2: number
-  ): Promise<UserMatch[]> {
-    return this.matchService.getCommonUserMatches(userId1, userId2);
-  }
+  // @Get("common/:userId1/:userId2")
+  // @ApiOperation({ summary: "Get matches between two users" })
+  // async getCommonUserMatches(
+  //   @Param("userId1", ParseIntPipe) userId1: number,
+  //   @Param("userId2", ParseIntPipe) userId2: number
+  // ): Promise<UserMatch[]> {
+  //   return this.matchService.getCommonUserMatches(userId1, userId2);
+  // }
 
   @Get("stats/:userId1/:userId2")
   @ApiOperation({ summary: "Get user match stats against another user" })

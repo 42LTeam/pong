@@ -144,16 +144,17 @@ export class UserController {
     return userResult.map(UserSerializer.serialize);
   }
 
-  @Get("/:id")
-  @ApiOperation({ summary: "Get user by id" })
+  @Get("/me")
+  @ApiOperation({ summary: "Get my info" })
   async getUserById(
-    @Param("id", ParseIntPipe, UserIdValidationPipe) id: number
+    @Req() req,
   ): Promise<User | null> {
-    if (id > 999999999) {
+    const user = await req.user;
+    if (user.id > 999999999) {
       return (null);
     }
-    const user = await this.userService.getUserById(Number(id));
-    return UserSerializer.serialize(user);
+    const userResult = await this.userService.getUserById(user.id);
+    return UserSerializer.serialize(userResult);
   }
 
   @Put("avatar")
@@ -245,42 +246,44 @@ export class UserController {
     return UserSerializer.serialize(deletedUser);
   }
 
-  @Get(":id/status")
-  async getUserStatus(
-    @Param("id", ParseIntPipe, UserIdValidationPipe) id: string
-  ): Promise<Status> {
-    return this.userService.getUserStatusById(Number(id));
-  }
+  // @Get(":id/status")
+  // async getUserStatus(
+  //   @Param("id", ParseIntPipe, UserIdValidationPipe) id: string
+  // ): Promise<Status> {
+  //   return this.userService.getUserStatusById(Number(id));
+  // }
 
-  @Put(":id/status")
-  @ApiBody({ type: UpdateUserStatusDto })
-  @ApiOperation({ summary: "Update user status" })
-  async updateUserStatus(
-      @Req() req,
-      @Body() updateUserStatusDto: UpdateUserStatusDto
-  ): Promise<Status> {
-    const user = await req.user;
-    const updatedStatus = await this.userService.updateUserStatusById(
-      user.id,
-      updateUserStatusDto.status
-    );
-    return UserSerializer.serializeStatus(updatedStatus);
-  }
+  // @Put(":id/status")
+  // @ApiBody({ type: UpdateUserStatusDto })
+  // @ApiOperation({ summary: "Update user status" })
+  // async updateUserStatus(
+  //     @Req() req,
+  //     @Body() updateUserStatusDto: UpdateUserStatusDto
+  // ): Promise<Status> {
+  //   const user = await req.user;
+  //   const updatedStatus = await this.userService.updateUserStatusById(
+  //     user.id,
+  //     updateUserStatusDto.status
+  //   );
+  //   return UserSerializer.serializeStatus(updatedStatus);
+  // }
 
-  @Get(":id/matches")
+  @Get("/matches")
   @ApiOperation({ summary: "Get all matches of user by Id" })
   async getUserMatches(
-    @Param("id", ParseIntPipe) id: number
+    @Req() req,
   ): Promise<UserMatch[]> {
-    return this.matchService.getUserMatches(id);
+    const user = await req.user;
+    return this.matchService.getUserMatches(user.id);
   }
 
-  @Get(":id/matches-resume")
+  @Get("/matches-resume")
   @ApiOperation({ summary: "Get all matches resume of user by ID" })
   async getUserMatchesResume(
-    @Param("id", ParseIntPipe) id: number
+    @Req() req,
   ): Promise<any[]> {
-    return this.userService.getUserMatchesResume(id);
+    const user = await req.user;
+    return this.userService.getUserMatchesResume(user.id);
   }
 
   @Post("avatar-upload")
@@ -315,12 +318,13 @@ export class UserController {
     return UserSerializer.serializeColorball(updatedUser);
   }
 
-  @Get("colorball/:id")
+  @Get("colorball/")
   @ApiOperation({ summary: "Get user's ball's color" })
   async getUserColorball(
-    @Param("id", ParseIntPipe) id: number
+    @Req() req,
   ): Promise<String> {
-    const colorball = await this.userService.getUserColorball(Number(id));
+    const user = req.user;
+    const colorball = await this.userService.getUserColorball(user.id);
     return UserSerializer.serializeColorball(colorball);
   }
 }

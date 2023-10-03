@@ -267,7 +267,6 @@ export async function editChannel(channelId: number, data: {
 
 export async function createChannel(data: {
   name: string;
-  passworded: boolean;
   password?: string;
   passworded: boolean;
   privated?: boolean;
@@ -440,7 +439,7 @@ export async function getPath(path: string) {
 export async function getUserByID(ID) {
   const config = {
     method: "get",
-    url: URL + "/users/" + ID,
+    url: URL + "/users/me",
     withCredentials: true,
   };
   return axios(config).catch(err => {return});
@@ -476,13 +475,13 @@ export async function getRatioAgainst(id1: number, id2: number) {
 export async function getUserMatches(ID) {
   const config = {
     method: "get",
-    url: URL + "/users/" + ID + "/matches",
+    url: URL + "/users/matches",
     withCredentials: true,
   };
   return axios(config).catch(err => {return});
 }
 
-export async function uploadUserAvatar(id, file) {
+export async function uploadUserAvatar(file) {
   const formData = new FormData();
   formData.append("avatar", file);
 
@@ -502,7 +501,7 @@ export async function uploadUserAvatar(id, file) {
 export async function getUserMatchesResume(ID) {
   const config = {
     method: "get",
-    url: URL + "/users/" + ID + "/matches-resume",
+    url: URL + "/users/matches-resume",
     withCredentials: true,
   };
   return axios(config).catch(err => {return});
@@ -538,7 +537,7 @@ export async function updateUserColorball(id: number, color: string) {
 export async function getUserColorball(id: number) {
   const config = {
     method: "get",
-    url: URL + "/colorball/" + id,
+    url: URL + "/colorball/",
     withCredentials: true,
   };
   return axios(config).catch(err => {return});
