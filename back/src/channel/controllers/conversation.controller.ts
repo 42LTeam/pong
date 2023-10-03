@@ -25,11 +25,10 @@ export class SendInviteDto {
 export class ConversationController {
   constructor(private channelService: ChannelService) {}
 
-  //TODO check if blocked
   @Get(":userId")
   @ApiOperation({ summary: "Create or return conversation between people" })
   async getConversation(
-    @Param("userId", ParseIntPipe) userId: number,
+    @Param("userId", ParseIntPipe, ParseIntPipe) userId: Number,
     @Req() req
   ): Promise<Channel> {
     const user = await req.user;

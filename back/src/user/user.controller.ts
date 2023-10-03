@@ -150,9 +150,6 @@ export class UserController {
     @Req() req,
   ): Promise<User | null> {
     const user = await req.user;
-    if (user.id > 999999999) {
-      return (null);
-    }
     const userResult = await this.userService.getUserById(user.id);
     return UserSerializer.serialize(userResult);
   }
@@ -160,7 +157,7 @@ export class UserController {
   @Get("/:id")
   @ApiOperation({ summary: "Get user by id" })
   async getUserById(
-    @Param("id", ParseIntPipe, UserIdValidationPipe) id: number
+    @Param("id", ParseIntPipe, ParseIntPipe, UserIdValidationPipe) id: number
   ): Promise<User | null> {
     const user = await this.userService.getUserById(Number(id));
     return UserSerializer.serialize(user);
@@ -250,7 +247,7 @@ export class UserController {
   @Delete(":id")
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: "Delete user" })
-  async deleteUser(@Param("id", ParseIntPipe) id: number): Promise<User> {
+  async deleteUser(@Param("id", ParseIntPipe, ParseIntPipe) id: number): Promise<User> {
     const deletedUser = await this.userService.deleteUser(Number(id));
     return UserSerializer.serialize(deletedUser);
   }
@@ -280,7 +277,7 @@ export class UserController {
   @Get(":id/matches")
   @ApiOperation({ summary: "Get all matches of user by Id" })
   async getUserMatches(
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseIntPipe, ParseIntPipe) id: number
   ): Promise<UserMatch[]> {
     return this.matchService.getUserMatches(id);
   }
@@ -288,7 +285,7 @@ export class UserController {
   @Get(":id/matches-resume")
   @ApiOperation({ summary: "Get all matches resume of user by ID" })
   async getUserMatchesResume(
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseIntPipe, ParseIntPipe) id: number
   ): Promise<any[]> {
     return this.userService.getUserMatchesResume(id);
   }

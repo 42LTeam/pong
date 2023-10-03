@@ -1,4 +1,4 @@
-import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import {
   CreateChannelDto,
@@ -6,6 +6,7 @@ import {
 } from "./controllers/channel.controller";
 import { FriendService } from "../friend/friend.service";
 import { MessageService } from "../message/message.service";
+import { BlockService } from "../block/block.service";
 import { Channel } from "@prisma/client";
 import { checkPassword, hashPassword } from "../auth/password.utils";
 import { throwError } from "rxjs";
@@ -16,7 +17,8 @@ export class ChannelService {
     private prisma: PrismaService,
     @Inject(forwardRef(() => FriendService))
     private friendService: FriendService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private blockService: BlockService
   ) { }
 
   async addInvite(id, userId) {
@@ -120,9 +122,6 @@ export class ChannelService {
   }
 
   async getAllUserChannelsInChannel(channelId: number): Promise<any> {
-    if (channelId > 999999999){
-      throw("Wallah on a pas autant de channels");
-    }
     return this.prisma.userChannel.findMany({
       where: {
         channelId: channelId,
@@ -154,9 +153,6 @@ export class ChannelService {
   }
 
   async getAllUserchannels(channelId: number): Promise<any> {
-    if (channelId > 999999999){
-      throw("Wallah on a pas autant de channels");
-    }
     return this.prisma.userChannel.findMany({
       where: {
         channelId: channelId,
@@ -284,6 +280,14 @@ export class ChannelService {
       (conv) => conv.users.length === 2
     );
 
+    const blocked = await this.blockService.getBlockedUsers(userId);
+    if (blocked.find(c => c.id === friendId)) {
+      if (validConversation.length) {
+        const quitConv = this.removeUserFromChannel(validConversation[0].id, userId);
+      }
+      throw new UnauthorizedException("You blocked this user");
+    }
+
     if (validConversation.length) return validConversation[0];
 
     const newConv = await this.prisma.channel.create({
@@ -399,10 +403,6 @@ export class ChannelService {
     channelId: number,
     userId: number
   ): Promise<boolean> {
-    if (channelId > 999999999){
-      throw("Wallah on a pas autant de channels");
-    }
-
     const userChannel = await this.prisma.userChannel.findFirst({
       where: { channelId: channelId, userId: userId },
     })

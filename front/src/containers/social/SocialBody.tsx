@@ -10,13 +10,6 @@ import NotFound from "../NotFound";
 
 export default function SocialBody() {
   const { channelId } = useParams();
-  if (channelId){
-    if (channelId.length > 9){
-      return (
-        <NotFound page={"social"}/>
-        );
-    }
-  }
   const [state, setState] = useState<any>(Number.parseInt(channelId));
   const [error, setError] = useState(undefined);
 

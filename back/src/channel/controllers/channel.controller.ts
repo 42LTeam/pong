@@ -145,7 +145,7 @@ export class ChannelController {
   @Get("/:channelId/members")
   @ApiOperation({ summary: "Get All users in channel by channel Id" })
   async getChannelAllMembers(
-    @Param("channelId", ParseIntPipe, isInChannelPipe) channelId: number
+    @Param("channelId", ParseIntPipe, ParseIntPipe, isInChannelPipe) channelId: number
   ): Promise<any> {
     if (channelId > Number.MAX_SAFE_INTEGER) {
       throw new BadRequestException("ID is too large");
@@ -156,8 +156,8 @@ export class ChannelController {
   @Post("/:channelId/quit/:userId")
   @ApiOperation({ summary: "Remove a user from a channel (User perspective)" })
   async removeUserFromChannel(
-    @Param("channelId", ParseIntPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("channelId", ParseIntPipe, ParseIntPipe) channelId: number,
+    @Param("userId", ParseIntPipe, ParseIntPipe) userId: number
   ): Promise<any> {
     return this.channelService.removeUserFromChannel(channelId, userId);
   }
@@ -166,8 +166,8 @@ export class ChannelController {
   @UsePipes()
   @ApiOperation({ summary: "Remove a user from a channel (Admin perspective)" })
   async removeUserAdminFromChannel(
-    @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("channelId", ParseIntPipe, ParseIntPipe, isChannelAdminPipe) channelId: number,
+    @Param("userId", ParseIntPipe, ParseIntPipe) userId: number
   ): Promise<any> {
     return this.channelService.removeUserFromChannel(channelId, userId);
   }
@@ -176,8 +176,8 @@ export class ChannelController {
   @UsePipes()
   @ApiOperation({ summary: "Make a User Admin (Admin privilege)" })
   async ownerMakeAdmin(
-      @Param("channelId", ParseIntPipe, isOwnerPipe) channelId: number,
-      @Param("userId", ParseIntPipe) userId: number
+      @Param("channelId", ParseIntPipe, ParseIntPipe, isOwnerPipe) channelId: number,
+      @Param("userId", ParseIntPipe, ParseIntPipe) userId: number
   ): Promise<any> {
     return this.channelService.ownerMakeAdmin(channelId, userId);
   }
@@ -186,8 +186,8 @@ export class ChannelController {
   @Post("/:channelId/ban/:userId")
   @ApiOperation({ summary: "Ban a user from a channel" })
   async banUserFromChannel(
-    @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("channelId", ParseIntPipe, ParseIntPipe, isChannelAdminPipe) channelId: number,
+    @Param("userId", ParseIntPipe, ParseIntPipe) userId: number
   ): Promise<any> {
     await this.channelService.banUserFromChannel(channelId, userId);
     await this.channelService.removeUserFromChannel(channelId, userId);
@@ -197,8 +197,8 @@ export class ChannelController {
   @Post("/:channelId/mute/:userId")
   @ApiOperation({ summary: "Mute a user from a channel" })
   async muteUserFromChannel(
-    @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("channelId", ParseIntPipe, ParseIntPipe, isChannelAdminPipe) channelId: number,
+    @Param("userId", ParseIntPipe, ParseIntPipe) userId: number
   ): Promise<any> {
     return this.channelService.muteUserFromChannel(channelId, userId);
   }
@@ -206,8 +206,8 @@ export class ChannelController {
   @Get("/:channelId/is-muted/:userId")
   @ApiOperation({ summary: "Check if a user is muted from a channel" })
   async isUserMutedFromChannel(
-    @Param("channelId", ParseIntPipe) channelId: number,
-    @Param("userId", ParseIntPipe) userId: number
+    @Param("channelId", ParseIntPipe, ParseIntPipe) channelId: number,
+    @Param("userId", ParseIntPipe, ParseIntPipe) userId: number
   ): Promise<any> {
     if (channelId > Number.MAX_SAFE_INTEGER) {
       throw new BadRequestException("ID is too large");
@@ -231,7 +231,7 @@ export class ChannelController {
   @Get('/public-channels/:userId')
   @ApiOperation({ summary: 'Get all public channels the user is not already in' })
   async getPublicChannels(
-      @Param('userId', ParseIntPipe) userId: number
+      @Param('userId', ParseIntPipe, ParseIntPipe) userId: number
   ): Promise<Channel[]> {
     const channels =  await this.channelService.getPublicChannels(userId);
     return channels.map(ChannelSerializer.serialize);
@@ -241,7 +241,7 @@ export class ChannelController {
   @ApiOperation({ summary: "Validate password for a channel" })
   @ApiBody({ type: ValidateChannelPasswordDto })
   async validateChannelPassword(
-    @Param("channelId", ParseIntPipe) channelId: number,
+    @Param("channelId", ParseIntPipe, ParseIntPipe) channelId: number,
     @Body() validatePasswordDto: ValidateChannelPasswordDto
   ): Promise<{ isValid: boolean }> {
     const isValid = await this.channelService.validateChannelPassword(
@@ -260,7 +260,7 @@ export class ChannelController {
     description: "ID of the channel to join",
   })
   async joinChannel(
-    @Param("channelId", ParseIntPipe, isBannedPipe) channelId: number,
+    @Param("channelId", ParseIntPipe, ParseIntPipe, isBannedPipe) channelId: number,
     @Req() req
   ): Promise<any> {
     const user = await req.user;
@@ -277,7 +277,10 @@ export class ChannelController {
   })
   @ApiOperation({summary: "Edit a channel"})
   @ApiBody( {type: EdiChannelDto})
-  async editChannel(@Body() body: EdiChannelDto, @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId){
+  async editChannel(
+    @Body() body: EdiChannelDto,
+    @Param("channelId", ParseIntPipe, ParseIntPipe, isChannelAdminPipe) channelId
+  ){
     if (body.name)
       await this.channelService.setChannelName(channelId, body.name)
     if (body.password)

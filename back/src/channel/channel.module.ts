@@ -4,6 +4,7 @@ import { ChannelService } from "./channel.service";
 import { PrismaModule } from "../prisma/prisma.module";
 import { FriendService } from "../friend/friend.service";
 import { FriendModule } from "../friend/friend.module";
+import { BlockService } from "../block/block.service";
 import { UserModule } from "../user/user.module";
 import { ConversationController } from "./controllers/conversation.controller";
 import { MessageModule } from "../message/message.module";
@@ -16,7 +17,7 @@ import {isOwnerPipe} from "./pipes/isOwner.pipe";
 
 @Module({
   controllers: [ChannelController, ConversationController],
-  providers: [ChannelService, FriendService, MessageService, isChannelAdminPipe, isBannedPipe, isInChannelPipe, isOwnerPipe],
+  providers: [ChannelService, FriendService, MessageService, BlockService, isChannelAdminPipe, isBannedPipe, isInChannelPipe, isOwnerPipe],
 
   imports: [
     PrismaModule,

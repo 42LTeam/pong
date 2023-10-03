@@ -55,10 +55,6 @@ export class UserService {
   }
 
   async getUserById(id: number): Promise<User | null> {
-    if (id > 999999999){
-      console.log("@getUserById ITS TOO BIG SENPAI");
-      throw new BadRequestException("ID is too large");
-    }
     return this.prisma.user.findUnique({
       where: { id },
     });
