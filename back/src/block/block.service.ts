@@ -13,6 +13,14 @@ export class BlockService {
     blockerId: number,
     blockedId: number
   ): Promise<Block> {
+    const exists = await this.prisma.user.findUnique({
+      where:{
+        id: blockedId,
+      }
+    });
+    if (!exists){
+      throw new ForbiddenException("Target of block does not exist");
+    }
 
     if (blockerId == blockedId) {
       throw new ForbiddenException("Both blockerId and blockedId shouldn't be the same");

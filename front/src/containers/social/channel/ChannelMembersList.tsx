@@ -81,7 +81,7 @@ export default function ChannelMembersList({
   const handleNewAdminUserFromChannel = async (user) => {
 
     await ownerMakeAdmin(channelId, user.id);
-    const makeAdminMessage = "J'ai nommé [" + user.username + "] Ministre. Ouais, c'est moi l'owner, je fais ce que je veux.";
+    const makeAdminMessage = "J'ai nommé [" + user.username + "] ministre. Ouais, c'est moi l'owner, je fais ce que je veux.";
     await sendMessageToChannel(channelId, makeAdminMessage);
     setRerenderFlag(false);
   }
@@ -92,7 +92,6 @@ export default function ChannelMembersList({
       body={
         <>
           {ChannelAllMembers.map((current) => {
-            console.log("@ChannelMemeberList => user = "+JSON.stringify(current));  //Pour Eduardo :*
             return (
               <Friend
                 key={current.user.id}
