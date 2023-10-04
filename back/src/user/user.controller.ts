@@ -154,15 +154,6 @@ export class UserController {
     return UserSerializer.serialize(userResult);
   }
 
-  @Get("/:id")
-  @ApiOperation({ summary: "Get user by id" })
-  async getUserById(
-    @Param("id", ParseIntPipe, ParseIntPipe, UserIdValidationPipe) id: number
-  ): Promise<User | null> {
-    const user = await this.userService.getUserById(Number(id));
-    return UserSerializer.serialize(user);
-  }
-
   @Put("avatar")
   @ApiOperation({ summary: "Update user's avatar" })
   @ApiBody({ type: UpdateUserAvatarDto })

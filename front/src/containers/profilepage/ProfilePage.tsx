@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import MatchHistoryBubble from "./MatchHistoryBubble";
 import ProfileLeaderboardPlaceBubble from "./ProfileLeaderboardPlaceBubble";
-import { getUserByID, getUserById, getUserMatchesResume } from "../../api";
+import { getUserByID, getUserMatchesResume } from "../../api";
 
 import "../../css/profile.css";
 import { User } from "../Auth";
@@ -30,7 +30,7 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    getUserById(userID)
+    getUserByID(userID)
       .then(function (response) {
         setUser(response.data);
       })

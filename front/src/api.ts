@@ -445,15 +445,6 @@ export async function getUserByID(ID) {
   return axios(config).catch(err => {return});
 }
 
-export async function getUserById(ID) {
-  const config = {
-    method: "get",
-    url: URL + "/users/"+ID,
-    withCredentials: true,
-  };
-  return axios(config).catch(err => {return});
-}
-
 export async function getUsers() {
   const config = {
     method: "get",
