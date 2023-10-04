@@ -78,6 +78,7 @@
 }
 
 .match-history-pp-pseudo-group {
+  cursor: pointer;
   display: flex;
   padding: 2px 0px;
   align-items: center;

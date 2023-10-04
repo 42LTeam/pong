@@ -38,7 +38,7 @@ export default function Friend(props: Props) {
       .then(() => {
         setRerenderFlag(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("cant unblock user"));
       user.blockList.splice(user.blockList.indexOf(props.friend?.id), 1);
   };
 

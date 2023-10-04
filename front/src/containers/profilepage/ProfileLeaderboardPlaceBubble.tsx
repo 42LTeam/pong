@@ -35,7 +35,7 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
         setUsers(updatedUsers);
       })
       .catch(function (error) {
-        console.error("Error fetching user data:", error);
+        console.log("cannot fetch user data",);
       });
   }, [me]);
 
@@ -69,7 +69,7 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
           setData(average);
         })
         .catch((error) => {
-          console.error("Error fetching average point:", error);
+          console.log("cannot fetch average points",);
           setData(0);
         });
     } else if (props.type === "Ratio victoires/défaites") {
@@ -78,7 +78,7 @@ export default function ProfileLeaderboardPlaceBubble(props: Props) {
           setData(ratio);
         })
         .catch((error) => {
-          console.error("Error fetching average point:", error);
+          console.log("cannot fetch ratio",);
           setData(0);
         });
     }

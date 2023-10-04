@@ -90,7 +90,7 @@ export const getRatio = async (userID: number) => {
       return 0;
     }
   } catch (error) {
-    console.error("Error fetching user matches:", error);
+    console.log("cannot fetch user matches:");
     return 0;
   }
 };
@@ -110,7 +110,7 @@ export const getAveragePoint = async (userID: number) => {
       return 0;
     }
   } catch (error) {
-    console.error("Error fetching user matches:", error);
+    console.log("cannot fetch user matches:");
     return 0;
   }
 };

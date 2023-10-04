@@ -77,7 +77,7 @@ export class UserService {
       });
       return updatedUser;
     } catch (error) {
-      console.error("Error updating user avatar in Prisma:", error);
+      console.log("Error updating user avatar in Prisma:", error);
       throw new BadRequestException("Failed to update avatar in database");
     }
   }
@@ -255,6 +255,7 @@ export class UserService {
         OpponentAvatar: opponent.avatar,
         OpponentUsername: opponent.username,
         OpponentScore: userMatchOpponent.score,
+        OpponentId: opponent.id,
         UserScore: userMatch.score,
       });
     }

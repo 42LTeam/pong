@@ -4,6 +4,8 @@ import TextIcon from "../../components/TextIcon";
 import { AuthContext, User } from "../Auth";
 
 import "../../css/leaderboard.css";
+import { Tooltip, Zoom } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   user: User;
@@ -13,6 +15,7 @@ type Props = {
 
 export default function LeaderboardPlaceBubble(props: Props) {
   const user = useContext(AuthContext);
+  const navigate = useNavigate();
   var stat: any = 0;
   var [description, setDescription] = useState("");
 
@@ -35,6 +38,10 @@ export default function LeaderboardPlaceBubble(props: Props) {
     }
   }, [props.kind]);
 
+  const handleClick = () => {
+    navigate("/profile/" + props.user.id);
+  };
+
   return (
     <div
       className={
@@ -42,15 +49,16 @@ export default function LeaderboardPlaceBubble(props: Props) {
         (props.user.id === user?.id ? "leaderboard-content-bubble-self" : "")
       }
     >
-      <div className="leaderboard-pp-pseudo-group">
-        <div
-          className="leaderboard-profile-picture"
-          style={{ backgroundImage: `url(${props.user.avatar})` }}
-        ></div>
+      <Tooltip title="Voir le profil" TransitionComponent={Zoom}>
+        <div className="leaderboard-pp-pseudo-group" onClick={handleClick}>
+          <div
+            className="leaderboard-profile-picture"
+            style={{ backgroundImage: `url(${props.user.avatar})` }}
+          ></div>
 
-        <div className="leaderboard-username"> {props.user.username} </div>
-      </div>
-
+          <div className="leaderboard-username"> {props.user.username} </div>
+        </div>
+      </Tooltip>
       <div className="leaderboard-data">
         {props.user.playedMatch
           ? `${props.user[statName].toFixed(2)} ${description}`

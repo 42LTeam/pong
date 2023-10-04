@@ -35,7 +35,7 @@ export default function HomePage() {
           setLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching user's colorball: ", error);
+        console.log("Cannot fetch user's colorball: ");
         setLoading(false);
       }
     };

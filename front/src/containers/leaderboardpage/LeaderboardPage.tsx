@@ -35,7 +35,7 @@ export default function LeaderboardPage() {
         setUsers(updatedUsers);
       })
       .catch(function (error) {
-        console.error("Error fetching user data:", error);
+        console.log("cannot fetch user data:");
       });
   }, [user]);
 

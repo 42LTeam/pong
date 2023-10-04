@@ -24,7 +24,7 @@ export default function PublicChannelsList() {
         const response = await getPublicChannels(user.id);
         setChannels(response.data);
       } catch (error) {
-        console.error("Error fetching channels:", error);
+        console.log("cannot fetch channels",);
       }
     }
     fetchChannels();
@@ -58,7 +58,7 @@ export default function PublicChannelsList() {
           alert("Mauvais mot de passe :(");
         }
       } catch (error) {
-        console.error("Error validating password:", error);
+        console.log("cannot validate password",);
       }
     }
   };

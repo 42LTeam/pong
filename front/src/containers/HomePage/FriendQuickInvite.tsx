@@ -22,7 +22,7 @@ export default function FriendQuickInvite() {
             response.data.filter((current) => current.id !== user?.id)
           )
         )
-        .catch((error) => console.error("Error fetching friend data:", error));
+        .catch((error) => console.log("Cannot fetch friend data:"));
     }
   }, [suggestions.length, user]);
 

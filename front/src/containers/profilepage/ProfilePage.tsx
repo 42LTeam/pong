@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import MatchHistoryBubble from "./MatchHistoryBubble";
 import ProfileLeaderboardPlaceBubble from "./ProfileLeaderboardPlaceBubble";
@@ -9,10 +9,12 @@ import "../../css/profile.css";
 import { User } from "../Auth";
 import NotFound from "../NotFound";
 import Avatar from "../../components/utils/Avatar";
+import { Tooltip, Zoom } from "@mui/material";
 
 export interface MatchResume {
   OpponentAvatar: string;
   OpponentUsername: string;
+  OpponentId: number;
   OpponentScore: number;
   UserScore: number;
 }
@@ -21,6 +23,11 @@ export default function ProfilePage() {
   const { userID } = useParams();
   const [user, setUser] = useState<User | null>(null);
   const [matches, setMatches] = useState<MatchResume[]>([]);
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    navigate("/leaderboard");
+  };
 
   useEffect(() => {
     getUserById(userID)
@@ -38,7 +45,7 @@ export default function ProfilePage() {
         setMatches(response.data);
       })
       .catch(function (error) {
-        console.log("No match found", error);
+        console.log("No match found");
       });
   }, [userID]);
 
@@ -70,7 +77,9 @@ export default function ProfilePage() {
       </div>
       <div className="vertical-separator"></div>
       <div className="right-frame-profile">
-        <div className="leaderboard-places">Places du classement</div>
+        <Tooltip title="Aller au classement" TransitionComponent={Zoom}>
+          <div className="leaderboard-places" onClick={handleClick}>Places du classement</div>
+        </Tooltip>
         <ProfileLeaderboardPlaceBubble
           user={user}
           type="XP total" />

@@ -340,10 +340,10 @@ export async function acceptFriendship(id: number) {
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 400) {
-      console.error("Bad request:", error.response.data);
+      console.log("Bad request:", error.response.data);
       alert("There was an issue getting the conversation. Please try again.");
     } else {
-      console.error("Unexpected error:", error.message);
+      console.log("Unexpected error:", error.message);
       alert("An error occurred. Please try again later.");
     }
   }

@@ -20,7 +20,7 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
             if (password || name) {
                 editChannel(channel.id, { privated, name, password, passworded })
                     .then(() => clear(true))
-                    .catch((err) => console.error("Erreur lors de la modification du canal", err));
+                    .catch((err) => console.log("cannot update channel"));
             }
         }
         : async () => {
@@ -43,7 +43,7 @@ export default function EditChannelPopOver({ channel, checked, clear, privatedde
                     });
                     clear(true);
                 } catch (err) {
-                    console.error("Erreur lors de la création du canal ou de l'envoi des invitations", err);
+                    console.log("cannot create channel or invite people in it");
                 }
             }
         };

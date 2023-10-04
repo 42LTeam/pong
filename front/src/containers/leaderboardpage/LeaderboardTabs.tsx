@@ -45,7 +45,7 @@ export default function LeaderboardTabs(props: Props) {
         setMatches(response.data);
       })
       .catch(function (error) {
-        console.error("Error fetching user matches:", error);
+        console.log("cannot fetch user matches:");
       });
   }, [user]);
 

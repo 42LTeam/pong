@@ -33,7 +33,7 @@ export default function ChannelMembersList({
 
       })
       .catch((err) => {
-        console.log(err)
+        console.log("cannot fetch members")
       });
   };
 
@@ -52,7 +52,7 @@ export default function ChannelMembersList({
         setRerenderFlag(false);
         fetchChannelAllMembers();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("cannot remove user"));
       const kickMessage = "[" + user.username + "]... T'es viré mon grand... Reviens quand tu seras frais";
       await sendMessageToChannel(channelId, kickMessage);
       setRerenderFlag(false);
@@ -64,7 +64,7 @@ export default function ChannelMembersList({
         setRerenderFlag(false);
         fetchChannelAllMembers();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("cannot ban user"));
       const banMessage = "J'ai décidé de bannir [" + user.username + "] de la tribu.. et ma sentence est irrévocable !";
       await sendMessageToChannel(channelId, banMessage);
       setRerenderFlag(false);
