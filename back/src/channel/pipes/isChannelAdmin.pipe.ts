@@ -2,7 +2,7 @@ import {
   Injectable,
   PipeTransform,
   ArgumentMetadata,
-  ForbiddenException, Inject,
+  ForbiddenException, Inject, NotFoundException,
 } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
 import { REQUEST } from '@nestjs/core'
@@ -17,6 +17,16 @@ export class isChannelAdminPipe implements PipeTransform {
   async transform(channelId: any, _metadata: ArgumentMetadata) {
 
     let user = await this.request["user"]
+
+    const exist = await this.prisma.userChannel.findFirst({
+      where: {
+        channelId: channelId,
+      },
+    })
+    if (!exist) {
+      throw new NotFoundException("Channel doest not exist");
+    }
+
     const userChannel = await this.prisma.userChannel.findFirst({
       where: {
         channelId: channelId,

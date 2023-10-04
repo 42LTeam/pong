@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Param,
   ParseIntPipe,
@@ -156,9 +157,14 @@ export class ChannelController {
   @Post("/:channelId/quit/:userId")
   @ApiOperation({ summary: "Remove a user from a channel (User perspective)" })
   async removeUserFromChannel(
-    @Param("channelId", ParseIntPipe, ParseIntPipe) channelId: number,
-    @Param("userId", ParseIntPipe, ParseIntPipe) userId: number
+    @Param("channelId", ParseIntPipe, ParseIntPipe, isInChannelPipe) channelId: number,
+    @Param("userId", ParseIntPipe, ParseIntPipe) userId: number,
+    @Req () request
   ): Promise<any> {
+    const user = await request.user;
+    if (user.id != userId) {
+      throw new ForbiddenException("Usurpation d'identité ? C'est beau ça...");
+    }
     return this.channelService.removeUserFromChannel(channelId, userId);
   }
 

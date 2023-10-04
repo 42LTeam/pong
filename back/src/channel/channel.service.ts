@@ -1,4 +1,4 @@
-import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, forwardRef, Inject, Injectable, NotFoundException, ParseIntPipe, UnauthorizedException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import {
   CreateChannelDto,
@@ -22,6 +22,15 @@ export class ChannelService {
   ) { }
 
   async addInvite(id, userId) {
+    const exists = await this.prisma.user.findUnique({
+      where:{
+        id: userId,
+      }
+    });
+    if (!exists){
+      throw new ForbiddenException("Target of invite does not exist");
+    }
+
     const newUser = await this.prisma.userChannel.create({
       data: {
         userId: userId,
@@ -42,6 +51,10 @@ export class ChannelService {
 
   async createChannel(creatorId, body: CreateChannelDto): Promise<any> {
     let { name, passworded, password, conv, privated } = body;
+    if (passworded && privated || passworded && !password) {
+      throw new BadRequestException("Ce que tu fais n'a aucun sens");
+    }
+
     if (password) password = await hashPassword(password);
     return this.prisma.channel.create({
       data: {
