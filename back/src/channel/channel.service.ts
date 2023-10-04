@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, forwardRef, Inject, Injectable, NotFoundException, ParseIntPipe, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, forwardRef, ImATeapotException, Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import {
   CreateChannelDto,
@@ -10,6 +10,7 @@ import { BlockService } from "../block/block.service";
 import { Channel } from "@prisma/client";
 import { checkPassword, hashPassword } from "../auth/password.utils";
 import { throwError } from "rxjs";
+import { get } from "http";
 
 @Injectable()
 export class ChannelService {
@@ -51,8 +52,11 @@ export class ChannelService {
 
   async createChannel(creatorId, body: CreateChannelDto): Promise<any> {
     let { name, passworded, password, conv, privated } = body;
-    if (passworded && privated || passworded && !password) {
-      throw new BadRequestException("Ce que tu fais n'a aucun sens");
+    if (body.passworded && !body.password
+      || body.password && !body.passworded
+      || body.privated && body.passworded
+      || body.privated && body.password) {
+        throw new ImATeapotException("Ce que tu fais n'a aucun sens");
     }
 
     if (password) password = await hashPassword(password);
@@ -485,6 +489,15 @@ export class ChannelService {
   }
 
   async joinChannel(channelId: number, userId: number): Promise<any> {
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        id: channelId
+      }
+    });
+    if (channel.conv || channel.privated) {
+      throw new ForbiddenException("This is a private channel... And u were not invited 🐸");
+    }
+    
     const existingUserChannel = await this.prisma.userChannel.findMany({
       where: {
         AND: [

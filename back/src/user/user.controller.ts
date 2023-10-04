@@ -239,7 +239,7 @@ export class UserController {
   @ApiOperation({ summary: "Get pending request" })
   async getPendingFriends(
       @Req() req,
-      @Param("userId") userId: number): Promise<any[]> {
+    ): Promise<any[]> {
     const user = await req.user;
     return this.userService.getPendingFriendRequests(user.id);
   }

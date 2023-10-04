@@ -47,7 +47,7 @@ export class FriendController {
   @Put("friend-request/accept/:friendshipId")
   @ApiOperation({ summary: "Accept a friend request" })
   async acceptFriendRequest(
-    @Param("friendshipId", ParseIntPipe) friendshipId: number,
+    @Param("friendshipId", ParseIntPipe, ParseIntPipe) friendshipId: number,
     @Req() req: any
   ): Promise<UserFriendship> {
     const user = await req.user;
@@ -60,7 +60,7 @@ export class FriendController {
   @Put("friend-request/decline/:friendshipId")
   @ApiOperation({ summary: "Decline a friend request" })
   async declineFriendRequest(
-    @Param("friendshipId", ParseIntPipe) friendshipId: number,
+    @Param("friendshipId", ParseIntPipe, ParseIntPipe) friendshipId: number,
     @Req() req: any
   ) {
     const user = await req.user;
@@ -73,7 +73,7 @@ export class FriendController {
   @Delete("/friendship/:friendId")
   @ApiOperation({ summary: "remove a friendship" })
   async removeFriendship(
-    @Param("friendId", ParseIntPipe) friendId: number,
+    @Param("friendId", ParseIntPipe, ParseIntPipe) friendId: number,
     @Req() req: any
   ) {
     const user = await req.user;

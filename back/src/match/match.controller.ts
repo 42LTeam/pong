@@ -62,8 +62,8 @@ export class MatchController {
   @Get("stats/:userId1/:userId2")
   @ApiOperation({ summary: "Get user match stats against another user" })
   async getUserMatchStats(
-    @Param("userId1", ParseIntPipe) userId1: number,
-    @Param("userId2", ParseIntPipe) userId2: number
+    @Param("userId1", ParseIntPipe, ParseIntPipe) userId1: number,
+    @Param("userId2", ParseIntPipe, ParseIntPipe) userId2: number
   ): Promise<{ wins: number; losses: number }> {
     return this.matchService.getUserMatchStats(userId1, userId2);
   }

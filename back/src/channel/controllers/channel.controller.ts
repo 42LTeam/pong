@@ -4,6 +4,7 @@ import {
   Controller,
   ForbiddenException,
   Get,
+  ImATeapotException,
   Param,
   ParseIntPipe,
   Post,
@@ -215,9 +216,6 @@ export class ChannelController {
     @Param("channelId", ParseIntPipe, ParseIntPipe) channelId: number,
     @Param("userId", ParseIntPipe, ParseIntPipe) userId: number
   ): Promise<any> {
-    if (channelId > Number.MAX_SAFE_INTEGER) {
-      throw new BadRequestException("ID is too large");
-    }
     return this.channelService.isUserMutedFromChannel(channelId, userId);
   }
 
@@ -225,7 +223,7 @@ export class ChannelController {
   @ApiOperation({ summary: "Set or Update password for a channel" })
   @ApiBody({ type: UpdateChannelPasswordDto })
   async setChannelPassword(
-    @Param("channelId", ParseIntPipe, isChannelAdminPipe) channelId: number,
+    @Param("channelId", ParseIntPipe, ParseIntPipe, isChannelAdminPipe) channelId: number,
     @Body() updatePasswordDto: UpdateChannelPasswordDto
   ): Promise<Channel> {
     return this.channelService.setChannelPassword(
@@ -237,8 +235,14 @@ export class ChannelController {
   @Get('/public-channels/:userId')
   @ApiOperation({ summary: 'Get all public channels the user is not already in' })
   async getPublicChannels(
-      @Param('userId', ParseIntPipe, ParseIntPipe) userId: number
+      @Param('userId', ParseIntPipe, ParseIntPipe) userId: number,
+      @Req() request
   ): Promise<Channel[]> {
+    const user = await request.user;
+    if (user.id != userId) {
+      throw new ForbiddenException("Usurpation d'identité ? C'est beau ça...");
+    }
+
     const channels =  await this.channelService.getPublicChannels(userId);
     return channels.map(ChannelSerializer.serialize);
   }
@@ -287,6 +291,13 @@ export class ChannelController {
     @Body() body: EdiChannelDto,
     @Param("channelId", ParseIntPipe, ParseIntPipe, isChannelAdminPipe) channelId
   ){
+    if (body.passworded && !body.password
+      || body.password && !body.passworded
+      || body.privated && body.passworded
+      || body.privated && body.password) {
+        throw new ImATeapotException("Ce que tu fais n'a aucun sens");
+    }
+
     if (body.name)
       await this.channelService.setChannelName(channelId, body.name)
     if (body.password)

@@ -79,7 +79,7 @@ export class MessageController {
 
   @Get("channel/:channel")
   async getMessageByChannel(
-    @Param("channel", ParseIntPipe) channel: number,
+    @Param("channel", ParseIntPipe, ParseIntPipe) channel: number,
     @Req() req
   ): Promise<{ lastRead: number; messages: Message[] } | null> {
     if (channel > Number.MAX_SAFE_INTEGER) {
@@ -114,7 +114,7 @@ export class MessageController {
   @Get("channel/:id/last")
   async getLastMessageInChannel(
 
-    @Param("id", ParseIntPipe) channelId: number
+    @Param("id", ParseIntPipe, ParseIntPipe) channelId: number
   ): Promise<Message> {
 
     return await this.messageService.getLastMessageInChannel(channelId);
