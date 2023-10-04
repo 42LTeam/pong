@@ -17,6 +17,7 @@ import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "@nestjs/class-validator";
 import { UserService } from "../user/user.service";
 import { authenticator } from "otplib";
+import { UserSerializer } from "../user/user.serializer";
 
 class DoubleAuthDto {
   @IsNotEmpty()
@@ -32,7 +33,7 @@ export class AuthController {
     private blockService: BlockService,
     private friendService: FriendService,
     private userService: UserService
-  ) {}
+  ) { }
   @Get("login")
   @UseGuards(FortyTwoAuthGuard)
   login() {
@@ -43,7 +44,7 @@ export class AuthController {
   @UseGuards(AuthenticatedGuard)
   async logout(@Req() req) {
     const user = await req.user;
-    await req.logout(() => {});
+    await req.logout(() => { });
     await this.clientService.unsubscribe(user.session);
     return "ok";
   }
@@ -92,11 +93,14 @@ export class AuthController {
     });
     ret.friendList = await this.friendService.getUserFriendships(ret.id);
 
+    const serializedStatus = UserSerializer.serializeStatus(ret);
+
     return {
-      user: { ...ret, secretO2FA: Boolean(ret.secretO2FA) },
+      user: { ...serializedStatus, secretO2FA: Boolean(ret.secretO2FA) },
       destination: !request.session.totp ? "2fa" : "",
     };
   }
+
 
   @Get("socketId")
   @UseGuards(AuthenticatedGuard)

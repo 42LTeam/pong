@@ -11,9 +11,16 @@ export class UserSerializer {
   static serializeStatus(user: any): any {
     return {
       id: user.id,
+      avatar: user.avatar,
+      username: user.username,
+      xp: user.xp,
       status: user.status,
+      colorball: user.colorball,
+      blockList: user.blockList,
+      friendList: user.friendList,
     };
   }
+
   static serializeColorball(user: any): any {
     return {
       id: user.id,
