@@ -77,6 +77,7 @@ export default class Game {
       player.status = playerStatus.ONLINE;
       player.name = user.username;
       player.socket = socket;
+      player.colorball = user.colorball;
     }
     if (this.players.length == 1) player.send("game-wait", null);
     else if (this.players[0].status != this.players[1].status)
