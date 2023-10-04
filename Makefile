@@ -7,7 +7,6 @@ PROD_FILE			:= $(SRCS_DIR)docker-compose.prod.yml
 ENV_FILE			:= $(SRCS_DIR).env
 DIST_FOLDER			:= $(SRCS_DIR)back/dist
 
-DOCKER_COMPOSE_PROD	:= @docker compose -f $(PROD_FILE) --env-file $(ENV_FILE) -p $(NAME)
 DOCKER_COMPOSE		:= @docker compose -f $(YML_FILE) --env-file $(ENV_FILE) -p $(NAME)
 
 VOLUMES				:= $(filter-out local,$(shell docker volume ls | grep $(NAME)))
@@ -33,7 +32,7 @@ BOLD_CYAN			:= "\033[1;36m"
 BOLD_WHITE			:= "\033[1;37m"
 
 
-all: dist env build up ls
+all: dist env-prod build up ls
 
 ls:
 	@echo $(BOLD_BLUE)Images$(RESET_COLOR)
@@ -74,14 +73,14 @@ logs:
 	@echo $(BOLD_GREEN) make logs: '🔮'  logs of containers $(RESET_COLOR)
 	$(DOCKER_COMPOSE) logs -f
 
-build: env dist
+build: env-prod dist
 	@echo $(BOLD_GREEN) make build: '🚧'  Build development containers + erase dist folder$(RESET_COLOR)
 	$(DOCKER_COMPOSE) build
 
 eval: dist env-prod build up
 	@echo $(BOLD_GREEN) make evaluation = dist env-prod build up : $(DOCKER_COMPOSE) up --build $(RESET_COLOR)
 
-up: env
+up: env-prod
 	@echo $(GREEN) make up '🚀'  Start development containers$(RESET_COLOR)
 	$(DOCKER_COMPOSE) up -d
 
@@ -120,23 +119,6 @@ rebuild: clean all
 reboot: fprune all
 	@echo $(BOLD_YELLOW) make reboot '✋'  STOP + '🔻'  DOWN + '🧼'  PRUNE  + '🛀'  RMVOL + '🚧'  BUILD + '🚀'  UP: Fully prune Docker and 'then' rebuild all containers$(RESET_COLOR)
 
-prod: env-prod prod-build
-	$(DOCKER_COMPOSE_PROD) up 
-
-prod-build: env-prod
-	$(DOCKER_COMPOSE_PROD) build --no-cache
-
-prod-up: env-prod
-	$(DOCKER_COMPOSE_PROD) up -d
-
-prod-stop:
-	$(DOCKER_COMPOSE_PROD) stop
-
-prod-down:
-	$(DOCKER_COMPOSE_PROD) down
-
-prod-re: prod-stop prod
-
 prettier:
 	@echo $(BOLD_YELLOW) make prettier: '🌸' == https://prettier.io/docs/en/install $(RESET_COLOR)
 	cd ./back/ && npx prettier . --write
@@ -171,4 +153,4 @@ help:
 	@echo $(BOLD_YELLOW) make script: '🥋' == Run health_script and running_script on local $(RESET_COLOR)
 
 
-.PHONY: all ls env build up stop down clean prune rmvol fprune re rebuild reboot help
+.PHONY: all ls env env-prod dist logs build eval up action stop down clean prune rmvol fprune re rebuild reboot prettier script help

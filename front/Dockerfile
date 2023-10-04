@@ -9,10 +9,10 @@ RUN chown -R node:node /usr/src/app
 # Set user to node for security
 USER node
 
-COPY --chown=node:node ./front/package.json ./
-COPY --chown=node:node ./front/package-lock.json ./
+COPY --chown=node:node ./package.json ./
+COPY --chown=node:node ./package-lock.json ./
 RUN npm ci
-COPY --chown=node:node ./front/ ./
+COPY --chown=node:node ./ ./
 
 FROM base as development
 EXPOSE 5173

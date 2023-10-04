@@ -13,10 +13,10 @@ USER node
 # ---- Development ----
 FROM base AS development
 # Copy package.json and package-lock.json and install dependencies
-COPY --chown=node:node ./back/package*.json ./
+COPY --chown=node:node ./package*.json ./
 RUN npm install
 # Copy application files
-COPY --chown=node:node ./back/ .
+COPY --chown=node:node ./ ./
 # Ensure public/uploads directory exists with correct permissions
 RUN mkdir -p public/uploads && \
     chown -R node:node public/uploads && \
