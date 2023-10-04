@@ -54,7 +54,7 @@ export default function Settings(props: Props) {
     const file = event.target.files[0];
     if (file) {
       try {
-        const response = await uploadUserAvatar(user.id, file);
+        const response = await uploadUserAvatar(file);
         if (response.status === 201) {
           setAvatarUrl(response.data.path);
           setErrorMsg("");
